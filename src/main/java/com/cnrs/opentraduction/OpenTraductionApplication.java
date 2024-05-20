@@ -7,7 +7,6 @@ import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
-
 import javax.faces.webapp.FacesServlet;
 
 
@@ -20,7 +19,7 @@ public class OpenTraductionApplication {
 
     @Bean
     public ServletRegistrationBean facesServletRegistration() {
-        ServletRegistrationBean registration = new ServletRegistrationBean<>(new FacesServlet(), "*.xhtml");
+        var registration = new ServletRegistrationBean<>(new FacesServlet(), "*.xhtml");
         registration.setLoadOnStartup(1);
         return registration;
     }

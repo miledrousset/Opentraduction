@@ -1,7 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
   <h:head>
@@ -16,13 +15,11 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect" />
     <link href="https://fonts.gstatic.com" rel="preconnect" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&amp;family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap" />
     <!-- Vendor CSS Files -->
     <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
     <link href="assets/vendor/aos/aos.css" rel="stylesheet" />
     <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
-    <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet" />
     <!-- Main CSS File -->
     <link href="assets/css/main.css" rel="stylesheet" />
   </h:head>
@@ -36,15 +33,22 @@
           </h1>
           <span>.</span>
         </a>
+        <h:panelGroup rendered="#{applicationBean.isConnected()}">
+
+        </h:panelGroup>
         <nav id="navmenu" class="navmenu">
           <ul>
-            <li><a href="index.html#about">Rechercher</a></li>
-            <li><a href="index.html#services">Paramètres</a></li>
-            <li><a href="index.html#portfolio">Contacter nous</a></li>
+            <h:panelGroup rendered="#{applicationBean.isConnected()}">
+              <li><a href="search.html"><h:outputText value="#{msg['application.menu.search']}" /></a></li>
+              <li><a href="index.html"><h:outputText value="#{msg['application.menu.settings']}" /></a></li>
+              <li><a href="index.html"><h:outputText value="#{msg['application.menu.contact-us']}" /></a></li>
+            </h:panelGroup>
           </ul>
           <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
-        <a class="btn-getstarted" href="index.html#about">Se Connecter</a>
+        <h:panelGroup rendered="#{!applicationBean.isConnected()}">
+          <a class="btn-getstarted" href="index.html"><h:outputText value="#{msg['application.menu.connect']}" /></a>
+        </h:panelGroup>
       </div>
     </header>
     <main class="main">
@@ -54,25 +58,31 @@
         <div class="container">
           <div class="row">
             <div class="col-12">
-              <h2 data-aos="fade-up" data-aos-delay="100">Bienvenu Firas GABSI</h2>
+              <h2 data-aos="fade-up" data-aos-delay="100">
+                <h:outputText value="#{applicationBean.getUserNameConnected()}"/>
+              </h2>
               <p data-aos="fade-up" data-aos-delay="200">Outil de traduction entre le Francais et Arabe</p>
             </div>
-            <div style="width: 100%; text-align: center">
-              <form action="#" class="sign-up-form d-flex" data-aos="fade-up" data-aos-delay="300" style="width: 40%">
-                <input type="text" class="form-control" placeholder="Enter votre mot" />
-                <input type="submit" class="btn btn-primary" value="Rechercher" />
-              </form>
-            </div>
+            <h:panelGroup rendered="#{applicationBean.isConnected()}">
+              <div style="width: 100%; text-align: center">
+                <form action="#" class="sign-up-form d-flex" data-aos="fade-up" data-aos-delay="300" style="width: 40%">
+                  <input type="text" class="form-control" placeholder="Enter votre mot" />
+                  <input type="submit" class="btn btn-primary" value="Rechercher" />
+                </form>
+              </div>
+            </h:panelGroup>
           </div>
-          <div id="about" class="about section" data-aos="fade-up" data-aos-delay="300">
-            <div class="row">
-              <div class="content">
-                <a href="#" class="read-more">
-                  <span>Se Connecter</span>
-                  <i class="bi bi-lock-fill"></i></a>
+          <h:panelGroup rendered="#{!applicationBean.isConnected()}">
+            <div id="about" class="about section" data-aos="fade-up" data-aos-delay="300">
+              <div class="row">
+                <div class="content">
+                  <a href="#" class="read-more">
+                    <span><h:outputText value="#{msg['application.menu.connect']}" /></span>
+                    <i class="bi bi-lock-fill"></i></a>
+                </div>
               </div>
             </div>
-          </div>
+          </h:panelGroup>
         </div>
       </section>
 
@@ -123,15 +133,15 @@
 
 
     <!-- Vendor JS Files -->
-    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/vendor/php-email-form/validate.js"></script>
-    <script src="assets/vendor/aos/aos.js"></script>
-    <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
-    <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
-    <script src="assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
-    <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-    <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js" />
+    <script src="assets/vendor/php-email-form/validate.js" />
+    <script src="assets/vendor/aos/aos.js" />
+    <script src="assets/vendor/glightbox/js/glightbox.min.js" />
+    <script src="assets/vendor/purecounter/purecounter_vanilla.js" />
+    <script src="assets/vendor/imagesloaded/imagesloaded.pkgd.min.js" />
+    <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js" />
+    <script src="assets/vendor/swiper/swiper-bundle.min.js" />
     <!-- Main JS File -->
-    <script src="assets/js/main.js"></script>
+    <script src="assets/js/main.js" />
   </h:body>
 </html>
