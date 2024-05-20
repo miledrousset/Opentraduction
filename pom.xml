@@ -18,6 +18,12 @@
 
   <properties>
     <java.version>11</java.version>
+    <primefaces.version>7.0</primefaces.version>
+    <cdi-api.version>2.0.SP1</cdi-api.version>
+    <lombok.version>1.18.24</lombok.version>
+    <jsf-api.version>2.2.20</jsf-api.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
 
   <dependencies>
@@ -34,13 +40,13 @@
     <dependency>
       <groupId>com.sun.faces</groupId>
       <artifactId>jsf-api</artifactId>
-      <version>2.2.20</version>
+      <version>${jsf-api.version}</version>
     </dependency>
 
     <dependency>
       <groupId>com.sun.faces</groupId>
       <artifactId>jsf-impl</artifactId>
-      <version>2.2.20</version>
+      <version>${jsf-api.version}</version>
     </dependency>
 
     <dependency>
@@ -51,26 +57,27 @@
     <dependency>
       <groupId>org.primefaces</groupId>
       <artifactId>primefaces</artifactId>
-      <version>7.0</version>
+      <version>${primefaces.version}</version>
     </dependency>
 
     <dependency>
       <groupId>javax.enterprise</groupId>
       <artifactId>cdi-api</artifactId>
-      <version>2.0.SP1</version>
+      <version>${cdi-api.version}</version>
     </dependency>
 
     <!--<dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
       <scope>runtime</scope>
-    </dependency>
+    </dependency>-->
+
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>1.18.10</version>
+      <version>${lombok.version}</version>
       <scope>provided</scope>
-    </dependency>-->
+    </dependency>
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -88,8 +95,20 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-compiler-plugin.version}</version>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+              <version>${lombok.version}</version>
+            </path>
+          </annotationProcessorPaths>
+        </configuration>
       </plugin>
     </plugins>
   </build>
