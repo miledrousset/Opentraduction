@@ -1,0 +1,59 @@
+<ui:composition 
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <header id="header" class="header d-flex align-items-center fixed-top">
+        <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
+            <a href="index.xhtml" class="logo d-flex align-items-center me-auto me-xl-0">
+                <h1 class="sitename">
+                    <h:outputText value="OpenTraduction"/>
+                </h1>
+                <span>.</span>
+            </a>
+            <h:panelGroup rendered="#{applicationBean.isConnected()}">
+
+            </h:panelGroup>
+            <nav id="navmenu" class="navmenu">
+                <ul>
+                    <h:panelGroup rendered="#{applicationBean.isConnected()}">
+                        <li>
+                            <p:commandLink class="#{applicationBean.getMenuItemClass('HOME')}"
+                                    action="#{applicationBean.navigateToPage('HOME')}"
+                                    value="#{msg['application.menu.home']}" />
+                        </li>
+                        <li>
+                            <p:commandLink class="#{applicationBean.getMenuItemClass('SEARCH')}"
+                                    actionListener="#{applicationBean.navigateToPage('SEARCH')}"
+                                    value="#{msg['application.menu.search']}" />
+                        </li>
+                        <li>
+                            <p:commandLink class="#{applicationBean.getMenuItemClass('USER_SETTINGS')}"
+                                    actionListener="#{applicationBean.navigateToPage('USER_SETTINGS')}"
+                                    value="#{msg['application.menu.settings']}" />
+                        </li>
+                        <li>
+                            <p:commandLink class="#{applicationBean.getMenuItemClass('SYSTEM_SETTINGS')}"
+                                           action="#{applicationBean.navigateToPage('SYSTEM_SETTINGS')}"
+                                           value="#{msg['application.menu.system-settings']}"
+                                           ajax="true" process="@this"/>
+                        </li>
+                        <li>
+                            <p:commandLink class="#{applicationBean.getMenuItemClass('CONTACT_US')}"
+                                    actionListener="#{applicationBean.navigateToPage('CONTACT_US')}"
+                                    value="#{msg['application.menu.contact-us']}" />
+                        </li>
+                    </h:panelGroup>
+                </ul>
+                <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+            </nav>
+            <h:panelGroup rendered="#{!applicationBean.isConnected()}">
+                <p:commandButton class="btn-getstarted" onclick="PF('login').show();" value="#{msg['application.menu.connect']}" />
+            </h:panelGroup>
+            <h:panelGroup rendered="#{applicationBean.isConnected()}">
+                <p:commandButton class="btn-getstarted" onclick="PF('login').show();" value="#{msg['application.menu.disconnect']}" />
+            </h:panelGroup>
+        </div>
+    </header>
+
+</ui:composition>

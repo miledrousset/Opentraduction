@@ -71,6 +71,7 @@ a {
   color: var(--accent-color);
   text-decoration: none;
   transition: 0.3s;
+  text-decoration: none !important;
 }
 
 a:hover {
@@ -127,7 +128,7 @@ h6 {
   color: var(--contrast-color);
   background: var(--accent-color);
   font-size: 14px;
-  padding: 8px 26px;
+  padding: 5px;
   margin: 0;
   border-radius: 4px;
   transition: 0.3s;
@@ -147,7 +148,7 @@ h6 {
   .header .btn-getstarted {
     order: 2;
     margin: 0 15px 0 0;
-    padding: 6px 20px;
+    padding: 5px;
   }
 
   .header .navmenu {
@@ -156,7 +157,8 @@ h6 {
 }
 
 .scrolled .header {
-  box-shadow: 0 0 30px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 30px 10px rgba(255, 255, 255, 0.1);
+  background: white !important;
 }
 
 /* Index Page Header
@@ -319,7 +321,7 @@ h6 {
 
   .navmenu a,
   .navmenu a:focus {
-    color: var(--nav-dropdown-color);
+    color: var(--nav-hover-color);
     padding: 10px 20px;
     font-family: var(--nav-font);
     font-size: 17px;
@@ -349,12 +351,13 @@ h6 {
   .navmenu a i:hover,
   .navmenu a:focus i:hover {
     background-color: var(--accent-color);
-    color: var(--contrast-color);
+    color: var(--accent-color);
   }
 
   .navmenu a:hover,
   .navmenu .active,
   .navmenu .active:focus {
+    background-color: var(--accent-color);
     color: var(--nav-dropdown-hover-color);
   }
 
@@ -661,6 +664,7 @@ section,
   color: var(--default-color);
   background-color: var(--background-color);
   padding: 60px 0;
+  padding-top: 100px;
   scroll-margin-top: 98px;
   overflow: clip;
 }
@@ -809,30 +813,36 @@ section,
   padding: 20px 0;
 }
 
-.clients .client-logo {
+.clients .sponsor-logo {
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  text-align: center;
 }
 
-.clients .client-logo img {
-  padding: 20px 40px;
-  max-width: 90%;
+.clients .sponsor-logo img {
+  padding: 10px 20px;
+  max-width: 50%;
   transition: 0.3s;
   opacity: 0.5;
   filter: grayscale(100);
 }
 
-.clients .client-logo img:hover {
+.clients .sponsor-logo img:hover {
   filter: none;
   opacity: 1;
 }
 
 @media (max-width: 640px) {
-  .clients .client-logo img {
+  .clients .sponsor-logo img {
     padding: 20px;
   }
+}
+
+.img-fluid{
+  max-width:10% !important;
+  height:auto;
 }
 
 /*--------------------------------------------------------------
@@ -1830,37 +1840,31 @@ section,
 /*--------------------------------------------------------------
 # Contact Section
 --------------------------------------------------------------*/
-.contact .info-item {
+.info-item {
   background: color-mix(in srgb, var(--default-color), transparent 96%);
   padding: 30px;
 }
 
-.contact .info-item i {
+.info-item i {
   font-size: 38px;
   line-height: 0;
   color: var(--accent-color);
 }
 
-.contact .info-item h3 {
+.info-item h3 {
   font-size: 20px;
   font-weight: 700;
   margin: 20px 0 10px 0;
 }
 
-.contact .info-item p {
+.info-item p {
   padding: 0;
   line-height: 24px;
   font-size: 14px;
   margin-bottom: 0;
 }
 
-.contact .php-email-form {
-  background: color-mix(in srgb, var(--default-color), transparent 96%);
-  padding: 30px;
-  height: 100%;
-}
-
-.contact .php-email-form .error-message {
+.php-email-form .error-message {
   display: none;
   background: #df1529;
   color: #ffffff;
@@ -1868,9 +1872,10 @@ section,
   padding: 15px;
   margin-bottom: 24px;
   font-weight: 600;
+  border-radius: 10px;
 }
 
-.contact .php-email-form .sent-message {
+.php-email-form .sent-message {
   display: none;
   color: #ffffff;
   background: #059652;
@@ -1878,17 +1883,19 @@ section,
   padding: 15px;
   margin-bottom: 24px;
   font-weight: 600;
+  border-radius: 10px;
 }
 
-.contact .php-email-form .loading {
+.php-email-form .loading {
   display: none;
   background: var(--background-color);
   text-align: center;
   padding: 15px;
   margin-bottom: 24px;
+  border-radius: 10px;
 }
 
-.contact .php-email-form .loading:before {
+.php-email-form .loading:before {
   content: "";
   display: inline-block;
   border-radius: 50%;
@@ -1900,9 +1907,8 @@ section,
   animation: animate-loading 1s linear infinite;
 }
 
-.contact .php-email-form input[type=text],
-.contact .php-email-form input[type=email],
-.contact .php-email-form textarea {
+.php-email-form input[type=text],
+.php-email-form input[type=password] {
   font-size: 14px;
   padding: 10px 15px;
   box-shadow: none;
@@ -1912,19 +1918,17 @@ section,
   border-color: color-mix(in srgb, var(--default-color), transparent 80%);
 }
 
-.contact .php-email-form input[type=text]:focus,
-.contact .php-email-form input[type=email]:focus,
-.contact .php-email-form textarea:focus {
+.php-email-form input[type=text]:focus,
+.php-email-form input[type=password]:focus {
   border-color: var(--accent-color);
 }
 
-.contact .php-email-form input[type=text]::placeholder,
-.contact .php-email-form input[type=email]::placeholder,
-.contact .php-email-form textarea::placeholder {
+.php-email-form input[type=text]::placeholder,
+.php-email-form input[type=password]::placeholder {
   color: color-mix(in srgb, var(--default-color), transparent 70%);
 }
 
-.contact .php-email-form button[type=submit] {
+.php-email-form button[type=submit] {
   background: var(--accent-color);
   color: var(--contrast-color);
   border: 0;
@@ -1933,7 +1937,7 @@ section,
   border-radius: 4px;
 }
 
-.contact .php-email-form button[type=submit]:hover {
+.php-email-form button[type=submit]:hover {
   background: color-mix(in srgb, var(--accent-color), transparent 20%);
 }
 
@@ -2838,4 +2842,51 @@ section,
   padding-left: 5px;
   color: color-mix(in srgb, var(--default-color), transparent 60%);
   font-size: 14px;
+}
+
+
+
+
+
+
+
+
+
+.ui-dialog {
+  padding: 0;
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, .16);
+  border: none;
+  border-radius: 10px !important;
+}
+
+.ui-input-icon-left, body .ui-input-icon-right {
+  width: 100% !important;
+}
+
+.ui-dialog .ui-dialog-titlebar {
+  background: #fff;
+  color: #e84545;
+  font-weight: 700;
+  border: none !important;
+  padding: 1rem;
+}
+
+.ui-dialog .ui-dialog-content {
+  background: #fff;
+  color: #333;
+  padding: 1rem;
+  border: none !important;
+}
+
+body .ui-dialog .ui-dialog-footer {
+  border: none !important;
+  background: #fff;
+  color: #333;
+  padding: .571rem 1rem;
+  margin: 0;
+  text-align: right;
+}
+
+body .ui-button {
+  border: 1px solid transparent !important;
 }

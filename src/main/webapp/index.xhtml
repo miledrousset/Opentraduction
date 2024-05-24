@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+  <h:head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>OpenTraduction</title>
+    <meta content="" name="description" />
+    <meta content="" name="keywords" />
+    <!-- Favicons -->
+    <link href="assets/img/favicon.png" rel="icon" />
+    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link href="https://fonts.gstatic.com" rel="preconnect" />
+    <!-- Vendor CSS Files -->
+    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="assets/vendor/aos/aos.css" rel="stylesheet" />
+    <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
+    <!-- Main CSS File -->
+    <link href="assets/css/main.css" rel="stylesheet" />
+  </h:head>
+
+  <h:body class="index-page">
+    <h:panelGroup id="mainContent">
+
+      <ui:include src="shared/header.xhtml" />
+
+      <main class="main">
+        <!-- Hero Section -->
+        <section id="hero" class="hero section call-to-action section">
+          <img src="assets/img/hero-bg.jpg" alt="" data-aos="fade-in" />
+          <div class="container">
+            <div class="row">
+              <div class="col-12">
+                <h2 data-aos="fade-up" data-aos-delay="100">
+                  <h:outputText value="#{applicationBean.getUserNameConnected()}"/>
+                </h2>
+                <p data-aos="fade-up" data-aos-delay="200">Outil de traduction entre le Français et Arabe</p>
+              </div>
+              <h:panelGroup rendered="#{applicationBean.isConnected()}">
+                <div style="width: 100%; text-align: center">
+                  <form action="#" class="sign-up-form d-flex" data-aos="fade-up" data-aos-delay="300" style="width: 40%">
+                    <input type="text" class="form-control" placeholder="Enter votre mot" />
+                    <input type="submit" class="btn btn-primary" value="Rechercher" />
+                  </form>
+                </div>
+              </h:panelGroup>
+            </div>
+            <h:panelGroup rendered="#{!applicationBean.isConnected()}">
+              <div id="about" class="about section" data-aos="fade-up" data-aos-delay="300">
+                <div class="row">
+                  <div class="content">
+                    <p:link href="#" class="read-more" onclick="PF('login').show();">
+                      <span><h:outputText value="#{msg['application.menu.connect']}" /></span>
+                      <i class="bi bi-lock-fill"/>
+                    </p:link>
+                  </div>
+                </div>
+              </div>
+            </h:panelGroup>
+          </div>
+        </section>
+
+        <section id="clients" class="clients section">
+          <div class="container" data-aos="fade-up">
+            <div class="row">
+              <div class="col-12 sponsor-logo">
+                <img src="assets/img/clients/cnrs.png" class="img-fluid" alt="" />
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <ui:include src="dialogs/login.xhtml" />
+    </h:panelGroup>
+
+    <ui:include src="shared/footer.xhtml" />
+  </h:body>
+</html>
