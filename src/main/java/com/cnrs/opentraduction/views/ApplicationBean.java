@@ -1,6 +1,7 @@
 package com.cnrs.opentraduction.views;
 
 import com.cnrs.opentraduction.models.MenuItem;
+
 import lombok.Data;
 import org.primefaces.PrimeFaces;
 import javax.enterprise.context.SessionScoped;
@@ -22,6 +23,7 @@ public class ApplicationBean implements Serializable {
     public void logout() {
 
         connected = false;
+        menuItemSelected = MenuItem.HOME;
     }
 
     public void login() {

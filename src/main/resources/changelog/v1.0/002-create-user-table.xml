@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+    <changeSet id="V1-002" author="fgabsi">
+        <preConditions>
+            <not>
+                <tableExists tableName="user"/>
+            </not>
+        </preConditions>
+        <createTable tableName="user">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="login" type="varchar(256)"/>
+            <column name="password" type="varchar(256)"/>
+            <column name="mail" type="varchar(256)"/>
+            <column name="first_name" type="varchar(256)"/>
+            <column name="last_name" type="varchar(256)"/>
+            <column name="active" type="boolean"/>
+            <column name="admin" type="boolean"/>
+            <column name="created" type="TIMESTAMP"/>
+            <column name="modified" type="TIMESTAMP"/>
+            <column name="id_group_user" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="user"
+                                 baseColumnNames="id_group_user"
+                                 referencedTableName="group"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_user_group"/>
+    </changeSet>
+</databaseChangeLog>

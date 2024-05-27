@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - include:
+      file: classpath:/changelog/v1.0/001-create-group-table.xml
+  - include:
+      file: classpath:/changelog/v1.0/002-create-user-table.xml
+  - include:
+      file: classpath:/changelog/v1.0/003-create-instance-table.xml
+  - include:
+      file: classpath:/changelog/v1.0/004-create-group_instance-table.xml
+  - include:
+      file: classpath:/changelog/v1.0/005-create-thesaurus-table.xml
+  - include:
+      file: classpath:/changelog/v1.0/006-create-user_thesaurus-table.xml

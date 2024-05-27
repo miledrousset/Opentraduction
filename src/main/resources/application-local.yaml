@@ -1,5 +1,39 @@
-############## Serveur Tomcat ##############
+#######################
+# Server Configuration
+#######################
 server:
   port: 8099
+  tomcat:
+    max-threads: 12
+    max-connections: 1000
   servlet:
     context-path: /open-traduction
+    session:
+      timeout: 30m
+
+
+#######################
+# Spring configuration
+#######################
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/open-traduction
+    password: postgres
+    username: postgres
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  liquibase:
+    enabled: true
+    change-log: classpath:/changelog/db.changelog.yaml
+
+#######################
+# Logging configuration
+#######################
+logging:
+  config: classpath:logback-local.xml

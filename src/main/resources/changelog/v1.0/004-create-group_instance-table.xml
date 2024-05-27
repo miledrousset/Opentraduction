@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+    <changeSet id="V1-004" author="fgabsi">
+        <preConditions>
+            <not>
+                <tableExists tableName="group_instance"/>
+            </not>
+        </preConditions>
+        <createTable tableName="group_instance">
+            <column name="group_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="instance_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="group_id, instance_id" constraintName="pk_group_instance" tableName="group_instance"/>
+
+        <addForeignKeyConstraint baseColumnNames="group_id" baseTableName="group_instance"
+                                 constraintName="fk_group_instance_group"
+                                 referencedColumnNames="id" referencedTableName="group"/>
+
+        <addForeignKeyConstraint baseColumnNames="instance_id" baseTableName="group_instance"
+                                 constraintName="fk_group_instance_instance"
+                                 referencedColumnNames="id" referencedTableName="instance"/>
+    </changeSet>
+</databaseChangeLog>
