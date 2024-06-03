@@ -23,59 +23,80 @@
     <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
     <!-- Main CSS File -->
     <link href="assets/css/main.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.1.0/css/flag-icon.min.css" rel="stylesheet"/>
   </h:head>
 
   <h:body class="index-page">
     <h:panelGroup id="mainContent">
 
+      <p:growl id="message" globalOnly="true" />
+
       <ui:include src="shared/header.xhtml" />
 
-      <main class="main">
-        <!-- Hero Section -->
-        <section id="hero" class="hero section call-to-action section">
-          <img src="assets/img/hero-bg.jpg" alt="" data-aos="fade-in" />
-          <div class="container">
-            <div class="row">
-              <div class="col-12">
-                <h2 data-aos="fade-up" data-aos-delay="100">
-                  <h:outputText value="#{applicationBean.getUserNameConnected()}"/>
-                </h2>
-                <p data-aos="fade-up" data-aos-delay="200">Outil de traduction entre le Français et Arabe</p>
-              </div>
-              <h:panelGroup rendered="#{applicationBean.isConnected()}">
-                <div style="width: 100%; text-align: center">
-                  <form action="#" class="sign-up-form d-flex" data-aos="fade-up" data-aos-delay="300" style="width: 40%">
-                    <input type="text" class="form-control" placeholder="Enter votre mot" />
-                    <input type="submit" class="btn btn-primary" value="Rechercher" />
-                  </form>
-                </div>
-              </h:panelGroup>
+      <section id="hero" class="hero section call-to-action section">
+        <img src="assets/img/backgroun-website.jpg" alt="" data-aos="fade-in" />
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <h2 data-aos="fade-up" data-aos-delay="100">
+                <h:outputText value="#{applicationBean.getUserNameConnected()}"/>
+              </h2>
+              <p data-aos="fade-up" data-aos-delay="200">
+                <h:outputText value="#{msg['application.home.title']}"/>
+              </p>
             </div>
-            <h:panelGroup rendered="#{!applicationBean.isConnected()}">
-              <div id="about" class="about section" data-aos="fade-up" data-aos-delay="300">
-                <div class="row">
-                  <div class="content">
-                    <p:link href="#" class="read-more" onclick="PF('login').show();">
-                      <span><h:outputText value="#{msg['application.menu.connect']}" /></span>
-                      <i class="bi bi-lock-fill"/>
-                    </p:link>
-                  </div>
-                </div>
+            <h:panelGroup rendered="#{applicationBean.isConnected()}">
+              <div style="width: 100%; text-align: center">
+                <form action="#" class="sign-up-form d-flex" data-aos="fade-up" data-aos-delay="300" style="width: 40%">
+                  <input type="text" class="form-control" placeholder="#{msg['search.sub-title']}" />
+                  <p:commandButton class="btn-getstarted" title="#{msg['search.title']}" style="background: #e84545; border-color: #e84545" />
+                </form>
               </div>
             </h:panelGroup>
           </div>
-        </section>
+          <h:panelGroup id="about" rendered="#{!applicationBean.isConnected()}" class="about section">
+            <div class="content" data-aos="fade-up" data-aos-delay="300">
+              <p:link href="#" class="read-more" onclick="PF('login').show();">
+                <span><h:outputText value="#{msg['application.menu.connect']}" /></span>
+                <i class="bi bi-lock-fill"/>
+              </p:link>
+            </div>
+          </h:panelGroup>
+        </div>
+      </section>
 
-        <section id="clients" class="clients section">
-          <div class="container" data-aos="fade-up">
-            <div class="row">
-              <div class="col-12 sponsor-logo">
-                <img src="assets/img/clients/cnrs.png" class="img-fluid" alt="" />
-              </div>
+      <section id="clients" class="clients section">
+        <div class="container" data-aos="fade-up">
+          <div class="row">
+            <div class="col-12 sponsor-logo">
+              <img src="assets/img/logos/ambassade%20france%20tunisie.png" class="img-fluid"
+                   alt="Ambassade de France en Tunisie"/>
+              <img src="assets/img/logos/institut-francais-tunisie.png" class="img-fluid"
+                   alt="Institut Français Tunisie" />
+              <img src="assets/img/logos/cnrs.png" class="img-fluid"
+                   alt="Centre National de Recherche Scientifique" />
+              <img src="assets/img/logos/moyen-orient%20et%20mondes%20musulmans.png" class="img-fluid"
+                   alt="Moyen-Orient et Mondes Musulmans" />
             </div>
           </div>
-        </section>
-      </main>
+
+          <div class="row">
+            <div class="col-12 sponsor-logo">
+              <img src="assets/img/logos/huma-num.png" class="img-fluid" alt="" />
+              <img src="assets/img/logos/opentheso.png" class="img-fluid" alt="" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12 sponsor-logo">
+              <img src="assets/img/logos/centre-jacques-berque.png" class="img-fluid" alt="" />
+              <img src="assets/img/logos/irmc.png" class="img-fluid" alt="" />
+              <img src="assets/img/logos/institut-francais-archeologie-orientale.png" class="img-fluid" alt="" />
+              <img src="assets/img/logos/ifpo.png" class="img-fluid" alt="" />
+            </div>
+          </div>
+        </div>
+      </section>
 
       <ui:include src="dialogs/login.xhtml" />
     </h:panelGroup>

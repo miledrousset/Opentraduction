@@ -18,7 +18,7 @@
 
   <properties>
     <java.version>11</java.version>
-    <primefaces.version>12.0.0</primefaces.version>
+    <primefaces.version>13.0.0</primefaces.version>
     <cdi-api.version>2.0.SP1</cdi-api.version>
     <lombok.version>1.18.24</lombok.version>
     <jsf-api.version>2.2.20</jsf-api.version>

@@ -123,21 +123,27 @@ h6 {
   padding-left: 3px;
 }
 
-.header .btn-getstarted,
-.header .btn-getstarted:focus {
+.btn-getstarted,
+.btn-getstarted:focus {
+  border: var(--accent-color) !important;
   color: var(--contrast-color);
   background: var(--accent-color);
   font-size: 14px;
-  padding: 5px;
+  padding: 10px;
   margin: 0;
   border-radius: 4px;
   transition: 0.3s;
 }
 
-.header .btn-getstarted:hover,
-.header .btn-getstarted:focus:hover {
+.btn-getstarted:hover,
+.btn-getstarted:focus:hover {
+  border: var(--accent-color) !important;
   color: var(--contrast-color);
   background: color-mix(in srgb, var(--accent-color), transparent 15%);
+}
+
+.ui-splitbutton .ui-button.ui-splitbutton-menubutton {
+  background: transparent !important;
 }
 
 @media (max-width: 1200px) {
@@ -148,7 +154,7 @@ h6 {
   .header .btn-getstarted {
     order: 2;
     margin: 0 15px 0 0;
-    padding: 5px;
+    padding: 10px;
   }
 
   .header .navmenu {
@@ -682,12 +688,12 @@ section,
 --------------------------------------------------------------*/
 .section-title {
   text-align: center;
-  padding-bottom: 60px;
+  padding-bottom: 20px;
   position: relative;
 }
 
 .section-title h2 {
-  font-size: 32px;
+  font-size: 25px;
   font-weight: 700;
   position: relative;
 }
@@ -1291,18 +1297,13 @@ section,
 # Pricing Section
 --------------------------------------------------------------*/
 .pricing {
-  padding: 60px 0 120px 0;
-}
-
-.pricing .section-title {
-  margin-bottom: 40px;
+  padding: 30px 0 120px 0;
 }
 
 .pricing .pricing-item {
   box-shadow: 0 3px 20px -2px color-mix(in srgb, var(--default-color), transparent 90%);
-  padding: 60px 40px;
+  padding: 20px 10px;
   height: 100%;
-  position: relative;
   border-radius: 15px;
 }
 
@@ -1319,7 +1320,6 @@ section,
   height: 70px;
   background: var(--accent-color);
   border-radius: 50%;
-  display: flex;
   align-items: center;
   justify-content: center;
   transition: 0.3s;
@@ -1428,12 +1428,6 @@ section,
 .pricing .featured {
   z-index: 10;
   border: 3px solid var(--accent-color);
-}
-
-@media (min-width: 992px) {
-  .pricing .featured {
-    transform: scale(1.15);
-  }
 }
 
 /*--------------------------------------------------------------
@@ -2890,3 +2884,5 @@ body .ui-dialog .ui-dialog-footer {
 body .ui-button {
   border: 1px solid transparent !important;
 }
+
+

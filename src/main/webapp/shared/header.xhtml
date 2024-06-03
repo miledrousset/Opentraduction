@@ -1,58 +1,93 @@
 <ui:composition 
     xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
     xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
     xmlns:h="http://xmlns.jcp.org/jsf/html">
 
     <header id="header" class="header d-flex align-items-center fixed-top">
         <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
             <a href="index.xhtml" class="logo d-flex align-items-center me-auto me-xl-0">
                 <h1 class="sitename">
-                    <h:outputText value="OpenTraduction"/>
+                    <h:outputText value="SHS en traduction"/>
                 </h1>
                 <span>.</span>
             </a>
-            <h:panelGroup rendered="#{applicationBean.isConnected()}">
-
-            </h:panelGroup>
             <nav id="navmenu" class="navmenu">
                 <ul>
                     <h:panelGroup rendered="#{applicationBean.isConnected()}">
                         <li>
                             <p:commandLink class="#{applicationBean.getMenuItemClass('HOME')}"
-                                    action="#{applicationBean.navigateToPage('HOME')}"
-                                    value="#{msg['application.menu.home']}" />
+                                           ajax="true" process="@this"
+                                           action="#{applicationBean.navigateToPage('HOME')}"
+                                           value="#{msg['application.menu.home']}" />
                         </li>
                         <li>
                             <p:commandLink class="#{applicationBean.getMenuItemClass('SEARCH')}"
-                                    actionListener="#{applicationBean.navigateToPage('SEARCH')}"
-                                    value="#{msg['application.menu.search']}" />
+                                           ajax="true" process="@this"
+                                           action="#{applicationBean.navigateToPage('SEARCH')}"
+                                           value="#{msg['application.menu.search']}" />
                         </li>
                         <li>
                             <p:commandLink class="#{applicationBean.getMenuItemClass('USER_SETTINGS')}"
-                                    actionListener="#{applicationBean.navigateToPage('USER_SETTINGS')}"
-                                    value="#{msg['application.menu.settings']}" />
+                                           ajax="true" process="@this"
+                                           action="#{applicationBean.navigateToPage('USER_SETTINGS')}"
+                                           value="#{msg['application.menu.settings']}" />
                         </li>
                         <li>
                             <p:commandLink class="#{applicationBean.getMenuItemClass('SYSTEM_SETTINGS')}"
                                            action="#{applicationBean.navigateToPage('SYSTEM_SETTINGS')}"
+                                           rendered="#{applicationBean.userConnected.isAdmin()}"
                                            value="#{msg['application.menu.system-settings']}"
                                            ajax="true" process="@this"/>
                         </li>
                         <li>
                             <p:commandLink class="#{applicationBean.getMenuItemClass('CONTACT_US')}"
-                                    actionListener="#{applicationBean.navigateToPage('CONTACT_US')}"
-                                    value="#{msg['application.menu.contact-us']}" />
+                                           action="#{applicationBean.navigateToPage('CONTACT_US')}"
+                                           value="#{msg['application.menu.contact-us']}"
+                                           ajax="true" process="@this"/>
                         </li>
                     </h:panelGroup>
                 </ul>
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
             </nav>
-            <h:panelGroup rendered="#{!applicationBean.isConnected()}">
-                <p:commandButton class="btn-getstarted" onclick="PF('login').show();" value="#{msg['application.menu.connect']}" />
-            </h:panelGroup>
-            <h:panelGroup rendered="#{applicationBean.isConnected()}">
-                <p:commandButton class="btn-getstarted" onclick="PF('login').show();" value="#{msg['application.menu.disconnect']}" />
-            </h:panelGroup>
+
+            <div class="d-flex align-items-center">
+                <h:form>
+                    <nav class="navbar navbar-expand-lg navbar-light bg-light rounded"
+                         style="background-color: transparent !important; border: white !important;">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                    style="border: solid white; margin-right: 10px; border-radius: 10px; color: white; !important;">
+                                    <span class="flag-icon flag-icon-#{localeBean.getLanguageSelected()}"/>
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="dropdown09">
+                                    <p:commandLink class="dropdown-item"
+                                                   ajax="true" process="@this" update="mainContent"
+                                                   action="#{localeBean.changeLanguage('ar')}">
+                                        <span class="flag-icon flag-icon-ae"/> <h:outputText value="#{msg['application.language.arabic']}"/>
+                                    </p:commandLink>
+                                    <p:commandLink class="dropdown-item"
+                                                   ajax="true" process="@this" update="mainContent"
+                                                   action="#{localeBean.changeLanguage('fr')}">
+                                        <span class="flag-icon flag-icon-fr"/> <h:outputText value="#{msg['application.language.french']}"/>
+                                    </p:commandLink>
+                                </div>
+                            </li>
+                        </ul>
+                    </nav>
+                    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+                </h:form>
+
+                <h:panelGroup rendered="#{!applicationBean.isConnected()}">
+                    <p:commandButton class="btn-getstarted" onclick="PF('login').show();"
+                                     title="#{msg['application.menu.connect']}" />
+                </h:panelGroup>
+                <h:panelGroup rendered="#{applicationBean.isConnected()}">
+                    <p:commandButton class="btn-getstarted" onclick="PF('login').show();"
+                                     title="#{msg['application.menu.disconnect']}" />
+                </h:panelGroup>
+            </div>
         </div>
     </header>
 

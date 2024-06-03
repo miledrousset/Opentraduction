@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+    <changeSet id="V1-006" author="fgabsi">
+        <insert tableName="group">
+            <column name="name" value="Tunisie"/>
+            <column name="created" valueDate="2024-01-01T00:00:00"/>
+            <column name="modified" valueDate="2024-01-01T00:00:00"/>
+        </insert>
+
+        <insert tableName="user">
+            <column name="login" value="admin"/>
+            <column name="password" value="admin"/>
+            <column name="mail" value="admin@google.com"/>
+            <column name="first_name" value="Admin"/>
+            <column name="last_name" value="User"/>
+            <column name="active" valueBoolean="true"/>
+            <column name="admin" valueBoolean="true"/>
+            <column name="id_group_user" value="1"/>
+            <column name="created" valueDate="2024-01-01T00:00:00"/>
+            <column name="modified" valueDate="2024-01-01T00:00:00"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

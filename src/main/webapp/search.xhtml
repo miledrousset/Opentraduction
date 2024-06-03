@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>OpenTraduction</title>
+  <meta content="" name="description" />
+  <meta content="" name="keywords" />
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon" />
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link href="https://fonts.gstatic.com" rel="preconnect" />
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet" />
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
+  <!-- Main CSS File -->
+  <link href="assets/css/main.css" rel="stylesheet" />
+</h:head>
+
+<h:body class="services-details-page">
+  <h:panelGroup id="mainContent">
+
+    <ui:include src="shared/header.xhtml" />
+
+    <main class="main">
+
+      <section id="service-details" class="service-details section">
+        <div class="container">
+          <div class="row gy-5">
+            <div class="col-lg-12 service-box" data-aos="fade-up" data-aos-delay="200">
+              <h3></h3>
+
+              <section id="pricing" class="pricing section">
+                <div class="container section-title" data-aos="fade-up">
+                  <h2>Rechercher</h2>
+                </div>
+
+                <div class="container" data-aos="zoom-in" data-aos-delay="100">
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <div class="search-widget widget-item">
+                        <form action="">
+                          <input type="text" />
+                          <button type="submit"><i class="bi bi-search"></i></button>
+                        </form>
+                      </div>
+
+                    </div><!-- End Pricing Item -->
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <ui:include src="shared/footer.xhtml" />
+  </h:panelGroup>
+</h:body>
+</html>

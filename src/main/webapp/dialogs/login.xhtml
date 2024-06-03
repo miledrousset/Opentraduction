@@ -7,21 +7,27 @@
     <p:dialog header="Connexion" widgetVar="login" minHeight="40" width="350" showEffect="fade" modal="true" resizable="true">
 
         <h:form class="php-email-form" data-aos="fade-up" data-aos-delay="200">
+
+            <p:defaultCommand target="loginBtn" />
+
             <div class="row">
                 <div class="col-12">
-                    <p:inputText type="text" class="form-control" placeholder="Login" required="true" />
+                    <p:inputText class="form-control" placeholder="Login" required="true" />
                 </div>
 
                 <div class="col-12" style="margin-top: 20px">
-                    <p:password type="text" class="form-control" placeholder="Mot de passe" required="true"/>
+                    <p:password class="form-control" placeholder="Mot de passe" required="true"/>
                 </div>
             </div>
         </h:form>
         <f:facet name="footer">
-            <p:commandButton value="Annuler" styleClass="ui-button-secondary ui-button-flat"
-                             actionListener="PF('login').hide();"/>
-            <p:commandButton value="Connexion" actionListener="#{applicationBean.login()}"
-                             styleClass="ui-button-raised ui-button-success" ajax="true" process="@this"
+            <p:commandButton value="#{msg['action.annuler']}" styleClass="ui-button-secondary ui-button-flat"
+                             actionListener="PF('login').hide();"
+                             ajax="true" process="@this" update="mainContent"/>
+
+            <p:commandButton id="loginBtn" title="#{msg['application.menu.connect']}"
+                             actionListener="#{applicationBean.login()}"
+                             class="btn-getstarted" ajax="true" process="@this"
                              update="mainContent"/>
         </f:facet>
     </p:dialog>
