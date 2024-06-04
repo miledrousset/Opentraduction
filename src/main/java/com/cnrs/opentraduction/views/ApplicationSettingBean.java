@@ -1,23 +1,24 @@
 package com.cnrs.opentraduction.views;
 
-import com.cnrs.opentraduction.entities.Group;
-import com.cnrs.opentraduction.entities.Thesaurus;
 import com.cnrs.opentraduction.entities.User;
 import com.cnrs.opentraduction.models.SettingPart;
+import com.cnrs.opentraduction.repositories.UserRepository;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 
 @Data
 @SessionScoped
 @Named(value = "applicationSettingBean")
 public class ApplicationSettingBean implements Serializable {
+
+    @Autowired
+    private UserRepository userRepository;
 
     private SettingPart selectedSetting = SettingPart.USER_MANAGEMENT;
     private List<User> users;
@@ -27,6 +28,7 @@ public class ApplicationSettingBean implements Serializable {
         selectedSetting = SettingPart.USER_MANAGEMENT;
 
         //searchAllUsers
+        /*
         Group group = Group.builder().name("Tunis GROUP").build();
         Thesaurus thesaurus = Thesaurus.builder().name("Pactole").build();
         User user = User.builder()
@@ -42,7 +44,8 @@ public class ApplicationSettingBean implements Serializable {
                 .created(LocalDateTime.now())
                 .modified(LocalDateTime.now())
                 .build();
-        users = List.of(user, user, user, user);
+        users = List.of(user, user, user, user);*/
+        users = (List<User>) userRepository.findAll();
     }
 
     public String getMenuItemClass(String settingItem) {

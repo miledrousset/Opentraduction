@@ -3,8 +3,8 @@ package com.cnrs.opentraduction.views;
 import com.cnrs.opentraduction.config.LocaleBean;
 import com.cnrs.opentraduction.entities.User;
 import com.cnrs.opentraduction.models.MenuItem;
-
 import com.cnrs.opentraduction.services.UserService;
+
 import lombok.Data;
 import org.primefaces.PrimeFaces;
 import org.springframework.context.MessageSource;
@@ -51,13 +51,13 @@ public class ApplicationBean implements Serializable {
         connected = true;
         menuItemSelected = MenuItem.HOME;
 
-        try {
+        /*try {
             userConnected = userService.authentification("admin", "admin");
             PrimeFaces.current().executeScript("PF('login').hide();");
         } catch (Exception ex) {
             showMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage());
-        }
-        //userConnected = User.builder().firstName("Firas").lastName("GABSI").admin(true).build();
+        }*/
+        userConnected = User.builder().firstName("Firas").lastName("GABSI").admin(true).build();
 
     }
 

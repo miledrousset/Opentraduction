@@ -49,7 +49,10 @@
               <div style="width: 100%; text-align: center">
                 <form action="#" class="sign-up-form d-flex" data-aos="fade-up" data-aos-delay="300" style="width: 40%">
                   <input type="text" class="form-control" placeholder="#{msg['search.sub-title']}" />
-                  <p:commandButton class="btn-getstarted" title="#{msg['search.title']}" style="background: #e84545; border-color: #e84545" />
+                  <p:commandButton class="btn-getstarted" title="#{msg['search.title']}"
+                                   ajax="true" process="@this"
+                                   actionListener="#{searchBean.searchTerm()}"
+                                   style="background: #e84545; border-color: #e84545" />
                 </form>
               </div>
             </h:panelGroup>
