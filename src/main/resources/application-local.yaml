@@ -9,7 +9,7 @@ server:
   servlet:
     context-path: /shs-traduction
     session:
-      timeout: 60s
+      timeout: 30m
 
 #######################
 # Spring configuration

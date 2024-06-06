@@ -47,6 +47,8 @@ public class ApplicationBean implements Serializable {
 
     public void logout() {
 
+        login = "";
+        password = "";
         connected = false;
         userConnected = null;
         menuItemSelected = MenuItem.HOME;
