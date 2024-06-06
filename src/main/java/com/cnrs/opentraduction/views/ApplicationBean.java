@@ -48,6 +48,7 @@ public class ApplicationBean implements Serializable {
     public void logout() {
 
         connected = false;
+        userConnected = null;
         menuItemSelected = MenuItem.HOME;
     }
 
@@ -82,24 +83,22 @@ public class ApplicationBean implements Serializable {
     }
 
     public void navigateToPage(String menuItem) throws IOException {
-        if (!menuItem.equals(menuItemSelected)) {
-            menuItemSelected = MenuItem.valueOf(menuItem);
-            switch(menuItemSelected) {
-                case SEARCH:
-                    FacesContext.getCurrentInstance().getExternalContext().redirect("search.xhtml");
-                    break;
-                case USER_SETTINGS:
-                    FacesContext.getCurrentInstance().getExternalContext().redirect("user-settings.xhtml");
-                    break;
-                case SYSTEM_SETTINGS:
-                    applicationSettingBean.initialInterface();
-                    FacesContext.getCurrentInstance().getExternalContext().redirect("admin-settings.xhtml");
-                    break;
-                case CONTACT_US:
-                    FacesContext.getCurrentInstance().getExternalContext().redirect("contact-us.xhtml");
-                    break;
-                default:
-            }
+        menuItemSelected = MenuItem.valueOf(menuItem);
+        switch(menuItemSelected) {
+            case SEARCH:
+                FacesContext.getCurrentInstance().getExternalContext().redirect("search.xhtml");
+                break;
+            case USER_SETTINGS:
+                FacesContext.getCurrentInstance().getExternalContext().redirect("user-settings.xhtml");
+                break;
+            case SYSTEM_SETTINGS:
+                applicationSettingBean.initialInterface();
+                FacesContext.getCurrentInstance().getExternalContext().redirect("admin-settings.xhtml");
+                break;
+            case CONTACT_US:
+                FacesContext.getCurrentInstance().getExternalContext().redirect("contact-us.xhtml");
+                break;
+            default:
         }
     }
 
