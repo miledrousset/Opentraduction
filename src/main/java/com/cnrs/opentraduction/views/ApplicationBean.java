@@ -1,11 +1,13 @@
 package com.cnrs.opentraduction.views;
 
 import com.cnrs.opentraduction.config.LocaleBean;
-import com.cnrs.opentraduction.entities.User;
+import com.cnrs.opentraduction.utils.MessageUtil;
+import com.cnrs.opentraduction.entities.Users;
 import com.cnrs.opentraduction.models.MenuItem;
 import com.cnrs.opentraduction.services.UserService;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.primefaces.PrimeFaces;
 import org.springframework.context.MessageSource;
 
@@ -19,6 +21,7 @@ import java.io.Serializable;
 
 
 @Data
+@Slf4j
 @SessionScoped
 @Named(value = "applicationBean")
 public class ApplicationBean implements Serializable {
@@ -37,7 +40,7 @@ public class ApplicationBean implements Serializable {
 
     private MenuItem menuItemSelected;
     private boolean connected;
-    private User userConnected;
+    private Users userConnected;
 
 
     public void logout() {
@@ -48,22 +51,26 @@ public class ApplicationBean implements Serializable {
 
     public void login() {
 
-        connected = true;
-        menuItemSelected = MenuItem.HOME;
-
-        /*try {
+        log.info("Début de l'authentification");
+        try {
             userConnected = userService.authentification("admin", "admin");
+
+            connected = true;
+            menuItemSelected = MenuItem.HOME;
+
             PrimeFaces.current().executeScript("PF('login').hide();");
+            MessageUtil.showMessage(FacesMessage.SEVERITY_INFO, "Utilisateur connecté avec sucée !");
+            log.info("Authentification terminé avec sucée de {}", userConnected.getLogin());
         } catch (Exception ex) {
-            showMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage());
-        }*/
-        userConnected = User.builder().firstName("Firas").lastName("GABSI").admin(true).build();
+            log.error("Erreur pendant l'authentification : " + ex.getMessage());
+            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage());
+        }
 
     }
 
     public String getUserNameConnected() {
-
-        return messageSource.getMessage("application.home.welcome", null, localeBean.getCurrentLocale()) + (connected ? " Firas GABSI" : "");
+        var label = connected ? " " + userConnected.getFullName() : "";
+        return messageSource.getMessage("application.home.welcome", null, localeBean.getCurrentLocale()) + label;
     }
 
     public String getMenuItemClass(String menuItem) {
@@ -90,12 +97,6 @@ public class ApplicationBean implements Serializable {
                 default:
             }
         }
-    }
-
-    private void showMessage(FacesMessage.Severity severity, String message) {
-        FacesMessage msg = new FacesMessage(severity, "", message);
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-        PrimeFaces.current().ajax().update("message");
     }
 
 }

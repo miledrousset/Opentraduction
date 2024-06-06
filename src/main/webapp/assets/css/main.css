@@ -69,7 +69,6 @@ body {
 
 a {
   color: var(--accent-color);
-  text-decoration: none;
   transition: 0.3s;
   text-decoration: none !important;
 }
@@ -1427,7 +1426,7 @@ section,
 
 .pricing .featured {
   z-index: 10;
-  border: 3px solid var(--accent-color);
+  border: 3px solid rgba(0, 0, 0, .16);
 }
 
 /*--------------------------------------------------------------
@@ -2892,3 +2891,6 @@ body .ui-commandlink, body .ui-link {
   transition: background-color .2s, color .2s, border-color .2s, box-shadow .2s, opacity .2s;
 }
 
+.ui-datatable table {
+  table-layout: auto;
+}

@@ -44,13 +44,13 @@ public class Thesaurus {
 
     @ManyToOne
     @JoinColumn(name = "instance_id", referencedColumnName = "id")
-    private Instance instance;
+    private Instances instance;
 
     @ManyToMany
     @JoinTable(
             name = "user_thesaurus",
             joinColumns = @JoinColumn(name = "thesaurus_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Set<User> users;
+    private Set<Users> users;
 }
 

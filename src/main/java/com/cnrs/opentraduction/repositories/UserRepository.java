@@ -1,12 +1,15 @@
 package com.cnrs.opentraduction.repositories;
 
-import com.cnrs.opentraduction.entities.User;
-import org.springframework.data.repository.CrudRepository;
-
+import com.cnrs.opentraduction.entities.Users;
+import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 
-public interface UserRepository extends CrudRepository<User, Integer> {
+public interface UserRepository extends JpaRepository<Users, Integer> {
 
-    Optional<User> findByLoginAndPassword(String login, String password);
+    Optional<Users> findByLoginAndPassword(String login, String password);
+
+    Optional<Users> findByMail(String mail);
+
+    Optional<Users> findByPassword(String password);
 }

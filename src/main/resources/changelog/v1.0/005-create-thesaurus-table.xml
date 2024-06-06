@@ -24,7 +24,7 @@
         </createTable>
         <addForeignKeyConstraint baseTableName="thesaurus"
                                  baseColumnNames="instance_id"
-                                 referencedTableName="instance"
+                                 referencedTableName="instances"
                                  referencedColumnNames="id"
                                  constraintName="fk_thesaurus_instance"/>
     </changeSet>

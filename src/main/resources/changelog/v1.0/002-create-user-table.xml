@@ -7,10 +7,10 @@
     <changeSet id="V1-002" author="fgabsi">
         <preConditions>
             <not>
-                <tableExists tableName="user"/>
+                <tableExists tableName="users"/>
             </not>
         </preConditions>
-        <createTable tableName="user">
+        <createTable tableName="users">
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -27,9 +27,9 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addForeignKeyConstraint baseTableName="user"
+        <addForeignKeyConstraint baseTableName="users"
                                  baseColumnNames="id_group_user"
-                                 referencedTableName="group"
+                                 referencedTableName="groups"
                                  referencedColumnNames="id"
                                  constraintName="fk_user_group"/>
     </changeSet>

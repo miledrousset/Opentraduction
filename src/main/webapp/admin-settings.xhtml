@@ -23,10 +23,13 @@
     <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
     <!-- Main CSS File -->
     <link href="assets/css/main.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.1.0/css/flag-icon.min.css" rel="stylesheet"/>
   </h:head>
 
   <h:body class="services-details-page">
-    <h:panelGroup id="mainContent">
+    <h:form id="mainContent">
+
+      <p:growl id="message" globalOnly="true" />
 
       <ui:include src="shared/header.xhtml" />
 
@@ -35,104 +38,41 @@
         <section id="service-details" class="service-details section">
           <div class="container">
             <div class="row gy-5">
-              <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+              <div class="col-lg-3" data-aos="fade-up" data-aos-delay="100">
                 <div class="service-box">
                   <h4>Paramètres Système</h4>
                   <div class="services-list">
-                    <p:link class="#{applicationSettingBean.getMenuItemClass('USER_MANAGEMENT')}">
-                      <i class="bi bi-arrow-right-circle"/><span>Gestion des utilisateurs</span>
-                    </p:link>
-                    <p:link class="#{applicationSettingBean.getMenuItemClass('GROUP_MANAGEMENT')}">
-                      <i class="bi bi-arrow-right-circle"/><span>Gestion des groupes</span>
-                    </p:link>
-                    <p:link class="#{applicationSettingBean.getMenuItemClass('INSTANCE_MANAGEMENT')}">
-                      <i class="bi bi-arrow-right-circle"/><span>Gestion des instances</span>
-                    </p:link>
-                    <p:link class="#{applicationSettingBean.getMenuItemClass('LANGUAGE_MANAGEMENT')}">
-                      <i class="bi bi-arrow-right-circle"/><span>Gestion des langues</span>
-                    </p:link>
+                    <p:commandLink class="#{applicationSettingBean.getMenuItemClass('USER_MANAGEMENT')}"
+                                   action="#{applicationSettingBean.setMenuItem('USER_MANAGEMENT')}"
+                                   update="mainContent" ajax="false" process="@this">
+                      <i class="pi pi-user"/><span>Gestion des utilisateurs</span>
+                    </p:commandLink>
+
+                    <p:commandLink class="#{applicationSettingBean.getMenuItemClass('GROUP_MANAGEMENT')}"
+                                   action="#{applicationSettingBean.setMenuItem('GROUP_MANAGEMENT')}"
+                                   update="mainContent" ajax="false" process="@this">
+                      <i class="pi pi-users"/><span>Gestion des groupes</span>
+                    </p:commandLink>
+
+                    <p:commandLink class="#{applicationSettingBean.getMenuItemClass('INSTANCE_MANAGEMENT')}"
+                                   action="#{applicationSettingBean.setMenuItem('INSTANCE_MANAGEMENT')}"
+                                   update="mainContent" ajax="false" process="@this">
+                      <i class="pi pi-server"/><span>Gestion des instances</span>
+                    </p:commandLink>
                   </div>
-                </div><!-- End Services List -->
+                </div>
               </div>
 
               <h:panelGroup rendered="#{applicationSettingBean.selectedSetting == 'USER_MANAGEMENT'}">
-                <div class="col-lg-8 service-box" data-aos="fade-up" data-aos-delay="200">
-                  <h3></h3>
-
-                  <section id="pricing" class="pricing section">
-                    <div class="container section-title" data-aos="fade-up">
-                      <h2>Liste des utilisateurs</h2>
-                    </div>
-
-                    <div class="container" data-aos="zoom-in" data-aos-delay="100">
-
-                      <div class="row">
-                        <div class="col-lg-12">
-                          <div class="pricing-item featured">
-                            <div class="row">
-                              <div class="col-12" style="text-align: right; margin-bottom: 10px">
-                                <p:commandButton styleClass="ui-button-raised ui-button-secondary"
-                                                 icon="pi pi-plus-circle" ajax="true" process="@this"
-                                                 onclick="PF('addUser').show();" value="Ajouter un nouveau utilisateur" />
-                              </div>
-                            </div>
-
-                            <p:dataTable var="user" value="#{applicationSettingBean.users}" class="table table-hover">
-                              <p:column headerText="Groupe">
-                                <p:tag styleClass="mr-2" value="#{user.group.name}" />
-                              </p:column>
-
-                              <p:column headerText="Prénom">
-                                <h:outputText value="#{user.firstName}" />
-                              </p:column>
-
-                              <p:column headerText="Nom">
-                                <h:outputText value="#{user.lastName}" />
-                              </p:column>
-
-                              <p:column headerText="Login">
-                                <h:outputText value="#{user.login}" />
-                              </p:column>
-
-                              <p:column headerText="Admin">
-                                <h:outputText value="#{user.admin}" />
-                                <p:selectBooleanButton onLabel="Yes" offLabel="No" style="width:6rem"/>
-                              </p:column>
-
-                              <p:column headerText="Action">
-
-                              </p:column>
-                            </p:dataTable>
-
-                          </div>
-                        </div><!-- End Pricing Item -->
-                      </div>
-
-                    </div>
-
-                  </section>
-                </div>
+                <ui:include src="system-settings/users-management.xhtml" />
               </h:panelGroup>
 
               <h:panelGroup rendered="#{applicationSettingBean.selectedSetting == 'GROUP_MANAGEMENT'}">
-                <div class="col-lg-8 ps-lg-5 service-box" data-aos="fade-up" data-aos-delay="200">
-                  <h3>Liste des groupes</h3>
-
-                </div>
+                <ui:include src="system-settings/groups-management.xhtml" />
               </h:panelGroup>
 
               <h:panelGroup rendered="#{applicationSettingBean.selectedSetting == 'INSTANCE_MANAGEMENT'}">
-                <div class="col-lg-8 ps-lg-5 service-box" data-aos="fade-up" data-aos-delay="200">
-                  <h3>Liste des instances</h3>
-
-                </div>
-              </h:panelGroup>
-
-              <h:panelGroup rendered="#{applicationSettingBean.selectedSetting == 'LANGUAGE_MANAGEMENT'}">
-                <div class="col-lg-8 ps-lg-5 service-box" data-aos="fade-up" data-aos-delay="200">
-                  <h3>Liste des langues</h3>
-
-                </div>
+                <ui:include src="system-settings/instances-management.xhtml" />
               </h:panelGroup>
             </div>
           </div>
@@ -140,8 +80,6 @@
       </main>
 
       <ui:include src="shared/footer.xhtml" />
-
-      <ui:include src="dialogs/addUser.xhtml" />
-    </h:panelGroup>
+    </h:form>
   </h:body>
 </html>

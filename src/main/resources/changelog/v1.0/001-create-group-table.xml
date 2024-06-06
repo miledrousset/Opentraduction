@@ -7,10 +7,10 @@
     <changeSet id="V1-001" author="fgabsi">
         <preConditions>
             <not>
-                <tableExists tableName="group"/>
+                <tableExists tableName="groups"/>
             </not>
         </preConditions>
-        <createTable tableName="group">
+        <createTable tableName="groups">
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>

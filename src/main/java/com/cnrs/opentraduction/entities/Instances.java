@@ -7,60 +7,40 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 
-@Entity(name = "user")
+@Entity(name = "instances")
 @Getter
 @Setter
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class User {
+public class Instances {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(unique = true)
-    private String login;
+    private String name;
 
-    private String password;
+    private String url;
 
-    @Column(unique = true)
-    private String mail;
+    @ManyToMany(mappedBy = "instances")
+    private Set<Groups> groups;
 
-    private String firstName;
-
-    private String lastName;
-
-    private boolean active;
-
-    private boolean admin;
+    @OneToMany(mappedBy = "instance")
+    private Set<Thesaurus> thesauruses;
 
     private LocalDateTime created;
 
     private LocalDateTime modified;
-
-    @ManyToOne
-    @JoinColumn(name = "id_group_user", referencedColumnName = "id")
-    private Group group;
-
-    @ManyToMany(mappedBy = "users")
-    private Set<Thesaurus> thesauruses;
-
-    public String getFullName() {
-        return String.join(" ", List.of(firstName, lastName));
-    }
 }

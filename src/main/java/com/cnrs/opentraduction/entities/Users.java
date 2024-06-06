@@ -7,47 +7,60 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
 
-@Entity(name = "group")
+@Entity(name = "users")
 @Getter
 @Setter
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class Group {
+public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String name;
+    @Column(unique = true)
+    private String login;
 
-    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<User> users;
+    private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "group_instance",
-            joinColumns = @JoinColumn(name = "group_id"),
-            inverseJoinColumns = @JoinColumn(name = "instance_id"))
-    private Set<Instance> instances;
+    @Column(unique = true)
+    private String mail;
+
+    private String firstName;
+
+    private String lastName;
+
+    private boolean active;
+
+    private boolean admin;
 
     private LocalDateTime created;
 
     private LocalDateTime modified;
 
+    @ManyToOne
+    @JoinColumn(name = "id_group_user", referencedColumnName = "id")
+    private Groups group;
+
+    @ManyToMany(mappedBy = "users")
+    private Set<Thesaurus> thesauruses;
+
+    public String getFullName() {
+        return String.join(" ", List.of(firstName, lastName));
+    }
 }

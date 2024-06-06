@@ -1,7 +1,9 @@
 package com.cnrs.opentraduction.repositories;
 
-import com.cnrs.opentraduction.entities.Group;
-import org.springframework.data.repository.CrudRepository;
+import com.cnrs.opentraduction.entities.Groups;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 
-public interface GroupRepository extends CrudRepository<Group, Integer> {}
+public interface GroupRepository extends JpaRepository<Groups, Integer> {
+
+}

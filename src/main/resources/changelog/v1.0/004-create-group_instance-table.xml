@@ -7,10 +7,10 @@
     <changeSet id="V1-004" author="fgabsi">
         <preConditions>
             <not>
-                <tableExists tableName="group_instance"/>
+                <tableExists tableName="group_instances"/>
             </not>
         </preConditions>
-        <createTable tableName="group_instance">
+        <createTable tableName="group_instances">
             <column name="group_id" type="int">
                 <constraints nullable="false"/>
             </column>
@@ -19,14 +19,18 @@
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="group_id, instance_id" constraintName="pk_group_instance" tableName="group_instance"/>
+        <addPrimaryKey columnNames="group_id, instance_id" constraintName="pk_group_instance" tableName="group_instances"/>
 
-        <addForeignKeyConstraint baseColumnNames="group_id" baseTableName="group_instance"
+        <addForeignKeyConstraint baseColumnNames="group_id"
+                                 baseTableName="group_instances"
                                  constraintName="fk_group_instance_group"
-                                 referencedColumnNames="id" referencedTableName="group"/>
+                                 referencedColumnNames="id"
+                                 referencedTableName="groups"/>
 
-        <addForeignKeyConstraint baseColumnNames="instance_id" baseTableName="group_instance"
+        <addForeignKeyConstraint baseColumnNames="instance_id"
+                                 baseTableName="group_instances"
                                  constraintName="fk_group_instance_instance"
-                                 referencedColumnNames="id" referencedTableName="instance"/>
+                                 referencedColumnNames="id"
+                                 referencedTableName="instances"/>
     </changeSet>
 </databaseChangeLog>

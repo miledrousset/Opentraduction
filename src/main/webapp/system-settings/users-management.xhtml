@@ -1,0 +1,85 @@
+<ui:composition 
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <div class="col-lg-9 service-box" data-aos="fade-up" data-aos-delay="200">
+        <section id="pricing" class="pricing section">
+            <div class="container section-title" data-aos="fade-up">
+                <h2>Liste des utilisateurs</h2>
+            </div>
+
+            <div class="container" data-aos="zoom-in" data-aos-delay="100">
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="pricing-item featured">
+                            <div class="row">
+                                <div class="col-12" style="text-align: right; margin-bottom: 10px">
+                                    <p:commandButton styleClass="ui-button-outlined ui-button-secondary"
+                                                     icon="pi pi-user-plus" ajax="true" process="@this"
+                                                     actionListener="#{applicationSettingBean.initialAddUserDialog()}"
+                                                     update="mainContent:userForm"
+                                                     value="Ajouter un nouveau utilisateur" />
+                                </div>
+                            </div>
+
+                            <p:dataTable var="user" value="#{applicationSettingBean.users}" class="table table-hover" stripedRows="true"
+                                         reflow="true" styleClass="products-table" draggableColumns="true">
+                                <p:column headerText="Groupe" width="10%" style="text-align: center">
+                                    <p:tag styleClass="mr-2" value="#{user.group.name}" style="background: rgba(0, 0, 0, 0.58)" />
+                                </p:column>
+
+                                <p:column headerText="Prénom" width="13%" style="text-align: center">
+                                    <h:outputText value="#{user.firstName}" />
+                                </p:column>
+
+                                <p:column headerText="Nom" width="13%" style="text-align: center">
+                                    <h:outputText value="#{user.lastName}" />
+                                </p:column>
+
+                                <p:column headerText="Login" width="15%" style="text-align: center">
+                                    <h:outputText value="#{user.login}" />
+                                </p:column>
+
+                                <p:column headerText="Admin" width="7%" style="text-align: center">
+                                    <h:panelGroup rendered="#{user.admin}">
+                                        <i class="pi pi-check-circle" style="color: #e84545"></i>
+                                    </h:panelGroup>
+                                    <h:panelGroup rendered="#{!user.admin}" width="7%">
+                                        <i class="pi pi-times-circle" style="color: rgba(0, 0, 0, 0.34)"></i>
+                                    </h:panelGroup>
+                                </p:column>
+
+                                <p:column headerText="Active" width="7%" style="text-align: center">
+                                    <h:panelGroup rendered="#{user.active}">
+                                        <i class="pi pi-check-circle" style="color: #e84545"></i>
+                                    </h:panelGroup>
+                                    <h:panelGroup rendered="#{!user.active}">
+                                        <i class="pi pi-times-circle" style="color: rgba(0, 0, 0, 0.34)"></i>
+                                    </h:panelGroup>
+                                </p:column>
+
+                                <p:column headerText="Action" width="10%">
+                                    <p:commandButton icon="pi pi-user-edit" ajax="true" process="@this" update="mainContent:userForm"
+                                                     actionListener="#{applicationSettingBean.initialUpdateUserDialog(user)}"
+                                                     styleClass="rounded-button ui-button-success ui-button-flat" />
+
+                                    <p:commandButton icon="pi pi-user-minus" ajax="true" process="@this" update="mainContent:userForm"
+                                                     actionListener="#{applicationSettingBean.initialUpdateUserDialog(user)}"
+                                                     styleClass="rounded-button ui-button-danger ui-button-flat" />
+                                </p:column>
+                            </p:dataTable>
+
+                        </div>
+                    </div><!-- End Pricing Item -->
+                </div>
+
+            </div>
+
+        </section>
+    </div>
+
+    <ui:include src="../dialogs/userForm.xhtml" />
+
+</ui:composition>
