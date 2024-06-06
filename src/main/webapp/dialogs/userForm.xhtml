@@ -15,33 +15,43 @@
                                  value="#{applicationSettingBean.userSelected.firstName}"
                                  placeholder="Prénom" required="true" />
                 </div>
+            </div>
 
+            <div class="row">
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
                     <p:outputLabel for="lastname" value="Nom"/>
                     <p:inputText id="lastname" class="form-control"
                                  value="#{applicationSettingBean.userSelected.lastName}"
                                  placeholder="Nom" required="true" />
                 </div>
+            </div>
 
+            <div class="row">
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
                     <p:outputLabel for="email" value="E-mail"/>
                     <p:inputText id="email" class="form-control" placeholder="E-mail"
                                  value="#{applicationSettingBean.userSelected.mail}"/>
                 </div>
+            </div>
 
+            <div class="row">
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
                     <p:outputLabel for="login" value="Login"/>
                     <p:inputText id="login" class="form-control" placeholder="Login" required="true"
                                  value="#{applicationSettingBean.userSelected.login}"/>
                 </div>
+            </div>
 
+            <div class="row">
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
                     <p:outputLabel for="password" value="Mot de passe"/>
                     <p:password id="password" class="form-control"
                                 value="#{applicationSettingBean.userSelected.password}"
                                 feedback="true" inline="true" required="true"/>
                 </div>
+            </div>
 
+            <div class="row">
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
                     <p:outputLabel for="groupe" value="Groupe"/>
                     <p:selectOneMenu id="groupe" class="form-control" required="true"
@@ -50,28 +60,33 @@
                                        itemLabel="#{group.name}" itemValue="#{group}"/>
                     </p:selectOneMenu>
                 </div>
+            </div>
 
+            <div class="row">
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
                     <h5><p:outputLabel for="admin" value="Admin"/></h5>
                     <p:toggleSwitch id="admin" onIcon="pi pi-check" offIcon="pi pi-times"
                                     value="#{applicationSettingBean.userSelected.admin}"/>
                 </div>
+            </div>
 
+            <div class="row">
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
                     <h5><p:outputLabel for="active" value="Active"/></h5>
                     <p:toggleSwitch id="active" onIcon="pi pi-check" offIcon="pi pi-times"
                                     value="#{applicationSettingBean.userSelected.active}"/>
                 </div>
             </div>
+
+            <div style="width: 100%; text-align: right; margin-top: 15px; margin-bottom: 2px;">
+                <p:commandButton value="Annuler" styleClass="ui-button-secondary ui-button-flat"
+                                 actionListener="PF('userDialog').hide();"
+                                 ajax="true" process="@this" update="userForm"/>
+                <p:commandButton title="Valider" actionListener="#{applicationSettingBean.userManagement()}"
+                                 class="btn-getstarted" ajax="true" process="@this"
+                                 update="mainContent"/>
+            </div>
         </h:form>
-        <f:facet name="footer">
-            <p:commandButton value="Annuler" styleClass="ui-button-secondary ui-button-flat"
-                             actionListener="PF('userDialog').hide();"
-                             ajax="true" process="@this" update="userForm"/>
-            <p:commandButton title="Valider" actionListener="#{applicationSettingBean.userManagement()}"
-                             class="btn-getstarted" ajax="true" process="@this"
-                             update="mainContent"/>
-        </f:facet>
     </p:dialog>
 
 </ui:composition>

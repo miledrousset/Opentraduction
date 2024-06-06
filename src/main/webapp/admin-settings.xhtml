@@ -44,19 +44,19 @@
                   <div class="services-list">
                     <p:commandLink class="#{applicationSettingBean.getMenuItemClass('USER_MANAGEMENT')}"
                                    action="#{applicationSettingBean.setMenuItem('USER_MANAGEMENT')}"
-                                   update="mainContent" ajax="false" process="@this">
+                                   ajax="false" process="@this">
                       <i class="pi pi-user"/><span>Gestion des utilisateurs</span>
                     </p:commandLink>
 
                     <p:commandLink class="#{applicationSettingBean.getMenuItemClass('GROUP_MANAGEMENT')}"
                                    action="#{applicationSettingBean.setMenuItem('GROUP_MANAGEMENT')}"
-                                   update="mainContent" ajax="false" process="@this">
+                                   ajax="false" process="@this">
                       <i class="pi pi-users"/><span>Gestion des groupes</span>
                     </p:commandLink>
 
                     <p:commandLink class="#{applicationSettingBean.getMenuItemClass('INSTANCE_MANAGEMENT')}"
                                    action="#{applicationSettingBean.setMenuItem('INSTANCE_MANAGEMENT')}"
-                                   update="mainContent" ajax="false" process="@this">
+                                   ajax="false" process="@this">
                       <i class="pi pi-server"/><span>Gestion des instances</span>
                     </p:commandLink>
                   </div>

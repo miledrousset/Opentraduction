@@ -19,7 +19,6 @@
                                     <p:commandButton styleClass="ui-button-outlined ui-button-secondary"
                                                      icon="pi pi-user-plus" ajax="true" process="@this"
                                                      actionListener="#{applicationSettingBean.initialAddUserDialog()}"
-                                                     update="mainContent:userForm"
                                                      value="Ajouter un nouveau utilisateur" />
                                 </div>
                             </div>
@@ -44,39 +43,37 @@
 
                                 <p:column headerText="Admin" width="7%" style="text-align: center">
                                     <h:panelGroup rendered="#{user.admin}">
-                                        <i class="pi pi-check-circle" style="color: #e84545"></i>
+                                        <i class="pi pi-check-circle" style="color: #e84545"/>
                                     </h:panelGroup>
                                     <h:panelGroup rendered="#{!user.admin}" width="7%">
-                                        <i class="pi pi-times-circle" style="color: rgba(0, 0, 0, 0.34)"></i>
+                                        <i class="pi pi-times-circle" style="color: rgba(0, 0, 0, 0.34)"/>
                                     </h:panelGroup>
                                 </p:column>
 
                                 <p:column headerText="Active" width="7%" style="text-align: center">
                                     <h:panelGroup rendered="#{user.active}">
-                                        <i class="pi pi-check-circle" style="color: #e84545"></i>
+                                        <i class="pi pi-check-circle" style="color: #e84545"/>
                                     </h:panelGroup>
                                     <h:panelGroup rendered="#{!user.active}">
-                                        <i class="pi pi-times-circle" style="color: rgba(0, 0, 0, 0.34)"></i>
+                                        <i class="pi pi-times-circle" style="color: rgba(0, 0, 0, 0.34)"/>
                                     </h:panelGroup>
                                 </p:column>
 
                                 <p:column headerText="Action" width="10%">
-                                    <p:commandButton icon="pi pi-user-edit" ajax="true" process="@this" update="mainContent:userForm"
+                                    <p:commandButton icon="pi pi-user-edit" ajax="true" process="@this" update="mainContent"
                                                      actionListener="#{applicationSettingBean.initialUpdateUserDialog(user)}"
                                                      styleClass="rounded-button ui-button-success ui-button-flat" />
 
-                                    <p:commandButton icon="pi pi-user-minus" ajax="true" process="@this" update="mainContent:userForm"
+                                    <p:commandButton icon="pi pi-user-minus" ajax="true" process="@this" update="mainContent"
                                                      actionListener="#{applicationSettingBean.initialUpdateUserDialog(user)}"
                                                      styleClass="rounded-button ui-button-danger ui-button-flat" />
                                 </p:column>
                             </p:dataTable>
 
                         </div>
-                    </div><!-- End Pricing Item -->
+                    </div>
                 </div>
-
             </div>
-
         </section>
     </div>
 

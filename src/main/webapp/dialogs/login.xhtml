@@ -8,28 +8,29 @@
 
         <h:form class="php-email-form" data-aos="fade-up" data-aos-delay="200">
 
-            <p:defaultCommand target="loginBtn" />
-
             <div class="row">
                 <div class="col-12">
-                    <p:inputText class="form-control" placeholder="Login" required="true" />
+                    <p:inputText class="form-control" placeholder="Login" required="true"
+                                 value="#{applicationBean.login}" />
                 </div>
 
                 <div class="col-12" style="margin-top: 20px">
-                    <p:password class="form-control" placeholder="Mot de passe" required="true"/>
+                    <p:password class="form-control" placeholder="Mot de passe" required="true"
+                                value="#{applicationBean.password}"/>
                 </div>
             </div>
-        </h:form>
-        <f:facet name="footer">
-            <p:commandButton value="#{msg['action.annuler']}" styleClass="ui-button-secondary ui-button-flat"
-                             actionListener="PF('login').hide();"
-                             ajax="true" process="@this" update="mainContent"/>
 
-            <p:commandButton id="loginBtn" title="#{msg['application.menu.connect']}"
-                             actionListener="#{applicationBean.login()}"
-                             class="btn-getstarted" ajax="true" process="@this"
-                             update="mainContent"/>
-        </f:facet>
+            <div style="width: 100%; text-align: right; margin-top: 15px; margin-bottom: 2px;">
+                <p:commandButton value="#{msg['action.annuler']}" styleClass="ui-button-secondary ui-button-flat"
+                                 actionListener="PF('login').hide();"
+                                 ajax="true" process="@this" update="mainContent"/>
+
+                <p:commandButton title="#{msg['application.menu.connect']}"
+                                 actionListener="#{applicationBean.login()}"
+                                 class="btn-getstarted" ajax="true" process="@form"
+                                 update="mainContent"/>
+            </div>
+        </h:form>
     </p:dialog>
 
 </ui:composition>

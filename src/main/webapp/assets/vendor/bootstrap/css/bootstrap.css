@@ -3419,7 +3419,6 @@ textarea.form-control-lg {
   border-right: 0.3em solid transparent;
   border-bottom: 0;
   border-left: 0.3em solid transparent;
-  color: white !important;
 }
 .dropdown-toggle:empty::after {
   margin-left: 0;

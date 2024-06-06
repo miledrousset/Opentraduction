@@ -42,6 +42,8 @@ public class ApplicationBean implements Serializable {
     private boolean connected;
     private Users userConnected;
 
+    private String login, password;
+
 
     public void logout() {
 
@@ -53,7 +55,7 @@ public class ApplicationBean implements Serializable {
 
         log.info("Début de l'authentification");
         try {
-            userConnected = userService.authentification("admin", "admin");
+            userConnected = userService.authentification(login, password);
 
             connected = true;
             menuItemSelected = MenuItem.HOME;
@@ -62,6 +64,8 @@ public class ApplicationBean implements Serializable {
             MessageUtil.showMessage(FacesMessage.SEVERITY_INFO, "Utilisateur connecté avec sucée !");
             log.info("Authentification terminé avec sucée de {}", userConnected.getLogin());
         } catch (Exception ex) {
+            login = "";
+            password = "";
             log.error("Erreur pendant l'authentification : " + ex.getMessage());
             MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage());
         }

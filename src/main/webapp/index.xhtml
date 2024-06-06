@@ -27,7 +27,7 @@
   </h:head>
 
   <h:body class="index-page">
-    <h:panelGroup id="mainContent">
+    <h:form id="mainContent">
 
       <p:growl id="message" globalOnly="true" />
 
@@ -59,7 +59,7 @@
           </div>
           <h:panelGroup id="about" rendered="#{!applicationBean.isConnected()}" class="about section">
             <div class="content" data-aos="fade-up" data-aos-delay="300">
-              <p:link href="#" class="read-more" onclick="PF('login').show();">
+              <p:link href="#" class="read-more" onclick="PF('login').show();" process="@this" ajax="true">
                 <span><h:outputText value="#{msg['application.menu.connect']}" /></span>
                 <i class="bi bi-lock-fill"/>
               </p:link>
@@ -102,7 +102,7 @@
       </section>
 
       <ui:include src="dialogs/login.xhtml" />
-    </h:panelGroup>
+    </h:form>
 
     <ui:include src="shared/footer.xhtml" />
   </h:body>

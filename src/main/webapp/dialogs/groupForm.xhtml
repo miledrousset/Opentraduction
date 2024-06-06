@@ -26,8 +26,8 @@
         </h:form>
         <f:facet name="footer">
             <p:commandButton value="Annuler" styleClass="ui-button-secondary ui-button-flat"
-                             actionListener="PF('userDialog').hide();"
-                             ajax="true" process="@this" update="userForm"/>
+                             actionListener="PF('groupDialog').hide();"
+                             ajax="true" process="@this" update="groupForm"/>
             <p:commandButton title="Valider" actionListener="#{applicationSettingBean.userManagement()}"
                              class="btn-getstarted" ajax="true" process="@this"
                              update="mainContent"/>

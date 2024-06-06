@@ -24,6 +24,29 @@
                                 </div>
                             </div>
 
+                            <p:dataTable var="group" value="#{applicationSettingBean.groups}" class="table table-hover" stripedRows="true"
+                                         reflow="true" styleClass="products-table" draggableColumns="true">
+
+                                <p:column headerText="Nom" width="20%">
+                                    <h:outputText value="#{group.name}" />
+                                </p:column>
+
+                                <p:column headerText="Les instances Thésaurus" width="60%" style="text-align: center">
+                                    <p:orderList value="#{group.instances}" var="instance" controlsLocation="none"
+                                                 itemLabel="#{instance.name}" itemValue="#{instance.id}" />
+                                </p:column>
+
+                                <p:column headerText="Action" width="20%" style="text-align: center">
+                                    <p:commandButton icon="pi pi-pencil" ajax="true" process="@this" update="mainContent:groupForm"
+                                                     actionListener="#{applicationSettingBean.initialUpdateGroup(group)}"
+                                                     styleClass="rounded-button ui-button-success ui-button-flat" />
+
+                                    <p:commandButton icon="pi pi-times" ajax="true" process="@this" update="mainContent:groupForm"
+                                                     actionListener="#{applicationSettingBean.initialUpdateGroup(group)}"
+                                                     styleClass="rounded-button ui-button-danger ui-button-flat" />
+                                </p:column>
+                            </p:dataTable>
+
                         </div>
                     </div><!-- End Pricing Item -->
                 </div>

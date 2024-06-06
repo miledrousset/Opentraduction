@@ -18,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.primefaces.PrimeFaces;
 import org.primefaces.model.DualListModel;
 
-import javax.annotation.ManagedBean;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.inject.Named;
@@ -29,7 +28,6 @@ import java.util.List;
 
 @Data
 @Slf4j
-@ManagedBean
 @SessionScoped
 @Named(value = "applicationSettingBean")
 public class ApplicationSettingBean implements Serializable {
