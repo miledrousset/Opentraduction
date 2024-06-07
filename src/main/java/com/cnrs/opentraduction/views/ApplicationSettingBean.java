@@ -1,7 +1,6 @@
 package com.cnrs.opentraduction.views;
 
 import com.cnrs.opentraduction.entities.Instances;
-import com.cnrs.opentraduction.models.User;
 import com.cnrs.opentraduction.repositories.InstanceRepository;
 import com.cnrs.opentraduction.services.GroupService;
 import com.cnrs.opentraduction.services.InstanceService;
@@ -46,10 +45,12 @@ public class ApplicationSettingBean implements Serializable {
     private List<Groups> groups;
     private List<Instances> instances;
 
-    private User userSelected;
+    private Users userSelected;
     private Groups groupSelected;
     private Instances instanceSelected;
     private List<Instances> instancesSelected;
+
+    private String test;
 
     private DualListModel<Instances> instanceModel;
 
@@ -75,7 +76,7 @@ public class ApplicationSettingBean implements Serializable {
 
     public void initialInterface() {
         selectedSetting = SettingPart.USER_MANAGEMENT;
-        userSelected = new User();
+        userSelected = new Users();
 
         users = userRepository.findAll();
         groups = groupRepository.findAll();
@@ -85,13 +86,13 @@ public class ApplicationSettingBean implements Serializable {
         instanceModel = new DualListModel<>(instances, instancesSelected);
     }
 
-    public void initialAddUserDialog() {
+    public void initialAddUser() {
 
-        userSelected = User.builder().active(true).build();
+        userSelected = Users.builder().active(true).build();
         PrimeFaces.current().executeScript("PF('userDialog').show();");
     }
 
-    public void initialUpdateUserDialog(User user) {
+    public void initialUpdateUser(Users user) {
 
         userSelected = user;
         PrimeFaces.current().executeScript("PF('userDialog').show();");

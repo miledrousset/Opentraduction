@@ -2,7 +2,6 @@ package com.cnrs.opentraduction.services;
 
 import com.cnrs.opentraduction.entities.Users;
 import com.cnrs.opentraduction.exception.BusinessException;
-import com.cnrs.opentraduction.models.User;
 import com.cnrs.opentraduction.repositories.UserRepository;
 import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
@@ -10,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+
+import java.time.LocalDateTime;
 
 
 @Slf4j
@@ -35,7 +36,7 @@ public class UserService {
         }
     }
 
-    public void saveUser(User userSelected) {
+    public void saveUser(Users userSelected) {
 
         if (StringUtils.isEmpty(userSelected.getMail())) {
             throw new BusinessException("Le mail est obligatoire !");
@@ -64,14 +65,14 @@ public class UserService {
                 throw new BusinessException("Erreur de création d'un nouveau utilisateur : Password existe déjà !");
             }
 
-            //userSelected.setCreated(LocalDateTime.now());
+            userSelected.setCreated(LocalDateTime.now());
         } else {
             log.info("Cas d'un utilisateur déjà existant !");
         }
 
-        //userSelected.setModified(LocalDateTime.now());
+        userSelected.setModified(LocalDateTime.now());
 
         log.info("Enregistrement dans la base");
-        //userRepository.save(userSelected);
+        userRepository.save(userSelected);
     }
 }

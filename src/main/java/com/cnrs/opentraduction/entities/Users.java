@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -57,7 +58,7 @@ public class Users {
     @JoinColumn(name = "id_group_user", referencedColumnName = "id")
     private Groups group;
 
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
     private Set<Thesaurus> thesauruses;
 
     public String getFullName() {

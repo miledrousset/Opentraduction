@@ -2,6 +2,8 @@ package com.cnrs.opentraduction.config;
 
 import lombok.Data;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
@@ -24,8 +26,8 @@ public class LocaleBean implements Serializable {
     }
 
     public String getLanguageSelected() {
-        if (currentLocale != null) {
-            return currentLocale.getLanguage();
+        if (!ObjectUtils.isEmpty(currentLocale)) {
+            return "ar".equals(currentLocale.getLanguage()) ? "ae" : currentLocale.getLanguage();
         }
         return "fr";
     }

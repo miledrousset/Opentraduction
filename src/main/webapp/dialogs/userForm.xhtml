@@ -1,8 +1,8 @@
-<ui:composition 
-    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-    xmlns:p="http://primefaces.org/ui"
-    xmlns:f="http://xmlns.jcp.org/jsf/core"
-    xmlns:h="http://xmlns.jcp.org/jsf/html">
+<ui:composition
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html">
 
     <p:dialog header="Ajouter un nouveau utilisateur" widgetVar="userDialog" minHeight="40" width="350"
               showEffect="fade" modal="true" resizable="false" position="top" >
@@ -80,13 +80,12 @@
 
             <div style="width: 100%; text-align: right; margin-top: 15px; margin-bottom: 2px;">
                 <p:commandButton value="Annuler" styleClass="ui-button-secondary ui-button-flat"
-                                 actionListener="PF('userDialog').hide();"
-                                 ajax="true" process="@this" update="userForm"/>
+                                 actionListener="PF('userDialog').hide()"
+                                 ajax="true" process="@this" update="mainContent"/>
                 <p:commandButton title="Valider" actionListener="#{applicationSettingBean.userManagement()}"
                                  class="btn-getstarted" ajax="true" process="@this"
                                  update="mainContent"/>
             </div>
         </h:form>
     </p:dialog>
-
 </ui:composition>

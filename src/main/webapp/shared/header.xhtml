@@ -51,7 +51,7 @@
             </nav>
 
             <div class="d-flex align-items-center">
-                <h:form>
+                <h:form id="languagesPanel">
                     <nav class="navbar navbar-expand-lg navbar-light bg-light rounded"
                          style="background-color: transparent !important; border: white !important;">
                         <ul class="navbar-nav mr-auto">
@@ -64,12 +64,14 @@
                                     <p:commandLink class="dropdown-item"
                                                    ajax="true" process="@this" update="mainContent"
                                                    action="#{localeBean.changeLanguage('ar')}">
-                                        <span class="flag-icon flag-icon-ae"/> <h:outputText value="#{msg['application.language.arabic']}"/>
+                                        <span class="flag-icon flag-icon-ae"/>
+                                        <h:outputText value="#{msg['application.language.arabic']}" style="margin-left: 5px"/>
                                     </p:commandLink>
                                     <p:commandLink class="dropdown-item"
-                                                   ajax="true" process="@this" update="mainContent"
+                                                   ajax="true" process="@form" update="mainContent languagesPanel"
                                                    action="#{localeBean.changeLanguage('fr')}">
-                                        <span class="flag-icon flag-icon-fr"/> <h:outputText value="#{msg['application.language.french']}"/>
+                                        <span class="flag-icon flag-icon-fr"/>
+                                        <h:outputText value="#{msg['application.language.french']}" style="margin-left: 5px"/>
                                     </p:commandLink>
                                 </div>
                             </li>

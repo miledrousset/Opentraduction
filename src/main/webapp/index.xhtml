@@ -59,7 +59,8 @@
           </div>
           <h:panelGroup id="about" rendered="#{!applicationBean.isConnected()}" class="about section">
             <div class="content" data-aos="fade-up" data-aos-delay="300">
-              <p:link href="#" class="read-more" onclick="PF('login').show();" process="@this" ajax="true">
+              <p:link href="#" class="read-more" onclick="PF('login').show();" process="@this" ajax="true"
+                style="color: #FFFF !important">
                 <span><h:outputText value="#{msg['application.menu.connect']}" /></span>
                 <i class="bi bi-lock-fill"/>
               </p:link>

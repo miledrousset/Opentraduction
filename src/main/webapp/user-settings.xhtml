@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+  <h:head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>OpenTraduction</title>
+    <meta content="" name="description" />
+    <meta content="" name="keywords" />
+    <!-- Favicons -->
+    <link href="assets/img/favicon.png" rel="icon" />
+    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link href="https://fonts.gstatic.com" rel="preconnect" />
+    <!-- Vendor CSS Files -->
+    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="assets/vendor/aos/aos.css" rel="stylesheet" />
+    <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
+    <!-- Main CSS File -->
+    <link href="assets/css/main.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.1.0/css/flag-icon.min.css" rel="stylesheet"/>
+  </h:head>
+
+  <h:body class="services-details-page">
+    <h:form id="mainContent">
+
+      <p:growl id="message" globalOnly="true" />
+
+      <ui:include src="shared/header.xhtml" />
+
+      <main class="main">
+        <!-- Service Details Section -->
+        <section id="service-details" class="service-details section">
+          <div class="container">
+            <div class="row gy-5">
+              <div class="col-lg-12 service-box" data-aos="fade-up" data-aos-delay="200">
+                <section id="pricing" class="pricing section">
+                  <div class="container section-title" data-aos="fade-up">
+                    <h2>Paramètres utilisateur</h2>
+                  </div>
+
+                  <div class="container" data-aos="zoom-in" data-aos-delay="100">
+
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <div class="pricing-item featured">
+                          <div class="row">
+                            <div class="col-12" style="text-align: right; margin-bottom: 10px">
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </h:form>
+    <ui:include src="shared/footer.xhtml" />
+  </h:body>
+</html>
