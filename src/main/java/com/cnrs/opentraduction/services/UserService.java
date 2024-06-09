@@ -11,6 +11,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Slf4j
@@ -74,5 +75,9 @@ public class UserService {
 
         log.info("Enregistrement dans la base");
         userRepository.save(userSelected);
+    }
+
+    public List<Users> getAllUsers() {
+        return userRepository.findAll();
     }
 }

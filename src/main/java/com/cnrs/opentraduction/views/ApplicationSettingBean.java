@@ -10,7 +10,6 @@ import com.cnrs.opentraduction.entities.Groups;
 import com.cnrs.opentraduction.entities.Users;
 import com.cnrs.opentraduction.models.SettingPart;
 import com.cnrs.opentraduction.repositories.GroupRepository;
-import com.cnrs.opentraduction.repositories.UserRepository;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +34,6 @@ public class ApplicationSettingBean implements Serializable {
     private final GroupService groupService;
     private final InstanceService instanceService;
 
-    private final UserRepository userRepository;
     private final GroupRepository groupRepository;
     private final InstanceRepository instanceRepository;
 
@@ -55,14 +53,12 @@ public class ApplicationSettingBean implements Serializable {
     private DualListModel<Instances> instanceModel;
 
 
-    public ApplicationSettingBean(UserRepository userRepository,
-                                  GroupRepository groupRepository,
+    public ApplicationSettingBean(GroupRepository groupRepository,
                                   InstanceRepository instanceRepository,
                                   UserService userService,
                                   GroupService groupService,
                                   InstanceService instanceService) {
 
-        this.userRepository = userRepository;
         this.groupRepository = groupRepository;
         this.instanceRepository = instanceRepository;
 
@@ -78,7 +74,7 @@ public class ApplicationSettingBean implements Serializable {
         selectedSetting = SettingPart.USER_MANAGEMENT;
         userSelected = new Users();
 
-        users = userRepository.findAll();
+        users = userService.getAllUsers();
         groups = groupRepository.findAll();
         instances = instanceRepository.findAll();
 
@@ -100,10 +96,13 @@ public class ApplicationSettingBean implements Serializable {
 
     public void userManagement() {
 
+        userSelected.setGroup(groups.get(0));
         userService.saveUser(userSelected);
 
+        users = userService.getAllUsers();
+
         MessageUtil.showMessage(FacesMessage.SEVERITY_INFO, "Utilisateur enregistré avec succès");
-        PrimeFaces.current().executeScript("PF('userDialog').show();");
+        PrimeFaces.current().executeScript("PF('userDialog').hide();");
         log.info("Utilisateur enregistré avec sucée !");
     }
 
