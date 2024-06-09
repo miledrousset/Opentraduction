@@ -60,7 +60,7 @@
                                 </p:column>
 
                                 <p:column headerText="Action" width="10%">
-                                    <p:commandButton icon="pi pi-user-edit" ajax="true" process="@this" update=":mainContent:userForm"
+                                    <p:commandButton icon="pi pi-user-edit" ajax="true" process="@this" update=":mainContent:userUpdateForm"
                                                      actionListener="#{applicationSettingBean.initialUpdateUser(user)}"
                                                      styleClass="rounded-button ui-button-success ui-button-flat" />
 
@@ -78,5 +78,6 @@
     </div>
 
     <ui:include src="../dialogs/userDialog.xhtml" />
+    <ui:include src="../dialogs/userUpdateDialog.xhtml" />
 
 </ui:composition>
