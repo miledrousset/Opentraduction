@@ -48,8 +48,6 @@ public class ApplicationSettingBean implements Serializable {
     private Instances instanceSelected;
     private List<Instances> instancesSelected;
 
-    private String test;
-
     private DualListModel<Instances> instanceModel;
 
 
@@ -84,7 +82,8 @@ public class ApplicationSettingBean implements Serializable {
 
     public void initialAddUser() {
 
-        userSelected = Users.builder().active(true).build();
+        userSelected = new Users();
+        userSelected.setActive(true);
         PrimeFaces.current().executeScript("PF('userDialog').show();");
     }
 
