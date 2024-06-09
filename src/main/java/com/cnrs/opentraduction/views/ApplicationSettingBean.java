@@ -91,7 +91,7 @@ public class ApplicationSettingBean implements Serializable {
     public void initialUpdateUser(Users user) {
 
         userSelected = user;
-        PrimeFaces.current().executeScript("PF('userUpdateDialog').show();");
+        PrimeFaces.current().executeScript("PF('userDialog').show();");
     }
 
     public void userManagement() {
