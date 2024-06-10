@@ -12,18 +12,16 @@
             <div class="row">
                 <div class="field col-12 md:col-4">
                     <p:outputLabel for="firstname" value="Prénom"/>
-                    <p:inputText id="firstname" class="form-control"
-                                 value="#{applicationSettingBean.userSelected.firstName}"
-                                 placeholder="Prénom" required="true" />
+                    <p:inputText id="firstname" class="form-control" placeholder="Prénom"
+                                 value="#{applicationSettingBean.userSelected.firstName}"/>
                 </div>
             </div>
 
             <div class="row">
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
                     <p:outputLabel for="lastname" value="Nom"/>
-                    <p:inputText id="lastname" class="form-control"
-                                 value="#{applicationSettingBean.userSelected.lastName}"
-                                 placeholder="Nom" required="true" />
+                    <p:inputText id="lastname" class="form-control" laceholder="Nom"
+                                 value="#{applicationSettingBean.userSelected.lastName}" />
                 </div>
             </div>
 
@@ -38,7 +36,7 @@
             <div class="row">
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
                     <p:outputLabel for="login" value="Login"/>
-                    <p:inputText id="login" class="form-control" placeholder="Login" required="true"
+                    <p:inputText id="login" class="form-control" placeholder="Login"
                                  value="#{applicationSettingBean.userSelected.login}"/>
                 </div>
             </div>
@@ -46,9 +44,8 @@
             <div class="row">
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
                     <p:outputLabel for="password" value="Mot de passe"/>
-                    <p:inputText id="password" class="form-control"
-                                value="#{applicationSettingBean.userSelected.password}"
-                                feedback="true" inline="true" required="true"/>
+                    <p:inputText id="password" class="form-control" feedback="true" inline="true"
+                                value="#{applicationSettingBean.userSelected.password}" />
                 </div>
             </div>
 

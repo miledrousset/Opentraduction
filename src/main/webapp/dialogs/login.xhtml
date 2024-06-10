@@ -9,12 +9,12 @@
 
             <div class="row">
                 <div class="col-12">
-                    <p:inputText class="form-control" placeholder="Login" required="true"
+                    <p:inputText class="form-control" placeholder="Login"
                                  value="#{applicationBean.connexionModel.login}" />
                 </div>
 
                 <div class="col-12" style="margin-top: 20px">
-                    <p:password class="form-control" placeholder="Mot de passe" required="true"
+                    <p:password class="form-control" placeholder="Mot de passe"
                                 value="#{applicationBean.connexionModel.password}"/>
                 </div>
             </div>
@@ -25,7 +25,7 @@
                                  ajax="true" process="@this" update="mainContent"/>
 
                 <p:commandButton value="#{msg['application.menu.connect']}"
-                                 actionListener="#{applicationBean.login()}" ajax="true" process="@form"
+                                 action="#{applicationBean.login()}" ajax="true" process="@form"
                                  update="mainContent"/>
             </div>
         </h:form>

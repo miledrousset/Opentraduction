@@ -15,6 +15,7 @@ import org.springframework.util.ObjectUtils;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -102,6 +103,50 @@ public class ApplicationBean implements Serializable {
                 FacesContext.getCurrentInstance().getExternalContext().redirect("contact-us.xhtml");
                 break;
             default:
+        }
+    }
+
+    public void openWebPage(String logoCode) {
+        String urlToOpen;
+        switch(logoCode) {
+            case "LOGO_1":
+                urlToOpen = "https://tn.ambafrance.org/";
+                break;
+            case "LOGO_2":
+                urlToOpen = "https://www.institutfrancais-tunisie.com/#/";
+                break;
+            case "LOGO_3":
+                urlToOpen = "https://www.cnrs.fr/fr";
+                break;
+            case "LOGO_4":
+                urlToOpen = "http://majlis-remomm.fr/";
+                break;
+            case "LOGO_5":
+                urlToOpen = "https://www.mom.fr/";
+                break;
+            case "LOGO_6":
+                urlToOpen = "https://www.huma-num.fr/";
+                break;
+            case "LOGO_7":
+                urlToOpen = "https://opentheso.huma-num.fr/opentheso/";
+                break;
+            case "LOGO_8":
+                urlToOpen = "https://www.cjb.ma/";
+                break;
+            case "LOGO_9":
+                urlToOpen = "https://irmcmaghreb.org/";
+                break;
+            case "LOGO_10":
+                urlToOpen = "https://www.ifao.egnet.net/";
+                break;
+            default:
+                urlToOpen = "https://www.ifporient.org/";
+        }
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect(urlToOpen);
+        } catch (IOException e) {
+            // Gérer l'exception, par exemple en affichant un message d'erreur
+            e.printStackTrace();
         }
     }
 

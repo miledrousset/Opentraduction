@@ -41,12 +41,6 @@
                                            value="#{msg['application.menu.system-settings']}"
                                            ajax="true" process="@this"/>
                         </li>
-                        <li>
-                            <p:commandLink class="#{applicationBean.getMenuItemClass('CONTACT_US')}"
-                                           action="#{applicationBean.navigateToPage('CONTACT_US')}"
-                                           value="#{msg['application.menu.contact-us']}"
-                                           ajax="true" process="@this"/>
-                        </li>
                     </h:panelGroup>
                 </ul>
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"/>
@@ -67,13 +61,13 @@
                                                    ajax="true" process="@this" update="mainContent"
                                                    action="#{localeBean.changeLanguage('ar')}">
                                         <span class="flag-icon flag-icon-ae"/>
-                                        <h:outputText value="#{msg['application.language.arabic']}" style="margin-left: 5px"/>
+                                        <h:outputText value="#{msg['application.language.arabic']}" style="margin-left: 5px; color: #000000"/>
                                     </p:commandLink>
                                     <p:commandLink class="dropdown-item"
                                                    ajax="true" process="@form" update="mainContent languagesPanel"
                                                    action="#{localeBean.changeLanguage('fr')}">
                                         <span class="flag-icon flag-icon-fr"/>
-                                        <h:outputText value="#{msg['application.language.french']}" style="margin-left: 5px"/>
+                                        <h:outputText value="#{msg['application.language.french']}" style="margin-left: 5px; color: #000000"/>
                                     </p:commandLink>
                                 </div>
                             </li>

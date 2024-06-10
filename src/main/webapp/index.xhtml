@@ -28,7 +28,7 @@
 
   <h:body class="index-page">
 
-    <h:form id="mainContent">
+    <h:panelGroup id="mainContent">
 
       <ui:include src="shared/header.xhtml" />
 
@@ -72,37 +72,97 @@
         <div class="container" data-aos="fade-up">
           <div class="row">
             <div class="col-12 sponsor-logo">
-              <img src="assets/img/logos/ambassade%20france%20tunisie.png" class="img-fluid"
-                   alt="Ambassade de France en Tunisie"/>
-              <img src="assets/img/logos/institut-francais-tunisie.png" class="img-fluid"
-                   alt="Institut Français Tunisie" />
-              <img src="assets/img/logos/cnrs.png" class="img-fluid"
-                   alt="Centre National de Recherche Scientifique" />
-              <img src="assets/img/logos/moyen-orient%20et%20mondes%20musulmans.png" class="img-fluid"
-                   alt="Moyen-Orient et Mondes Musulmans" />
+              <p:graphicImage value="/assets/img/logos/ambassade%20france%20tunisie.png"
+                              alt="#{msg['application.logos.logo1']}"
+                              title="#{msg['application.logos.logo1']}"
+                              style="max-width:15% !important;">
+                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_1')}"/>
+              </p:graphicImage>
+
+              <p:graphicImage value="/assets/img/logos/institut-francais-tunisie.png"
+                              alt="#{msg['application.logos.logo2']}"
+                              title="#{msg['application.logos.logo2']}"
+                              style="max-width:20% !important;">
+                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_2')}"/>
+              </p:graphicImage>
+
+              <p:graphicImage value="/assets/img/logos/cnrs.png"
+                              alt="#{msg['application.logos.logo3']}"
+                              title="#{msg['application.logos.logo3']}"
+                              style="max-width:11% !important;">
+                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_3')}"/>
+              </p:graphicImage>
+
+              <p:graphicImage value="/assets/img/logos/moyen-orient%20et%20mondes%20musulmans.png"
+                              alt="#{msg['application.logos.logo4']}"
+                              title="#{msg['application.logos.logo4']}"
+                              style="max-width:20% !important;">
+                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_4')}"/>
+              </p:graphicImage>
             </div>
           </div>
 
           <div class="row">
             <div class="col-12 sponsor-logo">
-              <img src="assets/img/logos/huma-num.png" class="img-fluid" alt="" />
-              <img src="assets/img/logos/opentheso.png" class="img-fluid" alt="" />
+              <p:graphicImage value="/assets/img/logos/Maison%20de%20l’Orient%20et%20de%20la%20Méditerranée.png"
+                              alt="#{msg['application.logos.logo5']}"
+                              title="#{msg['application.logos.logo5']}"
+                              style="max-width:10% !important;">
+                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_5')}"/>
+              </p:graphicImage>
+
+              <p:graphicImage value="/assets/img/logos/huma-num.png"
+                              alt="#{msg['application.logos.logo6']}"
+                              title="#{msg['application.logos.logo6']}"
+                              style="max-width:15% !important;">
+                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_6')}"/>
+              </p:graphicImage>
+
+              <p:graphicImage value="/assets/img/logos/opentheso.png"
+                              alt="#{msg['application.logos.logo7']}"
+                              title="#{msg['application.logos.logo7']}"
+                              style="max-width:15% !important;">
+                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_7')}"/>
+              </p:graphicImage>
             </div>
           </div>
 
           <div class="row">
             <div class="col-12 sponsor-logo">
-              <img src="assets/img/logos/centre-jacques-berque.png" class="img-fluid" alt="" />
-              <img src="assets/img/logos/irmc.png" class="img-fluid" alt="" />
-              <img src="assets/img/logos/institut-francais-archeologie-orientale.png" class="img-fluid" alt="" />
-              <img src="assets/img/logos/ifpo.png" class="img-fluid" alt="" />
+              <p:graphicImage value="/assets/img/logos/centre-jacques-berque.png"
+                              alt="#{msg['application.logos.logo8']}"
+                              title="#{msg['application.logos.logo8']}"
+                              style="max-width:9% !important;">
+                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_8')}"/>
+              </p:graphicImage>
+
+              <p:graphicImage value="/assets/img/logos/irmc.png"
+                              alt="#{msg['application.logos.logo9']}"
+                              title="#{msg['application.logos.logo9']}"
+                              style="max-width:9% !important;">
+                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_9')}"/>
+              </p:graphicImage>
+
+              <p:graphicImage value="/assets/img/logos/institut-francais-archeologie-orientale.png"
+                              alt="#{msg['application.logos.logo10']}"
+                              title="#{msg['application.logos.logo10']}"
+                              style="max-width:9% !important;">
+                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_10')}"/>
+              </p:graphicImage>
+
+              <p:graphicImage value="/assets/img/logos/ifpo.png"
+                              alt="#{msg['application.logos.logo11']}"
+                              title="#{msg['application.logos.logo11']}"
+                              style="max-width:8% !important;">
+                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_11')}"/>
+              </p:graphicImage>
             </div>
           </div>
         </div>
       </section>
 
       <ui:include src="dialogs/login.xhtml" />
-    </h:form>
+    </h:panelGroup>
 
     <ui:include src="shared/footer.xhtml" />
   </h:body>
