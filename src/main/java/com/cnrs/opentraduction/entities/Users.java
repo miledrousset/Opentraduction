@@ -1,9 +1,8 @@
 package com.cnrs.opentraduction.entities;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,17 +13,17 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
 
+@Data
 @Entity(name = "users")
-@Getter
-@Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class Users {
+@NoArgsConstructor
+public class Users implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,4 +59,5 @@ public class Users {
     public String getFullName() {
         return String.join(" ", List.of(firstName, lastName));
     }
+
 }

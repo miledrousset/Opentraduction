@@ -1,6 +1,7 @@
 package com.cnrs.opentraduction.views;
 
 import com.cnrs.opentraduction.config.LocaleBean;
+import com.cnrs.opentraduction.models.ConnexionModel;
 import com.cnrs.opentraduction.utils.MessageUtil;
 import com.cnrs.opentraduction.entities.Users;
 import com.cnrs.opentraduction.models.MenuItem;
@@ -10,6 +11,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.PrimeFaces;
 import org.springframework.context.MessageSource;
+import org.springframework.util.ObjectUtils;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
@@ -39,40 +41,39 @@ public class ApplicationBean implements Serializable {
     private UserService userService;
 
     private MenuItem menuItemSelected;
+    private ConnexionModel connexionModel = new ConnexionModel();
     private boolean connected;
     private Users userConnected;
-
-    private String login, password;
 
 
     public void logout() {
 
-        login = "";
-        password = "";
+        var userName = userConnected.getFullName();
+        connexionModel = new ConnexionModel();
         connected = false;
         userConnected = null;
         menuItemSelected = MenuItem.HOME;
+
+        MessageUtil.showMessage(FacesMessage.SEVERITY_INFO, "Déconnexion effectuée avec sucée !");
+        log.info("Déconnexion effectué avec sucée de {}", userName);
     }
 
     public void login() {
 
         log.info("Début de l'authentification");
-        try {
-            userConnected = userService.authentification(login, password);
-
+        userConnected = userService.authentification(connexionModel);
+        if (!ObjectUtils.isEmpty(userConnected)) {
             connected = true;
             menuItemSelected = MenuItem.HOME;
 
             PrimeFaces.current().executeScript("PF('login').hide();");
-            MessageUtil.showMessage(FacesMessage.SEVERITY_INFO, "Utilisateur connecté avec sucée !");
-            log.info("Authentification terminé avec sucée de {}", userConnected.getLogin());
-        } catch (Exception ex) {
-            login = "";
-            password = "";
-            log.error("Erreur pendant l'authentification : " + ex.getMessage());
-            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage());
-        }
 
+            MessageUtil.showMessage(FacesMessage.SEVERITY_INFO, "Utilisateur connecté avec sucée !");
+
+            log.info("Authentification terminé avec sucée de {}", userConnected.getLogin());
+        } else {
+            log.error("Erreur pendant l'authentification !");
+        }
     }
 
     public String getUserNameConnected() {

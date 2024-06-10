@@ -2,14 +2,17 @@ package com.cnrs.opentraduction.services;
 
 import com.cnrs.opentraduction.entities.Users;
 import com.cnrs.opentraduction.exception.BusinessException;
+import com.cnrs.opentraduction.models.ConnexionModel;
 import com.cnrs.opentraduction.repositories.UserRepository;
-import javassist.NotFoundException;
+import com.cnrs.opentraduction.utils.MessageUtil;
+
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
+import javax.faces.application.FacesMessage;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,18 +25,35 @@ public class UserService {
     private UserRepository userRepository;
 
 
-    public Users authentification(String login, String password) throws NotFoundException {
+    public Users authentification(ConnexionModel connexionModel) {
 
-        var user = userRepository.findByLoginAndPassword(login, password);
+        if (StringUtils.isEmpty(connexionModel.getPassword()) && StringUtils.isEmpty(connexionModel.getPassword())) {
+            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Le login et le mot de passe sont obligatoires !");
+            return null;
+        }
+
+        if (StringUtils.isEmpty(connexionModel.getPassword())) {
+            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Le mot de passe est obligatoire !");
+            return null;
+        }
+
+        if (StringUtils.isEmpty(connexionModel.getLogin())) {
+            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Le login est obligatoire !");
+            return null;
+        }
+
+        var user = userRepository.findByLoginAndPassword(connexionModel.getLogin(), connexionModel.getPassword());
 
         if (user.isPresent()) {
             if (user.get().isActive()) {
                 return user.get();
             } else {
-                throw new BusinessException("Le compte utilisateur est désactivé !");
+                MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Le compte utilisateur est désactivé !");
+                return null;
             }
         } else {
-            throw new NotFoundException("Login et/ou mot de passe erronés !");
+            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Login et/ou mot de passe erronés !");
+            return null;
         }
     }
 
@@ -79,5 +99,9 @@ public class UserService {
 
     public List<Users> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    public void deleteUser(Users user) {
+        userRepository.delete(user);
     }
 }

@@ -46,7 +46,7 @@
             <div class="row">
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
                     <p:outputLabel for="password" value="Mot de passe"/>
-                    <p:password id="password" class="form-control"
+                    <p:inputText id="password" class="form-control"
                                 value="#{applicationSettingBean.userSelected.password}"
                                 feedback="true" inline="true" required="true"/>
                 </div>
@@ -70,13 +70,13 @@
 
             <div style="width: 100%; text-align: right; margin-top: 15px; margin-bottom: 2px;">
                 <p:commandButton value="#{msg['action.annuler']}" styleClass="ui-button-secondary ui-button-flat"
-                                 actionListener="PF('userDialog').hide();"
-                                 ajax="true" process="@this" update="mainContent"/>
+                                 action="PF('userDialog').hide();"
+                                 ajax="true" process="@this" update=":mainContent:usersList"/>
 
                 <p:commandButton title="Valider"
-                                 actionListener="#{applicationSettingBean.userManagement()}"
+                                 action="#{applicationSettingBean.userManagement()}"
                                  class="btn-getstarted" ajax="true" process="@form"
-                                 update=":mainContent"/>
+                                 update=":mainContent:usersList"/>
             </div>
         </h:form>
     </p:dialog>

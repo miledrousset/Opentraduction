@@ -105,6 +105,17 @@ public class ApplicationSettingBean implements Serializable {
         log.info("Utilisateur enregistré avec sucée !");
     }
 
+    public void deleteUser(Users user) {
+
+        userService.deleteUser(user);
+
+        users = userService.getAllUsers();
+
+        MessageUtil.showMessage(FacesMessage.SEVERITY_INFO, "Utilisateur enregistré avec succès");
+        log.info("Utilisateur supprimé avec sucée !");
+
+    }
+
 
 
 

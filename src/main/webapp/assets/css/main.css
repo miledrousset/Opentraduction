@@ -2883,3 +2883,7 @@ body .ui-commandlink, body .ui-link {
 .ui-datatable table {
   table-layout: auto;
 }
+
+.ui-growl {
+  color: white;
+}
