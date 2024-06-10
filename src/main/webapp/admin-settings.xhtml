@@ -28,9 +28,9 @@
 
   <h:body class="services-details-page">
 
-    <h:form id="mainContent">
+    <ui:include src="shared/header.xhtml" />
 
-      <ui:include src="shared/header.xhtml" />
+    <h:form id="mainContent">
 
       <main class="main">
         <!-- Service Details Section -->
@@ -40,27 +40,25 @@
               <div class="col-lg-3" data-aos="fade-up" data-aos-delay="100">
                 <div class="service-box">
                   <h4>Paramètres Système</h4>
-                  <h:form>
-                    <div class="services-list">
-                      <p:commandLink class="#{applicationSettingBean.getMenuItemClass('USER_MANAGEMENT')}"
-                                     action="#{applicationSettingBean.setMenuItem('USER_MANAGEMENT')}"
-                                     ajax="true" process="@this" update="mainContent">
-                        <i class="pi pi-user"/><span>Gestion des utilisateurs</span>
-                      </p:commandLink>
+                  <div class="services-list">
+                    <p:commandLink class="#{applicationSettingBean.getMenuItemClass('USER_MANAGEMENT')}"
+                                   action="#{applicationSettingBean.setMenuItem('USER_MANAGEMENT')}"
+                                   ajax="true" process="@this" update="mainContent">
+                      <i class="pi pi-user"/><span>Gestion des utilisateurs</span>
+                    </p:commandLink>
 
-                      <p:commandLink class="#{applicationSettingBean.getMenuItemClass('GROUP_MANAGEMENT')}"
-                                     action="#{applicationSettingBean.setMenuItem('GROUP_MANAGEMENT')}"
-                                     ajax="true" process="@this" update="mainContent">
-                        <i class="pi pi-users"/><span>Gestion des groupes</span>
-                      </p:commandLink>
+                    <p:commandLink class="#{applicationSettingBean.getMenuItemClass('GROUP_MANAGEMENT')}"
+                                   action="#{applicationSettingBean.setMenuItem('GROUP_MANAGEMENT')}"
+                                   ajax="true" process="@this" update="mainContent">
+                      <i class="pi pi-users"/><span>Gestion des groupes</span>
+                    </p:commandLink>
 
-                      <p:commandLink class="#{applicationSettingBean.getMenuItemClass('INSTANCE_MANAGEMENT')}"
-                                     action="#{applicationSettingBean.setMenuItem('INSTANCE_MANAGEMENT')}"
-                                     ajax="true" process="@this" update="mainContent">
-                        <i class="pi pi-server"/><span>Gestion des instances</span>
-                      </p:commandLink>
-                    </div>
-                  </h:form>
+                    <p:commandLink class="#{applicationSettingBean.getMenuItemClass('INSTANCE_MANAGEMENT')}"
+                                   action="#{applicationSettingBean.setMenuItem('INSTANCE_MANAGEMENT')}"
+                                   ajax="true" process="@this" update="mainContent">
+                      <i class="pi pi-server"/><span>Gestion des instances</span>
+                    </p:commandLink>
+                  </div>
                 </div>
               </div>
 
@@ -79,8 +77,9 @@
           </div>
         </section>
       </main>
+      <ui:include src="shared/footer.xhtml" />
     </h:form>
-    <ui:include src="shared/footer.xhtml" />
+
 
     <ui:include src="dialogs/userDialog.xhtml" />
   </h:body>

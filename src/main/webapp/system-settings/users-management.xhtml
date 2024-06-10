@@ -24,7 +24,7 @@
                             </div>
 
                             <p:dataTable id="usersList" var="user" value="#{applicationSettingBean.users}" class="table table-hover" stripedRows="true"
-                                         reflow="true" styleClass="products-table" draggableColumns="true">
+                                         reflow="true" styleClass="products-table" draggableColumns="true" size="small" draggableRows="true">
                                 <p:column headerText="Groupe" width="10%" style="text-align: center">
                                     <p:tag styleClass="mr-2" value="#{user.group.name}" style="background: rgba(0, 0, 0, 0.58)" />
                                 </p:column>

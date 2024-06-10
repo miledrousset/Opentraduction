@@ -2890,3 +2890,19 @@ body .ui-button {
 .ui-growl .ui-growl-item-container.ui-growl-info .ui-icon {
   color: #ffffff !important;
 }
+
+ui-growl-image ui-growl-image-info {
+  color: #ffffff !important;
+}
+
+.ui-growl .ui-growl-item-container.ui-growl-info .ui-growl-image {
+  color: #ffffff !important;
+}
+
+
+body .ui-toggleswitch.ui-toggleswitch-checked .ui-toggleswitch-slider {
+  background: #e84545;
+}
+.ui-toggleswitch.ui-toggleswitch-checked .ui-toggleswitch-slider:before, body .ui-toggleswitch.ui-toggleswitch-checked .ui-toggleswitch-slider .ui-toggleswitch-handler {
+  background: #fff;
+}

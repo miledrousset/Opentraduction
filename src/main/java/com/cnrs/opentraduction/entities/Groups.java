@@ -1,7 +1,6 @@
 package com.cnrs.opentraduction.entities;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -26,11 +26,10 @@ import java.util.stream.Collectors;
 @Entity(name = "groups")
 @Getter
 @Setter
-@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class Groups {
+public class Groups implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

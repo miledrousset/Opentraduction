@@ -14,13 +14,11 @@ import com.cnrs.opentraduction.repositories.GroupRepository;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.PrimeFaces;
-import org.primefaces.model.DualListModel;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -46,9 +44,9 @@ public class ApplicationSettingBean implements Serializable {
     private Users userSelected;
     private Groups groupSelected;
     private Instances instanceSelected;
-    private List<Instances> instancesSelected;
 
-    private DualListModel<Instances> instanceModel;
+    private Integer idGroupSelected;
+    private String dialogTitle;
 
 
     public ApplicationSettingBean(GroupRepository groupRepository,
@@ -75,27 +73,31 @@ public class ApplicationSettingBean implements Serializable {
         users = userService.getAllUsers();
         groups = groupRepository.findAll();
         instances = instanceRepository.findAll();
-
-        instancesSelected = new ArrayList<>();
-        instanceModel = new DualListModel<>(instances, instancesSelected);
     }
+
 
     public void initialAddUser() {
 
         userSelected = new Users();
         userSelected.setActive(true);
+        dialogTitle = "Ajouter un nouveau utilisateur";
         PrimeFaces.current().executeScript("PF('userDialog').show();");
     }
 
     public void initialUpdateUser(Users user) {
 
         userSelected = user;
+        dialogTitle = "Modifier l'utilisateur " + user.getFullName();
         PrimeFaces.current().executeScript("PF('userDialog').show();");
     }
 
     public void userManagement() {
 
-        userSelected.setGroup(groups.get(0));
+        var groupSelected = groups.stream().filter(group -> group.getId() == idGroupSelected).findFirst();
+        if (groupSelected.isPresent()) {
+            userSelected.setGroup(groupSelected.get());
+        }
+
         userService.saveUser(userSelected);
 
         users = userService.getAllUsers();
@@ -143,9 +145,6 @@ public class ApplicationSettingBean implements Serializable {
     public void initialAddingGroup() {
 
         groupSelected = new Groups();
-
-        instancesSelected = new ArrayList<>();
-        instanceModel = new DualListModel<>(instances, instancesSelected);
 
         PrimeFaces.current().executeScript("PF('groupDialog').show();");
     }
