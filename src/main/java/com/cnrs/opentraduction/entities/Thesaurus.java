@@ -38,6 +38,11 @@ public class Thesaurus {
     @Column(name = "id_thesaurus")
     private String idThesaurus;
 
+    private String collection;
+
+    @Column(name = "id_collection")
+    private String idCollection;
+
     private LocalDateTime created;
 
     private LocalDateTime modified;

@@ -14,11 +14,13 @@ import com.cnrs.opentraduction.repositories.GroupRepository;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.PrimeFaces;
+import org.primefaces.model.DualListModel;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -44,7 +46,9 @@ public class ApplicationSettingBean implements Serializable {
     private Users userSelected;
     private Groups groupSelected;
     private Instances instanceSelected;
+    private List<Instances> instancesSelected;
 
+    private DualListModel<Instances> instanceModel;
     private Integer idGroupSelected;
     private String dialogTitle;
 
@@ -73,6 +77,9 @@ public class ApplicationSettingBean implements Serializable {
         users = userService.getAllUsers();
         groups = groupRepository.findAll();
         instances = instanceRepository.findAll();
+
+        instancesSelected = new ArrayList<>();
+        instanceModel = new DualListModel<>(instances, instancesSelected);
     }
 
 
@@ -163,5 +170,9 @@ public class ApplicationSettingBean implements Serializable {
         if (!settingItem.equals(selectedSetting.name())) {
             selectedSetting = SettingPart.valueOf(settingItem);
         }
+    }
+
+    public void searchListThesaurus() {
+
     }
 }

@@ -43,17 +43,31 @@
               <p data-aos="fade-up" data-aos-delay="200">
                 <h:outputText value="#{msg['application.home.title']}"/>
               </p>
+
+              <div style="width: 40%;">
+                <a href="#" class="arrow-container" id="arrow-container" style="text-align: center">
+                  <div class="arrow"></div>
+                  <div class="arrow"></div>
+                  <div class="arrow"></div>
+                </a>
+
+                <script>
+                  const arrowContainer = document.getElementById('arrow-container');
+                  arrowContainer.addEventListener('click', () => {
+                    arrowContainer.classList.toggle('rotated');
+                  });
+                </script>
+              </div>
+
             </div>
             <h:panelGroup rendered="#{applicationBean.isConnected()}">
-              <div style="width: 100%; text-align: center">
-                <form action="#" class="sign-up-form d-flex" data-aos="fade-up" data-aos-delay="300" style="width: 40%">
-                  <input type="text" class="form-control" placeholder="#{msg['search.sub-title']}" />
-                  <p:commandButton class="btn-getstarted" title="#{msg['search.title']}"
-                                   ajax="true" process="@this"
-                                   actionListener="#{searchBean.searchTerm()}"
-                                   style="background: #e84545; border-color: #e84545" />
-                </form>
-              </div>
+              <form action="#" class="sign-up-form d-flex" data-aos="fade-up" data-aos-delay="300" style="width: 40%">
+                <input type="text" class="form-control" placeholder="#{msg['search.sub-title']}" />
+                <p:commandButton class="btn-getstarted" title="#{msg['search.title']}"
+                                 ajax="true" process="@this"
+                                 actionListener="#{searchBean.searchTerm()}"
+                                 style="background: #e84545; border-color: #e84545" />
+              </form>
             </h:panelGroup>
           </div>
           <h:panelGroup id="about" rendered="#{!applicationBean.isConnected()}" class="about section">

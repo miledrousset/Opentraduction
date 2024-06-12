@@ -7,33 +7,57 @@
     <p:dialog header="Ajouter une nouvelle instance" widgetVar="instanceDialog"
               minHeight="40" width="350" showEffect="fade" modal="true" resizable="true">
 
-        <h:form id="instanceForm" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
+        <h:form id="instanceForm" >
             <div class="row">
                 <div class="field col-12 md:col-4">
-                    <p:outputLabel for="nom" value="Nom de l'instance"/>
+                    <p:outputLabel for="nom" value="Nom de l'instance" />
                     <p:inputText id="nom" class="form-control"
-                                 value="#{applicationSettingBean.instanceSelected.name}"
-                                 placeholder="Opentheso.." required="true" />
+                                 value="#{applicationSettingBean.instanceSelected.name}"/>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="field col-12 md:col-4" style="margin-top: 10px">
-                    <p:outputLabel for="url" value="Url"/>
-                    <p:inputText id="url" class="form-control"
-                                 value="#{applicationSettingBean.instanceSelected.url}"
-                                 placeholder="http://..." required="true" />
+            <div class="row" style="margin-top: 10px">
+                <p:outputLabel for="url" value="Nom de l'instance" />
+                <div class="col-12 md:col-4">
+                    <div class="ui-inputgroup">
+                        <p:inputText id="url" class="form-control" placeholder="http://..."
+                                     value="#{applicationSettingBean.instanceSelected.url}" />
+                        <p:commandButton icon="pi pi-search" ajax="true" process="@form"
+                                         update=":mainContent:instanceForm:listThesaurus"
+                                         action="#{applicationSettingBean.searchListThesaurus()}"/>
+                    </div>
                 </div>
             </div>
+
+            <div class="field col-12 md:col-4" style="margin-top: 10px">
+                <p:outputLabel value="Thésaurus"/>
+                <p:selectOneMenu id="listThesaurus" value="#{applicationSettingBean.idGroupSelected}" class="form-control"
+                                 required="true" label="tableId" appendTo="@this" >
+                    <f:selectItems value="#{applicationSettingBean.groups}" var="group"
+                                   itemLabel="#{group.name}" itemValue="#{group.id}"/>
+                </p:selectOneMenu>
+            </div>
+
+            <div class="field col-12 md:col-4" style="margin-top: 10px">
+                <p:outputLabel value="Collections"/>
+                <p:selectOneMenu value="#{applicationSettingBean.idGroupSelected}" class="form-control"
+                                 required="true" label="tableId" appendTo="@this" >
+                    <f:selectItems value="#{applicationSettingBean.groups}" var="group"
+                                   itemLabel="#{group.name}" itemValue="#{group.id}"/>
+                </p:selectOneMenu>
+            </div>
         </h:form>
-        <f:facet name="footer">
-            <p:commandButton value="Annuler" styleClass="ui-button-secondary ui-button-flat"
-                             actionListener="PF('instanceDialog').hide();"
-                             ajax="true" process="@this" update="userForm"/>
-            <p:commandButton title="Valider" actionListener="#{applicationSettingBean.instanceManagement()}"
-                             class="btn-getstarted"
-                             update="mainContent"/>
-        </f:facet>
+
+        <div style="width: 100%; text-align: right; margin-top: 15px; margin-bottom: 2px;">
+            <p:commandButton value="#{msg['action.annuler']}" styleClass="ui-button-secondary ui-button-flat"
+                             action="PF('instanceDialog').hide();"
+                             ajax="true" process="@this"/>
+
+            <p:commandButton title="Valider"
+                             action="#{applicationSettingBean.instanceManagement()}"
+                             class="btn-getstarted" ajax="true" process="@form"
+                             update=":mainContent:listInstances"/>
+        </div>
     </p:dialog>
 
 </ui:composition>

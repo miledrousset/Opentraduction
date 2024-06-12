@@ -16,6 +16,8 @@
             </column>
             <column name="name" type="varchar(256)"/>
             <column name="id_thesaurus" type="varchar(256)"/>
+            <column name="collection" type="varchar(256)"/>
+            <column name="id_collection" type="varchar(256)"/>
             <column name="created" type="TIMESTAMP"/>
             <column name="modified" type="TIMESTAMP"/>
             <column name="instance_id" type="int">

@@ -24,7 +24,7 @@
                                 </div>
                             </div>
 
-                            <p:dataTable var="instance" value="#{applicationSettingBean.instances}" class="table table-hover" stripedRows="true"
+                            <p:dataTable id="listInstances" var="instance" value="#{applicationSettingBean.instances}" class="table table-hover" stripedRows="true"
                                          reflow="true" styleClass="products-table" draggableColumns="true">
                                 <p:column headerText="Nom" width="20%" style="text-align: center">
                                     <p:tag styleClass="mr-2" value="#{instance.name}" style="background: rgba(0, 0, 0, 0.58)" />
