@@ -1,10 +1,9 @@
-package com.cnrs.opentraduction.views;
+package com.cnrs.opentraduction.views.settings;
 
+import com.cnrs.opentraduction.entities.Users;
 import com.cnrs.opentraduction.services.GroupService;
 import com.cnrs.opentraduction.services.UserService;
 import com.cnrs.opentraduction.utils.MessageUtil;
-import com.cnrs.opentraduction.entities.Users;
-import com.cnrs.opentraduction.models.SettingPart;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -20,47 +19,35 @@ import java.util.List;
 @Data
 @Slf4j
 @SessionScoped
-@Named(value = "applicationSettingBean")
-public class ApplicationSettingBean implements Serializable {
+@Named(value = "usersSettingBean")
+public class UsersSettingBean implements Serializable {
 
-    private InstancesSettingBean instancesSettingBean;
+    private UserService userService;
+    private GroupService groupService;
+
     private GroupsSettingBean groupsSettingBean;
-
-    private SettingPart selectedSetting;
 
     private List<Users> users;
     private Users userSelected;
-    private UserService userService;
 
     private Integer idGroupSelected;
-    private GroupService groupService;
     private String dialogTitle;
 
 
-    public ApplicationSettingBean(UserService userService,
-                                  GroupService groupService,
-                                  GroupsSettingBean groupsSettingBean,
-                                  InstancesSettingBean instancesSettingBean) {
+    public UsersSettingBean(UserService userService,
+                            GroupService groupService,
+                            GroupsSettingBean groupsSettingBean) {
 
         this.userService = userService;
         this.groupService = groupService;
         this.groupsSettingBean = groupsSettingBean;
-        this.instancesSettingBean = instancesSettingBean;
-
-        selectedSetting = SettingPart.USER_MANAGEMENT;
     }
-
 
     public void initialInterface() {
-        selectedSetting = SettingPart.USER_MANAGEMENT;
+
         userSelected = new Users();
-
         users = userService.getAllUsers();
-
-        instancesSettingBean.initialInterface();
-        groupsSettingBean.initialInterface();
     }
-
 
     public void initialAddUser() {
 
@@ -105,16 +92,5 @@ public class ApplicationSettingBean implements Serializable {
         MessageUtil.showMessage(FacesMessage.SEVERITY_INFO, "Utilisateur enregistré avec succès");
         log.info("Utilisateur supprimé avec sucée !");
 
-    }
-
-
-    public String getMenuItemClass(String settingItem) {
-        return (settingItem.equals(selectedSetting.name())) ? "active" : "";
-    }
-
-    public void setMenuItem(String settingItem) {
-        if (!settingItem.equals(selectedSetting.name())) {
-            selectedSetting = SettingPart.valueOf(settingItem);
-        }
     }
 }

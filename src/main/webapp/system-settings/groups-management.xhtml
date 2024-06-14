@@ -28,7 +28,7 @@
                                          reflow="true" styleClass="products-table" draggableColumns="true">
 
                                 <p:column headerText="Nom" width="20%">
-                                    <h:outputText value="#{group.name}" />
+                                    <p:tag styleClass="mr-2" value="#{group.name}" style="background: rgba(0, 0, 0, 0.58)" />
                                 </p:column>
 
                                 <p:column headerText="Thesaurus" width="20%">
@@ -37,7 +37,7 @@
                                     </a>
                                 </p:column>
 
-                                <p:column headerText="Collection" width="60%" style="text-align: center">
+                                <p:column headerText="Collection" width="20%" style="text-align: center">
                                     <h:outputText value="#{group.collectionName}" />
                                 </p:column>
 
@@ -46,9 +46,16 @@
                                                      actionListener="#{groupsSettingBean.initialUpdateGroup(group)}"
                                                      styleClass="rounded-button ui-button-success ui-button-flat" />
 
-                                    <p:commandButton icon="pi pi-times" ajax="true" process="@this" update="groupForm"
-                                                     actionListener="#{groupsSettingBean.initialUpdateGroup(group)}"
-                                                     styleClass="rounded-button ui-button-danger ui-button-flat" />
+                                    <p:commandButton icon="pi pi-times" update=":mainContent:listGroups"
+                                                     action="#{groupsSettingBean.deleteGroup(group)}"
+                                                     styleClass="rounded-button ui-button-danger ui-button-flat">
+                                        <p:confirm header="Confirmation" message="Are you sure you want to proceed?" icon="pi pi-exclamation-triangle"/>
+                                    </p:commandButton>
+
+                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+                                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+                                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
+                                    </p:confirmDialog>
                                 </p:column>
                             </p:dataTable>
 

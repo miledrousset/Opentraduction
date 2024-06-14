@@ -4,7 +4,7 @@
     xmlns:f="http://xmlns.jcp.org/jsf/core"
     xmlns:h="http://xmlns.jcp.org/jsf/html">
 
-    <p:dialog id="userForm" header="#{applicationSettingBean.dialogTitle}" widgetVar="userDialog" minHeight="40"
+    <p:dialog id="userForm" header="#{usersSettingBean.dialogTitle}" widgetVar="userDialog" minHeight="40"
               width="350" showEffect="fade" modal="true" resizable="true">
 
         <h:form>
@@ -12,7 +12,7 @@
                 <div class="field col-12 md:col-4">
                     <p:outputLabel for="firstname" value="Prénom"/>
                     <p:inputText id="firstname" class="form-control" placeholder="Prénom"
-                                 value="#{applicationSettingBean.userSelected.firstName}"/>
+                                 value="#{usersSettingBean.userSelected.firstName}"/>
                 </div>
             </div>
 
@@ -20,7 +20,7 @@
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
                     <p:outputLabel for="lastname" value="Nom"/>
                     <p:inputText id="lastname" class="form-control" laceholder="Nom"
-                                 value="#{applicationSettingBean.userSelected.lastName}" />
+                                 value="#{usersSettingBean.userSelected.lastName}" />
                 </div>
             </div>
 
@@ -28,7 +28,7 @@
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
                     <p:outputLabel for="email" value="E-mail"/>
                     <p:inputText id="email" class="form-control" placeholder="E-mail"
-                                 value="#{applicationSettingBean.userSelected.mail}"/>
+                                 value="#{usersSettingBean.userSelected.mail}"/>
                 </div>
             </div>
 
@@ -36,7 +36,7 @@
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
                     <p:outputLabel for="login" value="Login"/>
                     <p:inputText id="login" class="form-control" placeholder="Login"
-                                 value="#{applicationSettingBean.userSelected.login}"/>
+                                 value="#{usersSettingBean.userSelected.login}"/>
                 </div>
             </div>
 
@@ -44,13 +44,13 @@
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
                     <p:outputLabel for="password" value="Mot de passe"/>
                     <p:inputText id="password" class="form-control" placeholder="Password"
-                                value="#{applicationSettingBean.userSelected.password}" />
+                                value="#{usersSettingBean.userSelected.password}" />
                 </div>
             </div>
 
             <div class="field col-12 md:col-4" style="margin-top: 10px">
                 <p:outputLabel value="Groupe"/>
-                <p:selectOneMenu value="#{applicationSettingBean.idGroupSelected}" class="form-control"
+                <p:selectOneMenu value="#{usersSettingBean.idGroupSelected}" class="form-control"
                                  required="true" label="tableId" appendTo="@this" >
                     <f:selectItems value="#{groupsSettingBean.groups}" var="group"
                                    itemLabel="#{group.name}" itemValue="#{group.id}"/>
@@ -61,7 +61,7 @@
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
                     <h5><p:outputLabel for="admin" value="Admin"/></h5>
                     <p:toggleSwitch id="admin" onIcon="pi pi-check" offIcon="pi pi-times"
-                                    value="#{applicationSettingBean.userSelected.admin}"/>
+                                    value="#{usersSettingBean.userSelected.admin}"/>
                 </div>
             </div>
 
@@ -69,7 +69,7 @@
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
                     <h5><p:outputLabel for="active" value="Active"/></h5>
                     <p:toggleSwitch id="active" onIcon="pi pi-check" offIcon="pi pi-times"
-                                    value="#{applicationSettingBean.userSelected.active}"/>
+                                    value="#{usersSettingBean.userSelected.active}"/>
                 </div>
             </div>
 
@@ -79,7 +79,7 @@
                                  ajax="true" process="@this" update=":mainContent:usersList"/>
 
                 <p:commandButton title="Valider"
-                                 action="#{applicationSettingBean.userManagement()}"
+                                 action="#{usersSettingBean.userManagement()}"
                                  class="btn-getstarted" ajax="true" process="@form"
                                  update=":mainContent:usersList"/>
             </div>

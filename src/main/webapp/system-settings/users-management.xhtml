@@ -18,12 +18,12 @@
                                 <div class="col-12" style="text-align: right; margin-bottom: 10px">
                                     <p:commandButton styleClass="ui-button-outlined ui-button-secondary"
                                                      icon="pi pi-user-plus" ajax="true" process="@this" update=":userForm"
-                                                     actionListener="#{applicationSettingBean.initialAddUser()}"
+                                                     actionListener="#{usersSettingBean.initialAddUser()}"
                                                      value="Ajouter un nouveau utilisateur" />
                                 </div>
                             </div>
 
-                            <p:dataTable id="usersList" var="user" value="#{applicationSettingBean.users}" class="table table-hover" stripedRows="true"
+                            <p:dataTable id="usersList" var="user" value="#{usersSettingBean.users}" class="table table-hover" stripedRows="true"
                                          reflow="true" styleClass="products-table" draggableColumns="true" size="small" draggableRows="true">
                                 <p:column headerText="Groupe" width="10%" style="text-align: center">
                                     <p:tag styleClass="mr-2" value="#{user.group.name}" style="background: rgba(0, 0, 0, 0.58)" />
@@ -61,11 +61,11 @@
 
                                 <p:column headerText="Action" width="10%">
                                     <p:commandButton icon="pi pi-user-edit" ajax="true" process="@this" update="userForm"
-                                                     action="#{applicationSettingBean.initialUpdateUser(user)}"
+                                                     action="#{usersSettingBean.initialUpdateUser(user)}"
                                                      styleClass="rounded-button ui-button-success ui-button-flat" />
 
                                     <p:commandButton icon="pi pi-user-minus" update=":mainContent:usersList"
-                                                     action="#{applicationSettingBean.deleteUser(user)}"
+                                                     action="#{usersSettingBean.deleteUser(user)}"
                                                      styleClass="rounded-button ui-button-danger ui-button-flat">
                                         <p:confirm header="Confirmation" message="Are you sure you want to proceed?" icon="pi pi-exclamation-triangle"/>
                                     </p:commandButton>

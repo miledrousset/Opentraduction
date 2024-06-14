@@ -6,6 +6,7 @@ import com.cnrs.opentraduction.utils.MessageUtil;
 import com.cnrs.opentraduction.entities.Users;
 import com.cnrs.opentraduction.models.MenuItem;
 import com.cnrs.opentraduction.services.UserService;
+import com.cnrs.opentraduction.views.settings.ApplicationSettingBean;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +16,6 @@ import org.springframework.util.ObjectUtils;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;

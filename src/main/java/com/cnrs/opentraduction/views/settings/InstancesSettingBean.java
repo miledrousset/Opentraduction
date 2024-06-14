@@ -1,4 +1,4 @@
-package com.cnrs.opentraduction.views;
+package com.cnrs.opentraduction.views.settings;
 
 import com.cnrs.opentraduction.entities.Instances;
 import com.cnrs.opentraduction.entities.Thesaurus;

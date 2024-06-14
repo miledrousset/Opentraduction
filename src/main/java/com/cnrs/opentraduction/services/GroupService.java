@@ -29,6 +29,10 @@ public class GroupService {
         return group.orElse(null);
     }
 
+    public void deleteGroup(Integer groupId) {
+        groupRepository.deleteById(groupId);
+    }
+
     public void saveGroup(Groups groupSelected) {
 
         if (StringUtils.isEmpty(groupSelected.getName())) {
@@ -46,7 +50,7 @@ public class GroupService {
 
     public List<GroupModel> getAllGroups() {
         var groups = groupRepository.findAll();
-        if (CollectionUtils.isEmpty(groups)) {
+        if (!CollectionUtils.isEmpty(groups)) {
             return groups.stream()
                     .map(element -> {
                         var group = new GroupModel();
@@ -57,15 +61,11 @@ public class GroupService {
                             var instance = element.getInstances().get(0);
                             if (!CollectionUtils.isEmpty(instance.getThesauruses())) {
                                 var thesaurus = instance.getThesauruses().stream().findFirst();
-                                if (thesaurus.isPresent()) {
-                                    group.setThesaurusId(thesaurus.get().getIdThesaurus());
-                                    group.setThesaurusName(thesaurus.get().getName());
-                                    group.setThesaurusUrl(thesaurus.get().getInstance().getUrl()
-                                            + "/?idt=" + thesaurus.get().getIdThesaurus());
-
-                                    group.setCollectionId(thesaurus.get().getIdCollection());
-                                    group.setCollectionName(thesaurus.get().getCollection());
-                                }
+                                group.setThesaurusId(thesaurus.get().getIdThesaurus());
+                                group.setThesaurusName(thesaurus.get().getName());
+                                group.setThesaurusUrl(thesaurus.get().getInstance().getUrl() + "/?idt=" + thesaurus.get().getIdThesaurus());
+                                group.setCollectionId(thesaurus.get().getIdCollection());
+                                group.setCollectionName(thesaurus.get().getCollection());
                             }
                         }
 

@@ -1,4 +1,4 @@
-package com.cnrs.opentraduction.views;
+package com.cnrs.opentraduction.views.settings;
 
 import com.cnrs.opentraduction.entities.Groups;
 import com.cnrs.opentraduction.models.GroupModel;
@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.PrimeFaces;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
@@ -83,5 +84,16 @@ public class GroupsSettingBean implements Serializable {
         dialogTitle = "Modifier le group " + groups.getName();
         groupSelected = groups;
         PrimeFaces.current().executeScript("PF('groupDialog').show();");
+    }
+
+    public void deleteGroup(GroupModel group) {
+
+        if (!ObjectUtils.isEmpty(group)) {
+            groupService.deleteGroup(group.getId());
+            groups = groupService.getAllGroups();
+            MessageUtil.showMessage(FacesMessage.SEVERITY_INFO, "Le group a été supprimée avec succès !");
+        } else {
+            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Le group que vous voulez supprimer n'existe pas !");
+        }
     }
 }
