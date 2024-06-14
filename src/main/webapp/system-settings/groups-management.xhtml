@@ -18,31 +18,36 @@
                                 <div class="col-12" style="text-align: right; margin-bottom: 10px">
                                     <p:commandButton styleClass="ui-button-outlined ui-button-secondary"
                                                      icon="pi pi-plus-circle" ajax="true" process="@this"
-                                                     actionListener="#{applicationSettingBean.initialAddingGroup()}"
-                                                     update="mainContent:groupForm"
+                                                     actionListener="#{groupsSettingBean.initialAddingGroup()}"
+                                                     update="groupForm"
                                                      value="Ajouter un nouveau group" />
                                 </div>
                             </div>
 
-                            <p:dataTable var="group" value="#{applicationSettingBean.groups}" class="table table-hover" stripedRows="true"
+                            <p:dataTable id="listGroups" var="group" value="#{groupsSettingBean.groups}" class="table table-hover" stripedRows="true"
                                          reflow="true" styleClass="products-table" draggableColumns="true">
 
                                 <p:column headerText="Nom" width="20%">
                                     <h:outputText value="#{group.name}" />
                                 </p:column>
 
-                                <p:column headerText="Les instances Thésaurus" width="60%" style="text-align: center">
-                                    <p:orderList value="#{group.instances}" var="instance" controlsLocation="none"
-                                                 itemLabel="#{instance.name}" itemValue="#{instance.id}" />
+                                <p:column headerText="Thesaurus" width="20%">
+                                    <a href="#{group.thesaurusUrl}" target="_blank">
+                                        <h:outputText value="#{group.thesaurusName}" />
+                                    </a>
+                                </p:column>
+
+                                <p:column headerText="Collection" width="60%" style="text-align: center">
+                                    <h:outputText value="#{group.collectionName}" />
                                 </p:column>
 
                                 <p:column headerText="Action" width="20%" style="text-align: center">
-                                    <p:commandButton icon="pi pi-pencil" ajax="true" process="@this" update="mainContent:groupForm"
-                                                     actionListener="#{applicationSettingBean.initialUpdateGroup(group)}"
+                                    <p:commandButton icon="pi pi-pencil" ajax="true" process="@this" update="groupForm"
+                                                     actionListener="#{groupsSettingBean.initialUpdateGroup(group)}"
                                                      styleClass="rounded-button ui-button-success ui-button-flat" />
 
-                                    <p:commandButton icon="pi pi-times" ajax="true" process="@this" update="mainContent:groupForm"
-                                                     actionListener="#{applicationSettingBean.initialUpdateGroup(group)}"
+                                    <p:commandButton icon="pi pi-times" ajax="true" process="@this" update="groupForm"
+                                                     actionListener="#{groupsSettingBean.initialUpdateGroup(group)}"
                                                      styleClass="rounded-button ui-button-danger ui-button-flat" />
                                 </p:column>
                             </p:dataTable>
@@ -55,7 +60,5 @@
 
         </section>
     </div>
-
-    <ui:include src="../dialogs/groupForm.xhtml" />
 
 </ui:composition>

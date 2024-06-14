@@ -1,13 +1,10 @@
 package com.cnrs.opentraduction.views;
 
 import com.cnrs.opentraduction.services.GroupService;
-import com.cnrs.opentraduction.services.InstanceService;
 import com.cnrs.opentraduction.services.UserService;
 import com.cnrs.opentraduction.utils.MessageUtil;
-import com.cnrs.opentraduction.entities.Groups;
 import com.cnrs.opentraduction.entities.Users;
 import com.cnrs.opentraduction.models.SettingPart;
-import com.cnrs.opentraduction.repositories.GroupRepository;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -26,38 +23,28 @@ import java.util.List;
 @Named(value = "applicationSettingBean")
 public class ApplicationSettingBean implements Serializable {
 
-    private InstanceService instanceService;
     private InstancesSettingBean instancesSettingBean;
-
-    private final UserService userService;
-    private final GroupService groupService;
-
-    private final GroupRepository groupRepository;
+    private GroupsSettingBean groupsSettingBean;
 
     private SettingPart selectedSetting;
 
     private List<Users> users;
-    private List<Groups> groups;
-
     private Users userSelected;
-    private Groups groupSelected;
+    private UserService userService;
 
     private Integer idGroupSelected;
+    private GroupService groupService;
     private String dialogTitle;
 
 
-    public ApplicationSettingBean(GroupRepository groupRepository,
-                                  UserService userService,
+    public ApplicationSettingBean(UserService userService,
                                   GroupService groupService,
-                                  InstanceService instanceService,
+                                  GroupsSettingBean groupsSettingBean,
                                   InstancesSettingBean instancesSettingBean) {
-
-        this.groupRepository = groupRepository;
 
         this.userService = userService;
         this.groupService = groupService;
-        this.instanceService = instanceService;
-
+        this.groupsSettingBean = groupsSettingBean;
         this.instancesSettingBean = instancesSettingBean;
 
         selectedSetting = SettingPart.USER_MANAGEMENT;
@@ -69,11 +56,9 @@ public class ApplicationSettingBean implements Serializable {
         userSelected = new Users();
 
         users = userService.getAllUsers();
-        groups = groupRepository.findAll();
 
-        instancesSettingBean.setInstances(instanceService.getAllInstances());
-        instancesSettingBean.setThesaurusListStatut(false);
-        instancesSettingBean.setCollectionsListStatut(false);
+        instancesSettingBean.initialInterface();
+        groupsSettingBean.initialInterface();
     }
 
 
@@ -94,9 +79,12 @@ public class ApplicationSettingBean implements Serializable {
 
     public void userManagement() {
 
-        var groupSelected = groups.stream().filter(group -> group.getId().intValue() == idGroupSelected.intValue()).findFirst();
+        var groupSelected = groupsSettingBean.getGroups().stream()
+                .filter(group -> group.getId().intValue() == idGroupSelected.intValue())
+                .findFirst();
         if (groupSelected.isPresent()) {
-            userSelected.setGroup(groupSelected.get());
+            var group = groupService.getGroupById(groupSelected.get().getId());
+            userSelected.setGroup(group);
         }
 
         userService.saveUser(userSelected);
@@ -119,22 +107,6 @@ public class ApplicationSettingBean implements Serializable {
 
     }
 
-
-
-
-
-    public void initialAddingGroup() {
-
-        groupSelected = new Groups();
-
-        PrimeFaces.current().executeScript("PF('groupDialog').show();");
-    }
-
-    public void initialUpdateGroup(Groups groups) {
-
-        groupSelected = groups;
-        PrimeFaces.current().executeScript("PF('groupDialog').show();");
-    }
 
     public String getMenuItemClass(String settingItem) {
         return (settingItem.equals(selectedSetting.name())) ? "active" : "";

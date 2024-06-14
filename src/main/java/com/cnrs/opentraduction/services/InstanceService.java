@@ -40,8 +40,8 @@ public class InstanceService {
     public List<ThesaurusElementModel> searchThesaurus(String baseUrl) {
         var thesaurusResponse = openthesoClient.getThesoInfo(baseUrl);
         if (thesaurusResponse.length > 0) {
-            return List.of(thesaurusResponse).stream()
-                    .filter(element ->  element.getLabels().stream().filter(tmp -> "fr".equals(tmp.getLang())).findAny().isPresent())
+            return Stream.of(thesaurusResponse)
+                    .filter(element -> element.getLabels().stream().anyMatch(tmp -> "fr".equals(tmp.getLang())))
                     .map(element -> new ThesaurusElementModel(element.getIdTheso(),
                             element.getLabels().stream().filter(tmp -> "fr".equals(tmp.getLang())).findFirst().get().getTitle()))
                     .collect(Collectors.toList());
@@ -54,7 +54,7 @@ public class InstanceService {
         var collectionsResponse = openthesoClient.getCollectionsByThesaurus(baseUrl, idThesaurus);
         if (collectionsResponse.length > 0) {
             return Stream.of(collectionsResponse)
-                    .filter(element ->  element.getLabels().stream().filter(tmp -> "fr".equals(tmp.getLang())).findAny().isPresent())
+                    .filter(element -> element.getLabels().stream().anyMatch(tmp -> "fr".equals(tmp.getLang())))
                     .map(element -> new CollectionElementModel(element.getIdGroup(),
                             element.getLabels().stream().filter(tmp -> "fr".equals(tmp.getLang())).findFirst().get().getTitle()))
                     .collect(Collectors.toList());
@@ -125,9 +125,9 @@ public class InstanceService {
         }
     }
 
-    public Instances getInstanceFromId(Integer instanceId) {
+    public Instances getInstanceById(Integer instanceId) {
 
         var instance = instanceRepository.findById(instanceId);
-        return instance.isPresent() ? instance.get() : null;
+        return instance.orElse(null);
     }
 }

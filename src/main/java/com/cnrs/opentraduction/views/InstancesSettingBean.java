@@ -48,6 +48,12 @@ public class InstancesSettingBean implements Serializable {
         this.instanceService = instanceService;
     }
 
+    public void initialInterface() {
+        instances = instanceService.getAllInstances();
+
+        thesaurusListStatut = false;
+        collectionsListStatut = false;
+    }
 
     public void initialAddInstanceDialog() {
 
@@ -106,7 +112,7 @@ public class InstancesSettingBean implements Serializable {
 
             dialogTitle = "Modifier l'instance " + instance.getName();
 
-            instanceSelected = instanceService.getInstanceFromId(instance.getId());
+            instanceSelected = instanceService.getInstanceById(instance.getId());
 
             instanceName = instanceSelected.getName();
             instanceUrl = instanceSelected.getUrl();

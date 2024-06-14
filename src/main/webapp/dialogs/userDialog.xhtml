@@ -52,7 +52,7 @@
                 <p:outputLabel value="Groupe"/>
                 <p:selectOneMenu value="#{applicationSettingBean.idGroupSelected}" class="form-control"
                                  required="true" label="tableId" appendTo="@this" >
-                    <f:selectItems value="#{applicationSettingBean.groups}" var="group"
+                    <f:selectItems value="#{groupsSettingBean.groups}" var="group"
                                    itemLabel="#{group.name}" itemValue="#{group.id}"/>
                 </p:selectOneMenu>
             </div>
