@@ -1,21 +1,29 @@
 package com.cnrs.opentraduction.services;
 
+import com.cnrs.opentraduction.clients.OpenthesoClient;
 import com.cnrs.opentraduction.entities.Instances;
-import com.cnrs.opentraduction.exception.BusinessException;
+import com.cnrs.opentraduction.entities.Thesaurus;
+import com.cnrs.opentraduction.models.CollectionElementModel;
+import com.cnrs.opentraduction.models.InstanceModel;
+import com.cnrs.opentraduction.models.ThesaurusElementModel;
 import com.cnrs.opentraduction.repositories.InstanceRepository;
+import com.cnrs.opentraduction.repositories.ThesaurusRepository;
 import com.cnrs.opentraduction.utils.MessageUtil;
+
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.faces.application.FacesMessage;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @Slf4j
@@ -23,59 +31,103 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class InstanceService {
 
-    private InstanceRepository instanceRepository;
+    private final InstanceRepository instanceRepository;
+    private final ThesaurusRepository thesaurusRepository;
+
+    private final OpenthesoClient openthesoClient;
 
 
-    public void saveInstance(Instances instanceSelected) {
+    public List<ThesaurusElementModel> searchThesaurus(String baseUrl) {
+        var thesaurusResponse = openthesoClient.getThesoInfo(baseUrl);
+        if (thesaurusResponse.length > 0) {
+            return List.of(thesaurusResponse).stream()
+                    .filter(element ->  element.getLabels().stream().filter(tmp -> "fr".equals(tmp.getLang())).findAny().isPresent())
+                    .map(element -> new ThesaurusElementModel(element.getIdTheso(),
+                            element.getLabels().stream().filter(tmp -> "fr".equals(tmp.getLang())).findFirst().get().getTitle()))
+                    .collect(Collectors.toList());
+        } else {
+            return List.of();
+        }
+    }
+
+    public List<CollectionElementModel> searchCollections(String baseUrl, String idThesaurus) {
+        var collectionsResponse = openthesoClient.getCollectionsByThesaurus(baseUrl, idThesaurus);
+        if (collectionsResponse.length > 0) {
+            return Stream.of(collectionsResponse)
+                    .filter(element ->  element.getLabels().stream().filter(tmp -> "fr".equals(tmp.getLang())).findAny().isPresent())
+                    .map(element -> new CollectionElementModel(element.getIdGroup(),
+                            element.getLabels().stream().filter(tmp -> "fr".equals(tmp.getLang())).findFirst().get().getTitle()))
+                    .collect(Collectors.toList());
+        } else {
+            return List.of();
+        }
+    }
+
+    public void deleteInstance(Integer idInstance) {
+        instanceRepository.deleteById(idInstance);
+    }
+
+    public void saveInstance(Instances instanceSelected, Thesaurus thesaurus) {
 
         if (StringUtils.isEmpty(instanceSelected.getName())) {
-            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Le nom est absent !");
-            throw new BusinessException("Le nom est obligatoire !");
-        }
-
-        if (StringUtils.isEmpty(instanceSelected.getUrl())) {
-            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "L'URL est absente !");
-            throw new BusinessException("L'URL est obligatoire !");
-        }
-
-
-        if (!isValidURL(instanceSelected.getUrl())) {
-            throw new BusinessException("Erreur de création d'un nouveau utilisateur : E-mail existe déjà !");
+            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Le nom de l'instance est obligatoire !");
+            return;
         }
 
         if (ObjectUtils.isEmpty(instanceSelected.getCreated())) {
+            log.info("Enregistrement d'une nouvelle instance dans la base");
             instanceSelected.setCreated(LocalDateTime.now());
+        } else if (!CollectionUtils.isEmpty(instanceSelected.getThesauruses())) {
+            log.info("Mise à jour d'une instance dans la base");
+            log.info("Suppression de l'ancien thésaurus");
+            thesaurusRepository.deleteAll(instanceSelected.getThesauruses());
         }
+
         instanceSelected.setModified(LocalDateTime.now());
 
+        thesaurus.setCreated(LocalDateTime.now());
+        thesaurus.setModified(LocalDateTime.now());
+        thesaurus.setInstance(instanceSelected);
+        instanceSelected.setThesauruses(Set.of(thesaurus));
+
         log.info("Enregistrement dans la base");
-        instanceRepository.save(instanceSelected);
+        var instanceSaved = instanceRepository.save(instanceSelected);
+
+        thesaurus.setInstance(instanceSaved);
+        thesaurusRepository.save(thesaurus);
     }
 
-    private boolean isValidURL(String urlString) {
-        try {
-            var url = new URL(urlString);
-            if (!url.getProtocol().equals("http") && !url.getProtocol().equals("https")) {
-                return false;
-            }
-            url.toURI();
+    public List<InstanceModel> getAllInstances() {
+        var instances = instanceRepository.findAll();
 
-            // Ouvre une connexion à l'URL et vérifie la réponse
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("HEAD");
-            connection.setConnectTimeout(3000); // Timeout de connexion
-            connection.setReadTimeout(3000); // Timeout de lecture
-            int responseCode = connection.getResponseCode();
-            return (responseCode >= 200 && responseCode < 400);
-        } catch (MalformedURLException e) {
-            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Le format de l'URL n'est pas bon! ");
-            return false;
-        } catch (IOException e) {
-            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "L'URL n'est pas accessible ! ");
-            return false;
-        } catch (Exception e) {
-            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Erreur pendant la vérification de l'URL ! ");
-            return false;
+        if(!CollectionUtils.isEmpty(instances)) {
+            return instances.stream()
+                    .map(element -> {
+                        var instance = new InstanceModel();
+                        instance.setId(element.getId());
+                        instance.setName(element.getName());
+                        instance.setUrl(element.getUrl());
+                        if (!CollectionUtils.isEmpty(element.getThesauruses())) {
+                            var thesaurus = element.getThesauruses().stream().findFirst();
+                            if (thesaurus.isPresent()) {
+                                instance.setThesaurusId(thesaurus.get().getIdThesaurus());
+                                instance.setThesaurusName(thesaurus.get().getName());
+
+                                instance.setCollectionId(thesaurus.get().getIdCollection());
+                                instance.setCollectionName(thesaurus.get().getCollection());
+                            }
+                        }
+                        return instance;
+                    })
+                    .collect(Collectors.toList());
+        } else {
+            return List.of();
         }
+    }
+
+    public Instances getInstanceFromId(Integer instanceId) {
+
+        var instance = instanceRepository.findById(instanceId);
+        return instance.isPresent() ? instance.get() : null;
     }
 }

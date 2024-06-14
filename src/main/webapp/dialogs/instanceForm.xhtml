@@ -1,63 +1,71 @@
-<ui:composition 
-    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-    xmlns:p="http://primefaces.org/ui"
-    xmlns:f="http://xmlns.jcp.org/jsf/core"
-    xmlns:h="http://xmlns.jcp.org/jsf/html">
+<ui:composition
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html">
 
-    <p:dialog header="Ajouter une nouvelle instance" widgetVar="instanceDialog"
+    <p:dialog id="instanceForm" header="#{instancesSettingBean.dialogTitle}" widgetVar="instanceDialog"
               minHeight="40" width="350" showEffect="fade" modal="true" resizable="true">
 
-        <h:form id="instanceForm" >
+        <h:form>
             <div class="row">
                 <div class="field col-12 md:col-4">
                     <p:outputLabel for="nom" value="Nom de l'instance" />
                     <p:inputText id="nom" class="form-control"
-                                 value="#{applicationSettingBean.instanceSelected.name}"/>
+                                 value="#{instancesSettingBean.instanceName}"/>
                 </div>
             </div>
 
             <div class="row" style="margin-top: 10px">
-                <p:outputLabel for="url" value="Nom de l'instance" />
+                <p:outputLabel for="url" value="URL de l'instance" />
                 <div class="col-12 md:col-4">
                     <div class="ui-inputgroup">
                         <p:inputText id="url" class="form-control" placeholder="http://..."
-                                     value="#{applicationSettingBean.instanceSelected.url}" />
+                                     value="#{instancesSettingBean.instanceUrl}" />
                         <p:commandButton icon="pi pi-search" ajax="true" process="@form"
-                                         update=":mainContent:instanceForm:listThesaurus"
-                                         action="#{applicationSettingBean.searchListThesaurus()}"/>
+                                         update="listThesaurus listCollections"
+                                         action="#{instancesSettingBean.searchThesaurus()}"/>
                     </div>
                 </div>
             </div>
 
             <div class="field col-12 md:col-4" style="margin-top: 10px">
                 <p:outputLabel value="Thésaurus"/>
-                <p:selectOneMenu id="listThesaurus" value="#{applicationSettingBean.idGroupSelected}" class="form-control"
-                                 required="true" label="tableId" appendTo="@this" >
-                    <f:selectItems value="#{applicationSettingBean.groups}" var="group"
-                                   itemLabel="#{group.name}" itemValue="#{group.id}"/>
+                <p:selectOneMenu id="listThesaurus" value="#{instancesSettingBean.thesaurusSelected}"
+                                 class="form-control" style="width: 100%;"
+                                 disabled="#{!instancesSettingBean.thesaurusListStatut}">
+                    <p:ajax event="change" listener="#{instancesSettingBean.searchCollections}"
+                            update="listCollections valideInstance" process="@this" immediate="true"/>
+                    <f:selectItems value="#{instancesSettingBean.thesaurusList}" var="thesaurus"
+                                   itemLabel="#{thesaurus.label}" itemValue="#{thesaurus}"/>
                 </p:selectOneMenu>
             </div>
 
             <div class="field col-12 md:col-4" style="margin-top: 10px">
                 <p:outputLabel value="Collections"/>
-                <p:selectOneMenu value="#{applicationSettingBean.idGroupSelected}" class="form-control"
-                                 required="true" label="tableId" appendTo="@this" >
-                    <f:selectItems value="#{applicationSettingBean.groups}" var="group"
-                                   itemLabel="#{group.name}" itemValue="#{group.id}"/>
+                <p:selectOneMenu id="listCollections" value="#{instancesSettingBean.collectionSelected}" class="form-control"
+                                 style="width: 100%;"
+                                 disabled="#{!instancesSettingBean.collectionsListStatut}">
+
+                    <p:ajax event="change" update="listCollections valideInstance" process="@this" immediate="true"/>
+
+                    <f:selectItems value="#{instancesSettingBean.collectionList}" var="collection"
+                                   itemLabel="#{collection.label}" itemValue="#{collection}"/>
                 </p:selectOneMenu>
             </div>
+
+            <div style="width: 100%; text-align: right; margin-top: 15px; margin-bottom: 2px;">
+                <p:commandButton value="#{msg['action.annuler']}" styleClass="ui-button-secondary ui-button-flat"
+                                 action="PF('instanceDialog').hide();"
+                                 ajax="true" process="@this"/>
+
+                <p:commandButton id="valideInstance" title="Valider"
+                                 action="#{instancesSettingBean.instanceManagement()}"
+                                 disabled="#{!instancesSettingBean.validateBtnStatut}"
+                                 class="btn-getstarted" ajax="true" process="@this"
+                                 update="mainContent:listInstances"/>
+            </div>
         </h:form>
-
-        <div style="width: 100%; text-align: right; margin-top: 15px; margin-bottom: 2px;">
-            <p:commandButton value="#{msg['action.annuler']}" styleClass="ui-button-secondary ui-button-flat"
-                             action="PF('instanceDialog').hide();"
-                             ajax="true" process="@this"/>
-
-            <p:commandButton title="Valider"
-                             action="#{applicationSettingBean.instanceManagement()}"
-                             class="btn-getstarted" ajax="true" process="@form"
-                             update=":mainContent:listInstances"/>
-        </div>
     </p:dialog>
 
 </ui:composition>

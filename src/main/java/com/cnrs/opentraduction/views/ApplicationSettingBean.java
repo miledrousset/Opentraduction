@@ -1,7 +1,5 @@
 package com.cnrs.opentraduction.views;
 
-import com.cnrs.opentraduction.entities.Instances;
-import com.cnrs.opentraduction.repositories.InstanceRepository;
 import com.cnrs.opentraduction.services.GroupService;
 import com.cnrs.opentraduction.services.InstanceService;
 import com.cnrs.opentraduction.services.UserService;
@@ -14,13 +12,11 @@ import com.cnrs.opentraduction.repositories.GroupRepository;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.PrimeFaces;
-import org.primefaces.model.DualListModel;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -30,41 +26,39 @@ import java.util.List;
 @Named(value = "applicationSettingBean")
 public class ApplicationSettingBean implements Serializable {
 
+    private InstanceService instanceService;
+    private InstancesSettingBean instancesSettingBean;
+
     private final UserService userService;
     private final GroupService groupService;
-    private final InstanceService instanceService;
 
     private final GroupRepository groupRepository;
-    private final InstanceRepository instanceRepository;
 
     private SettingPart selectedSetting;
 
     private List<Users> users;
     private List<Groups> groups;
-    private List<Instances> instances;
 
     private Users userSelected;
     private Groups groupSelected;
-    private Instances instanceSelected;
-    private List<Instances> instancesSelected;
 
-    private DualListModel<Instances> instanceModel;
     private Integer idGroupSelected;
     private String dialogTitle;
 
 
     public ApplicationSettingBean(GroupRepository groupRepository,
-                                  InstanceRepository instanceRepository,
                                   UserService userService,
                                   GroupService groupService,
-                                  InstanceService instanceService) {
+                                  InstanceService instanceService,
+                                  InstancesSettingBean instancesSettingBean) {
 
         this.groupRepository = groupRepository;
-        this.instanceRepository = instanceRepository;
 
         this.userService = userService;
         this.groupService = groupService;
         this.instanceService = instanceService;
+
+        this.instancesSettingBean = instancesSettingBean;
 
         selectedSetting = SettingPart.USER_MANAGEMENT;
     }
@@ -76,10 +70,10 @@ public class ApplicationSettingBean implements Serializable {
 
         users = userService.getAllUsers();
         groups = groupRepository.findAll();
-        instances = instanceRepository.findAll();
 
-        instancesSelected = new ArrayList<>();
-        instanceModel = new DualListModel<>(instances, instancesSelected);
+        instancesSettingBean.setInstances(instanceService.getAllInstances());
+        instancesSettingBean.setThesaurusListStatut(false);
+        instancesSettingBean.setCollectionsListStatut(false);
     }
 
 
@@ -100,7 +94,7 @@ public class ApplicationSettingBean implements Serializable {
 
     public void userManagement() {
 
-        var groupSelected = groups.stream().filter(group -> group.getId() == idGroupSelected).findFirst();
+        var groupSelected = groups.stream().filter(group -> group.getId().intValue() == idGroupSelected.intValue()).findFirst();
         if (groupSelected.isPresent()) {
             userSelected.setGroup(groupSelected.get());
         }
@@ -128,26 +122,6 @@ public class ApplicationSettingBean implements Serializable {
 
 
 
-    public void initialAddInstanceDialog() {
-
-        instanceSelected = new Instances();
-        PrimeFaces.current().executeScript("PF('instanceDialog').show();");
-    }
-
-    public void initialUpdateInstanceDialog(Instances instance) {
-
-        instanceSelected = instance;
-        PrimeFaces.current().executeScript("PF('instanceDialog').show();");
-    }
-
-    public void instanceManagement() {
-
-        instanceService.saveInstance(instanceSelected);
-
-        MessageUtil.showMessage(FacesMessage.SEVERITY_INFO, "Instance enregistrée avec succès");
-        PrimeFaces.current().executeScript("PF('instanceDialog').show();");
-        log.info("Instance enregistrée avec succès !");
-    }
 
     public void initialAddingGroup() {
 
@@ -170,9 +144,5 @@ public class ApplicationSettingBean implements Serializable {
         if (!settingItem.equals(selectedSetting.name())) {
             selectedSetting = SettingPart.valueOf(settingItem);
         }
-    }
-
-    public void searchListThesaurus() {
-
     }
 }

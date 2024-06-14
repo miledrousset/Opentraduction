@@ -18,30 +18,51 @@
                                 <div class="col-12" style="text-align: right; margin-bottom: 10px">
                                     <p:commandButton styleClass="ui-button-outlined ui-button-secondary"
                                                      icon="pi pi-plus-circle" ajax="true" process="@this"
-                                                     actionListener="#{applicationSettingBean.initialAddInstanceDialog()}"
-                                                     update="mainContent:instanceForm"
+                                                     actionListener="#{instancesSettingBean.initialAddInstanceDialog()}"
+                                                     update="instanceForm"
                                                      value="Ajouter une nouvelle instance" />
                                 </div>
                             </div>
 
-                            <p:dataTable id="listInstances" var="instance" value="#{applicationSettingBean.instances}" class="table table-hover" stripedRows="true"
+                            <p:dataTable id="listInstances" var="instance" value="#{instancesSettingBean.instances}" class="table table-hover" stripedRows="true"
                                          reflow="true" styleClass="products-table" draggableColumns="true">
-                                <p:column headerText="Nom" width="20%" style="text-align: center">
+                                <p:column headerText="Nom" width="15%" style="text-align: center">
                                     <p:tag styleClass="mr-2" value="#{instance.name}" style="background: rgba(0, 0, 0, 0.58)" />
                                 </p:column>
 
-                                <p:column headerText="URL" width="50%">
-                                    <a href="#{instance.url}" target="_blank"><h:outputText value="#{instance.url}" /></a>
+                                <p:column headerText="URL" width="20%">
+                                    <a href="#{instance.url}" target="_blank">
+                                        <h:outputText value="#{instance.name}" />
+                                    </a>
                                 </p:column>
 
-                                <p:column headerText="Action" width="10%">
+                                <p:column headerText="Thésaurus" width="25%">
+                                    <a href="#{instance.url}/?idt=#{instance.thesaurusId}" target="_blank">
+                                        <h:outputText value="#{instance.thesaurusName}" />
+                                    </a>
+                                </p:column>
+
+                                <p:column headerText="Collection" width="25%">
+                                    <p:outputLabel value="#{instance.collectionName}" />
+                                </p:column>
+
+                                <p:column headerText="Action" width="15%" style="text-align: center">
                                     <p:commandButton icon="pi pi-pencil" ajax="true" process="@this"
-                                                     update="mainContent:instanceForm"
+                                                     update="instanceForm"
+                                                     action="#{instancesSettingBean.initialUpdateInstanceDialog(instance)}"
                                                      styleClass="rounded-button ui-button-success ui-button-flat" />
 
-                                    <p:commandButton icon="pi pi-times" ajax="true" process="@this"
-                                                     update="mainContent:instanceForm"
-                                                     styleClass="rounded-button ui-button-danger ui-button-flat" />
+                                    <p:commandButton icon="pi pi-user-minus" update=":mainContent:listInstances"
+                                                     action="#{instancesSettingBean.deleteInstance(instance)}"
+                                                     styleClass="rounded-button ui-button-danger ui-button-flat">
+                                        <p:confirm header="Confirmation" message="Are you sure you want to proceed?" icon="pi pi-exclamation-triangle"/>
+                                    </p:commandButton>
+
+                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+                                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+                                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
+                                    </p:confirmDialog>
+
                                 </p:column>
                             </p:dataTable>
 
@@ -53,7 +74,5 @@
 
         </section>
     </div>
-
-    <ui:include src="../dialogs/instanceForm.xhtml" />
 
 </ui:composition>
