@@ -4,13 +4,13 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
 
-    <changeSet id="V1-003" author="fgabsi">
+    <changeSet id="V1-008" author="fgabsi">
         <preConditions>
             <not>
-                <tableExists tableName="instances"/>
+                <tableExists tableName="reference_instances"/>
             </not>
         </preConditions>
-        <createTable tableName="instances">
+        <createTable tableName="reference_instances">
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>

@@ -48,8 +48,12 @@ public class Thesaurus {
     private LocalDateTime modified;
 
     @ManyToOne
-    @JoinColumn(name = "instance_id", referencedColumnName = "id")
-    private ConsultationInstances instance;
+    @JoinColumn(name = "consultation_instance_id", referencedColumnName = "id")
+    private ConsultationInstances consultationInstances;
+
+    @ManyToOne
+    @JoinColumn(name = "reference_instance_id", referencedColumnName = "id")
+    private ReferenceInstances referenceInstances;
 
     @ManyToMany
     @JoinTable(

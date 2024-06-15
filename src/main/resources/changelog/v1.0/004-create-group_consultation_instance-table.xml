@@ -7,30 +7,32 @@
     <changeSet id="V1-004" author="fgabsi">
         <preConditions>
             <not>
-                <tableExists tableName="group_instances"/>
+                <tableExists tableName="group_consultation_instances"/>
             </not>
         </preConditions>
-        <createTable tableName="group_instances">
+        <createTable tableName="group_consultation_instances">
             <column name="group_id" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="instance_id" type="int">
+            <column name="consultation_instance_id" type="int">
                 <constraints nullable="false"/>
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="group_id, instance_id" constraintName="pk_group_instance" tableName="group_instances"/>
+        <addPrimaryKey columnNames="group_id, consultation_instance_id"
+                       constraintName="pk_group_consultation_instances"
+                       tableName="group_consultation_instances"/>
 
         <addForeignKeyConstraint baseColumnNames="group_id"
-                                 baseTableName="group_instances"
-                                 constraintName="fk_group_instance_group"
+                                 baseTableName="group_consultation_instances"
+                                 constraintName="fk_group_consultation_instances"
                                  referencedColumnNames="id"
                                  referencedTableName="groups"/>
 
-        <addForeignKeyConstraint baseColumnNames="instance_id"
-                                 baseTableName="group_instances"
-                                 constraintName="fk_group_instance_instance"
+        <addForeignKeyConstraint baseColumnNames="consultation_instance_id"
+                                 baseTableName="group_consultation_instances"
+                                 constraintName="fk_group_consultation_instances2"
                                  referencedColumnNames="id"
-                                 referencedTableName="instances"/>
+                                 referencedTableName="consultation_instances"/>
     </changeSet>
 </databaseChangeLog>

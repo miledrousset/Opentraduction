@@ -4,9 +4,9 @@ databaseChangeLog:
   - include:
       file: classpath:/changelog/v1.0/002-create-user-table.xml
   - include:
-      file: classpath:/changelog/v1.0/003-create-instance-table.xml
+      file: classpath:/changelog/v1.0/003-create-consultation_instance-table.xml
   - include:
-      file: classpath:/changelog/v1.0/004-create-group_instance-table.xml
+      file: classpath:/changelog/v1.0/004-create-group_consultation_instance-table.xml
   - include:
       file: classpath:/changelog/v1.0/005-create-thesaurus-table.xml
   - include:
@@ -14,4 +14,8 @@ databaseChangeLog:
   - include:
       file: classpath:/changelog/v1.0/007-add-admin-user.xml
   - include:
-      file: classpath:/changelog/v1.0/008-rename-instances-table-to-consultation-instance-table.xml
+      file: classpath:/changelog/v1.0/008-create-reference-instance-table.xml
+  - include:
+      file: classpath:/changelog/v1.0/009-ajouter-cle-etrangere-group-table.xml
+  - include:
+      file: classpath:/changelog/v1.0/010-ajouter-cle-etrangere-thesaurus-table.xml

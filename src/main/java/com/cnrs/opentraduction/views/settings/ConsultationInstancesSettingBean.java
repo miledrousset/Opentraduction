@@ -167,7 +167,7 @@ public class ConsultationInstancesSettingBean implements Serializable {
         instanceSelected.setUrl(instanceUrl);
 
         Thesaurus thesaurus = new Thesaurus();
-        thesaurus.setInstance(instanceSelected);
+        thesaurus.setConsultationInstances(instanceSelected);
         thesaurus.setName(thesaurusSelected.getLabel());
         thesaurus.setIdThesaurus(thesaurusSelected.getId());
         thesaurus.setCollection(collectionSelected.getLabel());

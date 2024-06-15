@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -41,10 +42,14 @@ public class Groups implements Serializable {
     private List<Users> users;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "group_instances",
+    @JoinTable(name = "group_consultation_instances",
             joinColumns = @JoinColumn(name = "group_id"),
-            inverseJoinColumns = @JoinColumn(name = "instance_id"))
+            inverseJoinColumns = @JoinColumn(name = "consultation_instance_id"))
     private Set<ConsultationInstances> consultationInstances;
+
+    @ManyToOne
+    @JoinColumn(name = "id_reference_instance", referencedColumnName = "id")
+    private ReferenceInstances referenceInstances;
 
     private LocalDateTime created;
 

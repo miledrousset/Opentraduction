@@ -6,7 +6,7 @@ import com.cnrs.opentraduction.entities.Thesaurus;
 import com.cnrs.opentraduction.models.CollectionElementModel;
 import com.cnrs.opentraduction.models.InstanceModel;
 import com.cnrs.opentraduction.models.ThesaurusElementModel;
-import com.cnrs.opentraduction.repositories.InstanceRepository;
+import com.cnrs.opentraduction.repositories.ConsultationInstanceRepository;
 import com.cnrs.opentraduction.repositories.ThesaurusRepository;
 import com.cnrs.opentraduction.utils.MessageUtil;
 
@@ -31,7 +31,7 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 public class ConsultationInstanceService {
 
-    private final InstanceRepository instanceRepository;
+    private final ConsultationInstanceRepository consultationInstanceRepository;
     private final ThesaurusRepository thesaurusRepository;
 
     private final OpenthesoClient openthesoClient;
@@ -42,12 +42,13 @@ public class ConsultationInstanceService {
         if (thesaurusResponse.length > 0) {
             return Stream.of(thesaurusResponse)
                     .filter(element -> element.getLabels().stream().anyMatch(tmp -> "fr".equals(tmp.getLang())))
-                    .map(element -> new ThesaurusElementModel(element.getIdTheso(),
-                            element.getLabels().stream()
-                                    .filter(tmp -> "fr".equals(tmp.getLang()))
-                                    .findFirst()
-                                    .get()
-                                    .getTitle()))
+                    .map(element -> {
+                        var label = element.getLabels().stream()
+                                .filter(tmp -> "fr".equals(tmp.getLang()))
+                                .findFirst().orElse(null);
+                        return new ThesaurusElementModel(element.getIdTheso(),
+                                ObjectUtils.isEmpty(label) ? "" : label.getTitle());
+                    })
                     .collect(Collectors.toList());
         } else {
             return List.of();
@@ -59,13 +60,14 @@ public class ConsultationInstanceService {
         if (collectionsResponse.length > 0) {
             return Stream.of(collectionsResponse)
                     .filter(element -> element.getLabels().stream().anyMatch(tmp -> "fr".equals(tmp.getLang())))
-                    .map(element -> new CollectionElementModel(element.getIdGroup(),
-                            element.getLabels().stream()
-                                    .filter(tmp -> "fr".equals(tmp.getLang()))
-                                    .findFirst()
-                                    .get()
-                                    .getTitle())
-                    )
+                    .map(element -> {
+                        var label = element.getLabels().stream()
+                                .filter(tmp -> "fr".equals(tmp.getLang()))
+                                .findFirst().orElse(null);
+
+                        return new CollectionElementModel(element.getIdGroup(),
+                                ObjectUtils.isEmpty(label) ? "" : label.getTitle());
+                    })
                     .collect(Collectors.toList());
         } else {
             return List.of();
@@ -73,7 +75,7 @@ public class ConsultationInstanceService {
     }
 
     public void deleteInstance(Integer idInstance) {
-        instanceRepository.deleteById(idInstance);
+        consultationInstanceRepository.deleteById(idInstance);
     }
 
     public void saveInstance(ConsultationInstances instanceSelected, Thesaurus thesaurus) {
@@ -96,18 +98,18 @@ public class ConsultationInstanceService {
 
         thesaurus.setCreated(LocalDateTime.now());
         thesaurus.setModified(LocalDateTime.now());
-        thesaurus.setInstance(instanceSelected);
+        thesaurus.setConsultationInstances(instanceSelected);
         instanceSelected.setThesauruses(Set.of(thesaurus));
 
         log.info("Enregistrement dans la base");
-        var instanceSaved = instanceRepository.save(instanceSelected);
+        var instanceSaved = consultationInstanceRepository.save(instanceSelected);
 
-        thesaurus.setInstance(instanceSaved);
+        thesaurus.setConsultationInstances(instanceSaved);
         thesaurusRepository.save(thesaurus);
     }
 
     public List<InstanceModel> getAllInstances() {
-        var consultationInstances = instanceRepository.findAll();
+        var consultationInstances = consultationInstanceRepository.findAll();
 
         if(!CollectionUtils.isEmpty(consultationInstances)) {
             return consultationInstances.stream()
@@ -133,7 +135,7 @@ public class ConsultationInstanceService {
 
     public ConsultationInstances getInstanceById(Integer instanceId) {
 
-        var instance = instanceRepository.findById(instanceId);
+        var instance = consultationInstanceRepository.findById(instanceId);
         return instance.orElse(null);
     }
 }

@@ -63,7 +63,7 @@ public class GroupService {
                                 var thesaurus = instance.getThesauruses().stream().findFirst();
                                 group.setThesaurusId(thesaurus.get().getIdThesaurus());
                                 group.setThesaurusName(thesaurus.get().getName());
-                                group.setThesaurusUrl(thesaurus.get().getInstance().getUrl() + "/?idt=" + thesaurus.get().getIdThesaurus());
+                                group.setThesaurusUrl(thesaurus.get().getConsultationInstances().getUrl() + "/?idt=" + thesaurus.get().getIdThesaurus());
                                 group.setCollectionId(thesaurus.get().getIdCollection());
                                 group.setCollectionName(thesaurus.get().getCollection());
                             }
