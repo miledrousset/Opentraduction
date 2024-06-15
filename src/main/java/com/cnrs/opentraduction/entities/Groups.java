@@ -44,14 +44,14 @@ public class Groups implements Serializable {
     @JoinTable(name = "group_instances",
             joinColumns = @JoinColumn(name = "group_id"),
             inverseJoinColumns = @JoinColumn(name = "instance_id"))
-    private Set<Instances> instances;
+    private Set<ConsultationInstances> consultationInstances;
 
     private LocalDateTime created;
 
     private LocalDateTime modified;
 
-    public List<Instances> getInstances() {
-        return instances.stream().collect(Collectors.toList());
+    public List<ConsultationInstances> getConsultationInstances() {
+        return consultationInstances.stream().collect(Collectors.toList());
     }
 
 }

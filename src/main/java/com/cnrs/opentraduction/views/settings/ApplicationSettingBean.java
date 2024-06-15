@@ -15,7 +15,7 @@ import java.io.Serializable;
 @Named(value = "applicationSettingBean")
 public class ApplicationSettingBean implements Serializable {
 
-    private InstancesSettingBean instancesSettingBean;
+    private ConsultationInstancesSettingBean consultationInstancesBean;
     private GroupsSettingBean groupsSettingBean;
     private UsersSettingBean usersSettingBean;
 
@@ -24,11 +24,11 @@ public class ApplicationSettingBean implements Serializable {
 
     public ApplicationSettingBean(UsersSettingBean usersSettingBean,
                                   GroupsSettingBean groupsSettingBean,
-                                  InstancesSettingBean instancesSettingBean) {
+                                  ConsultationInstancesSettingBean consultationInstancesBean) {
 
         this.usersSettingBean = usersSettingBean;
         this.groupsSettingBean = groupsSettingBean;
-        this.instancesSettingBean = instancesSettingBean;
+        this.consultationInstancesBean = consultationInstancesBean;
 
         selectedSetting = SettingPart.USER_MANAGEMENT;
     }
@@ -38,7 +38,7 @@ public class ApplicationSettingBean implements Serializable {
         selectedSetting = SettingPart.USER_MANAGEMENT;
 
         usersSettingBean.initialInterface();
-        instancesSettingBean.initialInterface();
+        consultationInstancesBean.initialInterface();
         groupsSettingBean.initialInterface();
     }
 

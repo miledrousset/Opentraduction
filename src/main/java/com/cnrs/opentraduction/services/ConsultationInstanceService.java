@@ -1,7 +1,7 @@
 package com.cnrs.opentraduction.services;
 
 import com.cnrs.opentraduction.clients.OpenthesoClient;
-import com.cnrs.opentraduction.entities.Instances;
+import com.cnrs.opentraduction.entities.ConsultationInstances;
 import com.cnrs.opentraduction.entities.Thesaurus;
 import com.cnrs.opentraduction.models.CollectionElementModel;
 import com.cnrs.opentraduction.models.InstanceModel;
@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class InstanceService {
+public class ConsultationInstanceService {
 
     private final InstanceRepository instanceRepository;
     private final ThesaurusRepository thesaurusRepository;
@@ -43,7 +43,11 @@ public class InstanceService {
             return Stream.of(thesaurusResponse)
                     .filter(element -> element.getLabels().stream().anyMatch(tmp -> "fr".equals(tmp.getLang())))
                     .map(element -> new ThesaurusElementModel(element.getIdTheso(),
-                            element.getLabels().stream().filter(tmp -> "fr".equals(tmp.getLang())).findFirst().get().getTitle()))
+                            element.getLabels().stream()
+                                    .filter(tmp -> "fr".equals(tmp.getLang()))
+                                    .findFirst()
+                                    .get()
+                                    .getTitle()))
                     .collect(Collectors.toList());
         } else {
             return List.of();
@@ -56,7 +60,12 @@ public class InstanceService {
             return Stream.of(collectionsResponse)
                     .filter(element -> element.getLabels().stream().anyMatch(tmp -> "fr".equals(tmp.getLang())))
                     .map(element -> new CollectionElementModel(element.getIdGroup(),
-                            element.getLabels().stream().filter(tmp -> "fr".equals(tmp.getLang())).findFirst().get().getTitle()))
+                            element.getLabels().stream()
+                                    .filter(tmp -> "fr".equals(tmp.getLang()))
+                                    .findFirst()
+                                    .get()
+                                    .getTitle())
+                    )
                     .collect(Collectors.toList());
         } else {
             return List.of();
@@ -67,7 +76,7 @@ public class InstanceService {
         instanceRepository.deleteById(idInstance);
     }
 
-    public void saveInstance(Instances instanceSelected, Thesaurus thesaurus) {
+    public void saveInstance(ConsultationInstances instanceSelected, Thesaurus thesaurus) {
 
         if (StringUtils.isEmpty(instanceSelected.getName())) {
             MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Le nom de l'instance est obligatoire !");
@@ -98,10 +107,10 @@ public class InstanceService {
     }
 
     public List<InstanceModel> getAllInstances() {
-        var instances = instanceRepository.findAll();
+        var consultationInstances = instanceRepository.findAll();
 
-        if(!CollectionUtils.isEmpty(instances)) {
-            return instances.stream()
+        if(!CollectionUtils.isEmpty(consultationInstances)) {
+            return consultationInstances.stream()
                     .map(element -> {
                         var instance = new InstanceModel();
                         instance.setId(element.getId());
@@ -109,13 +118,10 @@ public class InstanceService {
                         instance.setUrl(element.getUrl());
                         if (!CollectionUtils.isEmpty(element.getThesauruses())) {
                             var thesaurus = element.getThesauruses().stream().findFirst();
-                            if (thesaurus.isPresent()) {
-                                instance.setThesaurusId(thesaurus.get().getIdThesaurus());
-                                instance.setThesaurusName(thesaurus.get().getName());
-
-                                instance.setCollectionId(thesaurus.get().getIdCollection());
-                                instance.setCollectionName(thesaurus.get().getCollection());
-                            }
+                            instance.setThesaurusId(thesaurus.get().getIdThesaurus());
+                            instance.setThesaurusName(thesaurus.get().getName());
+                            instance.setCollectionId(thesaurus.get().getIdCollection());
+                            instance.setCollectionName(thesaurus.get().getCollection());
                         }
                         return instance;
                     })
@@ -125,7 +131,7 @@ public class InstanceService {
         }
     }
 
-    public Instances getInstanceById(Integer instanceId) {
+    public ConsultationInstances getInstanceById(Integer instanceId) {
 
         var instance = instanceRepository.findById(instanceId);
         return instance.orElse(null);

@@ -57,8 +57,8 @@ public class GroupService {
                         group.setId(element.getId());
                         group.setName(element.getName());
 
-                        if (!CollectionUtils.isEmpty(element.getInstances())) {
-                            var instance = element.getInstances().get(0);
+                        if (!CollectionUtils.isEmpty(element.getConsultationInstances())) {
+                            var instance = element.getConsultationInstances().get(0);
                             if (!CollectionUtils.isEmpty(instance.getThesauruses())) {
                                 var thesaurus = instance.getThesauruses().stream().findFirst();
                                 group.setThesaurusId(thesaurus.get().getIdThesaurus());

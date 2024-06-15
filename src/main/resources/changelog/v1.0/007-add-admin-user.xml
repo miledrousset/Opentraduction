@@ -19,7 +19,7 @@
             <column name="last_name" value="User"/>
             <column name="active" valueBoolean="true"/>
             <column name="admin" valueBoolean="true"/>
-            <column name="id_group_user" value="1"/>
+            <column name="id_group" value="1"/>
             <column name="created" valueDate="2024-01-01T00:00:00"/>
             <column name="modified" valueDate="2024-01-01T00:00:00"/>
         </insert>

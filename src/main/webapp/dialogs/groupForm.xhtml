@@ -21,7 +21,7 @@
                     <p:outputLabel value="Instance thésaurus"/>
                     <p:selectOneMenu value="#{groupsSettingBean.idInstanceSelected}" class="form-control"
                                      required="true" label="tableId" appendTo="@this" >
-                        <f:selectItems value="#{instancesSettingBean.instances}" var="instance"
+                        <f:selectItems value="#{consultationInstancesBean.consultationInstances}" var="instance"
                                        itemLabel="#{instance.name}" itemValue="#{instance.id}"/>
                     </p:selectOneMenu>
                 </div>

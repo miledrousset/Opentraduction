@@ -23,12 +23,12 @@
             <column name="admin" type="boolean"/>
             <column name="created" type="TIMESTAMP"/>
             <column name="modified" type="TIMESTAMP"/>
-            <column name="id_group_user" type="int">
+            <column name="id_group" type="int">
                 <constraints nullable="false"/>
             </column>
         </createTable>
         <addForeignKeyConstraint baseTableName="users"
-                                 baseColumnNames="id_group_user"
+                                 baseColumnNames="id_group"
                                  referencedTableName="groups"
                                  referencedColumnNames="id"
                                  constraintName="fk_user_group"/>

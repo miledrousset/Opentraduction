@@ -52,7 +52,7 @@ public class Users implements Serializable {
     private LocalDateTime modified;
 
     @ManyToOne
-    @JoinColumn(name = "id_group_user", referencedColumnName = "id")
+    @JoinColumn(name = "id_group", referencedColumnName = "id")
     private Groups group;
 
     @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)

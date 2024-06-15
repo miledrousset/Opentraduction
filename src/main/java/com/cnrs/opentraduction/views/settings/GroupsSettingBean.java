@@ -3,7 +3,7 @@ package com.cnrs.opentraduction.views.settings;
 import com.cnrs.opentraduction.entities.Groups;
 import com.cnrs.opentraduction.models.GroupModel;
 import com.cnrs.opentraduction.services.GroupService;
-import com.cnrs.opentraduction.services.InstanceService;
+import com.cnrs.opentraduction.services.ConsultationInstanceService;
 import com.cnrs.opentraduction.utils.MessageUtil;
 
 import lombok.Data;
@@ -27,8 +27,8 @@ import java.util.Set;
 public class GroupsSettingBean implements Serializable {
 
     private GroupService groupService;
-    private InstanceService instanceService;
-    private InstancesSettingBean instancesSettingBean;
+    private ConsultationInstanceService consultationInstanceService;
+    private ConsultationInstancesSettingBean consultationInstancesBean;
 
     private List<GroupModel> groups;
     private Groups groupSelected;
@@ -38,12 +38,12 @@ public class GroupsSettingBean implements Serializable {
 
 
     public GroupsSettingBean(GroupService groupService,
-                             InstanceService instanceService,
-                             InstancesSettingBean instancesSettingBean) {
+                             ConsultationInstanceService consultationInstanceService,
+                             ConsultationInstancesSettingBean consultationInstancesBean) {
 
         this.groupService = groupService;
-        this.instanceService = instanceService;
-        this.instancesSettingBean = instancesSettingBean;
+        this.consultationInstanceService = consultationInstanceService;
+        this.consultationInstancesBean = consultationInstancesBean;
     }
 
     public void initialInterface() {
@@ -52,12 +52,12 @@ public class GroupsSettingBean implements Serializable {
 
     public void groupManager() {
 
-        var instanceSelected = instancesSettingBean.getInstances().stream()
+        var instanceSelected = consultationInstancesBean.getConsultationInstances().stream()
                 .filter(instance -> instance.getId().intValue() == idInstanceSelected.intValue())
                 .findFirst();
         if (instanceSelected.isPresent()) {
-            var instance = instanceService.getInstanceById(instanceSelected.get().getId());
-            groupSelected.setInstances(Set.of(instance));
+            var consultationInstances = consultationInstanceService.getInstanceById(instanceSelected.get().getId());
+            groupSelected.setConsultationInstances(Set.of(consultationInstances));
         }
 
         groupService.saveGroup(groupSelected);
@@ -73,8 +73,8 @@ public class GroupsSettingBean implements Serializable {
 
         dialogTitle = "Ajouter un nouveau group";
         groupSelected = new Groups();
-        if (!CollectionUtils.isEmpty(instancesSettingBean.getInstances())) {
-            idInstanceSelected = instancesSettingBean.getInstances().get(0).getId();
+        if (!CollectionUtils.isEmpty(consultationInstancesBean.getConsultationInstances())) {
+            idInstanceSelected = consultationInstancesBean.getConsultationInstances().get(0).getId();
         }
         PrimeFaces.current().executeScript("PF('groupDialog').show();");
     }

@@ -13,3 +13,5 @@ databaseChangeLog:
       file: classpath:/changelog/v1.0/006-create-user_thesaurus-table.xml
   - include:
       file: classpath:/changelog/v1.0/007-add-admin-user.xml
+  - include:
+      file: classpath:/changelog/v1.0/008-rename-instances-table-to-consultation-instance-table.xml

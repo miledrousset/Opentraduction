@@ -53,10 +53,16 @@
                       <i class="pi pi-users"/><span>Gestion des groupes</span>
                     </p:commandLink>
 
-                    <p:commandLink class="#{applicationSettingBean.getMenuItemClass('INSTANCE_MANAGEMENT')}"
-                                   action="#{applicationSettingBean.setMenuItem('INSTANCE_MANAGEMENT')}"
+                    <p:commandLink class="#{applicationSettingBean.getMenuItemClass('THESAURUS_REFERENCE')}"
+                                   action="#{applicationSettingBean.setMenuItem('THESAURUS_REFERENCE')}"
                                    ajax="true" process="@this" update="mainContent">
-                      <i class="pi pi-server"/><span>Gestion des instances</span>
+                      <i class="pi pi-server"/><span>Thésaurus de référence</span>
+                    </p:commandLink>
+
+                    <p:commandLink class="#{applicationSettingBean.getMenuItemClass('THESAURUS_CONSULTATION')}"
+                                   action="#{applicationSettingBean.setMenuItem('THESAURUS_CONSULTATION')}"
+                                   ajax="true" process="@this" update="mainContent">
+                      <i class="pi pi-server"/><span>Thésaurus de consultation</span>
                     </p:commandLink>
                   </div>
                 </div>
@@ -70,8 +76,8 @@
                 <ui:include src="system-settings/groups-management.xhtml" />
               </h:panelGroup>
 
-              <h:panelGroup rendered="#{applicationSettingBean.selectedSetting == 'INSTANCE_MANAGEMENT'}">
-                <ui:include src="system-settings/instances-management.xhtml" />
+              <h:panelGroup rendered="#{applicationSettingBean.selectedSetting == 'THESAURUS_CONSULTATION'}">
+                <ui:include src="system-settings/instances-consultation-management.xhtml" />
               </h:panelGroup>
             </div>
           </div>

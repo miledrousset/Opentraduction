@@ -49,7 +49,7 @@ public class Thesaurus {
 
     @ManyToOne
     @JoinColumn(name = "instance_id", referencedColumnName = "id")
-    private Instances instance;
+    private ConsultationInstances instance;
 
     @ManyToMany
     @JoinTable(

@@ -4,7 +4,7 @@
         xmlns:f="http://xmlns.jcp.org/jsf/core"
         xmlns:h="http://xmlns.jcp.org/jsf/html">
 
-    <p:dialog id="instanceForm" header="#{instancesSettingBean.dialogTitle}" widgetVar="instanceDialog"
+    <p:dialog id="instanceForm" header="#{consultationInstancesBean.dialogTitle}" widgetVar="instanceDialog"
               minHeight="40" width="350" showEffect="fade" modal="true" resizable="true">
 
         <h:form>
@@ -12,7 +12,7 @@
                 <div class="field col-12 md:col-4">
                     <p:outputLabel for="nom" value="Nom de l'instance" />
                     <p:inputText id="nom" class="form-control"
-                                 value="#{instancesSettingBean.instanceName}"/>
+                                 value="#{consultationInstancesBean.instanceName}"/>
                 </div>
             </div>
 
@@ -21,35 +21,35 @@
                 <div class="col-12 md:col-4">
                     <div class="ui-inputgroup">
                         <p:inputText id="url" class="form-control" placeholder="http://..."
-                                     value="#{instancesSettingBean.instanceUrl}" />
+                                     value="#{consultationInstancesBean.instanceUrl}" />
                         <p:commandButton icon="pi pi-search" ajax="true" process="@form"
                                          update="listThesaurus listCollections"
-                                         action="#{instancesSettingBean.searchThesaurus()}"/>
+                                         action="#{consultationInstancesBean.searchThesaurus()}"/>
                     </div>
                 </div>
             </div>
 
             <div class="field col-12 md:col-4" style="margin-top: 10px">
                 <p:outputLabel value="Thésaurus"/>
-                <p:selectOneMenu id="listThesaurus" value="#{instancesSettingBean.thesaurusSelected}"
+                <p:selectOneMenu id="listThesaurus" value="#{consultationInstancesBean.thesaurusSelected}"
                                  class="form-control" style="width: 100%;"
-                                 disabled="#{!instancesSettingBean.thesaurusListStatut}">
-                    <p:ajax event="change" listener="#{instancesSettingBean.searchCollections}"
+                                 disabled="#{!consultationInstancesBean.thesaurusListStatut}">
+                    <p:ajax event="change" listener="#{consultationInstancesBean.searchCollections}"
                             update="listCollections valideInstance" process="@this" immediate="true"/>
-                    <f:selectItems value="#{instancesSettingBean.thesaurusList}" var="thesaurus"
+                    <f:selectItems value="#{consultationInstancesBean.thesaurusList}" var="thesaurus"
                                    itemLabel="#{thesaurus.label}" itemValue="#{thesaurus}"/>
                 </p:selectOneMenu>
             </div>
 
             <div class="field col-12 md:col-4" style="margin-top: 10px">
                 <p:outputLabel value="Collections"/>
-                <p:selectOneMenu id="listCollections" value="#{instancesSettingBean.collectionSelected}" class="form-control"
-                                 style="width: 100%;"
-                                 disabled="#{!instancesSettingBean.collectionsListStatut}">
+                <p:selectOneMenu id="listCollections" value="#{consultationInstancesBean.collectionSelected}"
+                                 class="form-control" style="width: 100%;"
+                                 disabled="#{!consultationInstancesBean.collectionsListStatut}">
 
                     <p:ajax event="change" update="listCollections valideInstance" process="@this" immediate="true"/>
 
-                    <f:selectItems value="#{instancesSettingBean.collectionList}" var="collection"
+                    <f:selectItems value="#{consultationInstancesBean.collectionList}" var="collection"
                                    itemLabel="#{collection.label}" itemValue="#{collection}"/>
                 </p:selectOneMenu>
             </div>
@@ -60,8 +60,8 @@
                                  ajax="true" process="@this"/>
 
                 <p:commandButton id="valideInstance" title="Valider"
-                                 action="#{instancesSettingBean.instanceManagement()}"
-                                 disabled="#{!instancesSettingBean.validateBtnStatut}"
+                                 action="#{consultationInstancesBean.instanceManagement()}"
+                                 disabled="#{!consultationInstancesBean.validateBtnStatut}"
                                  class="btn-getstarted" ajax="true" process="@this"
                                  update="mainContent:listInstances"/>
             </div>

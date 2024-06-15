@@ -17,12 +17,12 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 
-@Entity(name = "instances")
+@Entity(name = "consultation_instances")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Instances implements Serializable {
+public class ConsultationInstances implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +32,7 @@ public class Instances implements Serializable {
 
     private String url;
 
-    @ManyToMany(mappedBy = "instances")
+    @ManyToMany(mappedBy = "consultationInstances")
     private Set<Groups> groups;
 
     @OneToMany(mappedBy = "instance", fetch = FetchType.EAGER)

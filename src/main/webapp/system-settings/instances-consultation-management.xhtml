@@ -18,13 +18,15 @@
                                 <div class="col-12" style="text-align: right; margin-bottom: 10px">
                                     <p:commandButton styleClass="ui-button-outlined ui-button-secondary"
                                                      icon="pi pi-plus-circle" ajax="true" process="@this"
-                                                     actionListener="#{instancesSettingBean.initialAddInstanceDialog()}"
+                                                     actionListener="#{consultationInstancesBean.initialAddInstanceDialog()}"
                                                      update="instanceForm"
                                                      value="Ajouter une nouvelle instance" />
                                 </div>
                             </div>
 
-                            <p:dataTable id="listInstances" var="instance" value="#{instancesSettingBean.instances}" class="table table-hover" stripedRows="true"
+                            <p:dataTable id="listInstances" var="instance"
+                                         value="#{consultationInstancesBean.consultationInstances}"
+                                         class="table table-hover" stripedRows="true"
                                          reflow="true" styleClass="products-table" draggableColumns="true">
                                 <p:column headerText="Nom" width="15%" style="text-align: center">
                                     <p:tag styleClass="mr-2" value="#{instance.name}" style="background: rgba(0, 0, 0, 0.58)" />
@@ -49,11 +51,11 @@
                                 <p:column headerText="Action" width="15%" style="text-align: center">
                                     <p:commandButton icon="pi pi-pencil" ajax="true" process="@this"
                                                      update="instanceForm"
-                                                     action="#{instancesSettingBean.initialUpdateInstanceDialog(instance)}"
+                                                     action="#{consultationInstancesBean.initialUpdateInstanceDialog(instance)}"
                                                      styleClass="rounded-button ui-button-success ui-button-flat" />
 
                                     <p:commandButton icon="pi pi-user-minus" update=":mainContent:listInstances"
-                                                     action="#{instancesSettingBean.deleteInstance(instance)}"
+                                                     action="#{consultationInstancesBean.deleteInstance(instance)}"
                                                      styleClass="rounded-button ui-button-danger ui-button-flat">
                                         <p:confirm header="Confirmation" message="Are you sure you want to proceed?" icon="pi pi-exclamation-triangle"/>
                                     </p:commandButton>
