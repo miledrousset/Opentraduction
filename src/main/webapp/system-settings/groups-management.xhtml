@@ -27,17 +27,21 @@
                             <p:dataTable id="listGroups" var="group" value="#{groupsSettingBean.groups}" class="table table-hover" stripedRows="true"
                                          reflow="true" styleClass="products-table" draggableColumns="true">
 
-                                <p:column headerText="Nom" width="20%">
+                                <p:column headerText="Nom" width="20%" groupRow="true" style="text-align: center">
                                     <p:tag styleClass="mr-2" value="#{group.name}" style="background: rgba(0, 0, 0, 0.58)" />
                                 </p:column>
 
-                                <p:column headerText="Thesaurus" width="20%">
+                                <p:column headerText="Type Thésaurus" width="20%" groupRow="true">
+                                    <h:outputText value="#{group.getType()}" />
+                                </p:column>
+
+                                <p:column headerText="Thésaurus" width="20%" groupRow="true">
                                     <a href="#{group.thesaurusUrl}" target="_blank">
                                         <h:outputText value="#{group.thesaurusName}" />
                                     </a>
                                 </p:column>
 
-                                <p:column headerText="Collection" width="20%" style="text-align: center">
+                                <p:column headerText="Collection" width="20%" groupRow="true">
                                     <h:outputText value="#{group.collectionName}" />
                                 </p:column>
 

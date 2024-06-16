@@ -1,3 +1,4 @@
+
 package com.cnrs.opentraduction.entities;
 
 import lombok.AllArgsConstructor;

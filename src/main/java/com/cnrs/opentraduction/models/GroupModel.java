@@ -13,5 +13,11 @@ public class GroupModel {
     private String thesaurusUrl;
     private String collectionId;
     private String collectionName;
+    private boolean reference;
+    private boolean consultation;
+
+    public String getType() {
+        return reference ? "Référence" : "Consultation";
+    }
 
 }

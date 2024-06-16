@@ -11,8 +11,8 @@ import org.springframework.util.StringUtils;
 
 import javax.faces.application.FacesMessage;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -50,28 +50,50 @@ public class GroupService {
 
     public List<GroupModel> getAllGroups() {
         var groups = groupRepository.findAll();
+
+        List<GroupModel> groupsModel = new ArrayList<>();
+
         if (!CollectionUtils.isEmpty(groups)) {
-            return groups.stream()
-                    .map(element -> {
-                        var group = new GroupModel();
-                        group.setId(element.getId());
-                        group.setName(element.getName());
 
-                        if (!CollectionUtils.isEmpty(element.getConsultationInstances())) {
-                            var instance = element.getConsultationInstances().get(0);
-                            if (!CollectionUtils.isEmpty(instance.getThesauruses())) {
-                                var thesaurus = instance.getThesauruses().stream().findFirst();
-                                group.setThesaurusId(thesaurus.get().getIdThesaurus());
-                                group.setThesaurusName(thesaurus.get().getName());
-                                group.setThesaurusUrl(thesaurus.get().getConsultationInstances().getUrl() + "/?idt=" + thesaurus.get().getIdThesaurus());
-                                group.setCollectionId(thesaurus.get().getIdCollection());
-                                group.setCollectionName(thesaurus.get().getCollection());
-                            }
+            groups.forEach(group -> {
+                if (!ObjectUtils.isEmpty(group.getReferenceInstances())) {
+                    var groupModel = new GroupModel();
+                    groupModel.setId(group.getId());
+                    groupModel.setName(group.getName());
+                    groupModel.setThesaurusId(group.getReferenceInstances().getThesaurus().getIdThesaurus());
+                    groupModel.setThesaurusName(group.getReferenceInstances().getThesaurus().getName());
+                    groupModel.setThesaurusUrl(group.getReferenceInstances().getUrl() + "/?idt="
+                            + group.getReferenceInstances().getThesaurus().getIdThesaurus());
+                    groupModel.setCollectionId(group.getReferenceInstances().getThesaurus().getIdCollection());
+                    groupModel.setCollectionName(group.getReferenceInstances().getThesaurus().getCollection());
+                    groupModel.setReference(true);
+                    groupModel.setConsultation(false);
+                    groupsModel.add(groupModel);
+                }
+
+                if (!CollectionUtils.isEmpty(group.getConsultationInstances())) {
+                    group.getConsultationInstances().forEach(instance -> {
+
+                        if (!CollectionUtils.isEmpty(instance.getThesauruses())) {
+                            instance.getThesauruses().forEach(thesaurus -> {
+                                var groupModel = new GroupModel();
+                                groupModel.setId(group.getId());
+                                groupModel.setName(group.getName());
+                                groupModel.setThesaurusId(thesaurus.getIdThesaurus());
+                                groupModel.setThesaurusName(thesaurus.getName());
+                                groupModel.setThesaurusUrl(instance.getUrl() + "/?idt=" + thesaurus.getIdThesaurus());
+                                groupModel.setCollectionId(thesaurus.getIdCollection());
+                                groupModel.setCollectionName(thesaurus.getCollection());
+                                groupModel.setConsultation(true);
+                                groupModel.setReference(false);
+                                groupsModel.add(groupModel);
+                            });
                         }
+                    });
+                }
+            });
 
-                        return group;
-                    })
-                    .collect(Collectors.toList());
+            return groupsModel;
         } else {
             return List.of();
         }
