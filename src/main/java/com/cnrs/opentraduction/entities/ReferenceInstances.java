@@ -7,15 +7,14 @@ import lombok.Setter;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
-
 
 @Entity(name = "reference_instances")
 @Getter
@@ -35,8 +34,8 @@ public class ReferenceInstances implements Serializable {
     @OneToMany(mappedBy = "referenceInstances", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Groups> groups;
 
-    @OneToMany(mappedBy = "consultationInstances", fetch = FetchType.EAGER)
-    private Set<Thesaurus> thesauruses;
+    @OneToOne(mappedBy = "referenceInstances")
+    private Thesaurus thesaurus;
 
     private LocalDateTime created;
 

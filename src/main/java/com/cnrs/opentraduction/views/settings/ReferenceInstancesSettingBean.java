@@ -1,11 +1,11 @@
 package com.cnrs.opentraduction.views.settings;
 
-import com.cnrs.opentraduction.entities.ConsultationInstances;
+import com.cnrs.opentraduction.entities.ReferenceInstances;
 import com.cnrs.opentraduction.entities.Thesaurus;
 import com.cnrs.opentraduction.models.CollectionElementModel;
 import com.cnrs.opentraduction.models.InstanceModel;
 import com.cnrs.opentraduction.models.ThesaurusElementModel;
-import com.cnrs.opentraduction.services.ConsultationInstanceService;
+import com.cnrs.opentraduction.services.ReferenceInstanceService;
 import com.cnrs.opentraduction.utils.MessageUtil;
 
 import lombok.Data;
@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.primefaces.PrimeFaces;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
@@ -24,32 +25,55 @@ import java.util.List;
 @Data
 @Slf4j
 @SessionScoped
-@Named(value = "consultationInstancesBean")
-public class ConsultationInstancesSettingBean implements Serializable {
+@Named(value = "referenceInstancesBean")
+public class ReferenceInstancesSettingBean implements Serializable {
 
-    private ConsultationInstanceService consultationInstanceService;
+    private ReferenceInstanceService referenceInstanceService;
 
-    private ConsultationInstances instanceSelected;
-    private List<InstanceModel> consultationInstances;
+    private ReferenceInstances referenceSelected;
+    private List<InstanceModel> referenceInstances;
 
     private List<ThesaurusElementModel> thesaurusList;
     private ThesaurusElementModel thesaurusSelected;
+    private String idThesaurusSelected;
 
     private List<CollectionElementModel> collectionList;
     private CollectionElementModel collectionSelected;
+    private String idCollectionSelected;
+
     private boolean thesaurusListStatut, collectionsListStatut, validateBtnStatut;
 
     private String instanceName, instanceUrl;
     private String dialogTitle;
 
 
-    public ConsultationInstancesSettingBean(ConsultationInstanceService consultationInstanceService) {
+    public ReferenceInstancesSettingBean(ReferenceInstanceService referenceInstanceService) {
 
-        this.consultationInstanceService = consultationInstanceService;
+        this.referenceInstanceService = referenceInstanceService;
+    }
+
+    public void setSelectedThesaurus() {
+        if (!StringUtils.isEmpty(idThesaurusSelected)) {
+            thesaurusSelected = thesaurusList.stream()
+                    .filter(element -> element.getId().equals(idThesaurusSelected))
+                    .findFirst()
+                    .get();
+
+            searchCollections();
+        }
+    }
+
+    public void setSelectedCollection() {
+        if (!StringUtils.isEmpty(idCollectionSelected)) {
+            collectionSelected = collectionList.stream()
+                    .filter(element -> element.getId().equals(idCollectionSelected))
+                    .findFirst()
+                    .get();
+        }
     }
 
     public void initialInterface() {
-        consultationInstances = consultationInstanceService.getAllConsultationInstances();
+        referenceInstances = referenceInstanceService.getAllInstances();
 
         thesaurusListStatut = false;
         collectionsListStatut = false;
@@ -68,14 +92,14 @@ public class ConsultationInstancesSettingBean implements Serializable {
         thesaurusListStatut = false;
         collectionsListStatut = false;
         validateBtnStatut = false;
-        instanceSelected = new ConsultationInstances();
-        PrimeFaces.current().executeScript("PF('consultationInstanceDialog').show();");
+        referenceSelected = new ReferenceInstances();
+        PrimeFaces.current().executeScript("PF('referenceInstanceDialog').show();");
     }
 
     public void searchThesaurus() {
         collectionsListStatut = false;
 
-        //thesaurusList = consultationInstanceService.the(instanceUrl);
+        thesaurusList = referenceInstanceService.searchThesaurus(instanceUrl);
         thesaurusListStatut = !CollectionUtils.isEmpty(thesaurusList);
 
         if (thesaurusListStatut) {
@@ -86,7 +110,7 @@ public class ConsultationInstancesSettingBean implements Serializable {
 
     public void searchCollections() {
 
-        //collectionList = consultationInstanceService.searchCollections(instanceUrl, thesaurusSelected.getId());
+        collectionList = referenceInstanceService.searchCollections(instanceUrl, thesaurusSelected.getId());
 
         validateBtnStatut = true;
 
@@ -98,8 +122,8 @@ public class ConsultationInstancesSettingBean implements Serializable {
 
     public void deleteInstance(InstanceModel instance) {
         if (!ObjectUtils.isEmpty(instance)) {
-            consultationInstanceService.deleteInstance(instance.getId());
-            consultationInstances = consultationInstanceService.getAllConsultationInstances();
+            referenceInstanceService.deleteInstance(instance.getId());
+            referenceInstances = referenceInstanceService.getAllInstances();
             MessageUtil.showMessage(FacesMessage.SEVERITY_INFO, "L'instance a été supprimée avec succès !");
         } else {
             MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "L'instance que vous voulez supprimer n'existe pas !");
@@ -112,10 +136,10 @@ public class ConsultationInstancesSettingBean implements Serializable {
 
             dialogTitle = "Modifier l'instance " + instance.getName();
 
-            instanceSelected = consultationInstanceService.getInstanceById(instance.getId());
+            referenceSelected = referenceInstanceService.getInstanceById(instance.getId());
 
-            instanceName = instanceSelected.getName();
-            instanceUrl = instanceSelected.getUrl();
+            instanceName = referenceSelected.getName();
+            instanceUrl = referenceSelected.getUrl();
 
             validateBtnStatut = false;
             thesaurusListStatut = false;
@@ -127,24 +151,24 @@ public class ConsultationInstancesSettingBean implements Serializable {
             collectionList = List.of();
             collectionSelected = null;
 
-            if (!CollectionUtils.isEmpty(instanceSelected.getThesauruses())) {
-                var thesaurusSaved = instanceSelected.getThesauruses().stream().findFirst();
+            if (!ObjectUtils.isEmpty(referenceSelected.getThesaurus())) {
+                var thesaurusSaved = referenceSelected.getThesaurus();
 
-                //thesaurusList = consultationInstanceService.searchThesaurus(instanceUrl);
+                thesaurusList = referenceInstanceService.searchThesaurus(instanceUrl);
 
                 if (!CollectionUtils.isEmpty(thesaurusList)) {
                     thesaurusListStatut = true;
                     var thesaurusTmp = thesaurusList.stream()
-                            .filter(element -> element.getId().equals(thesaurusSaved.get().getIdThesaurus()))
+                            .filter(element -> element.getId().equals(thesaurusSaved.getIdThesaurus()))
                             .findFirst();
                     if (thesaurusTmp.isPresent()) {
                         thesaurusSelected = thesaurusTmp.get();
 
                         validateBtnStatut = true;
-                        //collectionList = consultationInstanceService.searchCollections(instanceUrl, thesaurusSelected.getId());
+                        collectionList = referenceInstanceService.searchCollections(instanceUrl, thesaurusSelected.getId());
                         if (!CollectionUtils.isEmpty(collectionList)) {
                             var collectionTmp = collectionList.stream()
-                                    .filter(element -> element.getId().equals(thesaurusSaved.get().getIdCollection()))
+                                    .filter(element -> element.getId().equals(thesaurusSaved.getIdCollection()))
                                     .findFirst();
                             collectionsListStatut = true;
                             if (collectionTmp.isPresent()) {
@@ -155,7 +179,7 @@ public class ConsultationInstancesSettingBean implements Serializable {
                 }
             }
 
-            PrimeFaces.current().executeScript("PF('consultationInstanceDialog').show();");
+            PrimeFaces.current().executeScript("PF('referenceInstanceDialog').show();");
         } else {
             MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "L'instance que vous voulez modifier n'existe pas !");
         }
@@ -163,23 +187,23 @@ public class ConsultationInstancesSettingBean implements Serializable {
 
     public void instanceManagement() {
 
-        instanceSelected.setName(instanceName);
-        instanceSelected.setUrl(instanceUrl);
+        referenceSelected.setName(instanceName);
+        referenceSelected.setUrl(instanceUrl);
 
         Thesaurus thesaurus = new Thesaurus();
-        thesaurus.setConsultationInstances(instanceSelected);
+        thesaurus.setReferenceInstances(referenceSelected);
         thesaurus.setName(thesaurusSelected.getLabel());
         thesaurus.setIdThesaurus(thesaurusSelected.getId());
         thesaurus.setCollection(collectionSelected.getLabel());
         thesaurus.setIdCollection(collectionSelected.getId());
 
-        consultationInstanceService.saveInstance(instanceSelected,  thesaurus);
+        referenceInstanceService.saveInstance(referenceSelected,  thesaurus);
 
-        consultationInstances = consultationInstanceService.getAllConsultationInstances();
+        referenceInstances = referenceInstanceService.getAllInstances();
 
         MessageUtil.showMessage(FacesMessage.SEVERITY_INFO, "Instance enregistrée avec succès");
 
-        PrimeFaces.current().executeScript("PF('consultationInstanceDialog').hide();");
+        PrimeFaces.current().executeScript("PF('referenceInstanceDialog').hide();");
         log.info("Instance enregistrée avec succès !");
     }
 }

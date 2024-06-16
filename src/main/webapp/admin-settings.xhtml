@@ -44,13 +44,13 @@
                     <p:commandLink class="#{applicationSettingBean.getMenuItemClass('USER_MANAGEMENT')}"
                                    action="#{applicationSettingBean.setMenuItem('USER_MANAGEMENT')}"
                                    ajax="true" process="@this" update="mainContent">
-                      <i class="pi pi-user"/><span>Gestion des utilisateurs</span>
+                      <i class="pi pi-user"/><span>Utilisateurs</span>
                     </p:commandLink>
 
                     <p:commandLink class="#{applicationSettingBean.getMenuItemClass('GROUP_MANAGEMENT')}"
                                    action="#{applicationSettingBean.setMenuItem('GROUP_MANAGEMENT')}"
                                    ajax="true" process="@this" update="mainContent">
-                      <i class="pi pi-users"/><span>Gestion des groupes</span>
+                      <i class="pi pi-users"/><span>Groupes</span>
                     </p:commandLink>
 
                     <p:commandLink class="#{applicationSettingBean.getMenuItemClass('THESAURUS_REFERENCE')}"
@@ -76,8 +76,12 @@
                 <ui:include src="system-settings/groups-management.xhtml" />
               </h:panelGroup>
 
+              <h:panelGroup rendered="#{applicationSettingBean.selectedSetting == 'THESAURUS_REFERENCE'}">
+                <ui:include src="system-settings/reference-instances-management.xhtml" />
+              </h:panelGroup>
+
               <h:panelGroup rendered="#{applicationSettingBean.selectedSetting == 'THESAURUS_CONSULTATION'}">
-                <ui:include src="system-settings/instances-consultation-management.xhtml" />
+                <ui:include src="system-settings/consultation-instances-management.xhtml" />
               </h:panelGroup>
             </div>
           </div>
@@ -88,7 +92,8 @@
     <ui:include src="shared/footer.xhtml" />
 
     <ui:include src="dialogs/userDialog.xhtml" />
-    <ui:include src="dialogs/instanceForm.xhtml" />
     <ui:include src="dialogs/groupForm.xhtml" />
+    <ui:include src="dialogs/referenceInstanceDialog.xhtml" />
+    <ui:include src="dialogs/consultationInstanceDialog.xhtml" />
   </h:body>
 </html>

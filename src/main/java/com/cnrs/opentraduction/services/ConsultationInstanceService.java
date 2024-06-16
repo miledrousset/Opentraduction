@@ -3,9 +3,7 @@ package com.cnrs.opentraduction.services;
 import com.cnrs.opentraduction.clients.OpenthesoClient;
 import com.cnrs.opentraduction.entities.ConsultationInstances;
 import com.cnrs.opentraduction.entities.Thesaurus;
-import com.cnrs.opentraduction.models.CollectionElementModel;
 import com.cnrs.opentraduction.models.InstanceModel;
-import com.cnrs.opentraduction.models.ThesaurusElementModel;
 import com.cnrs.opentraduction.repositories.ConsultationInstanceRepository;
 import com.cnrs.opentraduction.repositories.ThesaurusRepository;
 import com.cnrs.opentraduction.utils.MessageUtil;
@@ -20,10 +18,9 @@ import org.springframework.util.StringUtils;
 
 import javax.faces.application.FacesMessage;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 @Slf4j
@@ -35,44 +32,6 @@ public class ConsultationInstanceService {
     private final ThesaurusRepository thesaurusRepository;
 
     private final OpenthesoClient openthesoClient;
-
-
-    public List<ThesaurusElementModel> searchThesaurus(String baseUrl) {
-        var thesaurusResponse = openthesoClient.getThesoInfo(baseUrl);
-        if (thesaurusResponse.length > 0) {
-            return Stream.of(thesaurusResponse)
-                    .filter(element -> element.getLabels().stream().anyMatch(tmp -> "fr".equals(tmp.getLang())))
-                    .map(element -> {
-                        var label = element.getLabels().stream()
-                                .filter(tmp -> "fr".equals(tmp.getLang()))
-                                .findFirst().orElse(null);
-                        return new ThesaurusElementModel(element.getIdTheso(),
-                                ObjectUtils.isEmpty(label) ? "" : label.getTitle());
-                    })
-                    .collect(Collectors.toList());
-        } else {
-            return List.of();
-        }
-    }
-
-    public List<CollectionElementModel> searchCollections(String baseUrl, String idThesaurus) {
-        var collectionsResponse = openthesoClient.getCollectionsByThesaurus(baseUrl, idThesaurus);
-        if (collectionsResponse.length > 0) {
-            return Stream.of(collectionsResponse)
-                    .filter(element -> element.getLabels().stream().anyMatch(tmp -> "fr".equals(tmp.getLang())))
-                    .map(element -> {
-                        var label = element.getLabels().stream()
-                                .filter(tmp -> "fr".equals(tmp.getLang()))
-                                .findFirst().orElse(null);
-
-                        return new CollectionElementModel(element.getIdGroup(),
-                                ObjectUtils.isEmpty(label) ? "" : label.getTitle());
-                    })
-                    .collect(Collectors.toList());
-        } else {
-            return List.of();
-        }
-    }
 
     public void deleteInstance(Integer idInstance) {
         consultationInstanceRepository.deleteById(idInstance);
@@ -108,26 +67,32 @@ public class ConsultationInstanceService {
         thesaurusRepository.save(thesaurus);
     }
 
-    public List<InstanceModel> getAllInstances() {
+    public List<InstanceModel> getAllConsultationInstances() {
         var consultationInstances = consultationInstanceRepository.findAll();
 
         if(!CollectionUtils.isEmpty(consultationInstances)) {
-            return consultationInstances.stream()
-                    .map(element -> {
-                        var instance = new InstanceModel();
-                        instance.setId(element.getId());
-                        instance.setName(element.getName());
-                        instance.setUrl(element.getUrl());
-                        if (!CollectionUtils.isEmpty(element.getThesauruses())) {
-                            var thesaurus = element.getThesauruses().stream().findFirst();
-                            instance.setThesaurusId(thesaurus.get().getIdThesaurus());
-                            instance.setThesaurusName(thesaurus.get().getName());
-                            instance.setCollectionId(thesaurus.get().getIdCollection());
-                            instance.setCollectionName(thesaurus.get().getCollection());
-                        }
-                        return instance;
-                    })
-                    .collect(Collectors.toList());
+
+            List<InstanceModel> consultationInstancesList = new ArrayList<>();
+
+            consultationInstances.forEach(instance -> {
+                if (!CollectionUtils.isEmpty(instance.getThesauruses())) {
+                    instance.getThesauruses().forEach(thesaurus -> {
+                        var instanceModel = new InstanceModel();
+                        instanceModel.setId(instance.getId());
+                        instanceModel.setName(instance.getName());
+                        instanceModel.setUrl(instance.getUrl());
+
+                        instanceModel.setThesaurusId(thesaurus.getIdThesaurus());
+                        instanceModel.setThesaurusName(thesaurus.getName());
+                        instanceModel.setCollectionId(thesaurus.getIdCollection());
+                        instanceModel.setCollectionName(thesaurus.getCollection());
+
+                        consultationInstancesList.add(instanceModel);
+                    });
+                }
+            });
+
+            return consultationInstancesList;
         } else {
             return List.of();
         }

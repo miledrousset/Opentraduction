@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,9 +17,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import java.time.LocalDateTime;
 import java.util.Set;
-
 
 @Entity(name = "thesaurus")
 @Getter
@@ -51,7 +52,7 @@ public class Thesaurus {
     @JoinColumn(name = "consultation_instance_id", referencedColumnName = "id")
     private ConsultationInstances consultationInstances;
 
-    @ManyToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "reference_instance_id", referencedColumnName = "id")
     private ReferenceInstances referenceInstances;
 
@@ -62,4 +63,3 @@ public class Thesaurus {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<Users> users;
 }
-

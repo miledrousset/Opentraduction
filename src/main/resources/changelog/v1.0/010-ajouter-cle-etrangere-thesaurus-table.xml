@@ -11,9 +11,7 @@
         </preConditions>
 
         <addColumn tableName="thesaurus">
-            <column name="reference_instance_id" type="int">
-                <constraints nullable="false"/>
-            </column>
+            <column name="reference_instance_id" type="int" />
         </addColumn>
 
         <addForeignKeyConstraint

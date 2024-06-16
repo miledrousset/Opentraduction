@@ -16,6 +16,7 @@ import java.io.Serializable;
 public class ApplicationSettingBean implements Serializable {
 
     private ConsultationInstancesSettingBean consultationInstancesBean;
+    private ReferenceInstancesSettingBean referenceInstancesBean;
     private GroupsSettingBean groupsSettingBean;
     private UsersSettingBean usersSettingBean;
 
@@ -24,10 +25,12 @@ public class ApplicationSettingBean implements Serializable {
 
     public ApplicationSettingBean(UsersSettingBean usersSettingBean,
                                   GroupsSettingBean groupsSettingBean,
+                                  ReferenceInstancesSettingBean referenceInstancesBean,
                                   ConsultationInstancesSettingBean consultationInstancesBean) {
 
         this.usersSettingBean = usersSettingBean;
         this.groupsSettingBean = groupsSettingBean;
+        this.referenceInstancesBean = referenceInstancesBean;
         this.consultationInstancesBean = consultationInstancesBean;
 
         selectedSetting = SettingPart.USER_MANAGEMENT;
@@ -38,8 +41,9 @@ public class ApplicationSettingBean implements Serializable {
         selectedSetting = SettingPart.USER_MANAGEMENT;
 
         usersSettingBean.initialInterface();
-        consultationInstancesBean.initialInterface();
         groupsSettingBean.initialInterface();
+        consultationInstancesBean.initialInterface();
+        referenceInstancesBean.initialInterface();
     }
 
     public String getMenuItemClass(String settingItem) {

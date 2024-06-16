@@ -4,38 +4,41 @@
         xmlns:f="http://xmlns.jcp.org/jsf/core"
         xmlns:h="http://xmlns.jcp.org/jsf/html">
 
-    <p:dialog id="instanceForm" header="#{consultationInstancesBean.dialogTitle}" widgetVar="instanceDialog"
-              minHeight="40" width="350" showEffect="fade" modal="true" resizable="true">
+    <p:dialog id="consultationInstanceForm" header="#{consultationInstancesBean.dialogTitle}"
+              widgetVar="consultationInstanceDialog" minHeight="40" width="350" showEffect="fade"
+              modal="true" resizable="true">
 
         <h:form>
             <div class="row">
                 <div class="field col-12 md:col-4">
-                    <p:outputLabel for="nom" value="Nom de l'instance" />
-                    <p:inputText id="nom" class="form-control"
+                    <p:outputLabel for="nomReferenceInstance" value="Nom de l'instance" />
+                    <p:inputText id="nomReferenceInstance" class="form-control"
                                  value="#{consultationInstancesBean.instanceName}"/>
                 </div>
             </div>
 
             <div class="row" style="margin-top: 10px">
-                <p:outputLabel for="url" value="URL de l'instance" />
+                <p:outputLabel for="urlReferenceInstance" value="URL de l'instance" />
                 <div class="col-12 md:col-4">
                     <div class="ui-inputgroup">
-                        <p:inputText id="url" class="form-control" placeholder="http://..."
+                        <p:inputText id="urlReferenceInstance" class="form-control" placeholder="http://..."
                                      value="#{consultationInstancesBean.instanceUrl}" />
                         <p:commandButton icon="pi pi-search" ajax="true" process="@form"
-                                         update="listThesaurus listCollections"
+                                         update="listThesaurusForConsultationInstance listCollectionsForConsultationInstance"
                                          action="#{consultationInstancesBean.searchThesaurus()}"/>
                     </div>
                 </div>
             </div>
 
             <div class="field col-12 md:col-4" style="margin-top: 10px">
-                <p:outputLabel value="Thésaurus"/>
-                <p:selectOneMenu id="listThesaurus" value="#{consultationInstancesBean.thesaurusSelected}"
+                <p:outputLabel value="ThésaurusReferenceInstance"/>
+                <p:selectOneMenu id="listThesaurusForConsultationInstance"
+                                 value="#{consultationInstancesBean.thesaurusSelected}"
                                  class="form-control" style="width: 100%;"
                                  disabled="#{!consultationInstancesBean.thesaurusListStatut}">
                     <p:ajax event="change" listener="#{consultationInstancesBean.searchCollections}"
-                            update="listCollections valideInstance" process="@this" immediate="true"/>
+                            update="listCollectionsForConsultationInstance valideConsultationInstance"
+                            process="@this" immediate="true"/>
                     <f:selectItems value="#{consultationInstancesBean.thesaurusList}" var="thesaurus"
                                    itemLabel="#{thesaurus.label}" itemValue="#{thesaurus}"/>
                 </p:selectOneMenu>
@@ -43,11 +46,13 @@
 
             <div class="field col-12 md:col-4" style="margin-top: 10px">
                 <p:outputLabel value="Collections"/>
-                <p:selectOneMenu id="listCollections" value="#{consultationInstancesBean.collectionSelected}"
+                <p:selectOneMenu id="listCollectionsForConsultationInstance"
+                                 value="#{consultationInstancesBean.collectionSelected}"
                                  class="form-control" style="width: 100%;"
                                  disabled="#{!consultationInstancesBean.collectionsListStatut}">
 
-                    <p:ajax event="change" update="listCollections valideInstance" process="@this" immediate="true"/>
+                    <p:ajax event="change" update="listCollectionsForConsultationInstance valideConsultationInstance"
+                            process="@this" immediate="true"/>
 
                     <f:selectItems value="#{consultationInstancesBean.collectionList}" var="collection"
                                    itemLabel="#{collection.label}" itemValue="#{collection}"/>
@@ -56,14 +61,14 @@
 
             <div style="width: 100%; text-align: right; margin-top: 15px; margin-bottom: 2px;">
                 <p:commandButton value="#{msg['action.annuler']}" styleClass="ui-button-secondary ui-button-flat"
-                                 action="PF('instanceDialog').hide();"
+                                 action="PF('consultationInstanceDialog').hide();"
                                  ajax="true" process="@this"/>
 
-                <p:commandButton id="valideInstance" title="Valider"
+                <p:commandButton id="valideConsultationInstance" title="Valider"
                                  action="#{consultationInstancesBean.instanceManagement()}"
                                  disabled="#{!consultationInstancesBean.validateBtnStatut}"
                                  class="btn-getstarted" ajax="true" process="@this"
-                                 update="mainContent:listInstances"/>
+                                 update="mainContent:listConsultationInstances"/>
             </div>
         </h:form>
     </p:dialog>
