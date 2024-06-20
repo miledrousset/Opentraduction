@@ -64,13 +64,14 @@
                     <h:outputText value="Group" />
                 </div>
                 <div class="field col-10">
-                    <p:inputText value="#{userSettingsBean.userConnected.group.name}" class="form-control" disabled="true" style="width: 100%"/>
+                    <p:tag styleClass="mr-2" value="#{userSettingsBean.userConnected.group.name}"
+                           style="background: rgba(0, 0, 0, 0.58)" />
                 </div>
             </div>
 
             <div class="row" style="margin-top: 10px;">
                 <div class="field col-12" style=" text-align: right">
-                    <h:outputText value="Créé le  : #{userSettingsBean.userConnected.created}, dernière mise à jour le : #{userSettingsBean.userConnected.modified}" />
+                    <h:outputText value="#{userSettingsBean.getUserAudit()}" style="font-style: italic; font-size: smaller; color: #BCBAB9" />
                 </div>
             </div>
 

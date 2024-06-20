@@ -1,8 +1,10 @@
 package com.cnrs.opentraduction.services;
 
 import com.cnrs.opentraduction.clients.OpenthesoClient;
+import com.cnrs.opentraduction.models.client.CollectionModel;
 import com.cnrs.opentraduction.models.client.ThesaurusElementModel;
 import com.cnrs.opentraduction.models.dao.CollectionElementDao;
+
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -41,8 +43,17 @@ public class ThesaurusService {
         }
     }
 
-    public List<CollectionElementDao> searchCollections(String baseUrl, String idThesaurus) {
-        var collectionsResponse = openthesoClient.getCollectionsByThesaurus(baseUrl, idThesaurus);
+    public List<CollectionElementDao> searchTopCollections(String baseUrl, String idThesaurus) {
+        var collectionsResponse = openthesoClient.getTopCollections(baseUrl, idThesaurus);
+        return getCollectionDatas(collectionsResponse);
+    }
+
+    public List<CollectionElementDao> searchCollections(String baseUrl, String idThesaurus, String idTopCollection) {
+        var collectionsResponse = openthesoClient.getCollections(baseUrl, idThesaurus, idTopCollection);
+        return getCollectionDatas(collectionsResponse);
+    }
+
+    private List<CollectionElementDao> getCollectionDatas(CollectionModel[] collectionsResponse) {
         if (collectionsResponse.length > 0) {
             return Stream.of(collectionsResponse)
                     .filter(element -> element.getLabels().stream().anyMatch(tmp -> FR.equals(tmp.getLang())))

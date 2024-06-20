@@ -18,8 +18,13 @@ public class OpenthesoClient {
         return restTemplate.getForObject(url, ThesaurusModel[].class);
     }
 
-    public CollectionModel[] getCollectionsByThesaurus(String baseUrl, String idThesaurus) {
-        var url = baseUrl + "/api/info/list?theso=" + idThesaurus + "&group=all";
+    public CollectionModel[] getTopCollections(String baseUrl, String idThesaurus) {
+        var url = baseUrl + "/api/info/list?theso=" + idThesaurus + "&topconcept=all";
+        return restTemplate.getForObject(url, CollectionModel[].class);
+    }
+
+    public CollectionModel[] getCollections(String baseUrl, String idThesaurus, String topCollectionAll) {
+        var url = baseUrl + "/api/info/list?theso=" + idThesaurus + "&topconcept=" + topCollectionAll + "&group=all";
         return restTemplate.getForObject(url, CollectionModel[].class);
     }
 }

@@ -115,7 +115,7 @@ public class ReferenceInstancesSettingBean implements Serializable {
 
     public void searchCollections() {
 
-        collectionList = thesaurusService.searchCollections(instanceUrl, thesaurusSelected.getId());
+        collectionList = thesaurusService.searchTopCollections(instanceUrl, thesaurusSelected.getId());
 
         validateBtnStatut = true;
 
@@ -171,7 +171,7 @@ public class ReferenceInstancesSettingBean implements Serializable {
                         thesaurusSelected = thesaurusTmp.get();
 
                         validateBtnStatut = true;
-                        collectionList = thesaurusService.searchCollections(instanceUrl, thesaurusSelected.getId());
+                        collectionList = thesaurusService.searchTopCollections(instanceUrl, thesaurusSelected.getId());
                         if (!CollectionUtils.isEmpty(collectionList)) {
                             var collectionTmp = collectionList.stream()
                                     .filter(element -> element.getId().equals(thesaurusSaved.getIdCollection()))

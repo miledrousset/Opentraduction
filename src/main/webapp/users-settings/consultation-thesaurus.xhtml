@@ -7,39 +7,52 @@
         <div class="pricing-item featured php-email-form" style="text-align: left">
 
             <div class="col-xl-12 content">
-                <h3>Thésaurus de référence</h3>
+                <h3>Thésaurus de consultation</h3>
             </div>
 
-            <div class="row">
-                <div class="field col-2" style="display: flex; align-items: center;">
-                    <h:outputText value="Thésaurus" />
-                </div>
-                <div class="field col-10">
-                    <p:inputText value="#{inputTextView.text}" class="form-control" style="width: 100%"/>
-                </div>
-            </div>
+            <p:dataTable id="listConsultationInstances" var="instance"
+                         value="#{userSettingsBean.consultationThesaurusList}"
+                         class="table table-hover" stripedRows="true"
+                         reflow="true" styleClass="products-table" draggableColumns="true">
 
-            <div class="row" style="margin-top: 10px">
-                <div class="field col-2" style="display: flex; align-items: center;">
-                    <h:outputText value="Collection" />
-                </div>
-                <div class="field col-10">
-                    <p:inputText value="#{inputTextView.text}" class="form-control" style="width: 100%"/>
-                </div>
-            </div>
+                <p:column headerText="Nom Instance" width="15%" style="text-align: center"  groupRow="true">
+                    <a href="#{instance.url}" target="_blank">
+                        <p:tag styleClass="mr-2" value="#{instance.name}" style="background: rgba(0, 0, 0, 0.58)" />
+                    </a>
+                </p:column>
 
-            <div class="row" style="margin-top: 10px">
-                <div class="field col-2" style="display: flex; align-items: center;">
-                    <h:outputText value="Sous-collection" />
-                </div>
-                <div class="field col-10">
-                    <p:inputText value="#{inputTextView.text}" class="form-control" style="width: 100%"/>
-                </div>
-            </div>
+                <p:column headerText="Nom Thésaurus" width="25%" groupRow="true">
+                    <a href="#{instance.url}/?idt=#{instance.thesaurusId}" target="_blank">
+                        <h:outputText value="#{instance.thesaurusName}" />
+                    </a>
+                </p:column>
+
+                <p:column headerText="Nom Collection" width="25%">
+                    <h:outputText value="#{instance.collectionName}" />
+                </p:column>
+
+                <p:column headerText="Actions" width="15%" style="text-align: center">
+                    <p:commandButton icon="pi pi-pencil" ajax="true" process="@this"
+                                     action="#{consultationInstancesBean.initialUpdateInstanceDialog(instance)}"
+                                     styleClass="rounded-button ui-button-success ui-button-flat" />
+
+                    <p:commandButton icon="pi pi-times" update=":mainContent:listConsultationInstances"
+                                     action="#{consultationInstancesBean.deleteInstance(instance)}"
+                                     styleClass="rounded-button ui-button-danger ui-button-flat">
+                        <p:confirm header="Confirmation" message="Are you sure you want to proceed?" icon="pi pi-exclamation-triangle"/>
+                    </p:commandButton>
+
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
+                    </p:confirmDialog>
+
+                </p:column>
+            </p:dataTable>
 
             <div class="row" style="margin-top: 10px;">
                 <div class="field col-12" style=" text-align: right">
-                    <h:outputText value="Créé le  : 22/11/2023 10:00, dernière mise à jour le : 22/11/2023 10:00" />
+                    <h:outputText value="#{userSettingsBean.getUserAudit()}" style="font-style: italic; font-size: smaller; color: #BCBAB9" />
                 </div>
             </div>
 
