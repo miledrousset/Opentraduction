@@ -31,10 +31,10 @@ public class ReferenceInstances implements Serializable {
 
     private String url;
 
-    @OneToMany(mappedBy = "referenceInstances", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "referenceInstances")
     private Set<Groups> groups;
 
-    @OneToOne(mappedBy = "referenceInstances")
+    @OneToOne(mappedBy = "referenceInstances", cascade = CascadeType.ALL)
     private Thesaurus thesaurus;
 
     private LocalDateTime created;

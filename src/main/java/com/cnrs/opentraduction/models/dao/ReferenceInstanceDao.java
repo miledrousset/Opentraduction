@@ -1,10 +1,10 @@
-package com.cnrs.opentraduction.models;
+package com.cnrs.opentraduction.models.dao;
 
 import lombok.Data;
 
 
 @Data
-public class InstanceModel {
+public class ReferenceInstanceDao {
 
     private Integer id;
     private String name;

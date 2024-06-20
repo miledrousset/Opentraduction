@@ -1,26 +1,24 @@
 package com.cnrs.opentraduction.services;
 
-import com.cnrs.opentraduction.clients.OpenthesoClient;
 import com.cnrs.opentraduction.entities.ConsultationInstances;
 import com.cnrs.opentraduction.entities.Thesaurus;
-import com.cnrs.opentraduction.models.InstanceModel;
+import com.cnrs.opentraduction.models.dao.ConsultationInstanceDao;
+import com.cnrs.opentraduction.models.dao.CollectionDao;
 import com.cnrs.opentraduction.repositories.ConsultationInstanceRepository;
 import com.cnrs.opentraduction.repositories.ThesaurusRepository;
-import com.cnrs.opentraduction.utils.MessageUtil;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 
-import javax.faces.application.FacesMessage;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -31,64 +29,64 @@ public class ConsultationInstanceService {
     private final ConsultationInstanceRepository consultationInstanceRepository;
     private final ThesaurusRepository thesaurusRepository;
 
-    private final OpenthesoClient openthesoClient;
 
     public void deleteInstance(Integer idInstance) {
         consultationInstanceRepository.deleteById(idInstance);
     }
 
-    public void saveInstance(ConsultationInstances instanceSelected, Thesaurus thesaurus) {
 
-        if (StringUtils.isEmpty(instanceSelected.getName())) {
-            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Le nom de l'instance est obligatoire !");
-            return;
-        }
+    @Transactional
+    public boolean saveConsultationInstance(ConsultationInstances consultationInstances, List<Thesaurus> thesaurusList) {
 
-        if (ObjectUtils.isEmpty(instanceSelected.getCreated())) {
+        if (ObjectUtils.isEmpty(consultationInstances.getId())) {
             log.info("Enregistrement d'une nouvelle instance dans la base");
-            instanceSelected.setCreated(LocalDateTime.now());
-        } else if (!CollectionUtils.isEmpty(instanceSelected.getThesauruses())) {
+            consultationInstances.setCreated(LocalDateTime.now());
+        } else {
             log.info("Mise à jour d'une instance dans la base");
             log.info("Suppression de l'ancien thésaurus");
-            thesaurusRepository.deleteAll(instanceSelected.getThesauruses());
+            thesaurusRepository.deleteAll(consultationInstances.getThesauruses());
         }
 
-        instanceSelected.setModified(LocalDateTime.now());
+        log.info("Enregistrement de l'instance de référence dans la base");
+        consultationInstances.setModified(LocalDateTime.now());
+        var instanceSaved = consultationInstanceRepository.save(consultationInstances);
 
-        thesaurus.setCreated(LocalDateTime.now());
-        thesaurus.setModified(LocalDateTime.now());
-        thesaurus.setConsultationInstances(instanceSelected);
-        instanceSelected.setThesauruses(Set.of(thesaurus));
+        log.info("Enregistrement du thésaurus dans la base");
+        thesaurusList.forEach(thesaurus -> {
+            thesaurus.setConsultationInstances(instanceSaved);
+            thesaurus.setCreated(LocalDateTime.now());
+            thesaurus.setModified(LocalDateTime.now());
+            thesaurusRepository.save(thesaurus);
+        });
 
-        log.info("Enregistrement dans la base");
-        var instanceSaved = consultationInstanceRepository.save(instanceSelected);
-
-        thesaurus.setConsultationInstances(instanceSaved);
-        thesaurusRepository.save(thesaurus);
+        return true;
     }
 
-    public List<InstanceModel> getAllConsultationInstances() {
+    public List<ConsultationInstanceDao> getAllConsultationInstances() {
         var consultationInstances = consultationInstanceRepository.findAll();
 
         if(!CollectionUtils.isEmpty(consultationInstances)) {
 
-            List<InstanceModel> consultationInstancesList = new ArrayList<>();
+            List<ConsultationInstanceDao> consultationInstancesList = new ArrayList<>();
 
             consultationInstances.forEach(instance -> {
                 if (!CollectionUtils.isEmpty(instance.getThesauruses())) {
-                    instance.getThesauruses().forEach(thesaurus -> {
-                        var instanceModel = new InstanceModel();
-                        instanceModel.setId(instance.getId());
-                        instanceModel.setName(instance.getName());
-                        instanceModel.setUrl(instance.getUrl());
 
-                        instanceModel.setThesaurusId(thesaurus.getIdThesaurus());
-                        instanceModel.setThesaurusName(thesaurus.getName());
-                        instanceModel.setCollectionId(thesaurus.getIdCollection());
-                        instanceModel.setCollectionName(thesaurus.getCollection());
+                    var collections = instance.getThesauruses().stream()
+                            .map(thesaurus -> CollectionDao.builder()
+                                    .collectionId(thesaurus.getIdCollection())
+                                    .collectionName(thesaurus.getCollection())
+                                    .build())
+                            .collect(Collectors.toList());
 
-                        consultationInstancesList.add(instanceModel);
-                    });
+                    consultationInstancesList.add(ConsultationInstanceDao.builder()
+                            .id(instance.getId())
+                            .name(instance.getName())
+                            .url(instance.getUrl())
+                            .thesaurusId(instance.getThesauruses().stream().findFirst().get().getIdThesaurus())
+                            .thesaurusName(instance.getThesauruses().stream().findFirst().get().getName())
+                            .collectionList(collections)
+                            .build());
                 }
             });
 

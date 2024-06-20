@@ -52,7 +52,7 @@ public class GroupsSettingBean implements Serializable {
 
     public void groupManager() {
 
-        var instanceSelected = consultationInstancesBean.getConsultationInstances().stream()
+        var instanceSelected = consultationInstancesBean.getConsultationList().stream()
                 .filter(instance -> instance.getId().intValue() == idInstanceSelected.intValue())
                 .findFirst();
         if (instanceSelected.isPresent()) {
@@ -73,8 +73,8 @@ public class GroupsSettingBean implements Serializable {
 
         dialogTitle = "Ajouter un nouveau group";
         groupSelected = new Groups();
-        if (!CollectionUtils.isEmpty(consultationInstancesBean.getConsultationInstances())) {
-            idInstanceSelected = consultationInstancesBean.getConsultationInstances().get(0).getId();
+        if (!CollectionUtils.isEmpty(consultationInstancesBean.getConsultationList())) {
+            idInstanceSelected = consultationInstancesBean.getConsultationList().get(0).getId();
         }
         PrimeFaces.current().executeScript("PF('groupDialog').show();");
     }

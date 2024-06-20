@@ -1,0 +1,57 @@
+<ui:composition 
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <section id="about" class="pricing about section">
+        <div class="pricing-item featured php-email-form" style="text-align: left">
+
+            <div class="col-xl-12 content">
+                <h3>Thésaurus de référence</h3>
+            </div>
+
+            <div class="row">
+                <div class="field col-2" style="display: flex; align-items: center;">
+                    <h:outputText value="Thésaurus" />
+                </div>
+                <div class="field col-10">
+                    <p:inputText value="#{inputTextView.text}" class="form-control" style="width: 100%"/>
+                </div>
+            </div>
+
+            <div class="row" style="margin-top: 10px">
+                <div class="field col-2" style="display: flex; align-items: center;">
+                    <h:outputText value="Collection" />
+                </div>
+                <div class="field col-10">
+                    <p:inputText value="#{inputTextView.text}" class="form-control" style="width: 100%"/>
+                </div>
+            </div>
+
+            <div class="row" style="margin-top: 10px">
+                <div class="field col-2" style="display: flex; align-items: center;">
+                    <h:outputText value="Sous-collection" />
+                </div>
+                <div class="field col-10">
+                    <p:inputText value="#{inputTextView.text}" class="form-control" style="width: 100%"/>
+                </div>
+            </div>
+
+            <div class="row" style="margin-top: 10px;">
+                <div class="field col-12" style=" text-align: right">
+                    <h:outputText value="Créé le  : 22/11/2023 10:00, dernière mise à jour le : 22/11/2023 10:00" />
+                </div>
+            </div>
+
+            <div class="row" style="margin-top: 10px;">
+                <div class="field col-12" style=" text-align: right">
+                    <p:commandButton title="Valider"
+                                     action="#{consultationInstancesBean.instanceManagement()}"
+                                     class="btn-getstarted" ajax="true" process="@this"
+                                     update="mainContent"/>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</ui:composition>

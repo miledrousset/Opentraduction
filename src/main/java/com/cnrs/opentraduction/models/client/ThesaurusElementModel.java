@@ -1,4 +1,4 @@
-package com.cnrs.opentraduction.models;
+package com.cnrs.opentraduction.models.client;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CollectionElementModel {
+public class ThesaurusElementModel {
 
     private String id;
     private String label;

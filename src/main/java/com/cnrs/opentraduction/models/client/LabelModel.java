@@ -1,4 +1,4 @@
-package com.cnrs.opentraduction.models;
+package com.cnrs.opentraduction.models.client;
 
 import lombok.Data;
 

@@ -1,6 +1,6 @@
 package com.cnrs.opentraduction.views;
 
-import com.cnrs.opentraduction.config.LocaleBean;
+import com.cnrs.opentraduction.config.LocaleManagement;
 import com.cnrs.opentraduction.models.ConnexionModel;
 import com.cnrs.opentraduction.utils.MessageUtil;
 import com.cnrs.opentraduction.entities.Users;
@@ -17,7 +17,6 @@ import org.springframework.util.ObjectUtils;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
 import java.io.Serializable;
@@ -29,17 +28,11 @@ import java.io.Serializable;
 @Named(value = "applicationBean")
 public class ApplicationBean implements Serializable {
 
-    @Inject
-    private ApplicationSettingBean applicationSettingBean;
-
-    @Inject
-    private MessageSource messageSource;
-
-    @Inject
-    private LocaleBean localeBean;
-
-    @Inject
-    private UserService userService;
+    private final ApplicationSettingBean applicationSettingBean;
+    private final UserSettingsBean userSettingsBean;
+    private final MessageSource messageSource;
+    private final LocaleManagement localeManagement;
+    private final UserService userService;
 
     private MenuItem menuItemSelected;
     private ConnexionModel connexionModel = new ConnexionModel();
@@ -79,7 +72,7 @@ public class ApplicationBean implements Serializable {
 
     public String getUserNameConnected() {
         var label = connected ? " " + userConnected.getFullName() : "";
-        return messageSource.getMessage("application.home.welcome", null, localeBean.getCurrentLocale()) + label;
+        return messageSource.getMessage("application.home.welcome", null, localeManagement.getCurrentLocale()) + label;
     }
 
     public String getMenuItemClass(String menuItem) {
@@ -93,6 +86,7 @@ public class ApplicationBean implements Serializable {
                 FacesContext.getCurrentInstance().getExternalContext().redirect("search.xhtml");
                 break;
             case USER_SETTINGS:
+                userSettingsBean.initialInterface(userConnected);
                 FacesContext.getCurrentInstance().getExternalContext().redirect("user-settings.xhtml");
                 break;
             case SYSTEM_SETTINGS:

@@ -2,15 +2,17 @@ package com.cnrs.opentraduction.views.settings;
 
 import com.cnrs.opentraduction.entities.ReferenceInstances;
 import com.cnrs.opentraduction.entities.Thesaurus;
-import com.cnrs.opentraduction.models.CollectionElementModel;
-import com.cnrs.opentraduction.models.InstanceModel;
-import com.cnrs.opentraduction.models.ThesaurusElementModel;
+import com.cnrs.opentraduction.models.dao.CollectionElementDao;
+import com.cnrs.opentraduction.models.dao.ReferenceInstanceDao;
+import com.cnrs.opentraduction.models.client.ThesaurusElementModel;
 import com.cnrs.opentraduction.services.ReferenceInstanceService;
+import com.cnrs.opentraduction.services.ThesaurusService;
 import com.cnrs.opentraduction.utils.MessageUtil;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.PrimeFaces;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -29,16 +31,17 @@ import java.util.List;
 public class ReferenceInstancesSettingBean implements Serializable {
 
     private ReferenceInstanceService referenceInstanceService;
+    private ThesaurusService thesaurusService;
 
     private ReferenceInstances referenceSelected;
-    private List<InstanceModel> referenceInstances;
+    private List<ReferenceInstanceDao> referenceInstances;
 
     private List<ThesaurusElementModel> thesaurusList;
     private ThesaurusElementModel thesaurusSelected;
     private String idThesaurusSelected;
 
-    private List<CollectionElementModel> collectionList;
-    private CollectionElementModel collectionSelected;
+    private List<CollectionElementDao> collectionList;
+    private CollectionElementDao collectionSelected;
     private String idCollectionSelected;
 
     private boolean thesaurusListStatut, collectionsListStatut, validateBtnStatut;
@@ -47,8 +50,10 @@ public class ReferenceInstancesSettingBean implements Serializable {
     private String dialogTitle;
 
 
-    public ReferenceInstancesSettingBean(ReferenceInstanceService referenceInstanceService) {
+    public ReferenceInstancesSettingBean(ReferenceInstanceService referenceInstanceService,
+                                         ThesaurusService thesaurusService) {
 
+        this.thesaurusService = thesaurusService;
         this.referenceInstanceService = referenceInstanceService;
     }
 
@@ -99,7 +104,7 @@ public class ReferenceInstancesSettingBean implements Serializable {
     public void searchThesaurus() {
         collectionsListStatut = false;
 
-        thesaurusList = referenceInstanceService.searchThesaurus(instanceUrl);
+        thesaurusList = thesaurusService.searchThesaurus(instanceUrl);
         thesaurusListStatut = !CollectionUtils.isEmpty(thesaurusList);
 
         if (thesaurusListStatut) {
@@ -110,7 +115,7 @@ public class ReferenceInstancesSettingBean implements Serializable {
 
     public void searchCollections() {
 
-        collectionList = referenceInstanceService.searchCollections(instanceUrl, thesaurusSelected.getId());
+        collectionList = thesaurusService.searchCollections(instanceUrl, thesaurusSelected.getId());
 
         validateBtnStatut = true;
 
@@ -120,7 +125,8 @@ public class ReferenceInstancesSettingBean implements Serializable {
         }
     }
 
-    public void deleteInstance(InstanceModel instance) {
+    @Transactional
+    public void deleteInstance(ReferenceInstanceDao instance) {
         if (!ObjectUtils.isEmpty(instance)) {
             referenceInstanceService.deleteInstance(instance.getId());
             referenceInstances = referenceInstanceService.getAllInstances();
@@ -130,7 +136,7 @@ public class ReferenceInstancesSettingBean implements Serializable {
         }
     }
 
-    public void initialUpdateInstanceDialog(InstanceModel instance) {
+    public void initialUpdateInstanceDialog(ReferenceInstanceDao instance) {
 
         if (!ObjectUtils.isEmpty(instance)) {
 
@@ -154,7 +160,7 @@ public class ReferenceInstancesSettingBean implements Serializable {
             if (!ObjectUtils.isEmpty(referenceSelected.getThesaurus())) {
                 var thesaurusSaved = referenceSelected.getThesaurus();
 
-                thesaurusList = referenceInstanceService.searchThesaurus(instanceUrl);
+                thesaurusList = thesaurusService.searchThesaurus(instanceUrl);
 
                 if (!CollectionUtils.isEmpty(thesaurusList)) {
                     thesaurusListStatut = true;
@@ -165,7 +171,7 @@ public class ReferenceInstancesSettingBean implements Serializable {
                         thesaurusSelected = thesaurusTmp.get();
 
                         validateBtnStatut = true;
-                        collectionList = referenceInstanceService.searchCollections(instanceUrl, thesaurusSelected.getId());
+                        collectionList = thesaurusService.searchCollections(instanceUrl, thesaurusSelected.getId());
                         if (!CollectionUtils.isEmpty(collectionList)) {
                             var collectionTmp = collectionList.stream()
                                     .filter(element -> element.getId().equals(thesaurusSaved.getIdCollection()))
@@ -185,7 +191,13 @@ public class ReferenceInstancesSettingBean implements Serializable {
         }
     }
 
+    @Transactional
     public void instanceManagement() {
+
+        if (StringUtils.isEmpty(instanceName)) {
+            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Le nom de l'instance est obligatoire !");
+            return;
+        }
 
         referenceSelected.setName(instanceName);
         referenceSelected.setUrl(instanceUrl);
@@ -197,13 +209,18 @@ public class ReferenceInstancesSettingBean implements Serializable {
         thesaurus.setCollection(collectionSelected.getLabel());
         thesaurus.setIdCollection(collectionSelected.getId());
 
-        referenceInstanceService.saveInstance(referenceSelected,  thesaurus);
+        if (referenceInstanceService.saveInstance(referenceSelected,  thesaurus)) {
+            referenceInstances = referenceInstanceService.getAllInstances();
 
-        referenceInstances = referenceInstanceService.getAllInstances();
+            MessageUtil.showMessage(FacesMessage.SEVERITY_INFO, "Instance enregistrée avec succès");
 
-        MessageUtil.showMessage(FacesMessage.SEVERITY_INFO, "Instance enregistrée avec succès");
-
-        PrimeFaces.current().executeScript("PF('referenceInstanceDialog').hide();");
-        log.info("Instance enregistrée avec succès !");
+            PrimeFaces.current().executeScript("PF('referenceInstanceDialog').hide();");
+            log.info("Instance enregistrée avec succès !");
+        } else {
+            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Instance enregistrée avec succès");
+            instanceName = "";
+            instanceUrl = "";
+            log.error("Erreur pendant l'enregistrée l'instance de référence !");
+        }
     }
 }

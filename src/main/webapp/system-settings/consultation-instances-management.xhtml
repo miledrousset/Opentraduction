@@ -6,7 +6,7 @@
     <div class="col-lg-9 service-box" data-aos="fade-up" data-aos-delay="200">
         <section id="pricing" class="pricing section">
             <div class="container section-title" data-aos="fade-up">
-                <h2>Liste des Instances</h2>
+                <h2>Liste des thésaurus/collections de consultation</h2>
             </div>
 
             <div class="container" data-aos="zoom-in" data-aos-delay="100">
@@ -20,42 +20,44 @@
                                                      icon="pi pi-plus-circle" ajax="true" process="@this"
                                                      actionListener="#{consultationInstancesBean.initialAddInstanceDialog()}"
                                                      update="consultationInstanceForm"
-                                                     value="Ajouter une nouvelle instance" />
+                                                     value="Ajouter une nouveau thésaurus" />
                                 </div>
                             </div>
 
                             <p:dataTable id="listConsultationInstances" var="instance"
-                                         value="#{consultationInstancesBean.consultationInstances}"
+                                         value="#{consultationInstancesBean.consultationList}"
                                          class="table table-hover" stripedRows="true"
                                          reflow="true" styleClass="products-table" draggableColumns="true">
 
                                 <p:column headerText="Nom" width="15%" style="text-align: center"  groupRow="true">
-                                    <p:tag styleClass="mr-2" value="#{instance.name}" style="background: rgba(0, 0, 0, 0.58)" />
-                                </p:column>
-
-                                <p:column headerText="URL" width="20%" groupRow="true">
                                     <a href="#{instance.url}" target="_blank">
-                                        <h:outputText value="#{instance.name}" />
+                                        <p:tag styleClass="mr-2" value="#{instance.name}" style="background: rgba(0, 0, 0, 0.58)" />
                                     </a>
                                 </p:column>
 
-                                <p:column headerText="Thésaurus" width="25%" groupRow="true">
+                                <p:column headerText="Thésaurus" width="25%">
                                     <a href="#{instance.url}/?idt=#{instance.thesaurusId}" target="_blank">
                                         <h:outputText value="#{instance.thesaurusName}" />
                                     </a>
                                 </p:column>
 
-                                <p:column headerText="Collection" width="25%">
-                                    <p:outputLabel value="#{instance.collectionName}" />
+                                <p:column headerText="Collections" width="25%">
+                                    <ul>
+                                        <ui:repeat value="#{instance.collectionList}" var="collection">
+                                            <li>
+                                                <h:outputText value="#{collection.collectionName}" />
+                                            </li>
+                                        </ui:repeat>
+                                    </ul>
                                 </p:column>
 
-                                <p:column headerText="Action" width="15%" style="text-align: center">
+                                <p:column headerText="Actions" width="15%" style="text-align: center">
                                     <p:commandButton icon="pi pi-pencil" ajax="true" process="@this"
                                                      update="consultationInstanceForm"
                                                      action="#{consultationInstancesBean.initialUpdateInstanceDialog(instance)}"
                                                      styleClass="rounded-button ui-button-success ui-button-flat" />
 
-                                    <p:commandButton icon="pi pi-user-minus" update=":mainContent:listConsultationInstances"
+                                    <p:commandButton icon="pi pi-times" update=":mainContent:listConsultationInstances"
                                                      action="#{consultationInstancesBean.deleteInstance(instance)}"
                                                      styleClass="rounded-button ui-button-danger ui-button-flat">
                                         <p:confirm header="Confirmation" message="Are you sure you want to proceed?" icon="pi pi-exclamation-triangle"/>

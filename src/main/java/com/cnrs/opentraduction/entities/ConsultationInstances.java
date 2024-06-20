@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -36,7 +37,7 @@ public class ConsultationInstances implements Serializable {
     @ManyToMany(mappedBy = "consultationInstances")
     private Set<Groups> groups;
 
-    @OneToMany(mappedBy = "consultationInstances", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "consultationInstances", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Thesaurus> thesauruses;
 
     private LocalDateTime created;

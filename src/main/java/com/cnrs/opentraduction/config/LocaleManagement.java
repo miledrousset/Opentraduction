@@ -15,7 +15,7 @@ import java.util.Locale;
 @Component
 @ApplicationScoped
 @Named(value = "localeBean")
-public class LocaleBean implements Serializable {
+public class LocaleManagement implements Serializable {
 
     private Locale currentLocale;
 
