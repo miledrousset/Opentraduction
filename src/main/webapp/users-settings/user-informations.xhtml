@@ -5,85 +5,92 @@
 
     <section id="about" class="pricing about section">
         <div class="container section-title" data-aos="fade-up">
-            <h2>Paramètres utilisateur</h2>
+            <h2><h:outputText value="#{msg['user.settings.title']}"/></h2>
         </div>
 
-        <div class="pricing-item featured php-email-form" style="text-align: left">
+        <h:form id="userInformations">
+            <div class="pricing-item featured php-email-form" style="text-align: left">
+                <div class="col-xl-12 content">
+                    <h3><h:outputText value="#{msg['user.settings.informations']}"/></h3>
+                </div>
 
-            <div class="col-xl-12 content">
-                <h3>Informations de utilisateur</h3>
-            </div>
+                <div class="row">
+                    <div class="field col-2" style="display: flex; align-items: center;">
+                        <h:outputText value="#{msg['user.settings.firstname']}"/>
+                    </div>
+                    <div class="field col-10">
+                        <p:inputText value="#{userSettingsBean.userConnected.firstName}" class="form-control" style="width: 100%"/>
+                    </div>
+                </div>
 
-            <div class="row">
-                <div class="field col-2" style="display: flex; align-items: center;">
-                    <h:outputText value="Prénom" />
+                <div class="row" style="margin-top: 10px">
+                    <div class="field col-2" style="display: flex; align-items: center;">
+                        <h:outputText value="#{msg['user.settings.name']}"/>
+                    </div>
+                    <div class="field col-10">
+                        <p:inputText value="#{userSettingsBean.userConnected.lastName}" class="form-control" style="width: 100%"/>
+                    </div>
                 </div>
-                <div class="field col-10">
-                    <p:inputText value="#{userSettingsBean.userConnected.firstName}" class="form-control" style="width: 100%"/>
-                </div>
-            </div>
 
-            <div class="row" style="margin-top: 10px">
-                <div class="field col-2" style="display: flex; align-items: center;">
-                    <h:outputText value="Nom" />
+                <div class="row" style="margin-top: 10px">
+                    <div class="field col-2" style="display: flex; align-items: center;">
+                        <h:outputText value="#{msg['user.settings.mail']}"/>
+                    </div>
+                    <div class="field col-10">
+                        <p:inputText value="#{userSettingsBean.userConnected.mail}" class="form-control" style="width: 100%"/>
+                    </div>
                 </div>
-                <div class="field col-10">
-                    <p:inputText value="#{userSettingsBean.userConnected.lastName}" class="form-control" style="width: 100%"/>
-                </div>
-            </div>
 
-            <div class="row" style="margin-top: 10px">
-                <div class="field col-2" style="display: flex; align-items: center;">
-                    <h:outputText value="Email" />
+                <div class="row" style="margin-top: 10px">
+                    <div class="field col-2" style="display: flex; align-items: center;">
+                        <h:outputText value="#{msg['user.settings.login']}"/>
+                    </div>
+                    <div class="field col-10">
+                        <p:inputText value="#{userSettingsBean.userConnected.login}" class="form-control" style="width: 100%"/>
+                    </div>
                 </div>
-                <div class="field col-10">
-                    <p:inputText value="#{userSettingsBean.userConnected.mail}" class="form-control" style="width: 100%"/>
-                </div>
-            </div>
 
-            <div class="row" style="margin-top: 10px">
-                <div class="field col-2" style="display: flex; align-items: center;">
-                    <h:outputText value="Login" />
+                <div class="row" style="margin-top: 10px">
+                    <div class="field col-2" style="display: flex; align-items: center;">
+                        <h:outputText value="#{msg['user.settings.password']}"/>
+                    </div>
+                    <div class="field col-10">
+                        <p:password value="#{userSettingsBean.userConnected.password}"
+                                    feedback="true" toggleMask="true" redisplay="true"
+                                    promptLabel="#{msg['user.settings.password.message']}"
+                                    weakLabel="#{msg['user.settings.password.weak']}"
+                                    goodLabel="#{msg['user.settings.password.good']}"
+                                    strongLabel="#{msg['user.settings.password.strong']}"
+                                    style="width: 100%" class="form-control" />
+                    </div>
                 </div>
-                <div class="field col-10">
-                    <p:inputText value="#{userSettingsBean.userConnected.login}" class="form-control" style="width: 100%"/>
-                </div>
-            </div>
 
-            <div class="row" style="margin-top: 10px">
-                <div class="field col-2" style="display: flex; align-items: center;">
-                    <h:outputText value="Mot de passe" />
+                <div class="row" style="margin-top: 10px">
+                    <div class="field col-2" style="display: flex; align-items: center;">
+                        <h:outputText value="#{msg['user.settings.group']}"/>
+                    </div>
+                    <div class="field col-10">
+                        <p:tag styleClass="mr-2" value="#{userSettingsBean.userConnected.group.name}"
+                               style="background: rgba(0, 0, 0, 0.58)" />
+                    </div>
                 </div>
-                <div class="field col-10">
-                    <p:inputText value="#{userSettingsBean.userConnected.password}" class="form-control" style="width: 100%"/>
-                </div>
-            </div>
 
-            <div class="row" style="margin-top: 10px">
-                <div class="field col-2" style="display: flex; align-items: center;">
-                    <h:outputText value="Group" />
+                <div class="row" style="margin-top: 10px;">
+                    <div class="field col-12" style=" text-align: right">
+                        <h:outputText value="#{userSettingsBean.getUserAudit()}" style="font-style: italic; font-size: smaller; color: #BCBAB9" />
+                    </div>
                 </div>
-                <div class="field col-10">
-                    <p:tag styleClass="mr-2" value="#{userSettingsBean.userConnected.group.name}"
-                           style="background: rgba(0, 0, 0, 0.58)" />
-                </div>
-            </div>
 
-            <div class="row" style="margin-top: 10px;">
-                <div class="field col-12" style=" text-align: right">
-                    <h:outputText value="#{userSettingsBean.getUserAudit()}" style="font-style: italic; font-size: smaller; color: #BCBAB9" />
+                <div class="row" style="margin-top: 10px;">
+                    <div class="field col-12" style=" text-align: right">
+                        <p:commandButton title="#{msg['user.settings.save']}"
+                                         ajax="true" process="@form"
+                                         action="#{userSettingsBean.saveUserInformations()}"
+                                         class="btn-getstarted"
+                                         update="userInformations"/>
+                    </div>
                 </div>
             </div>
-
-            <div class="row" style="margin-top: 10px;">
-                <div class="field col-12" style=" text-align: right">
-                    <p:commandButton title="Valider"
-                                     action="#{consultationInstancesBean.instanceManagement()}"
-                                     class="btn-getstarted" ajax="true" process="@this"
-                                     update="mainContent"/>
-                </div>
-            </div>
-        </div>
+        </h:form>
     </section>
-
 </ui:composition>

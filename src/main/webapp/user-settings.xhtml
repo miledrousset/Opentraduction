@@ -1,14 +1,12 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
 
   <h:head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>OpenTraduction</title>
+    <title>SHS en traduction</title>
     <meta content="" name="description" />
     <meta content="" name="keywords" />
     <!-- Favicons -->
@@ -28,10 +26,8 @@
   </h:head>
 
   <h:body class="services-details-page">
-    <h:form id="mainContent">
-
+    <h:panelGroup id="mainContent">
       <ui:include src="shared/header.xhtml" />
-
       <main class="main">
         <!-- Service Details Section -->
         <section id="service-details" class="service-details">
@@ -46,7 +42,7 @@
           </div>
         </section>
       </main>
-    </h:form>
+    </h:panelGroup>
     <ui:include src="shared/footer.xhtml" />
   </h:body>
 </html>

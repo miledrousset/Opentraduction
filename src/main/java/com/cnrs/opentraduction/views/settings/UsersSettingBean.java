@@ -8,6 +8,7 @@ import com.cnrs.opentraduction.utils.MessageUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.PrimeFaces;
+import org.springframework.util.StringUtils;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
@@ -65,6 +66,21 @@ public class UsersSettingBean implements Serializable {
     }
 
     public void userManagement() {
+
+        if (StringUtils.isEmpty(userSelected.getMail())) {
+            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Le mail est obligatoire !");
+            return;
+        }
+
+        if (StringUtils.isEmpty(userSelected.getPassword())) {
+            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Le mot de passe est obligatoire !");
+            return;
+        }
+
+        if (StringUtils.isEmpty(userSelected.getLogin())) {
+            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Le nom d'utilisateur est obligatoire !");
+            return;
+        }
 
         var groupSelected = groupsSettingBean.getGroups().stream()
                 .filter(group -> group.getId().intValue() == idGroupSelected.intValue())

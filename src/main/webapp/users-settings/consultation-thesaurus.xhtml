@@ -36,7 +36,7 @@
                                      action="#{consultationInstancesBean.initialUpdateInstanceDialog(instance)}"
                                      styleClass="rounded-button ui-button-success ui-button-flat" />
 
-                    <p:commandButton icon="pi pi-times" update=":mainContent:listConsultationInstances"
+                    <p:commandButton icon="pi pi-times" update="listConsultationInstances"
                                      action="#{consultationInstancesBean.deleteInstance(instance)}"
                                      styleClass="rounded-button ui-button-danger ui-button-flat">
                         <p:confirm header="Confirmation" message="Are you sure you want to proceed?" icon="pi pi-exclamation-triangle"/>
@@ -60,8 +60,7 @@
                 <div class="field col-12" style=" text-align: right">
                     <p:commandButton title="Valider"
                                      action="#{consultationInstancesBean.instanceManagement()}"
-                                     class="btn-getstarted" ajax="true" process="@this"
-                                     update="mainContent"/>
+                                     class="btn-getstarted" ajax="true" process="@this"/>
                 </div>
             </div>
         </div>

@@ -1,10 +1,12 @@
 package com.cnrs.opentraduction.services;
 
 import com.cnrs.opentraduction.entities.Users;
+import com.cnrs.opentraduction.exception.BusinessException;
 import com.cnrs.opentraduction.models.ConnexionModel;
 import com.cnrs.opentraduction.repositories.UserRepository;
 import com.cnrs.opentraduction.utils.MessageUtil;
 
+import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -56,22 +58,7 @@ public class UserService {
         }
     }
 
-    public void saveUser(Users userSelected) {
-
-        if (StringUtils.isEmpty(userSelected.getMail())) {
-            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Le mail est obligatoire !");
-            return;
-        }
-
-        if (StringUtils.isEmpty(userSelected.getPassword())) {
-            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Le mot de passe est obligatoire !");
-            return;
-        }
-
-        if (StringUtils.isEmpty(userSelected.getLogin())) {
-            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Le nom d'utilisateur est obligatoire !");
-            return;
-        }
+    public boolean saveUser(Users userSelected) {
 
         if (ObjectUtils.isEmpty(userSelected.getId())) {
             log.info("Cas d'un nouveau utilisateur !");
@@ -80,14 +67,14 @@ public class UserService {
             var user = userRepository.findByMail(userSelected.getMail());
             if (user.isPresent()) {
                 MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Erreur de création d'un nouveau utilisateur : E-mail existe déjà !");
-                return;
+                return false;
             }
 
             log.info("Vérification du password");
             user = userRepository.findByPassword(userSelected.getPassword());
             if (user.isPresent()) {
                 MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Erreur de création d'un nouveau utilisateur : Password existe déjà !");
-                return;
+                return false;
             }
 
             userSelected.setCreated(LocalDateTime.now());
@@ -97,6 +84,8 @@ public class UserService {
 
         log.info("Enregistrement dans la base");
         userRepository.save(userSelected);
+
+        return true;
     }
 
     public List<Users> getAllUsers() {
@@ -105,5 +94,10 @@ public class UserService {
 
     public void deleteUser(Users user) {
         userRepository.delete(user);
+    }
+
+    public Users getUserById(Integer userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(String.format("Utilisateur id %d n'existe pas !!!", userId)));
     }
 }
