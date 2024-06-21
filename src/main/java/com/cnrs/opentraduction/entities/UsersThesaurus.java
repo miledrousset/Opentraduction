@@ -8,27 +8,29 @@ import lombok.Setter;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import java.io.Serializable;
 
 
 @Getter
 @Setter
 @Entity(name = "user_thesaurus")
+@IdClass(UsersThesaurusId.class)
 @AllArgsConstructor
 @NoArgsConstructor
 public class UsersThesaurus implements Serializable {
 
     @Id
     @Column(name = "thesaurus_id")
-    private Integer idThesaurus;
+    private Integer thesaurusId;
 
     @Id
     @Column(name = "user_id")
-    private Integer idUser;
+    private Integer userId;
 
     @Column(name = "collection")
     private String collection;
 
     @Column(name = "id_collection")
-    private String idCollection;
+    private String collectionId;
 }

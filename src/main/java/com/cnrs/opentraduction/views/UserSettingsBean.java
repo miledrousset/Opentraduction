@@ -111,9 +111,11 @@ public class UserSettingsBean implements Serializable {
     }
 
     public String getUserAudit() {
-        var str = "Créé le : " + DateUtils.formatLocalDate(userConnected.getCreated(), DateUtils.DATE_TIME_FORMAT);
+        var created = messageSource.getMessage("user.settings.created", null, localeManagement.getCurrentLocale());
+        var str = created + " : " + DateUtils.formatLocalDate(userConnected.getCreated(), DateUtils.DATE_TIME_FORMAT);
         if (!ObjectUtils.isEmpty(userConnected.getModified())) {
-            str += ", dernière mise à jour effectuée le : " + DateUtils.formatLocalDate(userConnected.getModified(), DateUtils.DATE_TIME_FORMAT);
+            var updated = messageSource.getMessage("user.settings.updated", null, localeManagement.getCurrentLocale());
+            str += ", " + updated + " : " + DateUtils.formatLocalDate(userConnected.getModified(), DateUtils.DATE_TIME_FORMAT);
         }
         return str;
     }
@@ -140,9 +142,33 @@ public class UserSettingsBean implements Serializable {
         if (userService.saveUser(userConnected)) {
             MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, messageSource.getMessage("user.settings.ok.msg0",
                     null, localeManagement.getCurrentLocale()));
-            log.info("Enregistrement effectuée avec sucée !");
+            log.info("Enregistrement effectuée avec succès !");
         }  else {
             errorCase("user.settings.error.msg0");
+        }
+    }
+
+    public String getInstanceReferenceUrl() {
+
+        return userConnected.getGroup().getReferenceInstances().getUrl();
+    }
+
+    public String getThesaurusReferenceUrl() {
+
+        return getInstanceReferenceUrl() + "/?idt=" + userConnected.getGroup().getReferenceInstances()
+                .getThesaurus().getIdThesaurus();
+    }
+
+    public void saveCollectionReference() {
+
+        if (userService.addThesaurusToUser(userConnected.getId(), referenceInstances.getThesaurus(), collectionReferenceSelected)) {
+
+            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, messageSource.getMessage("user.settings.ok.msg1",
+                    null, localeManagement.getCurrentLocale()));
+            log.info("Collection de référence enregistrée avec succès !");
+        } else {
+            
+            errorCase("user.settings.error.msg4");
         }
     }
 

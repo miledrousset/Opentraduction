@@ -1,12 +1,14 @@
 package com.cnrs.opentraduction.services;
 
+import com.cnrs.opentraduction.entities.Thesaurus;
 import com.cnrs.opentraduction.entities.Users;
 import com.cnrs.opentraduction.exception.BusinessException;
 import com.cnrs.opentraduction.models.ConnexionModel;
+import com.cnrs.opentraduction.models.dao.CollectionElementDao;
 import com.cnrs.opentraduction.repositories.UserRepository;
+import com.cnrs.opentraduction.repositories.UserThesaurusRepository;
 import com.cnrs.opentraduction.utils.MessageUtil;
 
-import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,7 @@ import java.util.List;
 public class UserService {
 
     private UserRepository userRepository;
+    private UserThesaurusRepository thesaurusRepository;
 
 
     public Users authentification(ConnexionModel connexionModel) {
@@ -99,5 +102,29 @@ public class UserService {
     public Users getUserById(Integer userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(String.format("Utilisateur id %d n'existe pas !!!", userId)));
+    }
+
+    public boolean addThesaurusToUser(Integer userId, Thesaurus thesaurus, CollectionElementDao collection) {
+
+        var userThesaurus = thesaurusRepository.findByThesaurusIdAndUserId(thesaurus.getId(), userId);
+
+        if (userThesaurus.isEmpty()) {
+            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "La collection à modifier n'existe pas !");
+            return false;
+        }
+
+        if (ObjectUtils.isEmpty(collection)) {
+            log.info("L'utilisateur n'a pas choisie une sous-collection");
+            userThesaurus.get().setCollection(thesaurus.getCollection());
+            userThesaurus.get().setCollectionId(thesaurus.getIdCollection());
+        } else {
+            log.info("L'utilisateur a choisie une sous-collection ");
+            userThesaurus.get().setCollectionId(collection.getId());
+            userThesaurus.get().setCollection(collection.getLabel());
+        }
+
+        thesaurusRepository.save(userThesaurus.get());
+
+        return true;
     }
 }
