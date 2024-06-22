@@ -1,6 +1,7 @@
 package com.cnrs.opentraduction.views;
 
 import com.cnrs.opentraduction.config.LocaleManagement;
+import com.cnrs.opentraduction.entities.ConsultationInstances;
 import com.cnrs.opentraduction.entities.ReferenceInstances;
 import com.cnrs.opentraduction.entities.Thesaurus;
 import com.cnrs.opentraduction.entities.Users;
@@ -13,7 +14,9 @@ import com.cnrs.opentraduction.utils.MessageUtil;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.primefaces.PrimeFaces;
 import org.springframework.context.MessageSource;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -41,7 +44,9 @@ public class UserSettingsBean implements Serializable {
     private final UserService userService;
 
     private Users userConnected;
-    private ReferenceInstances referenceInstances;
+    private ReferenceInstances referenceInstance;
+
+    private List<ConsultationInstances> consultationInstances;
 
     private List<CollectionElementDao> referenceCollectionList;
     private CollectionElementDao collectionReferenceSelected;
@@ -49,18 +54,24 @@ public class UserSettingsBean implements Serializable {
 
     private List<ConsultationCollectionDao> consultationThesaurusList;
 
+    private String dialogTitle;
+    private String thesaurusSelected, collectionSelected, subCollectionIdSelected;
+    private List<String> thesaurusList, collectionList;
+    private Thesaurus consultationCollectionSelected;
+    private List<CollectionElementDao> subCollectionList;
+
 
     public void initialInterface(Users userConnected) {
 
         this.userConnected = userConnected;
 
-        referenceInstances = userConnected.getGroup().getReferenceInstances();
+        referenceInstance = userConnected.getGroup().getReferenceInstances();
 
         referenceCollectionList = new ArrayList<>();
         referenceCollectionList.add(new CollectionElementDao("ALL", "Dans la racine"));
-        referenceCollectionList.addAll(thesaurusService.searchCollections(referenceInstances.getUrl(),
-                referenceInstances.getThesaurus().getIdThesaurus(),
-                referenceInstances.getThesaurus().getIdCollection()));
+        referenceCollectionList.addAll(thesaurusService.searchCollections(referenceInstance.getUrl(),
+                referenceInstance.getThesaurus().getIdThesaurus(),
+                referenceInstance.getThesaurus().getIdCollection()));
 
         if (!CollectionUtils.isEmpty(userConnected.getThesauruses())) {
             setSelectedReferenceSubCollection();
@@ -112,10 +123,30 @@ public class UserSettingsBean implements Serializable {
 
     public String getUserAudit() {
         var created = messageSource.getMessage("user.settings.created", null, localeManagement.getCurrentLocale());
-        var str = created + " : " + DateUtils.formatLocalDate(userConnected.getCreated(), DateUtils.DATE_TIME_FORMAT);
+        var str = created + DateUtils.formatLocalDate(userConnected.getCreated(), DateUtils.DATE_TIME_FORMAT);
         if (!ObjectUtils.isEmpty(userConnected.getModified())) {
             var updated = messageSource.getMessage("user.settings.updated", null, localeManagement.getCurrentLocale());
-            str += ", " + updated + " : " + DateUtils.formatLocalDate(userConnected.getModified(), DateUtils.DATE_TIME_FORMAT);
+            str += updated + DateUtils.formatLocalDate(userConnected.getModified(), DateUtils.DATE_TIME_FORMAT);
+        }
+        return str;
+    }
+
+    public String getCollectionReferenceAudit() {
+        var created = messageSource.getMessage("user.settings.created", null, localeManagement.getCurrentLocale());
+        var str = created + DateUtils.formatLocalDate(referenceInstance.getCreated(), DateUtils.DATE_TIME_FORMAT);
+        if (!ObjectUtils.isEmpty(referenceInstance.getModified())) {
+            var updated = messageSource.getMessage("user.settings.updated", null, localeManagement.getCurrentLocale());
+            str += updated + DateUtils.formatLocalDate(referenceInstance.getModified(), DateUtils.DATE_TIME_FORMAT);
+        }
+        return str;
+    }
+
+    public String getCollectionCollectionAudit() {
+        var created = messageSource.getMessage("user.settings.created", null, localeManagement.getCurrentLocale());
+        var str = created + DateUtils.formatLocalDate(userConnected.getCreated(), DateUtils.DATE_TIME_FORMAT);
+        if (!ObjectUtils.isEmpty(userConnected.getModified())) {
+            var updated = messageSource.getMessage("user.settings.updated", null, localeManagement.getCurrentLocale());
+            str += updated + DateUtils.formatLocalDate(userConnected.getModified(), DateUtils.DATE_TIME_FORMAT);
         }
         return str;
     }
@@ -161,15 +192,89 @@ public class UserSettingsBean implements Serializable {
 
     public void saveCollectionReference() {
 
-        if (userService.addThesaurusToUser(userConnected.getId(), referenceInstances.getThesaurus(), collectionReferenceSelected)) {
+        if (userService.addThesaurusToUser(userConnected.getId(), referenceInstance.getThesaurus(), collectionReferenceSelected)) {
 
             MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, messageSource.getMessage("user.settings.ok.msg1",
                     null, localeManagement.getCurrentLocale()));
             log.info("Collection de référence enregistrée avec succès !");
         } else {
-            
+
             errorCase("user.settings.error.msg4");
         }
+    }
+
+    @Transactional
+    public void deleteCollectionConsultation(ConsultationCollectionDao consultationCollection) {
+
+        if (userService.deleteConsultationCollection(consultationCollection.getId(), userConnected.getId())) {
+            MessageUtil.showMessage(FacesMessage.SEVERITY_INFO, messageSource.getMessage("user.settings.ok.msg1",
+                    null, localeManagement.getCurrentLocale()));
+            log.info("Collection de conllection supprimée avec succès !");
+        } else {
+            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, messageSource.getMessage("user.settings.ok.msg1",
+                    null, localeManagement.getCurrentLocale()));
+            log.info("Erreur pendant la suppression de la collection de consultation !");
+        }
+
+        var user = userService.getUserById(userConnected.getId());
+        initialInterface(user);
+    }
+
+    public void initialConsultationDialogForInsert() {
+
+        dialogTitle = "Ajouter une nouvelle collection de consultation";
+        thesaurusSelected = "";
+        collectionSelected = "";
+        collectionList = List.of();
+        subCollectionList = List.of();
+        subCollectionIdSelected = null;
+        thesaurusList = getThesaurusForConsultation();
+        PrimeFaces.current().executeScript("PF('consultationThesaurusDialog').show();");
+    }
+
+    public List<String> getThesaurusForConsultation() {
+
+        var thesaurusList = userConnected.getGroup().getConsultationInstances().stream()
+                .flatMap(outer -> outer.getThesauruses().stream())
+                .map(Thesaurus::getName)
+                .collect(Collectors.toSet());
+
+        if (!CollectionUtils.isEmpty(thesaurusList)) {
+            thesaurusSelected = thesaurusList.stream().findFirst().get();
+            searchCollections();
+        }
+
+        return thesaurusList.stream().collect(Collectors.toList());
+    }
+
+    public void searchCollections() {
+        var tmp = userConnected.getGroup().getConsultationInstances().stream()
+                .flatMap(outer -> outer.getThesauruses().stream())
+                .filter(element -> element.getName().equals(thesaurusSelected))
+                .map(Thesaurus::getCollection)
+                .collect(Collectors.toSet());
+
+        collectionList = tmp.stream().collect(Collectors.toList());
+
+        if (!CollectionUtils.isEmpty(collectionList)) {
+            collectionSelected = collectionList.get(0);
+            consultationCollectionSelected = userConnected.getGroup().getConsultationInstances().stream()
+                    .flatMap(outer -> outer.getThesauruses().stream())
+                    .filter(element -> element.getCollection().equals(collectionSelected))
+                    .findFirst()
+                    .get();
+            searchSubCollections();
+        }
+    }
+
+    public void searchSubCollections() {
+
+        subCollectionList = new ArrayList<>();
+        subCollectionList.add(new CollectionElementDao("ALL", "Dans la racine"));
+        subCollectionList.addAll(thesaurusService.searchCollections(consultationCollectionSelected.getConsultationInstances().getUrl(),
+                consultationCollectionSelected.getIdThesaurus(),
+                consultationCollectionSelected.getIdCollection()));
+        subCollectionIdSelected = null;
     }
 
     private void errorCase(String codeMessage) {

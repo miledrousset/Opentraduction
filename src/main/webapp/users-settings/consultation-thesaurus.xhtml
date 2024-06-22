@@ -6,8 +6,17 @@
     <section id="about" class="pricing about section">
         <div class="pricing-item featured php-email-form" style="text-align: left">
 
-            <div class="col-xl-12 content">
-                <h3>Thésaurus de consultation</h3>
+            <div class="row">
+                <div class="col-xl-6 content">
+                    <h3>Thésaurus de consultation</h3>
+                </div>
+                <div class="col-xl-6 content" style="text-align: right">
+                    <p:commandButton styleClass="ui-button-outlined ui-button-secondary"
+                                     icon="pi pi-plus-circle" ajax="true" process="@this"
+                                     actionListener="#{userSettingsBean.initialConsultationDialogForInsert()}"
+                                     update="consultationThesaurusForm"
+                                     value="Ajouter une nouveau thésaurus" />
+                </div>
             </div>
 
             <p:dataTable id="listConsultationInstances" var="instance"
@@ -37,9 +46,9 @@
                                      styleClass="rounded-button ui-button-success ui-button-flat" />
 
                     <p:commandButton icon="pi pi-times" update="listConsultationInstances"
-                                     action="#{consultationInstancesBean.deleteInstance(instance)}"
+                                     action="#{userSettingsBean.deleteCollectionConsultation(instance)}"
                                      styleClass="rounded-button ui-button-danger ui-button-flat">
-                        <p:confirm header="Confirmation" message="Are you sure you want to proceed?" icon="pi pi-exclamation-triangle"/>
+                        <p:confirm header="Confirmation" message="Est ce que vous êtes sûr de vouloir supprimer la thésaurus/collection ?" icon="pi pi-exclamation-triangle"/>
                     </p:commandButton>
 
                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">

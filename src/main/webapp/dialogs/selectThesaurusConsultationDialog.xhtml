@@ -1,0 +1,66 @@
+<ui:composition
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <p:dialog id="consultationThesaurusForm" header="#{userSettingsBean.dialogTitle}"
+              widgetVar="consultationThesaurusDialog" minHeight="40" width="500" showEffect="fade"
+              modal="true" resizable="true" position="top"
+              style="margin-top: 20px">
+
+        <h:form>
+            <div class="field col-12 md:col-4" style="margin-top: 10px">
+                <p:outputLabel value="Thésaurus" />
+                <p:selectOneMenu value="#{userSettingsBean.thesaurusSelected}"
+                                 class="form-control" style="width: 100%;"
+                                 disabled="#{userSettingsBean.thesaurusList.size() == 1}">
+                    <p:ajax event="change" listener="#{userSettingsBean.searchCollections}"
+                            update="listCollections" process="@this" immediate="true"/>
+                    <f:selectItems value="#{userSettingsBean.thesaurusList}" var="thesaurus"
+                                   itemLabel="#{thesaurus}" itemValue="#{thesaurus}"/>
+                </p:selectOneMenu>
+            </div>
+
+            <div class="field col-12 md:col-4" style="margin-top: 10px">
+                <p:outputLabel value="Collections" />
+
+                <p:selectOneMenu id="listCollections" process="@this" ajax="true"
+                                 class="form-control" style="width: 100%;" styleClass="manymenu-advanced"
+                                 value="#{userSettingsBean.collectionSelected}">
+
+                    <p:ajax event="change" listener="#{userSettingsBean.searchSubCollections}"
+                            update="listSubCollections" process="@this" immediate="true"/>
+
+                    <f:selectItems value="#{userSettingsBean.collectionList}"
+                                   var="collection" itemLabel="#{collection}" itemValue="#{collection}"/>
+                </p:selectOneMenu>
+            </div>
+
+            <div class="field col-12 md:col-4" style="margin-top: 10px">
+                <p:outputLabel value="Sub-Collections" />
+
+                <p:selectOneMenu id="listSubCollections" process="@this" ajax="true"
+                                 class="form-control" style="width: 100%;"
+                                 value="#{userSettingsBean.subCollectionIdSelected}"
+                                 showCheckbox="true" styleClass="manymenu-advanced">
+
+                    <f:selectItems value="#{userSettingsBean.subCollectionList}"
+                                   var="collection" itemLabel="#{collection.label}" itemValue="#{collection}"/>
+                </p:selectOneMenu>
+            </div>
+
+            <div style="width: 100%; text-align: right; margin-top: 15px; margin-bottom: 2px;">
+                <p:commandButton value="#{msg['action.annuler']}" styleClass="ui-button-secondary ui-button-flat"
+                                 action="PF('consultationThesaurusDialog').hide();"
+                                 ajax="true" process="@this"/>
+
+                <p:commandButton title="Valider"
+                                 action="#{consultationInstancesBean.instanceManagement()}"
+                                 class="btn-getstarted" ajax="true" process="@this"
+                                 update="listConsultationInstances"/>
+            </div>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>

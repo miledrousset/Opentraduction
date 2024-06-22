@@ -12,6 +12,7 @@ import com.cnrs.opentraduction.utils.MessageUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
@@ -26,7 +27,7 @@ import java.util.List;
 public class UserService {
 
     private UserRepository userRepository;
-    private UserThesaurusRepository thesaurusRepository;
+    private UserThesaurusRepository userThesaurusRepository;
 
 
     public Users authentification(ConnexionModel connexionModel) {
@@ -106,10 +107,10 @@ public class UserService {
 
     public boolean addThesaurusToUser(Integer userId, Thesaurus thesaurus, CollectionElementDao collection) {
 
-        var userThesaurus = thesaurusRepository.findByThesaurusIdAndUserId(thesaurus.getId(), userId);
+        var userThesaurus = userThesaurusRepository.findByThesaurusIdAndUserId(thesaurus.getId(), userId);
 
         if (userThesaurus.isEmpty()) {
-            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "La collection à modifier n'existe pas !");
+            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "La collection n'existe pas !");
             return false;
         }
 
@@ -123,8 +124,15 @@ public class UserService {
             userThesaurus.get().setCollection(collection.getLabel());
         }
 
-        thesaurusRepository.save(userThesaurus.get());
+        userThesaurusRepository.save(userThesaurus.get());
 
+        return true;
+    }
+
+    @Transactional
+    public boolean deleteConsultationCollection(Integer thesaurusId, Integer userId) {
+
+        userThesaurusRepository.deleteByThesaurusIdAndUserId(thesaurusId, userId);
         return true;
     }
 }
