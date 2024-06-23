@@ -2912,3 +2912,9 @@ body .ui-toggleswitch.ui-toggleswitch-checked .ui-toggleswitch-slider {
   color: #fff;
   overflow: auto;
 }
+
+.ui-dialog.ui-confirm-dialog .ui-dialog-content>span.ui-icon {
+  margin-right: .5rem;
+  font-size: 2.5rem;
+  color: #e84545;
+}

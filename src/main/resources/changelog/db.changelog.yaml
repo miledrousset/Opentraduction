@@ -19,3 +19,5 @@ databaseChangeLog:
       file: classpath:/changelog/v1.0/009-ajouter-cle-etrangere-group-table.xml
   - include:
       file: classpath:/changelog/v1.0/010-ajouter-cle-etrangere-thesaurus-table.xml
+  - include:
+      file: classpath:/changelog/v1.0/011-ajouter-audit-columns-thesaurus-users-table.xml

@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 
 @Getter
@@ -33,4 +34,8 @@ public class UsersThesaurus implements Serializable {
 
     @Column(name = "id_collection")
     private String collectionId;
+
+    private LocalDateTime created;
+
+    private LocalDateTime modified;
 }

@@ -6,7 +6,7 @@
     <div class="col-lg-9 service-box" data-aos="fade-up" data-aos-delay="200">
         <section id="pricing" class="pricing section">
             <div class="container section-title" data-aos="fade-up">
-                <h2>Liste des thésaurus/collections de réference</h2>
+                <h2><h:outputText value="#{msg['system.reference.title']}"/></h2>
             </div>
 
             <div class="container" data-aos="zoom-in" data-aos-delay="100">
@@ -20,7 +20,7 @@
                                                      icon="pi pi-plus-circle" ajax="true" process="@this"
                                                      actionListener="#{referenceInstancesBean.initialAddInstanceDialog()}"
                                                      update="referenceInstanceForm"
-                                                     value="Ajouter une nouvelle instance" />
+                                                     value="#{msg['system.reference.add']}" />
                                 </div>
                             </div>
 
@@ -28,27 +28,24 @@
                                          value="#{referenceInstancesBean.referenceInstances}"
                                          class="table table-hover" stripedRows="true"
                                          reflow="true" styleClass="products-table" draggableColumns="true">
-                                <p:column headerText="Nom" width="15%" style="text-align: center">
-                                    <p:tag styleClass="mr-2" value="#{instance.name}" style="background: rgba(0, 0, 0, 0.58)" />
-                                </p:column>
 
-                                <p:column headerText="URL" width="20%">
-                                    <a href="#{instance.url}" target="_blank">
-                                        <h:outputText value="#{instance.name}" />
+                                <p:column headerText="#{msg['user.settings.name']}" width="20%">
+                                    <a href="#{user.settings.instance_label}" target="_blank">
+                                        <p:tag styleClass="mr-2" value="#{instance.name}" style="background: rgba(0, 0, 0, 0.58)" />
                                     </a>
                                 </p:column>
 
-                                <p:column headerText="Thésaurus" width="25%">
+                                <p:column headerText="#{msg['system.reference.thesaurus_name']}" width="25%">
                                     <a href="#{instance.url}/?idt=#{instance.thesaurusId}" target="_blank">
                                         <h:outputText value="#{instance.thesaurusName}" />
                                     </a>
                                 </p:column>
 
-                                <p:column headerText="Collection" width="25%">
+                                <p:column headerText="#{msg['system.reference.collection_name']}" width="25%">
                                     <p:outputLabel value="#{instance.collectionName}" />
                                 </p:column>
 
-                                <p:column headerText="Action" width="15%" style="text-align: center">
+                                <p:column headerText="#{msg['system.reference.actions']}" width="15%" style="text-align: center">
                                     <p:commandButton icon="pi pi-pencil" ajax="true" process="@this"
                                                      update="referenceInstanceForm"
                                                      action="#{referenceInstancesBean.initialUpdateInstanceDialog(instance)}"
@@ -57,24 +54,25 @@
                                     <p:commandButton icon="pi pi-times" update="mainContent:listReferenceInstances"
                                                      action="#{referenceInstancesBean.deleteInstance(instance)}"
                                                      styleClass="rounded-button ui-button-danger ui-button-flat">
-                                        <p:confirm header="Suppression" message="Est ce que vous êtes sur ?" icon="pi pi-exclamation-triangle"/>
+                                        <p:confirm header="#{msg['system.reference.remove']}"
+                                                   message="#{msg['system.reference.remove.msg']}"
+                                                   icon="pi pi-exclamation-triangle"/>
                                     </p:commandButton>
 
-                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
-                                        <p:commandButton value="Non" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
-                                        <p:commandButton value="Oui" type="button" styleClass="ui-confirmdialog-yes" />
-                                    </p:confirmDialog>
+                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="40%">
+                                        <p:commandButton value="#{msg['action.no']}" type="button"
+                                                         style="color: rgba(0, 0, 0, 0.55)"
+                                                         styleClass="ui-confirmdialog-no ui-button-flat"/>
 
+                                        <p:commandButton value="#{msg['action.yes']}" type="button" styleClass="ui-confirmdialog-yes"
+                                            style="color: #e84545; background: #e84545; color: #fff;"/>
+                                    </p:confirmDialog>
                                 </p:column>
                             </p:dataTable>
-
                         </div>
-                    </div><!-- End Pricing Item -->
+                    </div>
                 </div>
-
             </div>
-
         </section>
     </div>
-
 </ui:composition>

@@ -140,7 +140,7 @@ public class ReferenceInstancesSettingBean implements Serializable {
 
         if (!ObjectUtils.isEmpty(instance)) {
 
-            dialogTitle = "Modifier l'instance " + instance.getName();
+            dialogTitle = "Modifier la référence " + instance.getName();
 
             referenceSelected = referenceInstanceService.getInstanceById(instance.getId());
 
@@ -174,7 +174,8 @@ public class ReferenceInstancesSettingBean implements Serializable {
                         collectionList = thesaurusService.searchTopCollections(instanceUrl, thesaurusSelected.getId());
                         if (!CollectionUtils.isEmpty(collectionList)) {
                             var collectionTmp = collectionList.stream()
-                                    .filter(element -> element.getId().equals(thesaurusSaved.getIdCollection()))
+                                    .filter(element -> !ObjectUtils.isEmpty(element.getId()))
+                                    .filter(element -> thesaurusSaved.getIdCollection().equals(element.getId()))
                                     .findFirst();
                             collectionsListStatut = true;
                             if (collectionTmp.isPresent()) {

@@ -5,6 +5,7 @@ import com.cnrs.opentraduction.entities.ConsultationInstances;
 import com.cnrs.opentraduction.entities.ReferenceInstances;
 import com.cnrs.opentraduction.entities.Thesaurus;
 import com.cnrs.opentraduction.entities.Users;
+import com.cnrs.opentraduction.entities.UsersThesaurus;
 import com.cnrs.opentraduction.models.dao.CollectionElementDao;
 import com.cnrs.opentraduction.models.dao.ConsultationCollectionDao;
 import com.cnrs.opentraduction.services.ThesaurusService;
@@ -25,7 +26,9 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -122,33 +125,41 @@ public class UserSettingsBean implements Serializable {
     }
 
     public String getUserAudit() {
-        var created = messageSource.getMessage("user.settings.created", null, localeManagement.getCurrentLocale());
-        var str = created + DateUtils.formatLocalDate(userConnected.getCreated(), DateUtils.DATE_TIME_FORMAT);
-        if (!ObjectUtils.isEmpty(userConnected.getModified())) {
-            var updated = messageSource.getMessage("user.settings.updated", null, localeManagement.getCurrentLocale());
-            str += updated + DateUtils.formatLocalDate(userConnected.getModified(), DateUtils.DATE_TIME_FORMAT);
-        }
-        return str;
+
+        return ObjectUtils.isEmpty(userConnected.getModified()) ? getCreatedLabel(userConnected.getCreated())
+                : (getCreatedLabel(userConnected.getCreated()) + getUpdateLabel(userConnected.getModified()));
     }
 
     public String getCollectionReferenceAudit() {
-        var created = messageSource.getMessage("user.settings.created", null, localeManagement.getCurrentLocale());
-        var str = created + DateUtils.formatLocalDate(referenceInstance.getCreated(), DateUtils.DATE_TIME_FORMAT);
-        if (!ObjectUtils.isEmpty(referenceInstance.getModified())) {
-            var updated = messageSource.getMessage("user.settings.updated", null, localeManagement.getCurrentLocale());
-            str += updated + DateUtils.formatLocalDate(referenceInstance.getModified(), DateUtils.DATE_TIME_FORMAT);
-        }
-        return str;
+
+        return ObjectUtils.isEmpty(referenceInstance.getModified()) ? getCreatedLabel(referenceInstance.getCreated())
+                : (getCreatedLabel(referenceInstance.getCreated()) + getUpdateLabel(referenceInstance.getModified()));
     }
 
     public String getCollectionCollectionAudit() {
-        var created = messageSource.getMessage("user.settings.created", null, localeManagement.getCurrentLocale());
-        var str = created + DateUtils.formatLocalDate(userConnected.getCreated(), DateUtils.DATE_TIME_FORMAT);
-        if (!ObjectUtils.isEmpty(userConnected.getModified())) {
-            var updated = messageSource.getMessage("user.settings.updated", null, localeManagement.getCurrentLocale());
-            str += updated + DateUtils.formatLocalDate(userConnected.getModified(), DateUtils.DATE_TIME_FORMAT);
+
+        var userCollectionsConsultation = userService.getUserConsultationCollections(userConnected.getId());
+
+        if (!CollectionUtils.isEmpty(userCollectionsConsultation)) {
+            userCollectionsConsultation.sort(Comparator.comparing(UsersThesaurus::getModified).reversed());
+
+            var lastCollectionUpdated = userCollectionsConsultation.get(0);
+
+            return ObjectUtils.isEmpty(lastCollectionUpdated.getModified()) ? getCreatedLabel(lastCollectionUpdated.getCreated())
+                    : (getCreatedLabel(lastCollectionUpdated.getCreated()) + getUpdateLabel(lastCollectionUpdated.getModified()));
+        } else {
+            return "";
         }
-        return str;
+    }
+
+    private String getUpdateLabel(LocalDateTime date) {
+        return messageSource.getMessage("user.settings.updated", null, localeManagement.getCurrentLocale())
+                + DateUtils.formatLocalDate(date, DateUtils.DATE_TIME_FORMAT);
+    }
+
+    private String getCreatedLabel(LocalDateTime date) {
+        return messageSource.getMessage("user.settings.created", null, localeManagement.getCurrentLocale())
+                + DateUtils.formatLocalDate(date, DateUtils.DATE_TIME_FORMAT);
     }
 
     public void saveUserInformations() {

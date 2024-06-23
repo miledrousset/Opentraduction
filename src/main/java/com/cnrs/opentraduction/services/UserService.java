@@ -2,6 +2,7 @@ package com.cnrs.opentraduction.services;
 
 import com.cnrs.opentraduction.entities.Thesaurus;
 import com.cnrs.opentraduction.entities.Users;
+import com.cnrs.opentraduction.entities.UsersThesaurus;
 import com.cnrs.opentraduction.exception.BusinessException;
 import com.cnrs.opentraduction.models.ConnexionModel;
 import com.cnrs.opentraduction.models.dao.CollectionElementDao;
@@ -134,5 +135,10 @@ public class UserService {
 
         userThesaurusRepository.deleteByThesaurusIdAndUserId(thesaurusId, userId);
         return true;
+    }
+
+    public List<UsersThesaurus> getUserConsultationCollections(Integer userId) {
+
+        return userThesaurusRepository.getAllByUserId(userId);
     }
 }
