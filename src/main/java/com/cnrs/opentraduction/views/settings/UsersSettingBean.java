@@ -3,7 +3,7 @@ package com.cnrs.opentraduction.views.settings;
 import com.cnrs.opentraduction.entities.Users;
 import com.cnrs.opentraduction.services.GroupService;
 import com.cnrs.opentraduction.services.UserService;
-import com.cnrs.opentraduction.utils.MessageUtil;
+import com.cnrs.opentraduction.utils.MessageService;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +23,9 @@ import java.util.List;
 @Named(value = "usersSettingBean")
 public class UsersSettingBean implements Serializable {
 
-    private UserService userService;
-    private GroupService groupService;
+    private final UserService userService;
+    private final GroupService groupService;
+    private final MessageService messageService;
 
     private GroupsSettingBean groupsSettingBean;
 
@@ -34,15 +35,6 @@ public class UsersSettingBean implements Serializable {
     private Integer idGroupSelected;
     private String dialogTitle;
 
-
-    public UsersSettingBean(UserService userService,
-                            GroupService groupService,
-                            GroupsSettingBean groupsSettingBean) {
-
-        this.userService = userService;
-        this.groupService = groupService;
-        this.groupsSettingBean = groupsSettingBean;
-    }
 
     public void initialInterface() {
 
@@ -54,31 +46,31 @@ public class UsersSettingBean implements Serializable {
 
         userSelected = new Users();
         userSelected.setActive(true);
-        dialogTitle = "Ajouter un nouveau utilisateur";
+        dialogTitle = messageService.getMessage("user.settings.add.user");
         PrimeFaces.current().executeScript("PF('userDialog').show();");
     }
 
     public void initialUpdateUser(Users user) {
 
         userSelected = user;
-        dialogTitle = "Modifier l'utilisateur " + user.getFullName();
+        dialogTitle = messageService.getMessage("user.settings.update.title") + user.getFullName();
         PrimeFaces.current().executeScript("PF('userDialog').show();");
     }
 
     public void userManagement() {
 
         if (StringUtils.isEmpty(userSelected.getMail())) {
-            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Le mail est obligatoire !");
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "user.settings.error.msg1");
             return;
         }
 
         if (StringUtils.isEmpty(userSelected.getPassword())) {
-            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Le mot de passe est obligatoire !");
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "user.settings.error.msg3");
             return;
         }
 
         if (StringUtils.isEmpty(userSelected.getLogin())) {
-            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Le nom d'utilisateur est obligatoire !");
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "user.settings.error.msg5");
             return;
         }
 
@@ -94,7 +86,7 @@ public class UsersSettingBean implements Serializable {
 
         users = userService.getAllUsers();
 
-        MessageUtil.showMessage(FacesMessage.SEVERITY_INFO, "Utilisateur enregistré avec succès");
+        messageService.showMessage(FacesMessage.SEVERITY_INFO, "user.settings.ok.msg2");
         PrimeFaces.current().executeScript("PF('userDialog').hide();");
         log.info("Utilisateur enregistré avec sucée !");
     }
@@ -105,8 +97,7 @@ public class UsersSettingBean implements Serializable {
 
         users = userService.getAllUsers();
 
-        MessageUtil.showMessage(FacesMessage.SEVERITY_INFO, "Utilisateur enregistré avec succès");
+        messageService.showMessage(FacesMessage.SEVERITY_INFO, "user.settings.ok.msg2");
         log.info("Utilisateur supprimé avec sucée !");
-
     }
 }

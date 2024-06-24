@@ -4,12 +4,10 @@ import com.cnrs.opentraduction.entities.ConsultationInstances;
 import com.cnrs.opentraduction.entities.Thesaurus;
 import com.cnrs.opentraduction.models.dao.CollectionElementDao;
 import com.cnrs.opentraduction.models.dao.ConsultationInstanceDao;
-import com.cnrs.opentraduction.models.dao.ReferenceInstanceDao;
 import com.cnrs.opentraduction.models.client.ThesaurusElementModel;
 import com.cnrs.opentraduction.services.ConsultationInstanceService;
-import com.cnrs.opentraduction.services.ReferenceInstanceService;
 import com.cnrs.opentraduction.services.ThesaurusService;
-import com.cnrs.opentraduction.utils.MessageUtil;
+import com.cnrs.opentraduction.utils.MessageService;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -34,15 +32,16 @@ import java.util.stream.Collectors;
 @Named(value = "consultationInstancesBean")
 public class ConsultationInstancesSettingBean implements Serializable {
 
-    private ConsultationInstanceService consultationInstanceService;
-    private ReferenceInstanceService referenceInstanceService;
-    private ThesaurusService thesaurusService;
+    private final ConsultationInstanceService consultationInstanceService;
+    private final ThesaurusService thesaurusService;
+    private final MessageService messageService;
 
     private ConsultationInstances instanceSelected;
     private List<ConsultationInstanceDao> consultationList;
 
     private List<ThesaurusElementModel> thesaurusList;
     private ThesaurusElementModel thesaurusSelected;
+    private String thesaurusIdSelected;
 
     private List<CollectionElementDao> collectionList;
     private List<CollectionElementDao> selectedCollections;
@@ -53,15 +52,6 @@ public class ConsultationInstancesSettingBean implements Serializable {
     private String instanceName, instanceUrl;
     private String dialogTitle;
 
-
-    public ConsultationInstancesSettingBean(ConsultationInstanceService consultationInstanceService,
-                                            ReferenceInstanceService referenceInstanceService,
-                                            ThesaurusService thesaurusService) {
-
-        this.consultationInstanceService = consultationInstanceService;
-        this.referenceInstanceService = referenceInstanceService;
-        this.thesaurusService = thesaurusService;
-    }
 
     public void initialInterface() {
         consultationList = consultationInstanceService.getAllConsultationInstances();
@@ -74,7 +64,7 @@ public class ConsultationInstancesSettingBean implements Serializable {
 
     public void initialAddInstanceDialog() {
 
-        dialogTitle = "Ajouter une nouvelle instance";
+        dialogTitle = messageService.getMessage("system.consultation.add");
 
         instanceName = "";
         instanceUrl = "";
@@ -98,11 +88,16 @@ public class ConsultationInstancesSettingBean implements Serializable {
         if (!CollectionUtils.isEmpty(thesaurusList)) {
             thesaurusListStatut = true;
             thesaurusSelected = thesaurusList.get(0);
+            thesaurusIdSelected = thesaurusSelected.getId();
             searchCollections();
         }
     }
 
     public void searchCollections() {
+
+        thesaurusSelected = thesaurusList.stream()
+                .filter(element -> element.getId().equals(thesaurusIdSelected))
+                .findFirst().get();
 
         collectionList = thesaurusService.searchTopCollections(instanceUrl, thesaurusSelected.getId());
 
@@ -113,21 +108,21 @@ public class ConsultationInstancesSettingBean implements Serializable {
         }
     }
 
-    public void deleteInstance(ReferenceInstanceDao instance) {
+    public void deleteInstance(ConsultationInstanceDao instance) {
         if (!ObjectUtils.isEmpty(instance)) {
             consultationInstanceService.deleteInstance(instance.getId());
             consultationList = consultationInstanceService.getAllConsultationInstances();
-            MessageUtil.showMessage(FacesMessage.SEVERITY_INFO, "L'instance a été supprimée avec succès !");
+            messageService.showMessage(FacesMessage.SEVERITY_INFO, "system.consultation.success.msg1");
         } else {
-            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "L'instance que vous voulez supprimer n'existe pas !");
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "system.consultation.failed.msg1");
         }
     }
 
-    public void initialUpdateInstanceDialog(ReferenceInstanceDao instance) {
+    public void initialUpdateInstanceDialog(ConsultationInstanceDao instance) {
 
         if (!ObjectUtils.isEmpty(instance)) {
 
-            dialogTitle = "Modifier l'instance " + instance.getName();
+            dialogTitle = messageService.getMessage("system.consultation.update") + instance.getName();
 
             instanceSelected = consultationInstanceService.getInstanceById(instance.getId());
 
@@ -173,7 +168,7 @@ public class ConsultationInstancesSettingBean implements Serializable {
 
             PrimeFaces.current().executeScript("PF('consultationInstanceDialog').show();");
         } else {
-            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "L'instance que vous voulez modifier n'existe pas !");
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "system.consultation.failed.msg1");
         }
     }
 
@@ -195,7 +190,7 @@ public class ConsultationInstancesSettingBean implements Serializable {
     public void instanceManagement() {
 
         if (StringUtils.isEmpty(instanceName)) {
-            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Le nom de l'instance est obligatoire !");
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "system.reference.failed.msg2");
             return;
         }
 
@@ -216,12 +211,12 @@ public class ConsultationInstancesSettingBean implements Serializable {
 
             consultationList = consultationInstanceService.getAllConsultationInstances();
 
-            MessageUtil.showMessage(FacesMessage.SEVERITY_INFO, "Instance enregistrée avec succès");
+            messageService.showMessage(FacesMessage.SEVERITY_INFO, "system.consultation.success.msg2");
 
             PrimeFaces.current().executeScript("PF('consultationInstanceDialog').hide();");
             log.info("Instance enregistrée avec succès !");
         }  else {
-            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Instance enregistrée avec succès");
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "system.consultation.failed.msg2");
             instanceName = "";
             instanceUrl = "";
             log.error("Erreur pendant l'enregistrée l'instance de référence !");

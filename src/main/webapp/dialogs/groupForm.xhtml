@@ -22,7 +22,7 @@
                     <p:selectOneMenu value="#{groupsSettingBean.idInstanceSelected}" class="form-control"
                                      required="true" label="tableId" appendTo="@this" >
                         <f:selectItems value="#{consultationInstancesBean.collectionList}" var="instance"
-                                       itemLabel="#{instance.name}" itemValue="#{instance.id}"/>
+                                       itemLabel="#{instance.label}" itemValue="#{instance.id}"/>
                     </p:selectOneMenu>
                 </div>
             </div>

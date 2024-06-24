@@ -4,7 +4,7 @@ import com.cnrs.opentraduction.entities.Groups;
 import com.cnrs.opentraduction.models.GroupModel;
 import com.cnrs.opentraduction.services.GroupService;
 import com.cnrs.opentraduction.services.ConsultationInstanceService;
-import com.cnrs.opentraduction.utils.MessageUtil;
+import com.cnrs.opentraduction.utils.MessageService;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -26,9 +26,10 @@ import java.util.Set;
 @Named(value = "groupsSettingBean")
 public class GroupsSettingBean implements Serializable {
 
-    private GroupService groupService;
-    private ConsultationInstanceService consultationInstanceService;
-    private ConsultationInstancesSettingBean consultationInstancesBean;
+    private final GroupService groupService;
+    private final MessageService messageService;
+    private final ConsultationInstanceService consultationInstanceService;
+    private final ConsultationInstancesSettingBean consultationInstancesBean;
 
     private List<GroupModel> groups;
     private Groups groupSelected;
@@ -36,15 +37,6 @@ public class GroupsSettingBean implements Serializable {
     private Integer idInstanceSelected;
     private String dialogTitle;
 
-
-    public GroupsSettingBean(GroupService groupService,
-                             ConsultationInstanceService consultationInstanceService,
-                             ConsultationInstancesSettingBean consultationInstancesBean) {
-
-        this.groupService = groupService;
-        this.consultationInstanceService = consultationInstanceService;
-        this.consultationInstancesBean = consultationInstancesBean;
-    }
 
     public void initialInterface() {
         groups = groupService.getAllGroups();
@@ -64,14 +56,14 @@ public class GroupsSettingBean implements Serializable {
 
         initialInterface();
 
-        MessageUtil.showMessage(FacesMessage.SEVERITY_INFO, "Group enregistré avec succès");
+        messageService.showMessage(FacesMessage.SEVERITY_INFO, "application.group.ok.msg2");
         PrimeFaces.current().executeScript("PF('groupDialog').hide();");
         log.info("Group enregistré avec sucée !");
     }
 
     public void initialAddingGroup() {
 
-        dialogTitle = "Ajouter un nouveau group";
+        dialogTitle = messageService.getMessage("application.group.add.title");
         groupSelected = new Groups();
         if (!CollectionUtils.isEmpty(consultationInstancesBean.getConsultationList())) {
             idInstanceSelected = consultationInstancesBean.getConsultationList().get(0).getId();
@@ -81,7 +73,7 @@ public class GroupsSettingBean implements Serializable {
 
     public void initialUpdateGroup(Groups groups) {
 
-        dialogTitle = "Modifier le group " + groups.getName();
+        dialogTitle = messageService.getMessage("application.group.update.title") + groups.getName();
         groupSelected = groups;
         PrimeFaces.current().executeScript("PF('groupDialog').show();");
     }
@@ -91,9 +83,9 @@ public class GroupsSettingBean implements Serializable {
         if (!ObjectUtils.isEmpty(group)) {
             groupService.deleteGroup(group.getId());
             groups = groupService.getAllGroups();
-            MessageUtil.showMessage(FacesMessage.SEVERITY_INFO, "Le group a été supprimée avec succès !");
+            messageService.showMessage(FacesMessage.SEVERITY_INFO, "application.group.ok.msg1");
         } else {
-            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Le group que vous voulez supprimer n'existe pas !");
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.group.error.msg1");
         }
     }
 }

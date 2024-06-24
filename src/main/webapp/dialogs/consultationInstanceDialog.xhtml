@@ -25,6 +25,7 @@
                         <p:inputText id="urlReferenceInstance" class="form-control" placeholder="http://..."
                                      value="#{consultationInstancesBean.instanceUrl}" />
                         <p:commandButton icon="pi pi-search" ajax="true" process="@form"
+                                         style="background: #e84545; border: 1px solid #e84545"
                                          update="listThesaurusForConIns valideConsultationInstance"
                                          action="#{consultationInstancesBean.searchThesaurus()}"/>
                     </div>
@@ -35,14 +36,14 @@
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
                     <p:outputLabel value="Thésaurus" rendered="#{consultationInstancesBean.thesaurusListStatut}" />
                     <p:selectOneMenu id="listThesaurusForConsultationInstance"
-                                     value="#{consultationInstancesBean.thesaurusSelected}"
+                                     value="#{consultationInstancesBean.thesaurusIdSelected}"
                                      class="form-control" style="width: 100%;"
                                      rendered="#{consultationInstancesBean.thesaurusListStatut}">
-                        <p:ajax event="change" listener="#{consultationInstancesBean.searchCollections}"
+                        <p:ajax listener="#{consultationInstancesBean.searchCollections}"
                                 update="listCollectionsForConsultationInstance valideConsultationInstance"
                                 process="@this" immediate="true"/>
                         <f:selectItems value="#{consultationInstancesBean.thesaurusList}" var="thesaurus"
-                                       itemLabel="#{thesaurus.label}" itemValue="#{thesaurus}"/>
+                                       itemLabel="#{thesaurus.label}" itemValue="#{thesaurus.id}"/>
                     </p:selectOneMenu>
                 </div>
 

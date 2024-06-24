@@ -1,8 +1,7 @@
 package com.cnrs.opentraduction.views;
 
-import com.cnrs.opentraduction.config.LocaleManagement;
 import com.cnrs.opentraduction.models.ConnexionModel;
-import com.cnrs.opentraduction.utils.MessageUtil;
+import com.cnrs.opentraduction.utils.MessageService;
 import com.cnrs.opentraduction.entities.Users;
 import com.cnrs.opentraduction.models.MenuItem;
 import com.cnrs.opentraduction.services.UserService;
@@ -11,7 +10,6 @@ import com.cnrs.opentraduction.views.settings.ApplicationSettingBean;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.PrimeFaces;
-import org.springframework.context.MessageSource;
 import org.springframework.util.ObjectUtils;
 
 import javax.enterprise.context.SessionScoped;
@@ -30,8 +28,7 @@ public class ApplicationBean implements Serializable {
 
     private final ApplicationSettingBean applicationSettingBean;
     private final UserSettingsBean userSettingsBean;
-    private final MessageSource messageSource;
-    private final LocaleManagement localeManagement;
+    private final MessageService messageService;
     private final UserService userService;
 
     private MenuItem menuItemSelected;
@@ -48,7 +45,7 @@ public class ApplicationBean implements Serializable {
         userConnected = null;
         menuItemSelected = MenuItem.HOME;
 
-        MessageUtil.showMessage(FacesMessage.SEVERITY_INFO, "Déconnexion effectuée avec sucée !");
+        messageService.showMessage(FacesMessage.SEVERITY_INFO, "application.user.error.msg1");
         log.info("Déconnexion effectué avec sucée de {}", userName);
     }
 
@@ -62,7 +59,7 @@ public class ApplicationBean implements Serializable {
 
             PrimeFaces.current().executeScript("PF('login').hide();");
 
-            MessageUtil.showMessage(FacesMessage.SEVERITY_INFO, "Utilisateur connecté avec sucée !");
+            messageService.showMessage(FacesMessage.SEVERITY_INFO, "application.user.ok.msg1");
 
             log.info("Authentification terminé avec sucée de {}", userConnected.getLogin());
         } else {
@@ -72,7 +69,7 @@ public class ApplicationBean implements Serializable {
 
     public String getUserNameConnected() {
         var label = connected ? " " + userConnected.getFullName() : "";
-        return messageSource.getMessage("application.home.welcome", null, localeManagement.getCurrentLocale()) + label;
+        return messageService.getMessage("application.home.welcome") + label;
     }
 
     public String getMenuItemClass(String menuItem) {

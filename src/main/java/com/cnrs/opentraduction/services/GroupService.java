@@ -3,7 +3,9 @@ package com.cnrs.opentraduction.services;
 import com.cnrs.opentraduction.entities.Groups;
 import com.cnrs.opentraduction.models.GroupModel;
 import com.cnrs.opentraduction.repositories.GroupRepository;
-import com.cnrs.opentraduction.utils.MessageUtil;
+import com.cnrs.opentraduction.utils.MessageService;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -14,15 +16,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Data
 @Service
+@AllArgsConstructor
 public class GroupService {
 
+    private final MessageService messageService;
     private final GroupRepository groupRepository;
 
-    public GroupService(GroupRepository groupRepository) {
-        this.groupRepository = groupRepository;
-    }
 
     public Groups getGroupById(Integer groupId) {
         var group = groupRepository.findById(groupId);
@@ -36,7 +37,7 @@ public class GroupService {
     public void saveGroup(Groups groupSelected) {
 
         if (StringUtils.isEmpty(groupSelected.getName())) {
-            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Le nom du group est obligatoire !");
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "user.settings.error.msg12");
             return;
         }
 

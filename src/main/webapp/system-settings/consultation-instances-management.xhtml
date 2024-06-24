@@ -6,7 +6,7 @@
     <div class="col-lg-9 service-box" data-aos="fade-up" data-aos-delay="200">
         <section id="pricing" class="pricing section">
             <div class="container section-title" data-aos="fade-up">
-                <h2>Liste des thésaurus/collections de consultation</h2>
+                <h2><h:outputText value="#{msg['system.consultation.title']}" /></h2>
             </div>
 
             <div class="container" data-aos="zoom-in" data-aos-delay="100">
@@ -20,7 +20,7 @@
                                                      icon="pi pi-plus-circle" ajax="true" process="@this"
                                                      actionListener="#{consultationInstancesBean.initialAddInstanceDialog()}"
                                                      update="consultationInstanceForm"
-                                                     value="Ajouter une nouveau thésaurus" />
+                                                     value="#{msg['system.consultation.add']}" />
                                 </div>
                             </div>
 
@@ -29,19 +29,19 @@
                                          class="table table-hover" stripedRows="true"
                                          reflow="true" styleClass="products-table" draggableColumns="true">
 
-                                <p:column headerText="Nom" width="15%" style="text-align: center"  groupRow="true">
+                                <p:column headerText="#{msg['system.reference.thesaurus_name']}" width="15%" style="text-align: center"  groupRow="true">
                                     <a href="#{instance.url}" target="_blank">
                                         <p:tag styleClass="mr-2" value="#{instance.name}" style="background: rgba(0, 0, 0, 0.58)" />
                                     </a>
                                 </p:column>
 
-                                <p:column headerText="Thésaurus" width="25%">
+                                <p:column headerText="#{msg['system.reference.thesaurus_name']}" width="25%">
                                     <a href="#{instance.url}/?idt=#{instance.thesaurusId}" target="_blank">
                                         <h:outputText value="#{instance.thesaurusName}" />
                                     </a>
                                 </p:column>
 
-                                <p:column headerText="Collections" width="25%">
+                                <p:column headerText="#{msg['system.reference.collection_name']}" width="25%">
                                     <ul>
                                         <ui:repeat value="#{instance.collectionList}" var="collection">
                                             <li>
@@ -51,32 +51,34 @@
                                     </ul>
                                 </p:column>
 
-                                <p:column headerText="Actions" width="15%" style="text-align: center">
+                                <p:column headerText="#{msg['system.reference.actions']}" width="15%" style="text-align: center">
                                     <p:commandButton icon="pi pi-pencil" ajax="true" process="@this"
                                                      update="consultationInstanceForm"
                                                      action="#{consultationInstancesBean.initialUpdateInstanceDialog(instance)}"
                                                      styleClass="rounded-button ui-button-success ui-button-flat" />
 
-                                    <p:commandButton icon="pi pi-times" update=":mainContent:listConsultationInstances"
+                                    <p:commandButton icon="pi pi-times" update="listConsultationInstances"
+                                                     ajax="true" process="@this"
                                                      action="#{consultationInstancesBean.deleteInstance(instance)}"
                                                      styleClass="rounded-button ui-button-danger ui-button-flat">
-                                        <p:confirm header="Confirmation" message="Are you sure you want to proceed?" icon="pi pi-exclamation-triangle"/>
+                                        <p:confirm header="Confirmation" message="#{msg['system.reference.remove.msg']}" icon="pi pi-exclamation-triangle"/>
                                     </p:commandButton>
 
-                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
-                                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
-                                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
+                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="40%">
+                                        <p:commandButton value="#{msg['action.no']}" type="button"
+                                                         styleClass="ui-confirmdialog-no ui-button-flat"
+                                                         style="color: rgba(0, 0, 0, 0.55)"/>
+                                        <p:commandButton value="#{msg['action.yes']}" type="button"
+                                                         styleClass="ui-confirmdialog-yes"
+                                                         style="color: #e84545; background: #e84545; color: #fff;"/>
                                     </p:confirmDialog>
 
                                 </p:column>
                             </p:dataTable>
-
                         </div>
-                    </div><!-- End Pricing Item -->
+                    </div>
                 </div>
-
             </div>
-
         </section>
     </div>
 

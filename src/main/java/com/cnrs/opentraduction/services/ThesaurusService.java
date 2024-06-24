@@ -44,8 +44,23 @@ public class ThesaurusService {
     }
 
     public List<CollectionElementDao> searchTopCollections(String baseUrl, String idThesaurus) {
-        var collectionsResponse = openthesoClient.getTopCollections(baseUrl, idThesaurus);
-        return getCollectionDatas(collectionsResponse);
+        var topCollectionsResponse = openthesoClient.getTopCollections(baseUrl, idThesaurus);
+
+        if (topCollectionsResponse.length > 0) {
+            return Stream.of(topCollectionsResponse)
+                    .filter(element -> element.getLabels().stream().anyMatch(tmp -> FR.equals(tmp.getLang())))
+                    .map(element -> {
+                        var label = element.getLabels().stream()
+                                .filter(tmp -> FR.equals(tmp.getLang()))
+                                .findFirst().orElse(null);
+
+                        return new CollectionElementDao(element.getIdConcept(),
+                                ObjectUtils.isEmpty(label) ? "" : label.getTitle());
+                    })
+                    .collect(Collectors.toList());
+        } else {
+            return List.of();
+        }
     }
 
     public List<CollectionElementDao> searchCollections(String baseUrl, String idThesaurus, String idTopCollection) {

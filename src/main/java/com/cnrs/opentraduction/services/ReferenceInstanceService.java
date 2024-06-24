@@ -53,15 +53,18 @@ public class ReferenceInstanceService {
 
         log.info("Enregistrement de l'instance de référence dans la base");
         referenceInstances.setModified(LocalDateTime.now());
-        referenceInstances.setThesaurus(thesaurus);
-        var instanceSaved = referenceInstanceRepository.save(referenceInstances);
 
         log.info("Enregistrement du thésaurus dans la base");
-        instanceSaved.setThesaurus(thesaurus);
-        thesaurus.setReferenceInstances(instanceSaved);
-        thesaurus.setCreated(LocalDateTime.now());
-        thesaurus.setModified(LocalDateTime.now());
-        thesaurusRepository.save(thesaurus);
+        if (ObjectUtils.isEmpty(referenceInstances.getThesaurus())) {
+            thesaurus.setModified(LocalDateTime.now());
+            referenceInstances.setThesaurus(thesaurus);
+        } else {
+            thesaurus.setCreated(LocalDateTime.now());
+            thesaurus.setModified(LocalDateTime.now());
+            referenceInstances.setThesaurus(thesaurus);
+        }
+
+        referenceInstanceRepository.save(referenceInstances);
 
         return true;
     }

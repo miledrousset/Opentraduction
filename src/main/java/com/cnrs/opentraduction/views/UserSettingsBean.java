@@ -1,6 +1,5 @@
 package com.cnrs.opentraduction.views;
 
-import com.cnrs.opentraduction.config.LocaleManagement;
 import com.cnrs.opentraduction.entities.ConsultationInstances;
 import com.cnrs.opentraduction.entities.ReferenceInstances;
 import com.cnrs.opentraduction.entities.Thesaurus;
@@ -11,12 +10,11 @@ import com.cnrs.opentraduction.models.dao.ConsultationCollectionDao;
 import com.cnrs.opentraduction.services.ThesaurusService;
 import com.cnrs.opentraduction.services.UserService;
 import com.cnrs.opentraduction.utils.DateUtils;
-import com.cnrs.opentraduction.utils.MessageUtil;
+import com.cnrs.opentraduction.utils.MessageService;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.PrimeFaces;
-import org.springframework.context.MessageSource;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -30,7 +28,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 
@@ -40,9 +37,7 @@ import java.util.stream.Collectors;
 @Named(value = "userSettingsBean")
 public class UserSettingsBean implements Serializable {
 
-    private final MessageSource messageSource;
-    private final LocaleManagement localeManagement;
-
+    private final MessageService messageService;
     private final ThesaurusService thesaurusService;
     private final UserService userService;
 
@@ -71,7 +66,7 @@ public class UserSettingsBean implements Serializable {
         referenceInstance = userConnected.getGroup().getReferenceInstances();
 
         referenceCollectionList = new ArrayList<>();
-        referenceCollectionList.add(new CollectionElementDao("ALL", "Dans la racine"));
+        referenceCollectionList.add(new CollectionElementDao("ALL", messageService.getMessage("user.settings.consultation.racine")));
         referenceCollectionList.addAll(thesaurusService.searchCollections(referenceInstance.getUrl(),
                 referenceInstance.getThesaurus().getIdThesaurus(),
                 referenceInstance.getThesaurus().getIdCollection()));
@@ -153,12 +148,12 @@ public class UserSettingsBean implements Serializable {
     }
 
     private String getUpdateLabel(LocalDateTime date) {
-        return messageSource.getMessage("user.settings.updated", null, localeManagement.getCurrentLocale())
+        return messageService.getMessage("user.settings.updated")
                 + DateUtils.formatLocalDate(date, DateUtils.DATE_TIME_FORMAT);
     }
 
     private String getCreatedLabel(LocalDateTime date) {
-        return messageSource.getMessage("user.settings.created", null, localeManagement.getCurrentLocale())
+        return messageService.getMessage("user.settings.created")
                 + DateUtils.formatLocalDate(date, DateUtils.DATE_TIME_FORMAT);
     }
 
@@ -182,8 +177,7 @@ public class UserSettingsBean implements Serializable {
         }
 
         if (userService.saveUser(userConnected)) {
-            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, messageSource.getMessage("user.settings.ok.msg0",
-                    null, localeManagement.getCurrentLocale()));
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, ("user.settings.ok.msg0"));
             log.info("Enregistrement effectuée avec succès !");
         }  else {
             errorCase("user.settings.error.msg0");
@@ -205,8 +199,7 @@ public class UserSettingsBean implements Serializable {
 
         if (userService.addThesaurusToUser(userConnected.getId(), referenceInstance.getThesaurus(), collectionReferenceSelected)) {
 
-            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, messageSource.getMessage("user.settings.ok.msg1",
-                    null, localeManagement.getCurrentLocale()));
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "user.settings.ok.msg1");
             log.info("Collection de référence enregistrée avec succès !");
         } else {
 
@@ -218,12 +211,10 @@ public class UserSettingsBean implements Serializable {
     public void deleteCollectionConsultation(ConsultationCollectionDao consultationCollection) {
 
         if (userService.deleteConsultationCollection(consultationCollection.getId(), userConnected.getId())) {
-            MessageUtil.showMessage(FacesMessage.SEVERITY_INFO, messageSource.getMessage("user.settings.ok.msg1",
-                    null, localeManagement.getCurrentLocale()));
+            messageService.showMessage(FacesMessage.SEVERITY_INFO, "user.settings.ok.msg1");
             log.info("Collection de conllection supprimée avec succès !");
         } else {
-            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, messageSource.getMessage("user.settings.ok.msg1",
-                    null, localeManagement.getCurrentLocale()));
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "user.settings.ok.msg1");
             log.info("Erreur pendant la suppression de la collection de consultation !");
         }
 
@@ -233,7 +224,7 @@ public class UserSettingsBean implements Serializable {
 
     public void initialConsultationDialogForInsert() {
 
-        dialogTitle = "Ajouter une nouvelle collection de consultation";
+        dialogTitle = messageService.getMessage("user.settings.consultation.title");
         thesaurusSelected = "";
         collectionSelected = "";
         collectionList = List.of();
@@ -281,7 +272,7 @@ public class UserSettingsBean implements Serializable {
     public void searchSubCollections() {
 
         subCollectionList = new ArrayList<>();
-        subCollectionList.add(new CollectionElementDao("ALL", "Dans la racine"));
+        subCollectionList.add(new CollectionElementDao("ALL", messageService.getMessage("user.settings.consultation.racine")));
         subCollectionList.addAll(thesaurusService.searchCollections(consultationCollectionSelected.getConsultationInstances().getUrl(),
                 consultationCollectionSelected.getIdThesaurus(),
                 consultationCollectionSelected.getIdCollection()));
@@ -290,7 +281,7 @@ public class UserSettingsBean implements Serializable {
 
     private void errorCase(String codeMessage) {
         this.userConnected = userService.getUserById(userConnected.getId());
-        MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, messageSource.getMessage(codeMessage, null, localeManagement.getCurrentLocale()));
-        log.error(messageSource.getMessage(codeMessage, null, new Locale("fr")));
+        messageService.showMessage(FacesMessage.SEVERITY_ERROR, codeMessage);
+        log.error(messageService.getMessage(codeMessage));
     }
 }

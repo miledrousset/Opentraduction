@@ -7,7 +7,7 @@ import com.cnrs.opentraduction.models.dao.ReferenceInstanceDao;
 import com.cnrs.opentraduction.models.client.ThesaurusElementModel;
 import com.cnrs.opentraduction.services.ReferenceInstanceService;
 import com.cnrs.opentraduction.services.ThesaurusService;
-import com.cnrs.opentraduction.utils.MessageUtil;
+import com.cnrs.opentraduction.utils.MessageService;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +21,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -30,8 +31,9 @@ import java.util.List;
 @Named(value = "referenceInstancesBean")
 public class ReferenceInstancesSettingBean implements Serializable {
 
-    private ReferenceInstanceService referenceInstanceService;
-    private ThesaurusService thesaurusService;
+    private final ReferenceInstanceService referenceInstanceService;
+    private final ThesaurusService thesaurusService;
+    private final MessageService messageService;
 
     private ReferenceInstances referenceSelected;
     private List<ReferenceInstanceDao> referenceInstances;
@@ -46,16 +48,8 @@ public class ReferenceInstancesSettingBean implements Serializable {
 
     private boolean thesaurusListStatut, collectionsListStatut, validateBtnStatut;
 
-    private String instanceName, instanceUrl;
     private String dialogTitle;
 
-
-    public ReferenceInstancesSettingBean(ReferenceInstanceService referenceInstanceService,
-                                         ThesaurusService thesaurusService) {
-
-        this.thesaurusService = thesaurusService;
-        this.referenceInstanceService = referenceInstanceService;
-    }
 
     public void setSelectedThesaurus() {
         if (!StringUtils.isEmpty(idThesaurusSelected)) {
@@ -86,10 +80,9 @@ public class ReferenceInstancesSettingBean implements Serializable {
 
     public void initialAddInstanceDialog() {
 
-        dialogTitle = "Ajouter une nouvelle instance";
+        dialogTitle = "Ajouter une nouvelle référence";
 
-        instanceName = "";
-        instanceUrl = "";
+        referenceSelected = new ReferenceInstances();
 
         thesaurusList = List.of();
         collectionList = List.of();
@@ -104,7 +97,7 @@ public class ReferenceInstancesSettingBean implements Serializable {
     public void searchThesaurus() {
         collectionsListStatut = false;
 
-        thesaurusList = thesaurusService.searchThesaurus(instanceUrl);
+        thesaurusList = thesaurusService.searchThesaurus(referenceSelected.getUrl());
         thesaurusListStatut = !CollectionUtils.isEmpty(thesaurusList);
 
         if (thesaurusListStatut) {
@@ -115,7 +108,9 @@ public class ReferenceInstancesSettingBean implements Serializable {
 
     public void searchCollections() {
 
-        collectionList = thesaurusService.searchTopCollections(instanceUrl, thesaurusSelected.getId());
+        collectionList = new ArrayList<>();
+        collectionList.add(new CollectionElementDao());
+        collectionList.addAll(thesaurusService.searchTopCollections(referenceSelected.getUrl(), thesaurusSelected.getId()));
 
         validateBtnStatut = true;
 
@@ -130,9 +125,9 @@ public class ReferenceInstancesSettingBean implements Serializable {
         if (!ObjectUtils.isEmpty(instance)) {
             referenceInstanceService.deleteInstance(instance.getId());
             referenceInstances = referenceInstanceService.getAllInstances();
-            MessageUtil.showMessage(FacesMessage.SEVERITY_INFO, "L'instance a été supprimée avec succès !");
+            messageService.showMessage(FacesMessage.SEVERITY_INFO, "system.reference.success.msg2");
         } else {
-            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "L'instance que vous voulez supprimer n'existe pas !");
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "system.reference.failed.msg3");
         }
     }
 
@@ -140,12 +135,9 @@ public class ReferenceInstancesSettingBean implements Serializable {
 
         if (!ObjectUtils.isEmpty(instance)) {
 
-            dialogTitle = "Modifier la référence " + instance.getName();
+            dialogTitle =  messageService.getMessage("system.reference.update.title") + instance.getName();
 
             referenceSelected = referenceInstanceService.getInstanceById(instance.getId());
-
-            instanceName = referenceSelected.getName();
-            instanceUrl = referenceSelected.getUrl();
 
             validateBtnStatut = false;
             thesaurusListStatut = false;
@@ -160,7 +152,7 @@ public class ReferenceInstancesSettingBean implements Serializable {
             if (!ObjectUtils.isEmpty(referenceSelected.getThesaurus())) {
                 var thesaurusSaved = referenceSelected.getThesaurus();
 
-                thesaurusList = thesaurusService.searchThesaurus(instanceUrl);
+                thesaurusList = thesaurusService.searchThesaurus(referenceSelected.getUrl());
 
                 if (!CollectionUtils.isEmpty(thesaurusList)) {
                     thesaurusListStatut = true;
@@ -169,39 +161,43 @@ public class ReferenceInstancesSettingBean implements Serializable {
                             .findFirst();
                     if (thesaurusTmp.isPresent()) {
                         thesaurusSelected = thesaurusTmp.get();
+                        idThesaurusSelected = thesaurusTmp.get().getId();
 
                         validateBtnStatut = true;
-                        collectionList = thesaurusService.searchTopCollections(instanceUrl, thesaurusSelected.getId());
+                        collectionList = new ArrayList<>();
+                        collectionList.add(new CollectionElementDao());
+                        collectionList.addAll(thesaurusService.searchTopCollections(referenceSelected.getUrl(), thesaurusSelected.getId()));
                         if (!CollectionUtils.isEmpty(collectionList)) {
-                            var collectionTmp = collectionList.stream()
-                                    .filter(element -> !ObjectUtils.isEmpty(element.getId()))
-                                    .filter(element -> thesaurusSaved.getIdCollection().equals(element.getId()))
-                                    .findFirst();
                             collectionsListStatut = true;
-                            if (collectionTmp.isPresent()) {
-                                collectionSelected = collectionTmp.get();
+                            if (thesaurusSaved.getIdCollection().equals("ALL")) {
+                                collectionSelected = collectionList.get(0);
+                                idCollectionSelected = collectionList.get(0).getId();
+                            } else {
+                                var collectionTmp = collectionList.stream()
+                                        .filter(element -> thesaurusSaved.getCollection().equals(element.getLabel()))
+                                        .findFirst();
+                                if (collectionTmp.isPresent()) {
+                                    collectionSelected = collectionTmp.get();
+                                    idCollectionSelected = collectionTmp.get().getId();
+                                }
                             }
                         }
                     }
                 }
             }
-
             PrimeFaces.current().executeScript("PF('referenceInstanceDialog').show();");
         } else {
-            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "L'instance que vous voulez modifier n'existe pas !");
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "system.reference.failed.msg3");
         }
     }
 
     @Transactional
     public void instanceManagement() {
 
-        if (StringUtils.isEmpty(instanceName)) {
-            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Le nom de l'instance est obligatoire !");
+        if (StringUtils.isEmpty(referenceSelected.getName())) {
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "system.reference.failed.msg2");
             return;
         }
-
-        referenceSelected.setName(instanceName);
-        referenceSelected.setUrl(instanceUrl);
 
         Thesaurus thesaurus = new Thesaurus();
         thesaurus.setReferenceInstances(referenceSelected);
@@ -213,15 +209,14 @@ public class ReferenceInstancesSettingBean implements Serializable {
         if (referenceInstanceService.saveInstance(referenceSelected,  thesaurus)) {
             referenceInstances = referenceInstanceService.getAllInstances();
 
-            MessageUtil.showMessage(FacesMessage.SEVERITY_INFO, "Instance enregistrée avec succès");
+            messageService.showMessage(FacesMessage.SEVERITY_INFO, "system.reference.success.msg1");
 
             PrimeFaces.current().executeScript("PF('referenceInstanceDialog').hide();");
-            log.info("Instance enregistrée avec succès !");
+            log.info("Thésaurus/collection enregistrée avec succès !");
         } else {
-            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Instance enregistrée avec succès");
-            instanceName = "";
-            instanceUrl = "";
-            log.error("Erreur pendant l'enregistrée l'instance de référence !");
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "system.reference.failed.msg1");
+            referenceSelected = new ReferenceInstances();
+            log.error("Erreur pendant l'enregistrée du thésaurus/collection de référence !");
         }
     }
 }

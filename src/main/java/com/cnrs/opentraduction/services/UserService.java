@@ -8,12 +8,13 @@ import com.cnrs.opentraduction.models.ConnexionModel;
 import com.cnrs.opentraduction.models.dao.CollectionElementDao;
 import com.cnrs.opentraduction.repositories.UserRepository;
 import com.cnrs.opentraduction.repositories.UserThesaurusRepository;
-import com.cnrs.opentraduction.utils.MessageUtil;
+import com.cnrs.opentraduction.utils.MessageService;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
@@ -27,6 +28,7 @@ import java.util.List;
 @AllArgsConstructor
 public class UserService {
 
+    private MessageService messageService;
     private UserRepository userRepository;
     private UserThesaurusRepository userThesaurusRepository;
 
@@ -34,17 +36,17 @@ public class UserService {
     public Users authentification(ConnexionModel connexionModel) {
 
         if (StringUtils.isEmpty(connexionModel.getPassword()) && StringUtils.isEmpty(connexionModel.getPassword())) {
-            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Le login et le mot de passe sont obligatoires !");
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "user.settings.error.msg6");
             return null;
         }
 
         if (StringUtils.isEmpty(connexionModel.getPassword())) {
-            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Le mot de passe est obligatoire !");
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "user.settings.error.msg3");
             return null;
         }
 
         if (StringUtils.isEmpty(connexionModel.getLogin())) {
-            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Le login est obligatoire !");
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "user.settings.error.msg2");
             return null;
         }
 
@@ -54,11 +56,11 @@ public class UserService {
             if (user.get().isActive()) {
                 return user.get();
             } else {
-                MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Le compte utilisateur est désactivé !");
+                messageService.showMessage(FacesMessage.SEVERITY_ERROR, "user.settings.error.msg8");
                 return null;
             }
         } else {
-            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Login et/ou mot de passe erronés !");
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "user.settings.error.msg7");
             return null;
         }
     }
@@ -71,14 +73,14 @@ public class UserService {
             log.info("Vérification du mail");
             var user = userRepository.findByMail(userSelected.getMail());
             if (user.isPresent()) {
-                MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Erreur de création d'un nouveau utilisateur : E-mail existe déjà !");
+                messageService.showMessage(FacesMessage.SEVERITY_ERROR, "user.settings.error.msg9");
                 return false;
             }
 
             log.info("Vérification du password");
             user = userRepository.findByPassword(userSelected.getPassword());
             if (user.isPresent()) {
-                MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "Erreur de création d'un nouveau utilisateur : Password existe déjà !");
+                messageService.showMessage(FacesMessage.SEVERITY_ERROR, "user.settings.error.msg10");
                 return false;
             }
 
@@ -88,7 +90,40 @@ public class UserService {
         userSelected.setModified(LocalDateTime.now());
 
         log.info("Enregistrement dans la base");
-        userRepository.save(userSelected);
+        var userSaved = userRepository.save(userSelected);
+
+        if (!ObjectUtils.isEmpty(userSelected.getId())) {
+            log.info("Nouvel utilisateur, donc enregistrement des références...");
+            if (!ObjectUtils.isEmpty(userSaved.getGroup().getReferenceInstances())) {
+                log.info("Associer l'instance de référence au nouvel utilisateur");
+                var userThesaurus = new UsersThesaurus();
+                userThesaurus.setUserId(userSaved.getId());
+                userThesaurus.setThesaurusId(userSaved.getGroup().getReferenceInstances().getThesaurus().getId());
+                userThesaurus.setCollectionId(userSaved.getGroup().getReferenceInstances().getThesaurus().getIdCollection());
+                userThesaurus.setCollection(userSaved.getGroup().getReferenceInstances().getThesaurus().getCollection());
+                userThesaurus.setCreated(LocalDateTime.now());
+                userThesaurus.setModified(LocalDateTime.now());
+                userThesaurusRepository.save(userThesaurus);
+            }
+
+            if (!CollectionUtils.isEmpty(userSaved.getGroup().getConsultationInstances())) {
+                log.info("Associer l'instance de consultation au nouvel utilisateur");
+                userSaved.getGroup().getConsultationInstances().forEach(consultation -> {
+                    if (!CollectionUtils.isEmpty(consultation.getThesauruses())) {
+                        consultation.getThesauruses().forEach(thesaurus -> {
+                            var userThesaurus = new UsersThesaurus();
+                            userThesaurus.setUserId(userSaved.getId());
+                            userThesaurus.setThesaurusId(thesaurus.getId());
+                            userThesaurus.setCollectionId(thesaurus.getIdCollection());
+                            userThesaurus.setCollection(thesaurus.getCollection());
+                            userThesaurus.setCreated(LocalDateTime.now());
+                            userThesaurus.setModified(LocalDateTime.now());
+                            userThesaurusRepository.save(userThesaurus);
+                        });
+                    }
+                });
+            }
+        }
 
         return true;
     }
@@ -111,7 +146,7 @@ public class UserService {
         var userThesaurus = userThesaurusRepository.findByThesaurusIdAndUserId(thesaurus.getId(), userId);
 
         if (userThesaurus.isEmpty()) {
-            MessageUtil.showMessage(FacesMessage.SEVERITY_ERROR, "La collection n'existe pas !");
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "user.settings.error.msg11");
             return false;
         }
 
