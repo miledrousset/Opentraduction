@@ -16,10 +16,14 @@ public interface UserThesaurusRepository extends JpaRepository<UsersThesaurus, I
 
     List<UsersThesaurus> getAllByUserId(Integer userId);
 
-
     @Modifying
     @Transactional
     @Query("DELETE FROM user_thesaurus WHERE thesaurusId = ?1 AND userId = ?2")
     void deleteByThesaurusIdAndUserId(Integer thesaurusId, Integer userId);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM user_thesaurus WHERE userId = ?1")
+    void deleteByUserId(Integer userId);
 
 }

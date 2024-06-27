@@ -6,7 +6,7 @@
     <div class="col-lg-9 service-box" data-aos="fade-up" data-aos-delay="200">
         <section id="pricing" class="pricing section">
             <div class="container section-title" data-aos="fade-up">
-                <h2>Liste des groups</h2>
+                <h2><h:outputText value="#{msg['application.group.title']}"/></h2>
             </div>
 
             <div class="container" data-aos="zoom-in" data-aos-delay="100">
@@ -19,57 +19,64 @@
                                     <p:commandButton styleClass="ui-button-outlined ui-button-secondary"
                                                      icon="pi pi-plus-circle" ajax="true" process="@this"
                                                      actionListener="#{groupsSettingBean.initialAddingGroup()}"
-                                                     update="groupForm"
-                                                     value="Ajouter un nouveau group" />
+                                                     update="groupForm" value="#{msg['application.group.add.title']}" />
                                 </div>
                             </div>
 
                             <p:dataTable id="listGroups" var="group" value="#{groupsSettingBean.groups}" class="table table-hover" stripedRows="true"
                                          reflow="true" styleClass="products-table" draggableColumns="true">
 
-                                <p:column headerText="Nom" width="20%" groupRow="true" style="text-align: center">
+                                <p:column headerText="#{msg['user.settings.name']}" width="20%" groupRow="true" style="text-align: center">
                                     <p:tag styleClass="mr-2" value="#{group.name}" style="background: rgba(0, 0, 0, 0.58)" />
                                 </p:column>
 
-                                <p:column headerText="Type Thésaurus" width="20%" groupRow="true">
-                                    <h:outputText value="#{group.getType()}" />
-                                </p:column>
-
-                                <p:column headerText="Thésaurus" width="20%" groupRow="true">
-                                    <a href="#{group.thesaurusUrl}" target="_blank">
-                                        <h:outputText value="#{group.thesaurusName}" />
+                                <p:column headerText="#{msg['application.group.reference.project']}" width="20%">
+                                    <a href="#{group.referenceProject.thesaurusUrl}" target="_blank">
+                                        <h:outputText value="#{group.referenceProject.name}" />
                                     </a>
                                 </p:column>
 
-                                <p:column headerText="Collection" width="20%" groupRow="true">
-                                    <h:outputText value="#{group.collectionName}" />
+                                <p:column headerText="#{msg['application.group.consultation.projects']}" width="20%">
+                                    <ul>
+                                        <ui:repeat value="#{group.consultationProjectsList}" var="consultation">
+                                            <li>
+                                                <a href="#{consultation.thesaurusUrl}" target="_blank">
+                                                    <h:outputText value="#{consultation.name}" />
+                                                </a>
+                                            </li>
+                                        </ui:repeat>
+                                    </ul>
                                 </p:column>
 
-                                <p:column headerText="Action" width="20%" style="text-align: center">
-                                    <p:commandButton icon="pi pi-pencil" ajax="true" process="@this" update="groupForm"
-                                                     actionListener="#{groupsSettingBean.initialUpdateGroup(group)}"
+                                <p:column headerText="#{msg['system.reference.actions']}" width="20%" style="text-align: center">
+                                    <p:commandButton icon="pi pi-pencil" ajax="true" process="@this"
+                                                     update="groupForm"
+                                                     action="#{groupsSettingBean.initialUpdateGroup(group)}"
                                                      styleClass="rounded-button ui-button-success ui-button-flat" />
 
                                     <p:commandButton icon="pi pi-times" update=":mainContent:listGroups"
                                                      action="#{groupsSettingBean.deleteGroup(group)}"
                                                      styleClass="rounded-button ui-button-danger ui-button-flat">
-                                        <p:confirm header="Confirmation" message="Are you sure you want to proceed?" icon="pi pi-exclamation-triangle"/>
+
+                                        <p:confirm header="#{msg['system.reference.remove']}"
+                                                   message="#{msg['application.group.remove.msg']}"
+                                                   icon="pi pi-exclamation-triangle"/>
                                     </p:commandButton>
 
-                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
-                                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
-                                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
+                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="40%">
+                                        <p:commandButton value="#{msg['action.no']}" type="button"
+                                                         style="color: rgba(0, 0, 0, 0.55)"
+                                                         styleClass="ui-confirmdialog-no ui-button-flat"/>
+
+                                        <p:commandButton value="#{msg['action.yes']}" type="button" styleClass="ui-confirmdialog-yes"
+                                                         style="color: #e84545; background: #e84545; color: #fff;"/>
                                     </p:confirmDialog>
                                 </p:column>
                             </p:dataTable>
-
                         </div>
-                    </div><!-- End Pricing Item -->
+                    </div>
                 </div>
-
             </div>
-
         </section>
     </div>
-
 </ui:composition>

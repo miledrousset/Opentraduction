@@ -38,7 +38,7 @@ public class Groups implements Serializable {
 
     private String name;
 
-    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private List<Users> users;
 
     @ManyToMany(fetch = FetchType.EAGER)

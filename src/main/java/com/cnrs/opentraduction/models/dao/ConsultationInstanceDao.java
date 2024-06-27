@@ -15,6 +15,7 @@ public class ConsultationInstanceDao {
 
     private String thesaurusId;
     private String thesaurusName;
+    private String thesaurusUrl;
 
     private List<CollectionDao> collectionList;
 

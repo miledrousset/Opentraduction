@@ -12,7 +12,6 @@ import com.cnrs.opentraduction.utils.MessageService;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.PrimeFaces;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -21,6 +20,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,8 +48,6 @@ public class ConsultationInstancesSettingBean implements Serializable {
     private List<String> selectedIdCollections;
 
     private boolean thesaurusListStatut, collectionsListStatut, validateBtnStatut;
-
-    private String instanceName, instanceUrl;
     private String dialogTitle;
 
 
@@ -66,9 +64,6 @@ public class ConsultationInstancesSettingBean implements Serializable {
 
         dialogTitle = messageService.getMessage("system.consultation.add");
 
-        instanceName = "";
-        instanceUrl = "";
-
         thesaurusList = List.of();
         collectionList = List.of();
         selectedCollections = List.of();
@@ -83,7 +78,7 @@ public class ConsultationInstancesSettingBean implements Serializable {
 
     public void searchThesaurus() {
 
-        thesaurusList = thesaurusService.searchThesaurus(instanceUrl);
+        thesaurusList = thesaurusService.searchThesaurus(instanceSelected.getUrl());
 
         if (!CollectionUtils.isEmpty(thesaurusList)) {
             thesaurusListStatut = true;
@@ -99,20 +94,23 @@ public class ConsultationInstancesSettingBean implements Serializable {
                 .filter(element -> element.getId().equals(thesaurusIdSelected))
                 .findFirst().get();
 
-        collectionList = thesaurusService.searchTopCollections(instanceUrl, thesaurusSelected.getId());
+        collectionList = thesaurusService.searchTopCollections(instanceSelected.getUrl(), thesaurusSelected.getId());
 
         validateBtnStatut = true;
 
         if (!CollectionUtils.isEmpty(collectionList)) {
             collectionsListStatut = true;
+            selectedCollections = collectionList;
+            selectedIdCollections = collectionList.stream().map(element -> element.getId()).collect(Collectors.toList());
         }
     }
 
     public void deleteInstance(ConsultationInstanceDao instance) {
         if (!ObjectUtils.isEmpty(instance)) {
-            consultationInstanceService.deleteInstance(instance.getId());
-            consultationList = consultationInstanceService.getAllConsultationInstances();
-            messageService.showMessage(FacesMessage.SEVERITY_INFO, "system.consultation.success.msg1");
+            if (consultationInstanceService.deleteInstance(instance.getId())) {
+                consultationList = consultationInstanceService.getAllConsultationInstances();
+                messageService.showMessage(FacesMessage.SEVERITY_INFO, "system.consultation.success.msg1");
+            }
         } else {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "system.consultation.failed.msg1");
         }
@@ -126,8 +124,8 @@ public class ConsultationInstancesSettingBean implements Serializable {
 
             instanceSelected = consultationInstanceService.getInstanceById(instance.getId());
 
-            instanceName = instanceSelected.getName();
-            instanceUrl = instanceSelected.getUrl();
+            instanceSelected.setName(instanceSelected.getName());
+            instanceSelected.setUrl(instanceSelected.getUrl());
 
             validateBtnStatut = false;
             thesaurusListStatut = false;
@@ -137,11 +135,13 @@ public class ConsultationInstancesSettingBean implements Serializable {
             thesaurusSelected = null;
 
             collectionList = List.of();
+            selectedIdCollections = List.of();
+            selectedCollections = List.of();
 
             if (!CollectionUtils.isEmpty(instanceSelected.getThesauruses())) {
                 var thesaurusSaved = instanceSelected.getThesauruses().stream().findFirst();
 
-                thesaurusList = thesaurusService.searchThesaurus(instanceUrl);
+                thesaurusList = thesaurusService.searchThesaurus(instanceSelected.getUrl());
 
                 if (!CollectionUtils.isEmpty(thesaurusList)) {
                     thesaurusListStatut = true;
@@ -152,14 +152,30 @@ public class ConsultationInstancesSettingBean implements Serializable {
                         thesaurusSelected = thesaurusTmp.get();
 
                         validateBtnStatut = true;
-                        collectionList = thesaurusService.searchTopCollections(instanceUrl, thesaurusSelected.getId());
+                        collectionList = thesaurusService.searchTopCollections(instanceSelected.getUrl(), thesaurusSelected.getId());
+
                         if (!CollectionUtils.isEmpty(collectionList)) {
-                            var collectionTmp = collectionList.stream()
-                                    .filter(element -> element.getId().equals(thesaurusSaved.get().getIdCollection()))
-                                    .findFirst();
+                            var collectionsSaved = thesaurusSaved.get().getConsultationInstances().getThesauruses().stream()
+                                    .map(element -> element.getIdCollection())
+                                    .collect(Collectors.toList());
+
                             collectionsListStatut = true;
-                            if (collectionTmp.isPresent()) {
-                                //collectionSelected = collectionTmp.get();
+
+                            if (collectionsSaved.size() == 1 && collectionsSaved.get(0).equals("ALL")) {
+                                selectedCollections = collectionList;
+                                selectedIdCollections = collectionList.stream()
+                                        .map(element -> element.getId())
+                                        .collect(Collectors.toList());
+                            } else {
+                                var collectionTmp = collectionList.stream()
+                                        .filter(element -> collectionsSaved.stream().filter(collection -> element.getId().equals(collection)).findAny().isPresent())
+                                        .collect(Collectors.toList());
+                                if (!CollectionUtils.isEmpty(collectionTmp)) {
+                                    selectedCollections = collectionTmp;
+                                    selectedIdCollections = collectionTmp.stream()
+                                            .map(element -> element.getId())
+                                            .collect(Collectors.toList());
+                                }
                             }
                         }
                     }
@@ -186,28 +202,39 @@ public class ConsultationInstancesSettingBean implements Serializable {
         }
     }
 
-    @Transactional
     public void instanceManagement() {
 
-        if (StringUtils.isEmpty(instanceName)) {
+        if (StringUtils.isEmpty(instanceSelected.getName())) {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "system.reference.failed.msg2");
             return;
         }
 
-        instanceSelected.setName(instanceName);
-        instanceSelected.setUrl(instanceUrl);
+        List<Thesaurus> thesaurusToSave = new ArrayList<>();
+        if (selectedCollections.size() == collectionList.size()) {
+            thesaurusToSave = List.of(Thesaurus.builder()
+                    .consultationInstances(instanceSelected)
+                    .name(thesaurusSelected.getLabel())
+                    .idThesaurus(thesaurusSelected.getId())
+                    .collection("Toutes les collection")
+                    .idCollection("ALL")
+                    .created(LocalDateTime.now())
+                    .modified(LocalDateTime.now())
+                    .build());
+        } else {
+            thesaurusToSave = selectedCollections.stream()
+                    .map(collection -> Thesaurus.builder()
+                            .consultationInstances(instanceSelected)
+                            .name(thesaurusSelected.getLabel())
+                            .idThesaurus(thesaurusSelected.getId())
+                            .collection(collection.getLabel())
+                            .idCollection(collection.getId())
+                            .created(LocalDateTime.now())
+                            .modified(LocalDateTime.now())
+                            .build())
+                    .collect(Collectors.toList());
+        }
 
-        var thesaurusList = selectedCollections.stream()
-                .map(collection -> Thesaurus.builder()
-                        .consultationInstances(instanceSelected)
-                        .name(thesaurusSelected.getLabel())
-                        .idThesaurus(thesaurusSelected.getId())
-                        .collection(collection.getLabel())
-                        .idCollection(collection.getId())
-                        .build())
-                .collect(Collectors.toList());
-
-        if (consultationInstanceService.saveConsultationInstance(instanceSelected,  thesaurusList)) {
+        if (consultationInstanceService.saveConsultationInstance(instanceSelected,  thesaurusToSave)) {
 
             consultationList = consultationInstanceService.getAllConsultationInstances();
 
@@ -217,8 +244,7 @@ public class ConsultationInstancesSettingBean implements Serializable {
             log.info("Instance enregistrée avec succès !");
         }  else {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "system.consultation.failed.msg2");
-            instanceName = "";
-            instanceUrl = "";
+            instanceSelected = new ConsultationInstances();
             log.error("Erreur pendant l'enregistrée l'instance de référence !");
         }
     }

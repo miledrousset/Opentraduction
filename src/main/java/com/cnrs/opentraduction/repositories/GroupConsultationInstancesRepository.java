@@ -1,18 +1,18 @@
 package com.cnrs.opentraduction.repositories;
 
-import com.cnrs.opentraduction.entities.Thesaurus;
+import com.cnrs.opentraduction.entities.GroupConsultationInstances;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 
-public interface ThesaurusRepository extends JpaRepository<Thesaurus, Integer> {
+public interface GroupConsultationInstancesRepository extends JpaRepository<GroupConsultationInstances, Integer> {
 
 
     @Modifying
     @Transactional
-    @Query("delete from thesaurus t where t.consultationInstances.id = ?1")
-    void deleteByConsultationInstanceId(Integer consultationProjectId);
+    @Query("DELETE FROM group_consultation_instances WHERE groupId = ?1")
+    void deleteAllByGroupId(Integer groupId);
 
 }

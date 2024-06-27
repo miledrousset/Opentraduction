@@ -12,18 +12,18 @@
         <h:form>
             <div class="row">
                 <div class="field col-12 md:col-4">
-                    <p:outputLabel for="nomReferenceInstance" value="Nom de l'instance" />
+                    <p:outputLabel for="nomReferenceInstance" value="#{msg['system.consultation.project_name']}" />
                     <p:inputText id="nomReferenceInstance" class="form-control"
-                                 value="#{consultationInstancesBean.instanceName}"/>
+                                 value="#{consultationInstancesBean.instanceSelected.name}"/>
                 </div>
             </div>
 
             <div class="row" style="margin-top: 10px">
-                <p:outputLabel for="urlReferenceInstance" value="URL de l'instance" />
+                <p:outputLabel for="urlReferenceInstance" value="#{msg['system.consultation.project_url']}" />
                 <div class="col-12 md:col-4">
                     <div class="ui-inputgroup">
                         <p:inputText id="urlReferenceInstance" class="form-control" placeholder="http://..."
-                                     value="#{consultationInstancesBean.instanceUrl}" />
+                                     value="#{consultationInstancesBean.instanceSelected.url}" />
                         <p:commandButton icon="pi pi-search" ajax="true" process="@form"
                                          style="background: #e84545; border: 1px solid #e84545"
                                          update="listThesaurusForConIns valideConsultationInstance"
@@ -34,21 +34,21 @@
 
             <h:panelGroup id="listThesaurusForConIns" >
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
-                    <p:outputLabel value="Thésaurus" rendered="#{consultationInstancesBean.thesaurusListStatut}" />
+                    <p:outputLabel value="#{msg['user.settings.thesaurus']}"
+                                   rendered="#{consultationInstancesBean.thesaurusListStatut}" />
                     <p:selectOneMenu id="listThesaurusForConsultationInstance"
                                      value="#{consultationInstancesBean.thesaurusIdSelected}"
                                      class="form-control" style="width: 100%;"
                                      rendered="#{consultationInstancesBean.thesaurusListStatut}">
                         <p:ajax listener="#{consultationInstancesBean.searchCollections}"
-                                update="listCollectionsForConsultationInstance valideConsultationInstance"
-                                process="@this" immediate="true"/>
+                                update="listCollectionsForConsultationInstance valideConsultationInstance"/>
                         <f:selectItems value="#{consultationInstancesBean.thesaurusList}" var="thesaurus"
                                        itemLabel="#{thesaurus.label}" itemValue="#{thesaurus.id}"/>
                     </p:selectOneMenu>
                 </div>
 
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
-                    <p:outputLabel value="Collections" rendered="#{consultationInstancesBean.collectionsListStatut}"/>
+                    <p:outputLabel value="#{msg['user.settings.collection']}" rendered="#{consultationInstancesBean.collectionsListStatut}"/>
 
                     <p:selectManyMenu id="listCollectionsForConsultationInstance"
                                       process="@this" ajax="true"
@@ -74,7 +74,7 @@
                                      action="PF('consultationInstanceDialog').hide();"
                                      ajax="true" process="@this"/>
 
-                    <p:commandButton title="Valider"
+                    <p:commandButton title="#{msg['action.validate']}"
                                      action="#{consultationInstancesBean.instanceManagement()}"
                                      disabled="#{!consultationInstancesBean.validateBtnStatut}"
                                      class="btn-getstarted" ajax="true" process="@this"
