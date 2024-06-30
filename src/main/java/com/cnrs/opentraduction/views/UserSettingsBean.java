@@ -67,9 +67,11 @@ public class UserSettingsBean implements Serializable {
 
         referenceCollectionList = new ArrayList<>();
         referenceCollectionList.add(new CollectionElementDao("ALL", messageService.getMessage("user.settings.consultation.racine")));
-        referenceCollectionList.addAll(thesaurusService.searchCollections(referenceInstance.getUrl(),
-                referenceInstance.getThesaurus().getIdThesaurus(),
-                referenceInstance.getThesaurus().getIdCollection()));
+        if (!ObjectUtils.isEmpty(referenceInstance)) {
+            referenceCollectionList.addAll(thesaurusService.searchCollections(referenceInstance.getUrl(),
+                    referenceInstance.getThesaurus().getIdThesaurus(),
+                    referenceInstance.getThesaurus().getIdCollection()));
+        }
 
         if (!CollectionUtils.isEmpty(userConnected.getThesauruses())) {
             setSelectedReferenceSubCollection();
@@ -126,9 +128,12 @@ public class UserSettingsBean implements Serializable {
     }
 
     public String getCollectionReferenceAudit() {
-
-        return ObjectUtils.isEmpty(referenceInstance.getModified()) ? getCreatedLabel(referenceInstance.getCreated())
-                : (getCreatedLabel(referenceInstance.getCreated()) + getUpdateLabel(referenceInstance.getModified()));
+        if (!ObjectUtils.isEmpty(referenceInstance)) {
+            return ObjectUtils.isEmpty(referenceInstance.getModified()) ? getCreatedLabel(referenceInstance.getCreated())
+                    : (getCreatedLabel(referenceInstance.getCreated()) + getUpdateLabel(referenceInstance.getModified()));
+        } else {
+            return "";
+        }
     }
 
     public String getCollectionCollectionAudit() {
@@ -186,13 +191,21 @@ public class UserSettingsBean implements Serializable {
 
     public String getInstanceReferenceUrl() {
 
-        return userConnected.getGroup().getReferenceInstances().getUrl();
+        if (!ObjectUtils.isEmpty(userConnected.getGroup())
+                && !ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances())) {
+            return userConnected.getGroup().getReferenceInstances().getUrl();
+        }
+        return "";
     }
 
     public String getThesaurusReferenceUrl() {
 
-        return getInstanceReferenceUrl() + "/?idt=" + userConnected.getGroup().getReferenceInstances()
-                .getThesaurus().getIdThesaurus();
+        if (!ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances())) {
+            return getInstanceReferenceUrl() + "/?idt="
+                    + userConnected.getGroup().getReferenceInstances().getThesaurus().getIdThesaurus();
+        } else {
+            return "";
+        }
     }
 
     public void saveCollectionReference() {
@@ -224,7 +237,7 @@ public class UserSettingsBean implements Serializable {
 
     public void initialConsultationDialogForInsert() {
 
-        dialogTitle = messageService.getMessage("user.settings.consultation.title");
+        dialogTitle = messageService.getMessage("user.settings.consultation.add.title");
         thesaurusSelected = "";
         collectionSelected = "";
         collectionList = List.of();
@@ -283,5 +296,9 @@ public class UserSettingsBean implements Serializable {
         this.userConnected = userService.getUserById(userConnected.getId());
         messageService.showMessage(FacesMessage.SEVERITY_ERROR, codeMessage);
         log.error(messageService.getMessage(codeMessage));
+    }
+
+    public boolean showConsultationProjects() {
+        return !CollectionUtils.isEmpty(consultationThesaurusList);
     }
 }

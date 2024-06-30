@@ -67,6 +67,15 @@
 
                 <div class="row" style="margin-top: 10px">
                     <div class="field col-2" style="display: flex; align-items: center;">
+                        <h:outputText value="#{msg['user.settings.user_key']}"/>
+                    </div>
+                    <div class="field col-10">
+                        <p:inputText value="#{userSettingsBean.userConnected.apiKey}" class="form-control" style="width: 100%"/>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top: 10px">
+                    <div class="field col-2" style="display: flex; align-items: center;">
                         <h:outputText value="#{msg['user.settings.group']}"/>
                     </div>
                     <div class="field col-10">

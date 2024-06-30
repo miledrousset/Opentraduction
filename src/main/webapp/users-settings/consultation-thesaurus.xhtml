@@ -8,70 +8,83 @@
 
             <div class="row">
                 <div class="col-xl-6 content">
-                    <h3>Thésaurus de consultation</h3>
+                    <h3><h:outputText value="#{msg['user.settings.consultation.title']}"/></h3>
                 </div>
                 <div class="col-xl-6 content" style="text-align: right">
                     <p:commandButton styleClass="ui-button-outlined ui-button-secondary"
+                                     rendered="#{userSettingsBean.showConsultationProjects()}"
                                      icon="pi pi-plus-circle" ajax="true" process="@this"
                                      actionListener="#{userSettingsBean.initialConsultationDialogForInsert()}"
                                      update="consultationThesaurusForm"
-                                     value="Ajouter une nouveau thésaurus" />
+                                     value="#{msg['user.settings.add.action.title']}" />
                 </div>
             </div>
 
-            <p:dataTable id="listConsultationInstances" var="instance"
-                         value="#{userSettingsBean.consultationThesaurusList}"
-                         class="table table-hover" stripedRows="true"
-                         reflow="true" styleClass="products-table" draggableColumns="true">
-
-                <p:column headerText="Nom Instance" width="15%" style="text-align: center"  groupRow="true">
-                    <a href="#{instance.url}" target="_blank">
-                        <p:tag styleClass="mr-2" value="#{instance.name}" style="background: rgba(0, 0, 0, 0.58)" />
-                    </a>
-                </p:column>
-
-                <p:column headerText="Nom Thésaurus" width="25%" groupRow="true">
-                    <a href="#{instance.url}/?idt=#{instance.thesaurusId}" target="_blank">
-                        <h:outputText value="#{instance.thesaurusName}" />
-                    </a>
-                </p:column>
-
-                <p:column headerText="Nom Collection" width="25%">
-                    <h:outputText value="#{instance.collectionName}" />
-                </p:column>
-
-                <p:column headerText="Actions" width="15%" style="text-align: center">
-                    <p:commandButton icon="pi pi-pencil" ajax="true" process="@this"
-                                     action="#{consultationInstancesBean.initialUpdateInstanceDialog(instance)}"
-                                     styleClass="rounded-button ui-button-success ui-button-flat" />
-
-                    <p:commandButton icon="pi pi-times" update="listConsultationInstances"
-                                     action="#{userSettingsBean.deleteCollectionConsultation(instance)}"
-                                     styleClass="rounded-button ui-button-danger ui-button-flat">
-                        <p:confirm header="Confirmation" message="Est ce que vous êtes sûr de vouloir supprimer la thésaurus/collection ?" icon="pi pi-exclamation-triangle"/>
-                    </p:commandButton>
-
-                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
-                    </p:confirmDialog>
-
-                </p:column>
-            </p:dataTable>
-
-            <div class="row" style="margin-top: 10px;">
-                <div class="field col-12" style=" text-align: right">
-                    <h:outputText value="#{userSettingsBean.getUserAudit()}" style="font-style: italic; font-size: smaller; color: #BCBAB9" />
+            <h:panelGroup rendered="#{!userSettingsBean.showConsultationProjects()}">
+                <div class="row">
+                    <div class="col-12 content">
+                        <h:outputText value="#{msg['application.share.msg1']}" style="font-style: italic; color: rgba(33, 37, 41, 0.58)"/>
+                    </div>
                 </div>
-            </div>
+            </h:panelGroup>
 
-            <div class="row" style="margin-top: 10px;">
-                <div class="field col-12" style=" text-align: right">
-                    <p:commandButton title="Valider"
-                                     action="#{consultationInstancesBean.instanceManagement()}"
-                                     class="btn-getstarted" ajax="true" process="@this"/>
+            <h:panelGroup rendered="#{userSettingsBean.showConsultationProjects()}">
+                <p:dataTable id="listConsultationInstances" var="instance"
+                             value="#{userSettingsBean.consultationThesaurusList}"
+                             class="table table-hover" stripedRows="true"
+                             reflow="true" styleClass="products-table" draggableColumns="true">
+
+                    <p:column headerText="Nom du projet" width="15%" style="text-align: center"  groupRow="true">
+                        <a href="#{instance.url}" target="_blank">
+                            <p:tag styleClass="mr-2" value="#{instance.name}" style="background: rgba(0, 0, 0, 0.58)" />
+                        </a>
+                    </p:column>
+
+                    <p:column headerText="#{msg['system.reference.thesaurus_name']}" width="25%" groupRow="true">
+                        <a href="#{instance.url}/?idt=#{instance.thesaurusId}" target="_blank">
+                            <h:outputText value="#{instance.thesaurusName}" />
+                        </a>
+                    </p:column>
+
+                    <p:column headerText="#{msg['system.reference.collection_name']}" width="25%">
+                        <h:outputText value="#{instance.collectionName}" />
+                    </p:column>
+
+                    <p:column headerText="#{msg['system.reference.actions']}" width="15%" style="text-align: center">
+                        <p:commandButton icon="pi pi-pencil" ajax="true" process="@this"
+                                         action="#{consultationInstancesBean.initialUpdateInstanceDialog(instance)}"
+                                         styleClass="rounded-button ui-button-success ui-button-flat" />
+
+                        <p:commandButton icon="pi pi-times" update="listConsultationInstances"
+                                         action="#{userSettingsBean.deleteCollectionConsultation(instance)}"
+                                         styleClass="rounded-button ui-button-danger ui-button-flat">
+                            <p:confirm header="#{msg['user.settings.confirmation']}"
+                                       message="#{msg['user.settings.msg']}"
+                                       icon="pi pi-exclamation-triangle"/>
+                        </p:commandButton>
+
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+                            <p:commandButton value="#{msg['action.no']}" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+                            <p:commandButton value="#{msg['action.yes']}" type="button" styleClass="ui-confirmdialog-yes" />
+                        </p:confirmDialog>
+
+                    </p:column>
+                </p:dataTable>
+
+                <div class="row" style="margin-top: 10px;">
+                    <div class="field col-12" style=" text-align: right">
+                        <h:outputText value="#{userSettingsBean.getUserAudit()}" style="font-style: italic; font-size: smaller; color: #BCBAB9" />
+                    </div>
                 </div>
-            </div>
+
+                <div class="row" style="margin-top: 10px;">
+                    <div class="field col-12" style=" text-align: right">
+                        <p:commandButton title="#{msg['action.save']}"
+                                         action="#{consultationInstancesBean.instanceManagement()}"
+                                         class="btn-getstarted" ajax="true" process="@this"/>
+                    </div>
+                </div>
+            </h:panelGroup>
         </div>
     </section>
 

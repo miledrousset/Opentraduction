@@ -43,6 +43,9 @@ public class Users implements Serializable {
 
     private String lastName;
 
+    @Column(name = "api_key")
+    private String apiKey;
+
     private boolean active;
 
     private boolean admin;
