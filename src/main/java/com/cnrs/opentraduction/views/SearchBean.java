@@ -1,12 +1,15 @@
 package com.cnrs.opentraduction.views;
 
 import com.cnrs.opentraduction.clients.OpenthesoClient;
+import com.cnrs.opentraduction.entities.ConsultationInstances;
+import com.cnrs.opentraduction.entities.Thesaurus;
 import com.cnrs.opentraduction.entities.Users;
 import com.cnrs.opentraduction.models.client.ConceptModel;
 import com.cnrs.opentraduction.models.dao.ConceptDao;
 import com.cnrs.opentraduction.utils.MessageService;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
@@ -37,7 +40,7 @@ public class SearchBean implements Serializable {
     private String termValue;
     private boolean toArabic;
     private ConceptDao conceptSelected;
-    private List<ConceptDao> conceptsReferenceFoundList;
+    private List<ConceptDao> conceptsReferenceFoundList, conceptsConsultationFoundList;
 
     private boolean searchResultDisplay, addCandidatDisplay, addPropositionDisplay;
 
@@ -48,6 +51,7 @@ public class SearchBean implements Serializable {
         toArabic = false;
         this.userConnected = userConnected;
         conceptsReferenceFoundList = new ArrayList<>();
+        conceptsConsultationFoundList = new ArrayList<>();
 
         searchResultDisplay = true;
         addCandidatDisplay = false;
@@ -61,42 +65,71 @@ public class SearchBean implements Serializable {
             return;
         }
 
-        conceptsReferenceFoundList = new ArrayList<>();
+        referenceProjectPart();
 
-        var languageToSearch = toArabic ? "ar" : "fr";
+        conceptProjectsPart();
 
-        var projectReference = userConnected.getThesauruses().stream()
-                .filter(element -> !ObjectUtils.isEmpty(element.getReferenceInstances()))
-                .findAny();
-        if (projectReference.isPresent()) {
-            var thesaurusReference = projectReference.get().getReferenceInstances().getThesaurus();
-
-            log.info("Thésaurus de référence : " + thesaurusReference.getName());
-
-            var idCollection = "ALL".equalsIgnoreCase(thesaurusReference.getIdCollection())
-                    ? userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection()
-                    : thesaurusReference.getIdCollection();
-
-            var referenceResult = openthesoClient.searchTerm(
-                    thesaurusReference.getReferenceInstances().getUrl(),
-                    thesaurusReference.getIdThesaurus(),
-                    termValue,
-                    languageToSearch,
-                    idCollection);
-
-            log.info("Résultat trouvée dans le Thésaurus de référence : " + referenceResult.length);
-            conceptsReferenceFoundList.addAll(Arrays.asList(referenceResult).stream()
-                    .map(element -> toConceptDao(element, thesaurusReference.getName()))
-                    .collect(Collectors.toList()));
-        } else {
-            log.error("Aucun Thésaurus de référence n'est présent !: ");
-            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.search.failed.msg2");
+        if (CollectionUtils.isEmpty(conceptsReferenceFoundList) && CollectionUtils.isEmpty(conceptsConsultationFoundList)) {
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.search.failed.msg3");
             return;
         }
 
         if (fromMain) {
             FacesContext.getCurrentInstance().getExternalContext().redirect("search.xhtml");
         }
+    }
+
+    private void conceptProjectsPart() {
+        log.info("Vérification s'il y a des thésaurus de consultation");
+        conceptsConsultationFoundList = new ArrayList<>();
+        var consultationProjects = userConnected.getThesauruses().stream()
+                .map(Thesaurus::getConsultationInstances)
+                .filter(consultationInstances -> !ObjectUtils.isEmpty(consultationInstances))
+                .collect(Collectors.toList());
+        if (!CollectionUtils.isEmpty(consultationProjects)) {
+            log.info("Il existe {} projet de consultation !", consultationProjects.size());
+            for (ConsultationInstances project : consultationProjects) {
+                project.getThesauruses().forEach(thesaurus -> conceptsReferenceFoundList.addAll(searchInThesaurus(thesaurus, project.getUrl())));
+            }
+        }
+    }
+
+    private void referenceProjectPart() {
+        conceptsReferenceFoundList = new ArrayList<>();
+
+        var referenceProject = userConnected.getThesauruses().stream()
+                .filter(element -> !ObjectUtils.isEmpty(element.getReferenceInstances()))
+                .findAny();
+        if (referenceProject.isPresent() && !ObjectUtils.isEmpty(referenceProject.get().getReferenceInstances())) {
+            conceptsReferenceFoundList.addAll(searchInThesaurus(referenceProject.get().getReferenceInstances().getThesaurus(),
+                    referenceProject.get().getReferenceInstances().getUrl()));
+        } else {
+            log.error("Aucun Thésaurus de référence n'est présent !: ");
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.search.failed.msg2");
+        }
+    }
+
+    private List<ConceptDao> searchInThesaurus(Thesaurus thesaurus, String url) {
+
+        log.info("Thésaurus de référence : " + thesaurus.getName());
+
+        var idCollection = "ALL".equalsIgnoreCase(thesaurus.getIdCollection())
+                ? userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection()
+                : thesaurus.getIdCollection();
+
+        var languageToSearch = toArabic ? "ar" : "fr";
+
+        var referenceResult = openthesoClient.searchTerm(
+                url,
+                thesaurus.getIdThesaurus(),
+                termValue,
+                languageToSearch,
+                idCollection);
+
+        log.info("Résultat trouvée dans le Thésaurus de référence : " + referenceResult.length);
+        return Arrays.stream(referenceResult)
+                .map(element -> toConceptDao(element, thesaurus.getName()))
+                .collect(Collectors.toList());
     }
 
     public void initAddProposition(ConceptDao conceptToUpdate) {
@@ -128,7 +161,7 @@ public class SearchBean implements Serializable {
             idThesaurus = extractDataFromUri(url.getQuery(), "idt=([^&]+)");
             idConcept = extractDataFromUri(url.getQuery(), "idc=([^&]+)");
         } catch (Exception ex) {
-
+            log.error("Erreur lors du formatage de l'URL");
         }
 
         String labelAr = "", definitionAr = "";

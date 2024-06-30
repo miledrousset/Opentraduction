@@ -1,0 +1,136 @@
+<ui:composition
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <section id="service-details" class="service-details section">
+        <div class="container">
+            <section id="pricing" class="pricing section">
+                <section class="pricing about section pricing-item featured php-email-form" style="padding: 20px">
+                    <div class="container section-title" data-aos="fade-up">
+                        <h2><h:outputText value="Fiche de proposition"/></h2>
+                    </div>
+
+                    <ui:include src="referenceThesaurusPanel.xhtml" />
+
+                    <div class="row">
+                        <div class="col-6">
+                            <section id="about" class="pricing about section">
+                                <div class="pricing-item featured php-email-form">
+                                    <div class="row">
+                                        <div class="field col-2" style="display: flex; align-items: center;">
+                                            <h:outputText value="Terme"/>
+                                        </div>
+                                        <div class="field col-10">
+                                            <p:inputText value="" class="form-control" style="width: 100%"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" style="margin-top: 10px">
+                                        <div class="field col-2" style="display: flex; align-items: center;">
+                                            <h:outputText value="Variante"/>
+                                        </div>
+                                        <div class="field col-10">
+                                            <p:inputText value="" class="form-control" style="width: 100%"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" style="margin-top: 10px">
+                                        <div class="field col-2" style="display: flex; align-items: center;">
+                                            <h:outputText value="Définition"/>
+                                        </div>
+                                        <div class="field col-10">
+                                            <p:inputText value="" class="form-control" style="width: 100%"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" style="margin-top: 10px">
+                                        <div class="field col-2" style="display: flex; align-items: center;">
+                                            <h:outputText value="Remarque"/>
+                                        </div>
+                                        <div class="field col-10">
+                                            <p:inputText value="" class="form-control" style="width: 100%"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" style="margin-top: 10px">
+                                        <div class="field col-2" style="display: flex; align-items: center;">
+                                            <h:outputText value="Note"/>
+                                        </div>
+                                        <div class="field col-10">
+                                            <p:inputText value="" class="form-control" style="width: 100%"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                        <div class="col-6">
+                            <section id="about" class="pricing about section">
+                                <div class="pricing-item featured php-email-form">
+                                    <div class="row">
+                                        <div class="field col-2" style="display: flex; align-items: center;">
+                                            <h:outputText value="Terme"/>
+                                        </div>
+                                        <div class="field col-10">
+                                            <p:inputText value="" class="form-control" style="width: 100%"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" style="margin-top: 10px">
+                                        <div class="field col-2" style="display: flex; align-items: center;">
+                                            <h:outputText value="Variante"/>
+                                        </div>
+                                        <div class="field col-10">
+                                            <p:inputText value="" class="form-control" style="width: 100%"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" style="margin-top: 10px">
+                                        <div class="field col-2" style="display: flex; align-items: center;">
+                                            <h:outputText value="Définition"/>
+                                        </div>
+                                        <div class="field col-10">
+                                            <p:inputText value="" class="form-control" style="width: 100%"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" style="margin-top: 10px">
+                                        <div class="field col-2" style="display: flex; align-items: center;">
+                                            <h:outputText value="Remarque"/>
+                                        </div>
+                                        <div class="field col-10">
+                                            <p:inputText value="" class="form-control" style="width: 100%"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" style="margin-top: 10px">
+                                        <div class="field col-2" style="display: flex; align-items: center;">
+                                            <h:outputText value="Note"/>
+                                        </div>
+                                        <div class="field col-10">
+                                            <p:inputText value="" class="form-control" style="width: 100%"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12" style="text-align: right">
+                            <p:commandButton value="#{msg['action.annuler']}" styleClass="ui-button-secondary ui-button-flat"
+                                             actionListener="#{searchBean.backToSearchScrean()}"
+                                             ajax="true" process="@this" update="globalPanel"/>
+
+                            <p:commandButton class="btn-getstarted" update="globalPanel"
+                                             action="#{searchBean.backToSearchScrean()}"
+                                             title="Enregistrer"
+                                             ajax="true" process="@this" />
+                        </div>
+                    </div>
+                </section>
+            </section>
+        </div>
+    </section>
+</ui:composition>
