@@ -49,7 +49,7 @@
                 <input type="text" class="form-control" placeholder="#{msg['search.sub-title']}" />
                 <p:commandButton class="btn-getstarted" title="#{msg['search.title']}"
                                  ajax="true" process="@this"
-                                 actionListener="#{searchBean.searchTerm()}"
+                                 actionListener="#{searchBean.searchTerm(true)}"
                                  style="background: #e84545; border-color: #e84545" />
               </form>
             </h:panelGroup>

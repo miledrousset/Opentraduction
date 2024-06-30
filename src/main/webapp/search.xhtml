@@ -27,35 +27,190 @@
 
 <h:body class="services-details-page">
   <h:panelGroup id="mainContent">
-
     <ui:include src="shared/header.xhtml" />
-
     <main class="main">
 
       <section id="service-details" class="service-details section">
         <div class="container">
           <div class="row gy-5">
             <div class="col-lg-12 service-box" data-aos="fade-up" data-aos-delay="200">
-              <h3></h3>
-
               <section id="pricing" class="pricing section">
-                <div class="container section-title" data-aos="fade-up">
-                  <h2>Rechercher</h2>
-                </div>
+                <h:panelGroup id="globalPanel">
+                  <h:panelGroup id="resultPanel" rendered="#{searchBean.searchResultDisplay}"
+                                class="container" data-aos="zoom-in" data-aos-delay="100">
 
-                <div class="container" data-aos="zoom-in" data-aos-delay="100">
-                  <div class="row">
-                    <div class="col-lg-12">
-                      <div class="search-widget widget-item">
-                        <form action="">
-                          <input type="text" />
-                          <button type="submit"><i class="bi bi-search"></i></button>
-                        </form>
+                    <div class="container section-title" data-aos="fade-up">
+                      <h2><h:outputText value="#{msg['application.search.title']}"/></h2>
+                    </div>
+
+                    <div class="row" style="margin-bottom: 20px">
+                      <div class="col-5" style="text-align: right">
+                        <p:graphicImage value="/assets/img/flags/fr.png" style="max-width:12% !important;" />
                       </div>
+                      <div class="col-2" style="text-align: center; margin-top: 7px">
+                        <p:toggleSwitch value="#{selectBooleanView.value1}"/>
+                      </div>
+                      <div class="col-5">
+                        <p:graphicImage value="/assets/img/flags/sa.png" style="max-width:12% !important;" />
+                      </div>
+                    </div>
 
-                    </div><!-- End Pricing Item -->
-                  </div>
-                </div>
+                    <div class="row">
+                      <div class="col-lg-12 search-widget widget-item">
+                        <h:form>
+                          <p:inputText value="#{searchBean.termValue}" />
+                          <p:commandButton icon="bi bi-search"
+                                           ajax="true" process="@form"
+                                           update="resultPanel"
+                                           action="#{searchBean.searchTerm(false)}"
+                                           style="background: #e84545; border-color: #e84545"/>
+                        </h:form>
+                      </div>
+                    </div>
+
+                    <div class="row" style="margin-top: 20px">
+                      <div class="col-lg-12">
+                        <section id="about" class="pricing about section">
+                          <div class="pricing-item featured php-email-form" style="text-align: left">
+                            <div class="col-xl-12 content">
+                              <h3>
+                                <h:outputText value="Thésaurus de référence : "/>
+                                <h:outputText value="TEST"/>
+                              </h3>
+                            </div>
+
+                            <p:dataTable id="conceptsReferenceFound" var="concept" value="#{searchBean.conceptsReferenceFoundList}"
+                                         class="table table-hover" stripedRows="true"
+                                         reflow="true" styleClass="products-table" draggableColumns="true">
+
+                              <p:column headerText="Label FR" width="15%" style="text-align: center">
+                                <h:outputText value="#{concept.labelFr}" />
+                              </p:column>
+
+                              <p:column headerText="Définition FR" width="25%">
+                                <h:outputText value="#{concept.definitionFr}" />
+                              </p:column>
+
+                              <p:column headerText="Label AR" width="15%" style="text-align: center">
+                                <h:outputText value="#{concept.labelAr}" />
+                              </p:column>
+
+                              <p:column headerText="Définition AR" width="25%">
+                                <h:outputText value="#{concept.definitionAr}" />
+                              </p:column>
+
+                              <p:column headerText="Actions" width="15%" style="text-align: center">
+                                <p:commandButton icon="pi pi-pencil" ajax="true" process="@this"
+                                                 action="#{searchBean.initAddProposition(concept)}"
+                                                 styleClass="rounded-button ui-button-success ui-button-flat" />
+                              </p:column>
+                            </p:dataTable>
+                          </div>
+                        </section>
+                      </div>
+                    </div>
+
+                    <div class="row" style="margin-top: 20px">
+                      <div class="col-lg-12">
+                        <section class="pricing about section">
+                          <div class="pricing-item featured php-email-form" style="text-align: left">
+                            <div class="col-xl-12 content">
+                              <h3>
+                                <h:outputText value="Thésaurus de consultations"/>
+                              </h3>
+                            </div>
+
+                            <p:dataTable id="conceptsConsultationFound" var="concept" value="#{searchBean.conceptsReferenceFoundList}"
+                                         class="table table-hover" stripedRows="true"
+                                         reflow="true" styleClass="products-table" draggableColumns="true">
+
+                              <p:column headerText="Thésaurus" width="15%" style="text-align: center">
+                                <h:outputText value="#{concept.thesaurusName}" />
+                              </p:column>
+
+                              <p:column headerText="Label FR" width="15%" style="text-align: center">
+                                <h:outputText value="#{concept.labelFr}" />
+                              </p:column>
+
+                              <p:column headerText="Définition FR" width="25%">
+                                <h:outputText value="#{concept.definitionFr}" />
+                              </p:column>
+
+                              <p:column headerText="Label AR" width="15%" style="text-align: center">
+                                <h:outputText value="#{concept.labelAr}" />
+                              </p:column>
+
+                              <p:column headerText="Définition AR" width="25%">
+                                <h:outputText value="#{concept.definitionAr}" />
+                              </p:column>
+
+                              <p:column headerText="Actions" width="15%" style="text-align: center">
+                                <p:commandButton icon="pi pi-telegram" ajax="true" process="@this"
+                                                 action="#{searchBean.initAddProposition(concept)}"
+                                                 styleClass="rounded-button ui-button-success ui-button-flat" />
+                              </p:column>
+                            </p:dataTable>
+                          </div>
+                        </section>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-lg-12" style="text-align: right">
+                        <p:commandButton class="btn-getstarted" update="globalPanel"
+                                         action="#{searchBean.initAddCandidat()}"
+                                         title="Créer un candidat"
+                                         ajax="true" process="@this" />
+                      </div>
+                    </div>
+                  </h:panelGroup>
+
+                  <h:panelGroup id="addCandidat" rendered="#{searchBean.addCandidatDisplay}">
+                    <div class="row" style="margin-top: 20px">
+                      <div class="col-lg-12">
+                        <section class="pricing about section">
+                          <div class="pricing-item featured php-email-form" style="text-align: left">
+                            <div class="container section-title" data-aos="fade-up">
+                              <h2><h:outputText value="Fiche candidat"/></h2>
+                            </div>
+
+                            <div class="row">
+                              <div class="col-lg-12" style="text-align: right">
+                                <p:commandButton class="btn-getstarted" update="globalPanel"
+                                                 action="#{searchBean.backToSearchScrean()}"
+                                                 title="Retour"
+                                                 ajax="true" process="@this" />
+                              </div>
+                            </div>
+                          </div>
+                        </section>
+                      </div>
+                    </div>
+                  </h:panelGroup>
+
+                  <h:panelGroup id="addProposition" rendered="#{searchBean.addPropositionDisplay}">
+                    <div class="row" style="margin-top: 20px">
+                      <div class="col-lg-12">
+                        <section  class="pricing about section">
+                          <div class="pricing-item featured php-email-form" style="text-align: left">
+                            <div class="container section-title" data-aos="fade-up">
+                              <h2><h:outputText value="Fiche proposition"/></h2>
+                            </div>
+
+                            <div class="row">
+                              <div class="col-lg-12" style="text-align: right">
+                                <p:commandButton class="btn-getstarted" update="mainContent"
+                                                 action="#{searchBean.backToSearchScrean()}"
+                                                 title="Retour"
+                                                 ajax="true" process="@this" />
+                              </div>
+                            </div>
+                          </div>
+                        </section>
+                      </div>
+                    </div>
+                  </h:panelGroup>
+                </h:panelGroup>
               </section>
             </div>
           </div>

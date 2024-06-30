@@ -28,6 +28,7 @@ public class ApplicationBean implements Serializable {
 
     private final ApplicationSettingBean applicationSettingBean;
     private final UserSettingsBean userSettingsBean;
+    private final SearchBean searchBean;
     private final MessageService messageService;
     private final UserService userService;
 
@@ -80,20 +81,23 @@ public class ApplicationBean implements Serializable {
         menuItemSelected = MenuItem.valueOf(menuItem);
         switch(menuItemSelected) {
             case SEARCH:
+                log.info("Navigation vers l'interface de recherche");
+                searchBean.initSearchInterface(userConnected);
                 FacesContext.getCurrentInstance().getExternalContext().redirect("search.xhtml");
                 break;
             case USER_SETTINGS:
+                log.info("Navigation vers l'interface paramètres de l'utilisateur");
                 userSettingsBean.initialInterface(userConnected);
                 FacesContext.getCurrentInstance().getExternalContext().redirect("user-settings.xhtml");
                 break;
             case SYSTEM_SETTINGS:
+                log.info("Navigation vers l'interface paramètres du systhème");
                 applicationSettingBean.initialInterface();
                 FacesContext.getCurrentInstance().getExternalContext().redirect("admin-settings.xhtml");
                 break;
-            case CONTACT_US:
-                FacesContext.getCurrentInstance().getExternalContext().redirect("contact-us.xhtml");
-                break;
             default:
+                log.info("Navigation vers l'interface principale");
+                FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
         }
     }
 
