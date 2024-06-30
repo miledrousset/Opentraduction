@@ -83,6 +83,7 @@ public class UserSettingsBean implements Serializable {
         var selectedReferenceInstance = userConnected.getThesauruses().stream()
                 .filter(element -> !ObjectUtils.isEmpty(element.getReferenceInstances()))
                 .findFirst();
+
         selectedReferenceInstance.ifPresent(thesaurus -> collectionReferenceSelected = referenceCollectionList.stream()
                 .filter(element -> element.getId().equals(thesaurus.getIdCollection()))
                 .findFirst()
@@ -114,10 +115,10 @@ public class UserSettingsBean implements Serializable {
 
     public void setSelectedReferenceCollection() {
         if (!StringUtils.isEmpty(idReferenceCollectionSelected)) {
-            collectionReferenceSelected = referenceCollectionList.stream()
+            var collectionReferenceTmp = referenceCollectionList.stream()
                     .filter(element -> element.getId().equals(idReferenceCollectionSelected))
-                    .findFirst()
-                    .get();
+                    .findFirst();
+            collectionReferenceTmp.ifPresent(collectionElementDao -> collectionReferenceSelected = collectionElementDao);
         }
     }
 
@@ -182,7 +183,7 @@ public class UserSettingsBean implements Serializable {
         }
 
         if (userService.saveUser(userConnected)) {
-            messageService.showMessage(FacesMessage.SEVERITY_ERROR, ("user.settings.ok.msg0"));
+            messageService.showMessage(FacesMessage.SEVERITY_INFO, ("user.settings.ok.msg0"));
             log.info("Enregistrement effectuée avec succès !");
         }  else {
             errorCase("user.settings.error.msg0");
@@ -259,7 +260,7 @@ public class UserSettingsBean implements Serializable {
             searchCollections();
         }
 
-        return thesaurusList.stream().collect(Collectors.toList());
+        return new ArrayList<>(thesaurusList);
     }
 
     public void searchCollections() {
@@ -269,16 +270,18 @@ public class UserSettingsBean implements Serializable {
                 .map(Thesaurus::getCollection)
                 .collect(Collectors.toSet());
 
-        collectionList = tmp.stream().collect(Collectors.toList());
+        collectionList = new ArrayList<>(tmp);
 
         if (!CollectionUtils.isEmpty(collectionList)) {
             collectionSelected = collectionList.get(0);
-            consultationCollectionSelected = userConnected.getGroup().getConsultationInstances().stream()
+            var consultationCollectionTmp = userConnected.getGroup().getConsultationInstances().stream()
                     .flatMap(outer -> outer.getThesauruses().stream())
                     .filter(element -> element.getCollection().equals(collectionSelected))
-                    .findFirst()
-                    .get();
-            searchSubCollections();
+                    .findFirst();
+            if (consultationCollectionTmp.isPresent()) {
+                consultationCollectionSelected = consultationCollectionTmp.get();
+                searchSubCollections();
+            }
         }
     }
 
@@ -300,5 +303,9 @@ public class UserSettingsBean implements Serializable {
 
     public boolean showConsultationProjects() {
         return !CollectionUtils.isEmpty(consultationThesaurusList);
+    }
+
+    public boolean showReferenceProject() {
+        return !ObjectUtils.isEmpty(referenceInstance);
     }
 }
