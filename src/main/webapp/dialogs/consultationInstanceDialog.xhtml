@@ -4,7 +4,7 @@
         xmlns:f="http://xmlns.jcp.org/jsf/core"
         xmlns:h="http://xmlns.jcp.org/jsf/html">
 
-    <p:dialog id="consultationInstanceForm" header="#{consultationInstancesBean.dialogTitle}"
+    <p:dialog id="consultationInstanceForm" header="#{consultationBean.dialogTitle}"
               widgetVar="consultationInstanceDialog" minHeight="40" width="500" showEffect="fade"
               modal="true" resizable="true" position="top"
               style="margin-top: 20px">
@@ -13,7 +13,7 @@
             <div class="row">
                 <div class="field col-12 md:col-4">
                     <b><p:outputLabel value="#{msg['system.consultation.project_name']}" /></b>
-                    <p:inputText class="form-control" value="#{consultationInstancesBean.instanceSelected.name}"/>
+                    <p:inputText class="form-control" value="#{consultationBean.instanceSelected.name}"/>
                 </div>
             </div>
 
@@ -22,11 +22,11 @@
                 <div class="col-12 md:col-4">
                     <div class="ui-inputgroup">
                         <p:inputText id="urlReferenceInstance" class="form-control" placeholder="http://..."
-                                     value="#{consultationInstancesBean.instanceSelected.url}" />
+                                     value="#{consultationBean.instanceSelected.url}" />
                         <p:commandButton icon="pi pi-search" ajax="true" process="@form"
                                          style="background: #e84545; border: 1px solid #e84545"
                                          update="listThesaurusForConIns valideConsultationInstance"
-                                         action="#{consultationInstancesBean.searchThesaurus()}"/>
+                                         action="#{consultationBean.searchThesaurus()}"/>
                     </div>
                 </div>
             </div>
@@ -34,31 +34,31 @@
             <h:panelGroup id="listThesaurusForConIns" >
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
                     <b><p:outputLabel value="#{msg['user.settings.thesaurus']}"
-                                      rendered="#{consultationInstancesBean.thesaurusListStatut}" /></b>
+                                      rendered="#{consultationBean.thesaurusListStatut}" /></b>
                     <p:selectOneMenu id="listThesaurusForConsultationInstance"
-                                     value="#{consultationInstancesBean.thesaurusIdSelected}"
+                                     value="#{consultationBean.thesaurusIdSelected}"
                                      class="form-control" style="width: 100%;"
-                                     rendered="#{consultationInstancesBean.thesaurusListStatut}">
-                        <p:ajax listener="#{consultationInstancesBean.searchCollections}"
+                                     rendered="#{consultationBean.thesaurusListStatut}">
+                        <p:ajax listener="#{consultationBean.searchCollections}"
                                 update="listCollectionsForConsultationInstance valideConsultationInstance"/>
-                        <f:selectItems value="#{consultationInstancesBean.thesaurusList}" var="thesaurus"
+                        <f:selectItems value="#{consultationBean.thesaurusList}" var="thesaurus"
                                        itemLabel="#{thesaurus.label}" itemValue="#{thesaurus.id}"/>
                     </p:selectOneMenu>
                 </div>
 
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
                     <b><p:outputLabel value="#{msg['user.settings.collection']}"
-                                      rendered="#{consultationInstancesBean.collectionsListStatut}"/></b>
+                                      rendered="#{consultationBean.collectionsListStatut}"/></b>
 
                     <p:selectManyMenu id="listCollectionsForConsultationInstance"
                                       process="@this" ajax="true"
-                                      value="#{consultationInstancesBean.selectedIdCollections}"
-                                      rendered="#{consultationInstancesBean.collectionsListStatut}"
+                                      value="#{consultationBean.selectedIdCollections}"
+                                      rendered="#{consultationBean.collectionsListStatut}"
                                       showCheckbox="true" styleClass="manymenu-advanced">
 
-                        <p:ajax event="change" process="@this" listener="#{consultationInstancesBean.onCollectionSelectedUpdate}" />
+                        <p:ajax event="change" process="@this" listener="#{consultationBean.onCollectionSelectedUpdate}" />
 
-                        <f:selectItems value="#{consultationInstancesBean.collectionList}"
+                        <f:selectItems value="#{consultationBean.collectionList}"
                                        var="collection" itemLabel="#{collection.label}" itemValue="#{collection.id}"/>
 
                         <p:column>
@@ -76,8 +76,8 @@
                                      ajax="true" process="@this"/>
 
                     <p:commandButton title="#{msg['action.save']}"
-                                     action="#{consultationInstancesBean.instanceManagement()}"
-                                     disabled="#{!consultationInstancesBean.validateBtnStatut}"
+                                     action="#{consultationBean.instanceManagement()}"
+                                     disabled="#{!consultationBean.validateBtnStatut}"
                                      class="btn-getstarted" ajax="true" process="@form"
                                      update="mainContent:listConsultationInstances"/>
                 </div>

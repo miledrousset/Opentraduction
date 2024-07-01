@@ -4,14 +4,14 @@
         xmlns:f="http://xmlns.jcp.org/jsf/core"
         xmlns:h="http://xmlns.jcp.org/jsf/html">
 
-    <p:dialog id="referenceInstanceForm" header="#{referenceInstancesBean.dialogTitle}" widgetVar="referenceInstanceDialog"
+    <p:dialog id="referenceInstanceForm" header="#{referenceBean.dialogTitle}" widgetVar="referenceInstanceDialog"
               minHeight="40" width="350" showEffect="fade" modal="true" resizable="true" position="top" style="margin-top: 20px">
 
         <h:form>
             <div class="row">
                 <div class="field col-12 md:col-4">
                     <p:outputLabel for="nom" value="#{msg['system.reference.project_name']}" />
-                    <p:inputText id="nom" class="form-control" value="#{referenceInstancesBean.referenceSelected.name}"/>
+                    <p:inputText id="nom" class="form-control" value="#{referenceBean.referenceSelected.name}"/>
                 </div>
             </div>
 
@@ -20,25 +20,25 @@
                 <div class="col-12 md:col-4">
                     <div class="ui-inputgroup">
                         <p:inputText id="url" class="form-control" placeholder="http://..."
-                                     value="#{referenceInstancesBean.referenceSelected.url}" />
+                                     value="#{referenceBean.referenceSelected.url}" />
                         <p:commandButton icon="pi pi-search" ajax="true" process="@form"
                                          style="background: #e84545; border: 1px solid #e84545"
                                          update="listThesaurusForRefIns listCollectionsForRefIns valideReferenceInstance"
-                                         action="#{referenceInstancesBean.searchThesaurus()}"/>
+                                         action="#{referenceBean.searchThesaurus()}"/>
                     </div>
                 </div>
             </div>
 
             <h:panelGroup id="listThesaurusForRefIns" >
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
-                    <p:outputLabel value="#{msg['user.settings.thesaurus']}" rendered="#{referenceInstancesBean.thesaurusListStatut}"/>
+                    <p:outputLabel value="#{msg['user.settings.thesaurus']}" rendered="#{referenceBean.thesaurusListStatut}"/>
 
-                    <p:selectOneMenu value="#{referenceInstancesBean.idThesaurusSelected}"
-                                     rendered="#{referenceInstancesBean.thesaurusListStatut}"
+                    <p:selectOneMenu value="#{referenceBean.idThesaurusSelected}"
+                                     rendered="#{referenceBean.thesaurusListStatut}"
                                      class="form-control" style="width: 100%;">
-                        <p:ajax listener="#{referenceInstancesBean.setSelectedThesaurus()}"
+                        <p:ajax listener="#{referenceBean.setSelectedThesaurus()}"
                                 update="listCollectionsForRefIns valideReferenceInstance"/>
-                        <f:selectItems value="#{referenceInstancesBean.thesaurusList}" var="thesaurus"
+                        <f:selectItems value="#{referenceBean.thesaurusList}" var="thesaurus"
                                        itemLabel="#{thesaurus.label}" itemValue="#{thesaurus.id}"/>
                     </p:selectOneMenu>
                 </div>
@@ -47,15 +47,15 @@
             <h:panelGroup id="listCollectionsForRefIns">
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
                     <p:outputLabel value="#{msg['user.settings.collection']}"
-                                   rendered="#{referenceInstancesBean.collectionsListStatut}"/>
+                                   rendered="#{referenceBean.collectionsListStatut}"/>
 
-                    <p:selectOneMenu value="#{referenceInstancesBean.idCollectionSelected}" class="form-control"
-                                     rendered="#{referenceInstancesBean.collectionsListStatut}"
+                    <p:selectOneMenu value="#{referenceBean.idCollectionSelected}" class="form-control"
+                                     rendered="#{referenceBean.collectionsListStatut}"
                                      style="width: 100%;">
-                        <p:ajax listener="#{referenceInstancesBean.setSelectedCollection()}"
+                        <p:ajax listener="#{referenceBean.setSelectedCollection()}"
                                 update="valideReferenceInstance"/>
 
-                        <f:selectItems value="#{referenceInstancesBean.collectionList}" var="collection"
+                        <f:selectItems value="#{referenceBean.collectionList}" var="collection"
                                        itemLabel="#{collection.label}" itemValue="#{collection.id}"/>
                     </p:selectOneMenu>
                 </div>
@@ -68,9 +68,9 @@
                                  ajax="true" process="@this"/>
 
                 <p:commandButton id="valideReferenceInstance" title="#{msg['action.save']}"
-                                 action="#{referenceInstancesBean.instanceManagement()}"
-                                 disabled="#{!referenceInstancesBean.validateBtnStatut}"
-                                 class="btn-getstarted" ajax="true" process="@this"
+                                 action="#{referenceBean.instanceManagement()}"
+                                 disabled="#{!referenceBean.validateBtnStatut}"
+                                 class="btn-getstarted" ajax="true" process="@form"
                                  update="mainContent:listReferenceInstances"/>
             </div>
         </h:form>

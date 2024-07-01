@@ -18,14 +18,14 @@
                                 <div class="col-12" style="text-align: right; margin-bottom: 10px">
                                     <p:commandButton styleClass="ui-button-outlined ui-button-secondary"
                                                      icon="pi pi-plus-circle" ajax="true" process="@this"
-                                                     actionListener="#{consultationInstancesBean.initialAddInstanceDialog()}"
+                                                     actionListener="#{consultationBean.initialAddInstanceDialog()}"
                                                      update="consultationInstanceForm"
                                                      value="#{msg['system.consultation.add']}" />
                                 </div>
                             </div>
 
                             <p:dataTable id="listConsultationInstances" var="instance"
-                                         value="#{consultationInstancesBean.consultationList}"
+                                         value="#{consultationBean.consultationList}"
                                          class="table table-hover" stripedRows="true"
                                          emptyMessage="#{msg['system.consultation.empty.array']}"
                                          reflow="true" styleClass="products-table" draggableColumns="true">
@@ -55,12 +55,12 @@
                                 <p:column headerText="#{msg['system.reference.actions']}" width="15%" style="text-align: center">
                                     <p:commandButton icon="pi pi-pencil" ajax="true" process="@this"
                                                      update="consultationInstanceForm"
-                                                     action="#{consultationInstancesBean.initialUpdateInstanceDialog(instance)}"
+                                                     action="#{consultationBean.initialUpdateInstanceDialog(instance)}"
                                                      styleClass="rounded-button ui-button-success ui-button-flat" />
 
                                     <p:commandButton icon="pi pi-times" update="listConsultationInstances"
                                                      ajax="true" process="@this"
-                                                     action="#{consultationInstancesBean.deleteInstance(instance)}"
+                                                     action="#{consultationBean.deleteInstance(instance)}"
                                                      styleClass="rounded-button ui-button-danger ui-button-flat">
                                         <p:confirm header="Confirmation" message="#{msg['system.reference.remove.msg']}" icon="pi pi-exclamation-triangle"/>
                                     </p:commandButton>

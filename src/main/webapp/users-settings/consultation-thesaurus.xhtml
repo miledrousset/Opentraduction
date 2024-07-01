@@ -52,7 +52,7 @@
 
                     <p:column headerText="#{msg['system.reference.actions']}" width="15%" style="text-align: center">
                         <p:commandButton icon="pi pi-pencil" ajax="true" process="@this"
-                                         action="#{consultationInstancesBean.initialUpdateInstanceDialog(instance)}"
+                                         action="#{consultationBean.initialUpdateInstanceDialog(instance)}"
                                          styleClass="rounded-button ui-button-success ui-button-flat" />
 
                         <p:commandButton icon="pi pi-times" update="listConsultationInstances"
@@ -80,7 +80,7 @@
                 <div class="row" style="margin-top: 10px;">
                     <div class="field col-12" style=" text-align: right">
                         <p:commandButton title="#{msg['action.save']}"
-                                         action="#{consultationInstancesBean.instanceManagement()}"
+                                         action="#{consultationBean.instanceManagement()}"
                                          class="btn-getstarted" ajax="true" process="@this"/>
                     </div>
                 </div>

@@ -18,15 +18,16 @@
                                 <div class="col-12" style="text-align: right; margin-bottom: 10px">
                                     <p:commandButton styleClass="ui-button-outlined ui-button-secondary"
                                                      icon="pi pi-plus-circle" ajax="true" process="@this"
-                                                     actionListener="#{referenceInstancesBean.initialAddInstanceDialog()}"
+                                                     actionListener="#{referenceBean.initialAddInstanceDialog()}"
                                                      update="referenceInstanceForm"
                                                      value="#{msg['system.reference.add']}" />
                                 </div>
                             </div>
 
                             <p:dataTable id="listReferenceInstances" var="instance"
-                                         value="#{referenceInstancesBean.referenceInstances}"
+                                         value="#{referenceBean.referenceInstances}"
                                          class="table table-hover" stripedRows="true"
+                                         emptyMessage="#{msg['system.reference.empty.array']}"
                                          reflow="true" styleClass="products-table" draggableColumns="true">
 
                                 <p:column headerText="#{msg['user.settings.name']}" width="20%">
@@ -48,11 +49,11 @@
                                 <p:column headerText="#{msg['system.reference.actions']}" width="15%" style="text-align: center">
                                     <p:commandButton icon="pi pi-pencil" ajax="true" process="@this"
                                                      update="referenceInstanceForm"
-                                                     action="#{referenceInstancesBean.initialUpdateInstanceDialog(instance)}"
+                                                     action="#{referenceBean.initialUpdateInstanceDialog(instance)}"
                                                      styleClass="rounded-button ui-button-success ui-button-flat" />
 
                                     <p:commandButton icon="pi pi-times" update="mainContent:listReferenceInstances"
-                                                     action="#{referenceInstancesBean.deleteInstance(instance)}"
+                                                     action="#{referenceBean.deleteInstance(instance)}"
                                                      styleClass="rounded-button ui-button-danger ui-button-flat">
                                         <p:confirm header="#{msg['system.reference.remove']}"
                                                    message="#{msg['system.reference.remove.msg']}"

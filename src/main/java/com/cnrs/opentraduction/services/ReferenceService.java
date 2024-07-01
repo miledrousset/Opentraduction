@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class ReferenceInstanceService {
+public class ReferenceService {
 
     private final ReferenceInstanceRepository referenceInstanceRepository;
     private final ThesaurusRepository thesaurusRepository;
@@ -70,7 +70,7 @@ public class ReferenceInstanceService {
     }
 
     public List<ReferenceInstanceDao> getAllInstances() {
-        var consultationInstances = referenceInstanceRepository.findAll();
+        var consultationInstances = referenceInstanceRepository.findAllByOrderByName();
 
         if(!CollectionUtils.isEmpty(consultationInstances)) {
             return consultationInstances.stream()
@@ -97,5 +97,10 @@ public class ReferenceInstanceService {
 
         var instance = referenceInstanceRepository.findById(instanceId);
         return instance.orElse(null);
+    }
+
+    public boolean checkExistenceByName(String name) {
+
+        return referenceInstanceRepository.findByName(name).isPresent();
     }
 }

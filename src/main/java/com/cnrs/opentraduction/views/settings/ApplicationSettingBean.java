@@ -15,8 +15,8 @@ import java.io.Serializable;
 @Named(value = "applicationSettingBean")
 public class ApplicationSettingBean implements Serializable {
 
-    private final ConsultationInstancesSettingBean consultationInstancesBean;
-    private final ReferenceInstancesSettingBean referenceInstancesBean;
+    private final ConsultationSettingBean consultationBean;
+    private final ReferenceSettingBean referenceBean;
     private final GroupsSettingBean groupsSettingBean;
     private final UsersSettingBean usersSettingBean;
 
@@ -28,8 +28,8 @@ public class ApplicationSettingBean implements Serializable {
 
         usersSettingBean.initialInterface();
         groupsSettingBean.initialInterface();
-        consultationInstancesBean.initialInterface();
-        referenceInstancesBean.initialInterface();
+        consultationBean.initialInterface();
+        referenceBean.initialInterface();
     }
 
     public String getMenuItemClass(String settingItem) {

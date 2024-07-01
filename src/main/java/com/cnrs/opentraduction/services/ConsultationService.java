@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class ConsultationInstanceService {
+public class ConsultationService {
 
     private final ConsultationInstanceRepository consultationInstanceRepository;
     private final ThesaurusRepository thesaurusRepository;

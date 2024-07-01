@@ -5,7 +5,7 @@ import com.cnrs.opentraduction.entities.Thesaurus;
 import com.cnrs.opentraduction.models.dao.CollectionElementDao;
 import com.cnrs.opentraduction.models.dao.ReferenceInstanceDao;
 import com.cnrs.opentraduction.models.client.ThesaurusElementModel;
-import com.cnrs.opentraduction.services.ReferenceInstanceService;
+import com.cnrs.opentraduction.services.ReferenceService;
 import com.cnrs.opentraduction.services.ThesaurusService;
 import com.cnrs.opentraduction.utils.MessageService;
 
@@ -28,13 +28,13 @@ import java.util.List;
 @Data
 @Slf4j
 @SessionScoped
-@Named(value = "referenceInstancesBean")
-public class ReferenceInstancesSettingBean implements Serializable {
+@Named(value = "referenceBean")
+public class ReferenceSettingBean implements Serializable {
 
-    private final ReferenceInstanceService referenceInstanceService;
+    private final ReferenceService referenceService;
     private final ThesaurusService thesaurusService;
     private final MessageService messageService;
-
+    
     private ReferenceInstances referenceSelected;
     private List<ReferenceInstanceDao> referenceInstances;
 
@@ -72,7 +72,7 @@ public class ReferenceInstancesSettingBean implements Serializable {
     }
 
     public void initialInterface() {
-        referenceInstances = referenceInstanceService.getAllInstances();
+        referenceInstances = referenceService.getAllInstances();
 
         thesaurusListStatut = false;
         collectionsListStatut = false;
@@ -123,8 +123,8 @@ public class ReferenceInstancesSettingBean implements Serializable {
     @Transactional
     public void deleteInstance(ReferenceInstanceDao instance) {
         if (!ObjectUtils.isEmpty(instance)) {
-            referenceInstanceService.deleteInstance(instance.getId());
-            referenceInstances = referenceInstanceService.getAllInstances();
+            referenceService.deleteInstance(instance.getId());
+            referenceInstances = referenceService.getAllInstances();
             messageService.showMessage(FacesMessage.SEVERITY_INFO, "system.reference.success.msg2");
         } else {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "system.reference.failed.msg3");
@@ -137,7 +137,7 @@ public class ReferenceInstancesSettingBean implements Serializable {
 
             dialogTitle =  messageService.getMessage("system.reference.update.title") + instance.getName();
 
-            referenceSelected = referenceInstanceService.getInstanceById(instance.getId());
+            referenceSelected = referenceService.getInstanceById(instance.getId());
 
             validateBtnStatut = false;
             thesaurusListStatut = false;
@@ -199,6 +199,11 @@ public class ReferenceInstancesSettingBean implements Serializable {
             return;
         }
 
+        if (referenceService.checkExistenceByName(referenceSelected.getName())) {
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "system.reference.failed.msg4");
+            return;
+        }
+
         Thesaurus thesaurus = new Thesaurus();
         thesaurus.setReferenceInstances(referenceSelected);
         thesaurus.setName(thesaurusSelected.getLabel());
@@ -206,8 +211,8 @@ public class ReferenceInstancesSettingBean implements Serializable {
         thesaurus.setCollection(collectionSelected.getLabel());
         thesaurus.setIdCollection(collectionSelected.getId());
 
-        if (referenceInstanceService.saveInstance(referenceSelected,  thesaurus)) {
-            referenceInstances = referenceInstanceService.getAllInstances();
+        if (referenceService.saveInstance(referenceSelected,  thesaurus)) {
+            referenceInstances = referenceService.getAllInstances();
 
             messageService.showMessage(FacesMessage.SEVERITY_INFO, "system.reference.success.msg1");
 

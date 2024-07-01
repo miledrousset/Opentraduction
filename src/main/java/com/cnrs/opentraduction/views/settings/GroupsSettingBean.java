@@ -3,9 +3,9 @@ package com.cnrs.opentraduction.views.settings;
 import com.cnrs.opentraduction.models.dao.ConsultationInstanceDao;
 import com.cnrs.opentraduction.models.dao.GroupDao;
 import com.cnrs.opentraduction.models.dao.ReferenceInstanceDao;
-import com.cnrs.opentraduction.services.ConsultationInstanceService;
+import com.cnrs.opentraduction.services.ConsultationService;
 import com.cnrs.opentraduction.services.GroupService;
-import com.cnrs.opentraduction.services.ReferenceInstanceService;
+import com.cnrs.opentraduction.services.ReferenceService;
 import com.cnrs.opentraduction.utils.MessageService;
 
 import lombok.Data;
@@ -32,8 +32,8 @@ public class GroupsSettingBean implements Serializable {
 
     private final GroupService groupService;
     private final MessageService messageService;
-    private final ReferenceInstanceService referenceInstanceService;
-    private final ConsultationInstanceService consultationInstanceService;
+    private final ReferenceService referenceInstanceService;
+    private final ConsultationService consultationInstanceService;
 
     private List<GroupDao> groups;
     private GroupDao groupSelected;

@@ -41,7 +41,7 @@ public class GroupService {
     private final UserThesaurusRepository userThesaurusRepository;
     private final GroupConsultationInstancesRepository groupConsultationInstancesRepository;
     private final ReferenceInstanceRepository referenceInstanceRepository;
-    private final ConsultationInstanceService consultationInstanceService;
+    private final ConsultationService consultationInstanceService;
 
 
     public Groups getGroupById(Integer groupId) {

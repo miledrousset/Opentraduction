@@ -5,7 +5,7 @@ import com.cnrs.opentraduction.entities.Thesaurus;
 import com.cnrs.opentraduction.models.dao.CollectionElementDao;
 import com.cnrs.opentraduction.models.dao.ConsultationInstanceDao;
 import com.cnrs.opentraduction.models.client.ThesaurusElementModel;
-import com.cnrs.opentraduction.services.ConsultationInstanceService;
+import com.cnrs.opentraduction.services.ConsultationService;
 import com.cnrs.opentraduction.services.ThesaurusService;
 import com.cnrs.opentraduction.utils.MessageService;
 
@@ -29,10 +29,10 @@ import java.util.stream.Collectors;
 @Data
 @Slf4j
 @SessionScoped
-@Named(value = "consultationInstancesBean")
-public class ConsultationInstancesSettingBean implements Serializable {
+@Named(value = "consultationBean")
+public class ConsultationSettingBean implements Serializable {
 
-    private final ConsultationInstanceService consultationInstanceService;
+    private final ConsultationService consultationInstanceService;
     private final ThesaurusService thesaurusService;
     private final MessageService messageService;
 
@@ -106,7 +106,9 @@ public class ConsultationInstancesSettingBean implements Serializable {
         if (!CollectionUtils.isEmpty(collectionList)) {
             collectionsListStatut = true;
             selectedCollections = collectionList;
-            selectedIdCollections = collectionList.stream().map(element -> element.getId()).collect(Collectors.toList());
+            selectedIdCollections = collectionList.stream()
+                    .map(CollectionElementDao::getId)
+                    .collect(Collectors.toList());
         }
     }
 
@@ -118,7 +120,7 @@ public class ConsultationInstancesSettingBean implements Serializable {
                 messageService.showMessage(FacesMessage.SEVERITY_INFO, "system.consultation.success.msg1");
             }
         } else {
-            log.error("Aucun projet de consultation n'est sélectionné !", consultationInstanceDao.getName());
+            log.error("Aucun projet de consultation n'est sélectionné !");
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "system.consultation.failed.msg1");
         }
     }
@@ -164,7 +166,7 @@ public class ConsultationInstancesSettingBean implements Serializable {
 
                         if (!CollectionUtils.isEmpty(collectionList)) {
                             var collectionsSaved = thesaurusSaved.get().getConsultationInstances().getThesauruses().stream()
-                                    .map(element -> element.getIdCollection())
+                                    .map(Thesaurus::getIdCollection)
                                     .collect(Collectors.toList());
 
                             collectionsListStatut = true;
@@ -172,11 +174,14 @@ public class ConsultationInstancesSettingBean implements Serializable {
                             if (collectionsSaved.size() == 1 && collectionsSaved.get(0).equals("ALL")) {
                                 selectedCollections = collectionList;
                                 selectedIdCollections = collectionList.stream()
-                                        .map(element -> element.getId())
+                                        .map(CollectionElementDao::getId)
                                         .collect(Collectors.toList());
                             } else {
                                 var collectionTmp = collectionList.stream()
-                                        .filter(element -> collectionsSaved.stream().filter(collection -> element.getId().equals(collection)).findAny().isPresent())
+                                        .filter(element -> collectionsSaved.stream()
+                                                .filter(collection -> element.getId().equals(collection))
+                                                .findAny()
+                                                .isPresent())
                                         .collect(Collectors.toList());
                                 if (!CollectionUtils.isEmpty(collectionTmp)) {
                                     selectedCollections = collectionTmp;
