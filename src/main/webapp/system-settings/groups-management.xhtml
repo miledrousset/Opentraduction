@@ -5,6 +5,7 @@
 
     <div class="col-lg-9 service-box" data-aos="fade-up" data-aos-delay="200">
         <section id="pricing" class="pricing section">
+
             <div class="container section-title" data-aos="fade-up">
                 <h2><h:outputText value="#{msg['application.group.title']}"/></h2>
             </div>
@@ -23,10 +24,12 @@
                                 </div>
                             </div>
 
-                            <p:dataTable id="listGroups" var="group" value="#{groupsSettingBean.groups}" class="table table-hover" stripedRows="true"
+                            <p:dataTable id="listGroups" var="group" value="#{groupsSettingBean.groups}"
+                                         class="table table-hover" stripedRows="true"
+                                         emptyMessage="#{msg['application.group.empty.array']}"
                                          reflow="true" styleClass="products-table" draggableColumns="true">
 
-                                <p:column headerText="#{msg['user.settings.name']}" width="20%" groupRow="true" style="text-align: center">
+                                <p:column headerText="#{msg['user.settings.name']}" width="20%" style="text-align: center">
                                     <p:tag styleClass="mr-2" value="#{group.name}" style="background: rgba(0, 0, 0, 0.58)" />
                                 </p:column>
 
@@ -37,7 +40,7 @@
                                 </p:column>
 
                                 <p:column headerText="#{msg['application.group.consultation.projects']}" width="20%">
-                                    <ul>
+                                    <ul style="margin-bottom: -1px">
                                         <ui:repeat value="#{group.consultationProjectsList}" var="consultation">
                                             <li>
                                                 <a href="#{consultation.thesaurusUrl}" target="_blank">

@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 
 public interface GroupRepository extends JpaRepository<Groups, Integer> {
 
@@ -15,5 +17,7 @@ public interface GroupRepository extends JpaRepository<Groups, Integer> {
     @Transactional
     @Query("UPDATE groups c SET c.referenceInstances = ?2 WHERE c.id = ?1")
     void updateReferenceProject(Integer id, ReferenceInstances referenceInstances);
+
+    List<Groups> findAllByOrderByName();
 
 }

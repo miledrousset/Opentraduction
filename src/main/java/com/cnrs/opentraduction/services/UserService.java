@@ -176,4 +176,8 @@ public class UserService {
 
         return userThesaurusRepository.getAllByUserId(userId);
     }
+
+    public List<Users> getUsersByGroup(String groupName) {
+        return userRepository.findAllByGroupName(groupName);
+    }
 }

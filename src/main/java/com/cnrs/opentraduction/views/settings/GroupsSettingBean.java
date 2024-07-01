@@ -6,6 +6,7 @@ import com.cnrs.opentraduction.models.dao.ReferenceInstanceDao;
 import com.cnrs.opentraduction.services.ConsultationService;
 import com.cnrs.opentraduction.services.GroupService;
 import com.cnrs.opentraduction.services.ReferenceService;
+import com.cnrs.opentraduction.services.UserService;
 import com.cnrs.opentraduction.utils.MessageService;
 
 import lombok.Data;
@@ -17,6 +18,7 @@ import org.springframework.util.StringUtils;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -31,6 +33,7 @@ import java.util.stream.Collectors;
 public class GroupsSettingBean implements Serializable {
 
     private final GroupService groupService;
+    private final UserService userService;
     private final MessageService messageService;
     private final ReferenceService referenceInstanceService;
     private final ConsultationService consultationInstanceService;
@@ -55,6 +58,12 @@ public class GroupsSettingBean implements Serializable {
 
         referenceProjects = referenceInstanceService.getAllInstances();
         consultationProjects = consultationInstanceService.getAllConsultationInstances();
+
+        if (CollectionUtils.isEmpty(referenceProjects)) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Erreur",
+                    "Il faut configurer les projets de référence"));
+            PrimeFaces.current().ajax().update("messages");
+        }
     }
 
     public void onConsultationProjectSelected() {
@@ -105,10 +114,17 @@ public class GroupsSettingBean implements Serializable {
 
         groupSelected = new GroupDao();
 
-        if (!CollectionUtils.isEmpty(referenceProjects)) {
-            referenceProjectNameSelected = referenceProjects.get(0).getName();
-            referenceProjectSelected = referenceProjects.get(0);
+        if (CollectionUtils.isEmpty(referenceProjects)) {
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.group.error.msg6");
+            return;
         }
+
+        if (CollectionUtils.isEmpty(consultationProjects)) {
+            messageService.showMessage(FacesMessage.SEVERITY_WARN, "application.group.error.msg7");
+        }
+
+        referenceProjectNameSelected = referenceProjects.get(0).getName();
+        referenceProjectSelected = referenceProjects.get(0);
 
         consultationProjectsNamesSelected = new ArrayList<>();
         consultationProjectsSelected = new ArrayList<>();
@@ -122,19 +138,27 @@ public class GroupsSettingBean implements Serializable {
 
         groupSelected = groups;
 
-        referenceProjectSelected = referenceProjects.stream()
-                .filter(element -> element.getName().equals(groupSelected.getReferenceProject().getName()))
-                .findFirst()
-                .get();
-        referenceProjectNameSelected = referenceProjectSelected.getName();
+        if (!ObjectUtils.isEmpty(groupSelected.getReferenceProject())) {
+            var referenceTmp = referenceProjects.stream()
+                    .filter(element -> element.getName().equals(groupSelected.getReferenceProject().getName()))
+                    .findFirst();
+            if (referenceTmp.isPresent()) {
+                referenceProjectSelected = referenceTmp.get();
+                referenceProjectNameSelected = referenceProjectSelected.getName();
+            }
+        }
 
         var consultationNames = consultationProjects.stream().map(ConsultationInstanceDao::getName).collect(Collectors.toList());
-        consultationProjectsSelected = groupSelected.getConsultationProjectsList().stream()
-                .filter(element -> consultationNames.stream().anyMatch(consultantProject -> consultantProject.equals(element.getName())))
-                .collect(Collectors.toList());
-        consultationProjectsNamesSelected = consultationProjectsSelected.stream()
-                .map(ConsultationInstanceDao::getName)
-                .collect(Collectors.toList());
+        if (!CollectionUtils.isEmpty(consultationNames)) {
+            consultationProjectsSelected = groupSelected.getConsultationProjectsList().stream()
+                    .filter(element -> consultationNames.stream().anyMatch(consultantProject -> consultantProject.equals(element.getName())))
+                    .collect(Collectors.toList());
+            if (!CollectionUtils.isEmpty(consultationProjectsSelected)) {
+                consultationProjectsNamesSelected = consultationProjectsSelected.stream()
+                        .map(ConsultationInstanceDao::getName)
+                        .collect(Collectors.toList());
+            }
+        }
 
         PrimeFaces.current().executeScript("PF('groupDialog').show();");
     }
@@ -142,9 +166,13 @@ public class GroupsSettingBean implements Serializable {
     public void deleteGroup(GroupDao group) {
 
         if (!ObjectUtils.isEmpty(group)) {
-            groupService.deleteGroup(group.getId());
-            groups = groupService.getAllGroups();
-            messageService.showMessage(FacesMessage.SEVERITY_INFO, "application.group.ok.msg1");
+            if (CollectionUtils.isEmpty(userService.getUsersByGroup(group.getName()))) {
+                groupService.deleteGroup(group.getId());
+                groups = groupService.getAllGroups();
+                messageService.showMessage(FacesMessage.SEVERITY_INFO, "application.group.ok.msg1");
+            } else {
+                messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.group.error.msg5");
+            }
         } else {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.group.error.msg1");
         }

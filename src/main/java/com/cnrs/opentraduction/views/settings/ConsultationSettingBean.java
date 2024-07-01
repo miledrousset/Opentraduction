@@ -75,7 +75,7 @@ public class ConsultationSettingBean implements Serializable {
         collectionsListStatut = false;
         validateBtnStatut = false;
         instanceSelected = new ConsultationInstances();
-        PrimeFaces.current().executeScript("PF('consultationInstanceDialog').show();");
+        PrimeFaces.current().executeScript("PF('consultationDialog').show();");
     }
 
     public void searchThesaurus() {
@@ -195,7 +195,7 @@ public class ConsultationSettingBean implements Serializable {
                 }
             }
 
-            PrimeFaces.current().executeScript("PF('consultationInstanceDialog').show();");
+            PrimeFaces.current().executeScript("PF('consultationDialog').show();");
         } else {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "system.consultation.failed.msg1");
         }
@@ -239,7 +239,7 @@ public class ConsultationSettingBean implements Serializable {
 
             messageService.showMessage(FacesMessage.SEVERITY_INFO, "system.consultation.success.msg2");
 
-            PrimeFaces.current().executeScript("PF('consultationInstanceDialog').hide();");
+            PrimeFaces.current().executeScript("PF('consultationDialog').hide();");
             log.info("Instance enregistrée avec succès !");
         }  else {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "system.consultation.failed.msg2");

@@ -66,23 +66,25 @@ public class GroupService {
         } else {
             log.info("Cas de mise à jour de groupe");
             isUpdateCase = true;
-            var groupSaved = groupRepository.findById(groupDao.getId()).get();
-            groupToSave.setCreated(groupSaved.getCreated());
+            var groupSaved = groupRepository.findById(groupDao.getId());
+            if (groupSaved.isPresent()) {
+                groupToSave.setCreated(groupSaved.get().getCreated());
 
-            log.info("Suppression du thésaurus de référence");
-            if (!ObjectUtils.isEmpty(groupSaved.getReferenceInstances())) {
-                groupRepository.updateReferenceProject(groupSaved.getId(), null);
-            }
+                log.info("Suppression du thésaurus de référence");
+                if (!ObjectUtils.isEmpty(groupSaved.get().getReferenceInstances())) {
+                    groupRepository.updateReferenceProject(groupSaved.get().getId(), null);
+                }
 
-            log.info("Suppression des thésaurus de collection");
-            if (!CollectionUtils.isEmpty(groupSaved.getConsultationInstances())) {
-                groupConsultationInstancesRepository.deleteAllByGroupId(groupSaved.getId());
-            }
+                log.info("Suppression des thésaurus de collection");
+                if (!CollectionUtils.isEmpty(groupSaved.get().getConsultationInstances())) {
+                    groupConsultationInstancesRepository.deleteAllByGroupId(groupSaved.get().getId());
+                }
 
-            log.info("Suppression des associations groupe/thésaurus");
-            users = groupSaved.getUsers();
-            if (!CollectionUtils.isEmpty(users)) {
-                users.forEach(user -> userThesaurusRepository.deleteByUserId(user.getId()));
+                log.info("Suppression des associations groupe/thésaurus");
+                users = groupSaved.get().getUsers();
+                if (!CollectionUtils.isEmpty(users)) {
+                    users.forEach(user -> userThesaurusRepository.deleteByUserId(user.getId()));
+                }
             }
         }
 
@@ -91,7 +93,9 @@ public class GroupService {
         groupToSave.setModified(LocalDateTime.now());
 
         var reference = referenceInstanceRepository.findById(referenceProjects.getId());
-        groupToSave.setReferenceInstances(reference.get());
+        if (reference.isPresent()) {
+            groupToSave.setReferenceInstances(reference.get());
+        }
 
         Set<ConsultationInstances> consultationTmp = new HashSet<>();
         if (!CollectionUtils.isEmpty(consultationProjects)) {
@@ -122,7 +126,8 @@ public class GroupService {
     }
 
     public List<GroupDao> getAllGroups() {
-        var groups = groupRepository.findAll();
+
+        var groups = groupRepository.findAllByOrderByName();
 
         List<GroupDao> groupsModel = new ArrayList<>();
 

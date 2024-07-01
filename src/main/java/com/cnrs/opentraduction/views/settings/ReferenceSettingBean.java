@@ -91,7 +91,7 @@ public class ReferenceSettingBean implements Serializable {
         collectionsListStatut = false;
         validateBtnStatut = false;
         referenceSelected = new ReferenceInstances();
-        PrimeFaces.current().executeScript("PF('referenceInstanceDialog').show();");
+        PrimeFaces.current().executeScript("PF('referenceDialog').show();");
     }
 
     public void searchThesaurus() {
@@ -185,7 +185,7 @@ public class ReferenceSettingBean implements Serializable {
                     }
                 }
             }
-            PrimeFaces.current().executeScript("PF('referenceInstanceDialog').show();");
+            PrimeFaces.current().executeScript("PF('referenceDialog').show();");
         } else {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "system.reference.failed.msg3");
         }
@@ -216,7 +216,7 @@ public class ReferenceSettingBean implements Serializable {
 
             messageService.showMessage(FacesMessage.SEVERITY_INFO, "system.reference.success.msg1");
 
-            PrimeFaces.current().executeScript("PF('referenceInstanceDialog').hide();");
+            PrimeFaces.current().executeScript("PF('referenceDialog').hide();");
             log.info("Thésaurus/collection enregistrée avec succès !");
         } else {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "system.reference.failed.msg1");

@@ -39,6 +39,19 @@ public class ApplicationSettingBean implements Serializable {
     public void setMenuItem(String settingItem) {
         if (!settingItem.equals(selectedSetting.name())) {
             selectedSetting = SettingPart.valueOf(settingItem);
+            switch (settingItem) {
+                case "USER_MANAGEMENT":
+                    usersSettingBean.initialInterface();
+                    break;
+                case "GROUP_MANAGEMENT":
+                    groupsSettingBean.initialInterface();
+                    break;
+                case "THESAURUS_REFERENCE":
+                    referenceBean.initialInterface();
+                    break;
+                default:
+                    consultationBean.initialInterface();
+            }
         }
     }
 }
