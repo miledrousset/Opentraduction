@@ -27,9 +27,10 @@
                             <p:dataTable id="listConsultationInstances" var="instance"
                                          value="#{consultationInstancesBean.consultationList}"
                                          class="table table-hover" stripedRows="true"
+                                         emptyMessage="#{msg['system.consultation.empty.array']}"
                                          reflow="true" styleClass="products-table" draggableColumns="true">
 
-                                <p:column headerText="#{msg['system.consultation.project_name']}" width="15%" style="text-align: center"  groupRow="true">
+                                <p:column headerText="#{msg['system.consultation.project_name']}" width="15%" style="text-align: center">
                                     <a href="#{instance.url}" target="_blank">
                                         <p:tag styleClass="mr-2" value="#{instance.name}" style="background: rgba(0, 0, 0, 0.58)" />
                                     </a>
@@ -42,7 +43,7 @@
                                 </p:column>
 
                                 <p:column headerText="#{msg['system.reference.collection_name']}" width="25%">
-                                    <ul>
+                                    <ul style="margin-bottom: -1px">
                                         <ui:repeat value="#{instance.collectionList}" var="collection">
                                             <li>
                                                 <h:outputText value="#{collection.collectionName}" />

@@ -52,6 +52,7 @@ public class ConsultationInstancesSettingBean implements Serializable {
 
 
     public void initialInterface() {
+        log.info("Initialisation d'interface gestion des projets de consultation");
         consultationList = consultationInstanceService.getAllConsultationInstances();
 
         thesaurusListStatut = false;
@@ -62,6 +63,7 @@ public class ConsultationInstancesSettingBean implements Serializable {
 
     public void initialAddInstanceDialog() {
 
+        log.info("Initialisation de la boite de dialog pour l'ajout d'un projet de consultation");
         dialogTitle = messageService.getMessage("system.consultation.add");
 
         thesaurusList = List.of();
@@ -77,7 +79,7 @@ public class ConsultationInstancesSettingBean implements Serializable {
     }
 
     public void searchThesaurus() {
-
+        log.info("Recherche de la liste des thésaurus");
         thesaurusList = thesaurusService.searchThesaurus(instanceSelected.getUrl());
 
         if (!CollectionUtils.isEmpty(thesaurusList)) {
@@ -90,10 +92,13 @@ public class ConsultationInstancesSettingBean implements Serializable {
 
     public void searchCollections() {
 
+        log.info("Recherche des collections");
         thesaurusSelected = thesaurusList.stream()
                 .filter(element -> element.getId().equals(thesaurusIdSelected))
-                .findFirst().get();
+                .findFirst()
+                .get();
 
+        log.info("Thésaurus cible : {}", thesaurusSelected.getLabel());
         collectionList = thesaurusService.searchTopCollections(instanceSelected.getUrl(), thesaurusSelected.getId());
 
         validateBtnStatut = true;
@@ -105,19 +110,22 @@ public class ConsultationInstancesSettingBean implements Serializable {
         }
     }
 
-    public void deleteInstance(ConsultationInstanceDao instance) {
-        if (!ObjectUtils.isEmpty(instance)) {
-            if (consultationInstanceService.deleteInstance(instance.getId())) {
+    public void deleteInstance(ConsultationInstanceDao consultationInstanceDao) {
+        if (!ObjectUtils.isEmpty(consultationInstanceDao)) {
+            log.info("Suppression du projet de consultation {}", consultationInstanceDao.getName());
+            if (consultationInstanceService.deleteInstance(consultationInstanceDao.getId())) {
                 consultationList = consultationInstanceService.getAllConsultationInstances();
                 messageService.showMessage(FacesMessage.SEVERITY_INFO, "system.consultation.success.msg1");
             }
         } else {
+            log.error("Aucun projet de consultation n'est sélectionné !", consultationInstanceDao.getName());
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "system.consultation.failed.msg1");
         }
     }
 
     public void initialUpdateInstanceDialog(ConsultationInstanceDao instance) {
 
+        log.info("Initialisation de la boite de dialog pour la mise à jour du projet de consultation");
         if (!ObjectUtils.isEmpty(instance)) {
 
             dialogTitle = messageService.getMessage("system.consultation.update") + instance.getName();
@@ -189,6 +197,7 @@ public class ConsultationInstancesSettingBean implements Serializable {
     }
 
     public void onCollectionSelectedUpdate() {
+        log.info("Mise à jour de la collection sélectionnée");
         selectedCollections = new ArrayList<>();
         if (!CollectionUtils.isEmpty(selectedIdCollections)) {
             selectedIdCollections.forEach(idCollection -> {
@@ -209,33 +218,18 @@ public class ConsultationInstancesSettingBean implements Serializable {
             return;
         }
 
-        List<Thesaurus> thesaurusToSave = new ArrayList<>();
-        if (selectedCollections.size() == collectionList.size()) {
-            thesaurusToSave = List.of(Thesaurus.builder()
-                    .consultationInstances(instanceSelected)
-                    .name(thesaurusSelected.getLabel())
-                    .idThesaurus(thesaurusSelected.getId())
-                    .collection("Toutes les collection")
-                    .idCollection("ALL")
-                    .created(LocalDateTime.now())
-                    .modified(LocalDateTime.now())
-                    .build());
-        } else {
-            thesaurusToSave = selectedCollections.stream()
-                    .map(collection -> Thesaurus.builder()
-                            .consultationInstances(instanceSelected)
-                            .name(thesaurusSelected.getLabel())
-                            .idThesaurus(thesaurusSelected.getId())
-                            .collection(collection.getLabel())
-                            .idCollection(collection.getId())
-                            .created(LocalDateTime.now())
-                            .modified(LocalDateTime.now())
-                            .build())
-                    .collect(Collectors.toList());
+        if (consultationInstanceService.checkExistingName(instanceSelected.getName())) {
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "system.reference.failed.msg4");
+            return;
         }
 
+        log.info("Recherche de la liste des thésaurus");
+        List<Thesaurus> thesaurusToSave = getThesaurus();
+
+        log.info("Enregistrement du projet de consultation");
         if (consultationInstanceService.saveConsultationInstance(instanceSelected,  thesaurusToSave)) {
 
+            log.info("Mise à jour de la list des projets de consultation");
             consultationList = consultationInstanceService.getAllConsultationInstances();
 
             messageService.showMessage(FacesMessage.SEVERITY_INFO, "system.consultation.success.msg2");
@@ -246,6 +240,32 @@ public class ConsultationInstancesSettingBean implements Serializable {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "system.consultation.failed.msg2");
             instanceSelected = new ConsultationInstances();
             log.error("Erreur pendant l'enregistrée l'instance de référence !");
+        }
+    }
+
+    private List<Thesaurus> getThesaurus() {
+        if (selectedCollections.size() == collectionList.size()) {
+            return List.of(Thesaurus.builder()
+                    .consultationInstances(instanceSelected)
+                    .name(thesaurusSelected.getLabel())
+                    .idThesaurus(thesaurusSelected.getId())
+                    .collection("Toutes les collection")
+                    .idCollection("ALL")
+                    .created(LocalDateTime.now())
+                    .modified(LocalDateTime.now())
+                    .build());
+        } else {
+            return selectedCollections.stream()
+                    .map(collection -> Thesaurus.builder()
+                            .consultationInstances(instanceSelected)
+                            .name(thesaurusSelected.getLabel())
+                            .idThesaurus(thesaurusSelected.getId())
+                            .collection(collection.getLabel())
+                            .idCollection(collection.getId())
+                            .created(LocalDateTime.now())
+                            .modified(LocalDateTime.now())
+                            .build())
+                    .collect(Collectors.toList());
         }
     }
 }

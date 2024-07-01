@@ -8,8 +8,11 @@ import com.cnrs.opentraduction.models.dao.CollectionElementDao;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
+import org.thymeleaf.util.ArrayUtils;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -27,16 +30,17 @@ public class ThesaurusService {
 
     public List<ThesaurusElementModel> searchThesaurus(String baseUrl) {
         var thesaurusResponse = openthesoClient.getThesoInfo(baseUrl);
-        if (thesaurusResponse.length > 0) {
-            return Stream.of(thesaurusResponse)
+        if (!ArrayUtils.isEmpty(thesaurusResponse)) {
+            return List.of(thesaurusResponse).stream()
+                    .filter(element -> !ObjectUtils.isEmpty(element.getLabels()))
                     .filter(element -> element.getLabels().stream().anyMatch(tmp -> FR.equals(tmp.getLang())))
-                    .map(element -> {
-                        var label = element.getLabels().stream()
-                                .filter(tmp -> FR.equals(tmp.getLang()))
-                                .findFirst().orElse(null);
-                        return new ThesaurusElementModel(element.getIdTheso(),
-                                ObjectUtils.isEmpty(label) ? "" : label.getTitle());
-                    })
+                    .filter(element -> element.getLabels().stream().filter(tmp -> FR.equals(tmp.getLang())).findFirst().isPresent())
+                    .map(element -> new ThesaurusElementModel(element.getIdTheso(),
+                            element.getLabels().stream()
+                                    .filter(tmp -> FR.equals(tmp.getLang()))
+                                    .findFirst()
+                                    .get()
+                                    .getTitle()))
                     .collect(Collectors.toList());
         } else {
             return List.of();

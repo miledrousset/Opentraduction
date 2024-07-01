@@ -12,14 +12,13 @@
         <h:form>
             <div class="row">
                 <div class="field col-12 md:col-4">
-                    <p:outputLabel for="nomReferenceInstance" value="#{msg['system.consultation.project_name']}" />
-                    <p:inputText id="nomReferenceInstance" class="form-control"
-                                 value="#{consultationInstancesBean.instanceSelected.name}"/>
+                    <b><p:outputLabel value="#{msg['system.consultation.project_name']}" /></b>
+                    <p:inputText class="form-control" value="#{consultationInstancesBean.instanceSelected.name}"/>
                 </div>
             </div>
 
             <div class="row" style="margin-top: 10px">
-                <p:outputLabel for="urlReferenceInstance" value="#{msg['system.consultation.project_url']}" />
+                <b><p:outputLabel for="urlReferenceInstance" value="#{msg['system.consultation.project_url']}" /></b>
                 <div class="col-12 md:col-4">
                     <div class="ui-inputgroup">
                         <p:inputText id="urlReferenceInstance" class="form-control" placeholder="http://..."
@@ -34,8 +33,8 @@
 
             <h:panelGroup id="listThesaurusForConIns" >
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
-                    <p:outputLabel value="#{msg['user.settings.thesaurus']}"
-                                   rendered="#{consultationInstancesBean.thesaurusListStatut}" />
+                    <b><p:outputLabel value="#{msg['user.settings.thesaurus']}"
+                                      rendered="#{consultationInstancesBean.thesaurusListStatut}" /></b>
                     <p:selectOneMenu id="listThesaurusForConsultationInstance"
                                      value="#{consultationInstancesBean.thesaurusIdSelected}"
                                      class="form-control" style="width: 100%;"
@@ -48,7 +47,8 @@
                 </div>
 
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
-                    <p:outputLabel value="#{msg['user.settings.collection']}" rendered="#{consultationInstancesBean.collectionsListStatut}"/>
+                    <b><p:outputLabel value="#{msg['user.settings.collection']}"
+                                      rendered="#{consultationInstancesBean.collectionsListStatut}"/></b>
 
                     <p:selectManyMenu id="listCollectionsForConsultationInstance"
                                       process="@this" ajax="true"
@@ -72,12 +72,13 @@
                 <div style="width: 100%; text-align: right; margin-top: 15px; margin-bottom: 2px;">
                     <p:commandButton value="#{msg['action.annuler']}" styleClass="ui-button-secondary ui-button-flat"
                                      action="PF('consultationInstanceDialog').hide();"
+                                     update="consultationInstanceForm"
                                      ajax="true" process="@this"/>
 
-                    <p:commandButton title="#{msg['action.validate']}"
+                    <p:commandButton title="#{msg['action.save']}"
                                      action="#{consultationInstancesBean.instanceManagement()}"
                                      disabled="#{!consultationInstancesBean.validateBtnStatut}"
-                                     class="btn-getstarted" ajax="true" process="@this"
+                                     class="btn-getstarted" ajax="true" process="@form"
                                      update="mainContent:listConsultationInstances"/>
                 </div>
             </h:panelGroup>

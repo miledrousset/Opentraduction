@@ -6,8 +6,8 @@ import com.cnrs.opentraduction.models.dao.ConsultationInstanceDao;
 import com.cnrs.opentraduction.models.dao.CollectionDao;
 import com.cnrs.opentraduction.repositories.ConsultationInstanceRepository;
 import com.cnrs.opentraduction.repositories.ThesaurusRepository;
-
 import com.cnrs.opentraduction.utils.MessageService;
+
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -63,11 +63,12 @@ public class ConsultationInstanceService {
     }
 
     public List<ConsultationInstanceDao> getAllConsultationInstances() {
-        var consultationInstances = consultationInstanceRepository.findAll();
+
+        var consultationInstances = consultationInstanceRepository.findAllByOrderByName();
 
         if(!CollectionUtils.isEmpty(consultationInstances)) {
 
-            List<ConsultationInstanceDao> consultationInstancesList = consultationInstances.stream()
+            return consultationInstances.stream()
                     .filter(element -> !CollectionUtils.isEmpty(element.getThesauruses()))
                     .map(instance -> {
                         var collections = instance.getThesauruses().stream()
@@ -87,8 +88,6 @@ public class ConsultationInstanceService {
                                 .build();
                     })
                     .collect(Collectors.toList());
-
-            return consultationInstancesList;
         } else {
             return List.of();
         }
@@ -98,5 +97,9 @@ public class ConsultationInstanceService {
 
         var instance = consultationInstanceRepository.findById(instanceId);
         return instance.orElse(null);
+    }
+
+    public boolean checkExistingName(String nameToCheck) {
+        return consultationInstanceRepository.findByName(nameToCheck).isPresent();
     }
 }
