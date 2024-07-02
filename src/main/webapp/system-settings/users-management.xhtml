@@ -6,7 +6,7 @@
     <div class="col-lg-9 service-box" data-aos="fade-up" data-aos-delay="200">
         <section id="pricing" class="pricing section">
             <div class="container section-title" data-aos="fade-up">
-                <h2>Liste des utilisateurs</h2>
+                <h2><h:outputText value="#{msg['application.user.interface.title']}" /></h2>
             </div>
 
             <div class="container" data-aos="zoom-in" data-aos-delay="100">
@@ -19,38 +19,39 @@
                                     <p:commandButton styleClass="ui-button-outlined ui-button-secondary"
                                                      icon="pi pi-user-plus" ajax="true" process="@this" update=":userForm"
                                                      actionListener="#{usersSettingBean.initialAddUser()}"
-                                                     value="Ajouter un nouveau utilisateur" />
+                                                     value="#{msg['application.user.action.add']}" />
                                 </div>
                             </div>
 
                             <p:dataTable id="usersList" var="user" value="#{usersSettingBean.users}" class="table table-hover" stripedRows="true"
                                          reflow="true" styleClass="products-table" draggableColumns="true" size="small" draggableRows="true">
+
                                 <p:column headerText="Groupe" width="10%" style="text-align: center">
                                     <p:tag styleClass="mr-2" value="#{user.group.name}" style="background: rgba(0, 0, 0, 0.58)" />
                                 </p:column>
 
-                                <p:column headerText="Prénom" width="13%" style="text-align: center">
+                                <p:column headerText="#{msg['application.user.firstname']}" width="13%">
                                     <h:outputText value="#{user.firstName}" />
                                 </p:column>
 
-                                <p:column headerText="Nom" width="13%" style="text-align: center">
+                                <p:column headerText="#{msg['application.user.lastname']}" width="13%">
                                     <h:outputText value="#{user.lastName}" />
                                 </p:column>
 
-                                <p:column headerText="Login" width="15%" style="text-align: center">
+                                <p:column headerText="#{msg['application.user.login']}" width="15%">
                                     <h:outputText value="#{user.login}" />
                                 </p:column>
 
-                                <p:column headerText="Admin" width="7%" style="text-align: center">
+                                <p:column headerText="#{msg['application.user.admin']}" width="7%" style="text-align: center">
                                     <h:panelGroup rendered="#{user.admin}">
                                         <i class="pi pi-check-circle" style="color: #e84545"/>
                                     </h:panelGroup>
-                                    <h:panelGroup rendered="#{!user.admin}" width="7%">
+                                    <h:panelGroup rendered="#{!user.admin}">
                                         <i class="pi pi-times-circle" style="color: rgba(0, 0, 0, 0.34)"/>
                                     </h:panelGroup>
                                 </p:column>
 
-                                <p:column headerText="Active" width="7%" style="text-align: center">
+                                <p:column headerText="#{msg['application.user.enable']}" width="7%" style="text-align: center">
                                     <h:panelGroup rendered="#{user.active}">
                                         <i class="pi pi-check-circle" style="color: #e84545"/>
                                     </h:panelGroup>
@@ -59,7 +60,7 @@
                                     </h:panelGroup>
                                 </p:column>
 
-                                <p:column headerText="Action" width="10%">
+                                <p:column headerText="#{msg['system.reference.actions']}" width="10%" style="text-align: center">
                                     <p:commandButton icon="pi pi-user-edit" ajax="true" process="@this" update="userForm"
                                                      action="#{usersSettingBean.initialUpdateUser(user)}"
                                                      styleClass="rounded-button ui-button-success ui-button-flat" />
@@ -67,12 +68,18 @@
                                     <p:commandButton icon="pi pi-user-minus" update=":mainContent:usersList"
                                                      action="#{usersSettingBean.deleteUser(user)}"
                                                      styleClass="rounded-button ui-button-danger ui-button-flat">
-                                        <p:confirm header="Confirmation" message="Are you sure you want to proceed?" icon="pi pi-exclamation-triangle"/>
+                                        <p:confirm header="#{msg['user.settings.confirmation']}"
+                                                   message="#{msg['application.user.delete.confirmation']}"
+                                                   icon="pi pi-exclamation-triangle"/>
                                     </p:commandButton>
 
-                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
-                                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
-                                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
+                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="40%">
+                                        <p:commandButton value="#{msg['action.no']}" type="button"
+                                                         style="color: rgba(0, 0, 0, 0.55)"
+                                                         styleClass="ui-confirmdialog-no ui-button-flat"/>
+
+                                        <p:commandButton value="#{msg['action.yes']}" type="button" styleClass="ui-confirmdialog-yes"
+                                                         style="color: #e84545; background: #e84545; color: #fff;"/>
                                     </p:confirmDialog>
                                 </p:column>
                             </p:dataTable>

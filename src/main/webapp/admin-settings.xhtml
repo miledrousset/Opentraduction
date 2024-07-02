@@ -78,11 +78,11 @@
               </h:panelGroup>
 
               <h:panelGroup rendered="#{applicationSettingBean.selectedSetting == 'THESAURUS_REFERENCE'}">
-                <ui:include src="system-settings/reference-instances-management.xhtml" />
+                <ui:include src="system-settings/reference-management.xhtml" />
               </h:panelGroup>
 
               <h:panelGroup rendered="#{applicationSettingBean.selectedSetting == 'THESAURUS_CONSULTATION'}">
-                <ui:include src="system-settings/consultation-instances-management.xhtml" />
+                <ui:include src="system-settings/consultation-management.xhtml" />
               </h:panelGroup>
             </div>
           </div>
@@ -93,7 +93,7 @@
     <ui:include src="shared/footer.xhtml" />
 
     <ui:include src="dialogs/userDialog.xhtml" />
-    <ui:include src="dialogs/groupForm.xhtml" />
+    <ui:include src="dialogs/groupDialog.xhtml" />
     <ui:include src="dialogs/referenceDialog.xhtml" />
     <ui:include src="dialogs/consultationDialog.xhtml" />
   </h:body>

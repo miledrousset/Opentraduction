@@ -65,35 +65,49 @@ public class UserService {
         }
     }
 
-    public boolean saveUser(Users userSelected) {
+    public boolean saveUser(Users userToSave) {
 
-        if (ObjectUtils.isEmpty(userSelected.getId())) {
+        if (ObjectUtils.isEmpty(userToSave.getId())) {
             log.info("Cas d'un nouveau utilisateur !");
 
             log.info("Vérification du mail");
-            var user = userRepository.findByMail(userSelected.getMail());
+            var user = userRepository.findByMail(userToSave.getMail());
             if (user.isPresent()) {
                 messageService.showMessage(FacesMessage.SEVERITY_ERROR, "user.settings.error.msg9");
                 return false;
             }
 
             log.info("Vérification du password");
-            user = userRepository.findByPassword(userSelected.getPassword());
+            user = userRepository.findByPassword(userToSave.getPassword());
             if (user.isPresent()) {
                 messageService.showMessage(FacesMessage.SEVERITY_ERROR, "user.settings.error.msg10");
                 return false;
             }
 
-            userSelected.setCreated(LocalDateTime.now());
+            userToSave.setCreated(LocalDateTime.now());
         }
 
-        userSelected.setModified(LocalDateTime.now());
+        userToSave.setModified(LocalDateTime.now());
+
+        boolean createNewThesaurusAssociation = true;
+        if (!ObjectUtils.isEmpty(userToSave.getId())) {
+            var userTmp = userRepository.findById(userToSave.getId());
+            if (userTmp.isPresent()) {
+                if (userTmp.get().getGroup().getId().intValue() != userToSave.getId().intValue()) {
+                    log.info("Suppression des anciens thésaurus liées à l'utilisateur en vue de lui associés les nouvelles associations !");
+                    userThesaurusRepository.deleteByUserId(userToSave.getId());
+                } else {
+                    log.info("Nous somme dans le cas d'une mise à jour et le group n'a pas changé !");
+                    createNewThesaurusAssociation = false;
+                }
+            }
+        }
 
         log.info("Enregistrement dans la base");
-        var userSaved = userRepository.save(userSelected);
+        var userSaved = userRepository.save(userToSave);
 
-        if (!ObjectUtils.isEmpty(userSelected.getId())) {
-            log.info("Nouvel utilisateur, donc enregistrement des références...");
+        if (createNewThesaurusAssociation) {
+            log.info("Nouvel utilisateur ou le groupe de l'utilisateur à changé, donc enregistrement des références...");
             if (!ObjectUtils.isEmpty(userSaved.getGroup().getReferenceInstances())) {
                 log.info("Associer l'instance de référence au nouvel utilisateur");
                 var userThesaurus = new UsersThesaurus();
@@ -123,6 +137,7 @@ public class UserService {
                     }
                 });
             }
+
         }
 
         return true;

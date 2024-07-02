@@ -92,10 +92,7 @@ public class GroupService {
         groupToSave.setName(groupDao.getName());
         groupToSave.setModified(LocalDateTime.now());
 
-        var reference = referenceInstanceRepository.findById(referenceProjects.getId());
-        if (reference.isPresent()) {
-            groupToSave.setReferenceInstances(reference.get());
-        }
+        referenceInstanceRepository.findById(referenceProjects.getId()).ifPresent(groupToSave::setReferenceInstances);
 
         Set<ConsultationInstances> consultationTmp = new HashSet<>();
         if (!CollectionUtils.isEmpty(consultationProjects)) {
@@ -127,7 +124,7 @@ public class GroupService {
 
     public List<GroupDao> getAllGroups() {
 
-        var groups = groupRepository.findAllByOrderByName();
+        var groups = getGroups();
 
         List<GroupDao> groupsModel = new ArrayList<>();
 
@@ -190,6 +187,10 @@ public class GroupService {
         } else {
             return List.of();
         }
+    }
+
+    public List<Groups> getGroups() {
+        return groupRepository.findAllByOrderByName();
     }
 
 }

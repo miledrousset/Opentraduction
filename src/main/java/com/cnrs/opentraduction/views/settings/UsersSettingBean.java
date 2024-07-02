@@ -1,5 +1,6 @@
 package com.cnrs.opentraduction.views.settings;
 
+import com.cnrs.opentraduction.entities.Groups;
 import com.cnrs.opentraduction.entities.Users;
 import com.cnrs.opentraduction.services.GroupService;
 import com.cnrs.opentraduction.services.UserService;
@@ -27,8 +28,7 @@ public class UsersSettingBean implements Serializable {
     private final GroupService groupService;
     private final MessageService messageService;
 
-    private GroupsSettingBean groupsSettingBean;
-
+    private List<Groups> groups;
     private List<Users> users;
     private Users userSelected;
 
@@ -38,12 +38,15 @@ public class UsersSettingBean implements Serializable {
 
     public void initialInterface() {
 
+        log.info("Initialisation de l'interface gestion des utilisateur");
         userSelected = new Users();
         users = userService.getAllUsers();
+        groups = groupService.getGroups();
     }
 
     public void initialAddUser() {
 
+        log.info("Initialiser la boite de dialog pour l'ajout d'un nouvel utilisateur");
         userSelected = new Users();
         userSelected.setActive(true);
         dialogTitle = messageService.getMessage("user.settings.add.user");
@@ -52,8 +55,12 @@ public class UsersSettingBean implements Serializable {
 
     public void initialUpdateUser(Users user) {
 
+        log.info("Initialiser la boite de dialog pour la modification de l'utilisateur " + user.getFullName());
+
         userSelected = user;
-        dialogTitle = messageService.getMessage("user.settings.update.title") + user.getFullName();
+        idGroupSelected = userSelected.getGroup().getId();
+
+        dialogTitle = messageService.getMessage("application.user.update.title") + user.getFullName();
         PrimeFaces.current().executeScript("PF('userDialog').show();");
     }
 
@@ -74,7 +81,7 @@ public class UsersSettingBean implements Serializable {
             return;
         }
 
-        var groupSelected = groupsSettingBean.getGroups().stream()
+        var groupSelected = groups.stream()
                 .filter(group -> group.getId().intValue() == idGroupSelected.intValue())
                 .findFirst();
         if (groupSelected.isPresent()) {
@@ -93,11 +100,12 @@ public class UsersSettingBean implements Serializable {
 
     public void deleteUser(Users user) {
 
+        log.info("Début de suppression de l'utilisateur {}", user.getFullName());
         userService.deleteUser(user);
 
         users = userService.getAllUsers();
 
         messageService.showMessage(FacesMessage.SEVERITY_INFO, "user.settings.ok.msg2");
-        log.info("Utilisateur supprimé avec sucée !");
+        log.info("L'utilisateur a été supprimé !");
     }
 }
