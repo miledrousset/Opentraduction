@@ -7,11 +7,10 @@
 
     <header id="header" class="header d-flex align-items-center fixed-top">
         <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
-            <a href="index.xhtml" class="logo d-flex align-items-center me-auto me-xl-0">
-                <h1 class="sitename">
-                    <h:outputText value="#{msg['application.name']}"/>
-                </h1>
-                <span>.</span>
+            <a href="index.xhtml" class="logo d-flex flex-column align-items-start me-auto me-xl-0">
+                <h5 class="sitename"><h:outputText value="#{msg['application.name1']}"/><span>.</span></h5>
+                <h5 class="sitename"><span>.</span><h:outputText value="#{msg['application.name3']}"/></h5>
+                <!--<h6 class="sitename"><h:outputText value="#{msg['application.name2']}"/></h6>-->
             </a>
             <nav id="navmenu" class="navmenu">
                 <ul>
@@ -54,19 +53,19 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                                     style="border: solid white; margin-right: 10px; border-radius: 10px; color: white; !important;">
-                                    <span class="flag-icon flag-icon-#{localeBean.getLanguageSelected()}"/>
+                                    <p:graphicImage value="#{localeBean.getLanguageImg()}" style="width: 27px" />
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="dropdown09">
                                     <p:commandLink class="dropdown-item"
-                                                   ajax="true" process="@this" update="mainContent"
+                                                   ajax="true" process="@this" update="mainContent languagesPanel"
                                                    action="#{localeBean.changeLanguage('ar')}">
-                                        <span class="flag-icon flag-icon-ae"/>
+                                        <p:graphicImage value="/assets/img/flags/ar.png" style="width: 27px" />
                                         <h:outputText value="#{msg['application.language.arabic']}" style="margin-left: 5px; color: #000000"/>
                                     </p:commandLink>
                                     <p:commandLink class="dropdown-item"
                                                    ajax="true" process="@form" update="mainContent languagesPanel"
                                                    action="#{localeBean.changeLanguage('fr')}">
-                                        <span class="flag-icon flag-icon-fr"/>
+                                        <p:graphicImage value="/assets/img/flags/fr.png" style="width: 27px" />
                                         <h:outputText value="#{msg['application.language.french']}" style="margin-left: 5px; color: #000000"/>
                                     </p:commandLink>
                                 </div>

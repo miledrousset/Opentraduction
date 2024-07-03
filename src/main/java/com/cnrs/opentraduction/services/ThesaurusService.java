@@ -8,11 +8,9 @@ import com.cnrs.opentraduction.models.dao.CollectionElementDao;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.thymeleaf.util.ArrayUtils;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -31,10 +29,10 @@ public class ThesaurusService {
     public List<ThesaurusElementModel> searchThesaurus(String baseUrl) {
         var thesaurusResponse = openthesoClient.getThesoInfo(baseUrl);
         if (!ArrayUtils.isEmpty(thesaurusResponse)) {
-            return List.of(thesaurusResponse).stream()
+            return Stream.of(thesaurusResponse)
                     .filter(element -> !ObjectUtils.isEmpty(element.getLabels()))
                     .filter(element -> element.getLabels().stream().anyMatch(tmp -> FR.equals(tmp.getLang())))
-                    .filter(element -> element.getLabels().stream().filter(tmp -> FR.equals(tmp.getLang())).findFirst().isPresent())
+                    .filter(element -> element.getLabels().stream().anyMatch(tmp -> FR.equals(tmp.getLang())))
                     .map(element -> new ThesaurusElementModel(element.getIdTheso(),
                             element.getLabels().stream()
                                     .filter(tmp -> FR.equals(tmp.getLang()))
@@ -67,23 +65,30 @@ public class ThesaurusService {
         }
     }
 
-    public List<CollectionElementDao> searchCollections(String baseUrl, String idThesaurus, String idTopCollection) {
-        var collectionsResponse = openthesoClient.getCollections(baseUrl, idThesaurus, idTopCollection);
-        return getCollectionDatas(collectionsResponse);
+    public List<CollectionElementDao> searchSubCollections(String baseUrl, String idThesaurus, String idTopCollection) {
+        var collectionsResponse = openthesoClient.getSousCollections(baseUrl, idThesaurus, idTopCollection);
+        if (collectionsResponse.length > 0) {
+            return Stream.of(collectionsResponse)
+                    .filter(element -> element.getLabels().stream().anyMatch(tmp -> FR.equals(tmp.getLang())))
+                    .map(element -> new CollectionElementDao(element.getIdGroup(), element.getLabels().stream()
+                            .filter(tmp -> FR.equals(tmp.getLang()))
+                            .findFirst()
+                            .get()
+                            .getTitle()))
+                    .collect(Collectors.toList());
+        } else {
+            return List.of();
+        }
     }
 
     private List<CollectionElementDao> getCollectionDatas(CollectionModel[] collectionsResponse) {
         if (collectionsResponse.length > 0) {
             return Stream.of(collectionsResponse)
                     .filter(element -> element.getLabels().stream().anyMatch(tmp -> FR.equals(tmp.getLang())))
-                    .map(element -> {
-                        var label = element.getLabels().stream()
-                                .filter(tmp -> FR.equals(tmp.getLang()))
-                                .findFirst().orElse(null);
-
-                        return new CollectionElementDao(element.getIdGroup(),
-                                ObjectUtils.isEmpty(label) ? "" : label.getTitle());
-                    })
+                    .map(element -> new CollectionElementDao(element.getIdGroup(), element.getLabels().stream()
+                            .filter(tmp -> FR.equals(tmp.getLang()))
+                            .findFirst().get()
+                            .getTitle()))
                     .collect(Collectors.toList());
         } else {
             return List.of();

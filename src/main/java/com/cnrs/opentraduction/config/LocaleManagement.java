@@ -25,10 +25,11 @@ public class LocaleManagement implements Serializable {
         context.getViewRoot().setLocale(currentLocale);
     }
 
-    public String getLanguageSelected() {
+    public String getLanguageImg() {
+        var url = "/assets/img/flags/";
         if (!ObjectUtils.isEmpty(currentLocale)) {
-            return "ar".equals(currentLocale.getLanguage()) ? "ae" : currentLocale.getLanguage();
+            return "ar".equals(currentLocale.getLanguage()) ? url + "ar.png" : url + "fr.png";
         }
-        return "fr";
+        return url + "fr.png";
     }
 }

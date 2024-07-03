@@ -4,6 +4,11 @@
     xmlns:h="http://xmlns.jcp.org/jsf/html">
 
     <section id="about" class="pricing about section">
+
+        <p:staticMessage severity="warn" summary="Attention" style="width: 100%; margin-bottom: 20px"
+                         detail=""
+                         closable="true" rendered="#{userSettingsBean.displayDialog}" />
+
         <div class="container section-title" data-aos="fade-up">
             <h2><h:outputText value="#{msg['user.settings.title']}"/></h2>
         </div>

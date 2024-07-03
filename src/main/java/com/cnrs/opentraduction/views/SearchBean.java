@@ -12,7 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.HttpClientErrorException;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -38,24 +40,46 @@ public class SearchBean implements Serializable {
 
     private Users userConnected;
     private String termValue;
-    private boolean toArabic;
+    private boolean toArabic, searchDone;
+    private String languageSelected;
     private ConceptDao conceptSelected;
     private List<ConceptDao> conceptsReferenceFoundList, conceptsConsultationFoundList;
 
     private boolean searchResultDisplay, addCandidatDisplay, addPropositionDisplay;
 
 
-    public void initSearchInterface(Users userConnected) {
+    @PostConstruct
+    public void initialSearch() {
+        toArabic = true;
+        searchDone = false;
+        languageSelected = "ar";
+    }
+
+    public void initSearchInterface() {
         log.info("Initialisation de l'interface recherche");
         termValue = "";
         toArabic = false;
-        this.userConnected = userConnected;
+        searchDone = false;
         conceptsReferenceFoundList = new ArrayList<>();
         conceptsConsultationFoundList = new ArrayList<>();
 
         searchResultDisplay = true;
         addCandidatDisplay = false;
         addPropositionDisplay = false;
+    }
+
+    public void setLanguageForSearch(String languageCode) {
+        languageSelected = languageCode;
+        toArabic = !languageCode.equals("fr");
+    }
+
+    public String getLanguageImgFromCode() {
+        var url = "/assets/img/flags/";
+        return "fr".equals(languageSelected) ? url + "fr.png" : url + "ar.png";
+    }
+
+    public String getReferenceThesaurus() {
+        return CollectionUtils.isEmpty(conceptsReferenceFoundList) ? "" : conceptsReferenceFoundList.get(0).getThesaurusName();
     }
 
     public void searchTerm(boolean fromMain) throws IOException {
@@ -65,14 +89,25 @@ public class SearchBean implements Serializable {
             return;
         }
 
+        if (fromMain) {
+            searchDone = false;
+            conceptsReferenceFoundList = new ArrayList<>();
+            conceptsConsultationFoundList = new ArrayList<>();
+            searchResultDisplay = true;
+            addCandidatDisplay = false;
+            addPropositionDisplay = false;
+        }
+
         referenceProjectPart();
 
-        conceptProjectsPart();
-
-        if (CollectionUtils.isEmpty(conceptsReferenceFoundList) && CollectionUtils.isEmpty(conceptsConsultationFoundList)) {
+        if (CollectionUtils.isEmpty(conceptsReferenceFoundList)) {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.search.failed.msg3");
             return;
         }
+
+        conceptProjectsPart();
+
+        searchDone = true;
 
         if (fromMain) {
             FacesContext.getCurrentInstance().getExternalContext().redirect("search.xhtml");
@@ -89,20 +124,32 @@ public class SearchBean implements Serializable {
         if (!CollectionUtils.isEmpty(consultationProjects)) {
             log.info("Il existe {} projet de consultation !", consultationProjects.size());
             for (ConsultationInstances project : consultationProjects) {
-                project.getThesauruses().forEach(thesaurus -> conceptsReferenceFoundList.addAll(searchInThesaurus(thesaurus, project.getUrl())));
+                project.getThesauruses().forEach(thesaurus -> {
+                    try {
+                        var tmp = searchInThesaurus(thesaurus, project.getUrl());
+                        conceptsReferenceFoundList.addAll(tmp);
+                    } catch(HttpClientErrorException ex) {
+                        log.info("Aucune résultat trouvée dans le thésaurus {}", thesaurus.getName());
+                    }
+                });
             }
         }
     }
 
     private void referenceProjectPart() {
         conceptsReferenceFoundList = new ArrayList<>();
-
         var referenceProject = userConnected.getThesauruses().stream()
                 .filter(element -> !ObjectUtils.isEmpty(element.getReferenceInstances()))
                 .findAny();
         if (referenceProject.isPresent() && !ObjectUtils.isEmpty(referenceProject.get().getReferenceInstances())) {
-            conceptsReferenceFoundList.addAll(searchInThesaurus(referenceProject.get().getReferenceInstances().getThesaurus(),
-                    referenceProject.get().getReferenceInstances().getUrl()));
+            try {
+                var tmp = searchInThesaurus(referenceProject.get().getReferenceInstances().getThesaurus(),
+                        referenceProject.get().getReferenceInstances().getUrl());
+                conceptsReferenceFoundList.addAll(tmp);
+            } catch (Exception ex) {
+                log.info("Aucune résultat trouvé pour le thésaurus de référence {}",
+                        referenceProject.get().getReferenceInstances().getThesaurus().getName());
+            }
         } else {
             log.error("Aucun Thésaurus de référence n'est présent !: ");
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.search.failed.msg2");
@@ -113,8 +160,10 @@ public class SearchBean implements Serializable {
 
         log.info("Thésaurus de référence : " + thesaurus.getName());
 
+        var defaultIdGroup = "ALL".equalsIgnoreCase(userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection()) ?
+                null : userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection();
         var idCollection = "ALL".equalsIgnoreCase(thesaurus.getIdCollection())
-                ? userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection()
+                ? defaultIdGroup
                 : thesaurus.getIdCollection();
 
         var languageToSearch = toArabic ? "ar" : "fr";

@@ -22,6 +22,7 @@ import org.springframework.util.StringUtils;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -58,17 +59,36 @@ public class UserSettingsBean implements Serializable {
     private Thesaurus consultationCollectionSelected;
     private List<CollectionElementDao> subCollectionList;
 
+    private boolean displayDialog;
+    private String errorMessage;
+
 
     public void initialInterface(Users userConnected) {
 
+        log.info("Initialisation de l'interface de paramétrage de l'utilisateur connecté {}", userConnected.getFullName());
         this.userConnected = userConnected;
 
+        log.info("Vérification de la présence de clé API utilisateur");
+        if (StringUtils.isEmpty(userConnected.getApiKey())) {
+            log.error("L'utilisateur {} ne dispose de pas de clé API", userConnected.getFullName());
+            displayDialog = true;
+            errorMessage = messageService.getMessage("application.user.error.msg2");
+        }
+
+
+        log.info("Préparation du projet de référence");
         referenceInstance = userConnected.getGroup().getReferenceInstances();
 
+        if (!ObjectUtils.isEmpty(referenceInstance)) {
+            displayDialog = true;
+            errorMessage = messageService.getMessage("application.user.error.msg3");
+        }
+
+        log.info("Préparation des projets de consultation");
         referenceCollectionList = new ArrayList<>();
         referenceCollectionList.add(new CollectionElementDao("ALL", messageService.getMessage("user.settings.consultation.racine")));
         if (!ObjectUtils.isEmpty(referenceInstance)) {
-            referenceCollectionList.addAll(thesaurusService.searchCollections(referenceInstance.getUrl(),
+            referenceCollectionList.addAll(thesaurusService.searchSubCollections(referenceInstance.getUrl(),
                     referenceInstance.getThesaurus().getIdThesaurus(),
                     referenceInstance.getThesaurus().getIdCollection()));
         }
@@ -116,7 +136,7 @@ public class UserSettingsBean implements Serializable {
     public void setSelectedReferenceCollection() {
         if (!StringUtils.isEmpty(idReferenceCollectionSelected)) {
             var collectionReferenceTmp = referenceCollectionList.stream()
-                    .filter(element -> element.getId().equals(idReferenceCollectionSelected))
+                    .filter(element -> element.getLabel().equals(idReferenceCollectionSelected))
                     .findFirst();
             collectionReferenceTmp.ifPresent(collectionElementDao -> collectionReferenceSelected = collectionElementDao);
         }
@@ -129,6 +149,7 @@ public class UserSettingsBean implements Serializable {
     }
 
     public String getCollectionReferenceAudit() {
+        log.info("Génération de la phrase d'audit pour la brique projet de référence");
         if (!ObjectUtils.isEmpty(referenceInstance)) {
             return ObjectUtils.isEmpty(referenceInstance.getModified()) ? getCreatedLabel(referenceInstance.getCreated())
                     : (getCreatedLabel(referenceInstance.getCreated()) + getUpdateLabel(referenceInstance.getModified()));
@@ -211,12 +232,15 @@ public class UserSettingsBean implements Serializable {
 
     public void saveCollectionReference() {
 
+        log.info("Enregistrement des informations sur le projet de référence");
         if (userService.addThesaurusToUser(userConnected.getId(), referenceInstance.getThesaurus(), collectionReferenceSelected)) {
-
-            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "user.settings.ok.msg1");
+            log.info("Affichage des informations suite à la mise à jour du projet de référence");
+            messageService.showMessage(FacesMessage.SEVERITY_INFO, "user.settings.ok.msg1");
+            userConnected = userService.getUserById(userConnected.getId());
+            referenceInstance = userConnected.getGroup().getReferenceInstances();
             log.info("Collection de référence enregistrée avec succès !");
         } else {
-
+            log.error("Erreur pendant la mise à jour du projet de référence");
             errorCase("user.settings.error.msg4");
         }
     }
@@ -289,7 +313,7 @@ public class UserSettingsBean implements Serializable {
 
         subCollectionList = new ArrayList<>();
         subCollectionList.add(new CollectionElementDao("ALL", messageService.getMessage("user.settings.consultation.racine")));
-        subCollectionList.addAll(thesaurusService.searchCollections(consultationCollectionSelected.getConsultationInstances().getUrl(),
+        subCollectionList.addAll(thesaurusService.searchSubCollections(consultationCollectionSelected.getConsultationInstances().getUrl(),
                 consultationCollectionSelected.getIdThesaurus(),
                 consultationCollectionSelected.getIdCollection()));
         subCollectionIdSelected = null;

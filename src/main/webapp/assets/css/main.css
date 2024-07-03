@@ -2918,3 +2918,15 @@ body .ui-toggleswitch.ui-toggleswitch-checked .ui-toggleswitch-slider {
   font-size: 2.5rem;
   color: #e84545;
 }
+
+.d-flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.align-items-start {
+  align-items: flex-start;
+}

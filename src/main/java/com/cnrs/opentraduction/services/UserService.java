@@ -158,6 +158,7 @@ public class UserService {
 
     public boolean addThesaurusToUser(Integer userId, Thesaurus thesaurus, CollectionElementDao collection) {
 
+        log.info("Recherche du projet de référence pour l'utilisateur id {}", userId);
         var userThesaurus = userThesaurusRepository.findByThesaurusIdAndUserId(thesaurus.getId(), userId);
 
         if (userThesaurus.isEmpty()) {
@@ -165,15 +166,10 @@ public class UserService {
             return false;
         }
 
-        if (ObjectUtils.isEmpty(collection)) {
-            log.info("L'utilisateur n'a pas choisie une sous-collection");
-            userThesaurus.get().setCollection(thesaurus.getCollection());
-            userThesaurus.get().setCollectionId(thesaurus.getIdCollection());
-        } else {
-            log.info("L'utilisateur a choisie une sous-collection ");
-            userThesaurus.get().setCollectionId(collection.getId());
-            userThesaurus.get().setCollection(collection.getLabel());
-        }
+        log.info("Enregistrement du nouveau projet de référence");
+        userThesaurus.get().setCollectionId(collection.getId());
+        userThesaurus.get().setCollection(collection.getLabel());
+        userThesaurus.get().setModified(LocalDateTime.now());
 
         userThesaurusRepository.save(userThesaurus.get());
 

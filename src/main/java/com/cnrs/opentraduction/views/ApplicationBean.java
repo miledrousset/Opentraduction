@@ -60,6 +60,8 @@ public class ApplicationBean implements Serializable {
 
             PrimeFaces.current().executeScript("PF('login').hide();");
 
+            searchBean.setUserConnected(userConnected);
+
             messageService.showMessage(FacesMessage.SEVERITY_INFO, "application.user.ok.msg1");
 
             log.info("Authentification terminé avec sucée de {}", userConnected.getLogin());
@@ -82,7 +84,7 @@ public class ApplicationBean implements Serializable {
         switch(menuItemSelected) {
             case SEARCH:
                 log.info("Navigation vers l'interface de recherche");
-                searchBean.initSearchInterface(userConnected);
+                searchBean.initSearchInterface();
                 FacesContext.getCurrentInstance().getExternalContext().redirect("search.xhtml");
                 break;
             case USER_SETTINGS:
