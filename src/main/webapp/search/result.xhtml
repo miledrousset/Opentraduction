@@ -27,7 +27,8 @@
                         <div class="row">
                             <div class="col-lg-12 search-widget widget-item">
                                 <h:form>
-                                    <p:inputText value="#{searchBean.termValue}" />
+                                    <p:inputText value="#{searchBean.termValue}" class="form-control"
+                                                 placeholder="#{msg['search.sub-title']}"/>
                                     <p:commandButton icon="bi bi-search"
                                                      ajax="true" process="@form"
                                                      update="resultPanel"
@@ -51,6 +52,7 @@
 
                                             <p:dataTable id="conceptsReferenceFound" var="concept" value="#{searchBean.conceptsReferenceFoundList}"
                                                          class="table table-hover" stripedRows="true"
+                                                         emptyMessage="#{msg['application.search.no_data']}"
                                                          reflow="true" styleClass="products-table" draggableColumns="true">
 
                                                 <p:column headerText="Label FR" width="15%" style="text-align: center">
@@ -92,6 +94,7 @@
 
                                             <p:dataTable id="conceptsConsultationFound" var="concept" value="#{searchBean.conceptsConsultationFoundList}"
                                                          class="table table-hover" stripedRows="true"
+                                                         emptyMessage="#{msg['application.search.no_data']}"
                                                          reflow="true" styleClass="products-table" draggableColumns="true">
 
                                                 <p:column headerText="Thésaurus" width="15%" style="text-align: center">

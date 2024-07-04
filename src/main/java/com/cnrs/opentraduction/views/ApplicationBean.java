@@ -1,6 +1,6 @@
 package com.cnrs.opentraduction.views;
 
-import com.cnrs.opentraduction.models.ConnexionModel;
+import com.cnrs.opentraduction.models.dao.ConnexionDto;
 import com.cnrs.opentraduction.utils.MessageService;
 import com.cnrs.opentraduction.entities.Users;
 import com.cnrs.opentraduction.models.MenuItem;
@@ -33,7 +33,7 @@ public class ApplicationBean implements Serializable {
     private final UserService userService;
 
     private MenuItem menuItemSelected;
-    private ConnexionModel connexionModel = new ConnexionModel();
+    private ConnexionDto connexionModel = new ConnexionDto();
     private boolean connected;
     private Users userConnected;
 
@@ -41,7 +41,7 @@ public class ApplicationBean implements Serializable {
     public void logout() {
 
         var userName = userConnected.getFullName();
-        connexionModel = new ConnexionModel();
+        connexionModel = new ConnexionDto();
         connected = false;
         userConnected = null;
         menuItemSelected = MenuItem.HOME;
@@ -99,6 +99,7 @@ public class ApplicationBean implements Serializable {
                 break;
             default:
                 log.info("Navigation vers l'interface principale");
+                searchBean.setTermValue("");
                 FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
         }
     }

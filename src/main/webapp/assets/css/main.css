@@ -2930,3 +2930,14 @@ body .ui-toggleswitch.ui-toggleswitch-checked .ui-toggleswitch-slider {
 .align-items-start {
   align-items: flex-start;
 }
+
+.transparent-border {
+  border: none; /* Rend le bord transparent */
+  padding: 10px; /* Ajoute un peu de padding pour le style */
+  outline: none; /* Enlève le contour bleu lors du focus */
+}
+
+.transparent-border:focus {
+  border: none; /* Garde le bord transparent lors du focus */
+  box-shadow: none; /* Optionnel : ajoute une ombre pour indiquer le focus */
+}

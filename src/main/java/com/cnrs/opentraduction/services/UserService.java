@@ -4,7 +4,7 @@ import com.cnrs.opentraduction.entities.Thesaurus;
 import com.cnrs.opentraduction.entities.Users;
 import com.cnrs.opentraduction.entities.UsersThesaurus;
 import com.cnrs.opentraduction.exception.BusinessException;
-import com.cnrs.opentraduction.models.ConnexionModel;
+import com.cnrs.opentraduction.models.dao.ConnexionDto;
 import com.cnrs.opentraduction.models.dao.CollectionElementDao;
 import com.cnrs.opentraduction.repositories.UserRepository;
 import com.cnrs.opentraduction.repositories.UserThesaurusRepository;
@@ -33,7 +33,7 @@ public class UserService {
     private UserThesaurusRepository userThesaurusRepository;
 
 
-    public Users authentification(ConnexionModel connexionModel) {
+    public Users authentification(ConnexionDto connexionModel) {
 
         if (StringUtils.isEmpty(connexionModel.getPassword()) && StringUtils.isEmpty(connexionModel.getPassword())) {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "user.settings.error.msg6");

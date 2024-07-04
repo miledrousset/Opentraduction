@@ -5,8 +5,11 @@ import com.cnrs.opentraduction.entities.ConsultationInstances;
 import com.cnrs.opentraduction.entities.Thesaurus;
 import com.cnrs.opentraduction.entities.Users;
 import com.cnrs.opentraduction.models.client.ConceptModel;
+import com.cnrs.opentraduction.models.dao.CollectionElementDao;
 import com.cnrs.opentraduction.models.dao.ConceptDao;
+import com.cnrs.opentraduction.services.ThesaurusService;
 import com.cnrs.opentraduction.utils.MessageService;
+
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
@@ -36,7 +39,9 @@ import java.util.stream.Collectors;
 public class SearchBean implements Serializable {
 
     private final MessageService messageService;
+    private final ThesaurusService thesaurusService;
     private final OpenthesoClient openthesoClient;
+    private final CandidatBean candidatBean;
 
     private Users userConnected;
     private String termValue;
@@ -46,6 +51,10 @@ public class SearchBean implements Serializable {
     private List<ConceptDao> conceptsReferenceFoundList, conceptsConsultationFoundList;
 
     private boolean searchResultDisplay, addCandidatDisplay, addPropositionDisplay;
+
+    private List<CollectionElementDao> referenceCollectionList;
+    private CollectionElementDao collectionReferenceSelected;
+    private String idReferenceCollectionSelected;
 
 
     @PostConstruct
@@ -66,6 +75,27 @@ public class SearchBean implements Serializable {
         searchResultDisplay = true;
         addCandidatDisplay = false;
         addPropositionDisplay = false;
+
+        log.info("Préparation des projets de consultation");
+        searchReferenceCollectionList();
+    }
+
+    private void searchReferenceCollectionList() {
+
+        referenceCollectionList = new ArrayList<>();
+        referenceCollectionList.add(new CollectionElementDao("ALL", "--"));
+        if (!ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances())) {
+            if ("ALL".equals(userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection())) {
+                referenceCollectionList.addAll(thesaurusService.searchTopCollections(
+                        userConnected.getGroup().getReferenceInstances().getUrl(),
+                        userConnected.getGroup().getReferenceInstances().getThesaurus().getIdThesaurus()));
+            } else {
+                referenceCollectionList.addAll(thesaurusService.searchSubCollections(
+                        userConnected.getGroup().getReferenceInstances().getUrl(),
+                        userConnected.getGroup().getReferenceInstances().getThesaurus().getIdThesaurus(),
+                        userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection()));
+            }
+        }
     }
 
     public void setLanguageForSearch(String languageCode) {
@@ -96,6 +126,9 @@ public class SearchBean implements Serializable {
             searchResultDisplay = true;
             addCandidatDisplay = false;
             addPropositionDisplay = false;
+
+            log.info("Préparation des projets de consultation");
+            searchReferenceCollectionList();
         }
 
         referenceProjectPart();
@@ -194,6 +227,7 @@ public class SearchBean implements Serializable {
         searchResultDisplay = false;
         addCandidatDisplay = true;
         addPropositionDisplay = false;
+        candidatBean.initInterface();
     }
 
     public void backToSearchScrean() {
@@ -243,5 +277,39 @@ public class SearchBean implements Serializable {
         } else {
             return "";
         }
+    }
+
+    public String getThesaurusReferenceUrl() {
+
+        if (!ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances())) {
+            return getInstanceReferenceUrl() + "/?idt="
+                    + userConnected.getGroup().getReferenceInstances().getThesaurus().getIdThesaurus();
+        } else {
+            return "";
+        }
+    }
+
+    public String getInstanceReferenceUrl() {
+
+        if (!ObjectUtils.isEmpty(userConnected.getGroup())
+                && !ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances())) {
+            return userConnected.getGroup().getReferenceInstances().getUrl();
+        }
+        return "";
+    }
+
+    public void setSelectedReferenceCollection() {
+        if (!StringUtils.isEmpty(idReferenceCollectionSelected)) {
+            var collectionReferenceTmp = referenceCollectionList.stream()
+                    .filter(element -> element.getLabel().equals(idReferenceCollectionSelected))
+                    .findFirst();
+            collectionReferenceTmp.ifPresent(collectionElementDao -> collectionReferenceSelected = collectionElementDao);
+        }
+    }
+
+    public String getCollectionReferenceName() {
+        return "ALL".equals(userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection())
+                ? messageService.getMessage("user.settings.consultation.racine")
+                : userConnected.getGroup().getReferenceInstances().getThesaurus().getCollection();
     }
 }

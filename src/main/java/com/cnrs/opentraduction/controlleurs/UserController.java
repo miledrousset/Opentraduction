@@ -1,6 +1,6 @@
 package com.cnrs.opentraduction.controlleurs;
 
-import com.cnrs.opentraduction.models.ConnexionModel;
+import com.cnrs.opentraduction.models.dao.ConnexionDto;
 import com.cnrs.opentraduction.models.MenuItem;
 import com.cnrs.opentraduction.views.ApplicationBean;
 import lombok.Data;
@@ -23,7 +23,7 @@ public class UserController {
     public String logout(HttpServletRequest request) {
 
         log.info("Session timeout -> logout and navigate to index.xhtml");
-        applicationBean.setConnexionModel(new ConnexionModel());
+        applicationBean.setConnexionModel(new ConnexionDto());
         applicationBean.setConnected(false);
         applicationBean.setUserConnected(null);
         applicationBean.setMenuItemSelected(MenuItem.HOME);

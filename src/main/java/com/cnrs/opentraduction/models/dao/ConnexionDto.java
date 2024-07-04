@@ -1,16 +1,16 @@
-package com.cnrs.opentraduction.models;
+package com.cnrs.opentraduction.models.dao;
 
 import lombok.Data;
 import java.io.Serializable;
 
 
 @Data
-public class ConnexionModel implements Serializable {
+public class ConnexionDto implements Serializable {
 
     private String login;
     private String password;
 
-    public ConnexionModel() {
+    public ConnexionDto() {
         login = "";
         password = "";
     }

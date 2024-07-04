@@ -13,8 +13,8 @@
                             <h:outputText value="#{msg['user.settings.thesaurus']}" />
                         </div>
                         <div class="field col-10" style="display: flex; align-items: center;">
-                            <a href="#{userSettingsBean.getThesaurusReferenceUrl()}" target="_blank">
-                                <h:outputText value="#{userSettingsBean.userConnected.group.referenceInstances.thesaurus.name}" />
+                            <a href="#{searchBean.getThesaurusReferenceUrl()}" target="_blank">
+                                <h:outputText value="#{searchBean.userConnected.group.referenceInstances.thesaurus.name}" />
                             </a>
                         </div>
                     </div>
@@ -24,7 +24,7 @@
                             <h:outputText value="#{msg['user.settings.collection']}" />
                         </div>
                         <div class="field col-10" style="display: flex; align-items: center;">
-                            <h:outputText value="#{userSettingsBean.userConnected.group.referenceInstances.thesaurus.collection}" />
+                            <h:outputText value="#{searchBean.getCollectionReferenceName()}" />
                         </div>
                     </div>
 
@@ -33,11 +33,11 @@
                             <h:outputText value="#{msg['user.settings.subCollection']}" />
                         </div>
                         <div class="field col-10">
-                            <p:selectOneMenu value="#{userSettingsBean.idReferenceCollectionSelected}"
+                            <p:selectOneMenu value="#{searchBean.idReferenceCollectionSelected}"
                                              class="form-control" style="width: 100%;">
-                                <p:ajax event="change" listener="#{userSettingsBean.setSelectedReferenceCollection()}"/>
-                                <f:selectItems value="#{userSettingsBean.referenceCollectionList}" var="collection"
-                                               itemLabel="#{collection.label}" itemValue="#{collection.id}"/>
+                                <p:ajax listener="#{searchBean.setSelectedReferenceCollection()}"/>
+                                <f:selectItems value="#{searchBean.referenceCollectionList}" var="collection"
+                                               itemLabel="#{collection.label}" itemValue="#{collection.label}"/>
                             </p:selectOneMenu>
                         </div>
                     </div>
@@ -51,10 +51,10 @@
             <p:graphicImage value="/assets/img/flags/fr.png" style="max-width:12% !important;" />
         </div>
         <div class="col-2" style="text-align: center; margin-top: 7px">
-            <p:toggleSwitch value="#{selectBooleanView.value1}"/>
+            <p:toggleSwitch value="#{searchBean.toArabic}" disabled="#{!searchBean.toArabic}"/>
         </div>
         <div class="col-5" style="text-align: left">
-            <p:graphicImage value="/assets/img/flags/sa.png" style="max-width:12% !important;" />
+            <p:graphicImage value="/assets/img/flags/ar.png" style="max-width:12% !important;" />
         </div>
     </div>
 </ui:composition>
