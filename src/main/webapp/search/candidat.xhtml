@@ -9,107 +9,44 @@
             <section id="pricing" class="pricing section">
                 <section class="pricing about section pricing-item featured php-email-form" style="padding: 20px">
                     <div class="container section-title" data-aos="fade-up">
-                        <h2><h:outputText value="Fiche candidat"/></h2>
+                        <h2><h:outputText value="#{msg['application.candidat.title']}"/></h2>
                     </div>
 
-                    <ui:include src="referenceThesaurusPanel.xhtml" />
-
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-lg-12">
                             <section id="about" class="pricing about section">
                                 <div class="pricing-item featured php-email-form">
                                     <div class="row">
-                                        <div class="field col-2" style="display: flex; align-items: center;">
-                                            <h:outputText value="Terme"/>
+                                        <div class="field col-2" style="display: flex; align-items: center">
+                                            <h:outputText value="#{msg['user.settings.thesaurus']}" />
                                         </div>
-                                        <div class="field col-10">
-                                            <p:inputText value="" class="form-control" style="width: 100%"/>
-                                        </div>
-                                    </div>
-
-                                    <div class="row" style="margin-top: 10px">
-                                        <div class="field col-2" style="display: flex; align-items: center;">
-                                            <h:outputText value="Variante"/>
-                                        </div>
-                                        <div class="field col-10">
-                                            <p:inputText value="" class="form-control" style="width: 100%"/>
+                                        <div class="field col-10" style="display: flex; align-items: center;">
+                                            <a href="#{searchBean.getThesaurusReferenceUrl()}" target="_blank">
+                                                <h:outputText value="#{searchBean.userConnected.group.referenceInstances.thesaurus.name}" />
+                                            </a>
                                         </div>
                                     </div>
 
-                                    <div class="row" style="margin-top: 10px">
-                                        <div class="field col-2" style="display: flex; align-items: center;">
-                                            <h:outputText value="Définition"/>
+                                    <div class="row" style="margin-top: 20px">
+                                        <div class="field col-2" style="display: flex; align-items: center">
+                                            <h:outputText value="#{msg['user.settings.collection']}" />
                                         </div>
-                                        <div class="field col-10">
-                                            <p:inputText value="" class="form-control" style="width: 100%"/>
-                                        </div>
-                                    </div>
-
-                                    <div class="row" style="margin-top: 10px">
-                                        <div class="field col-2" style="display: flex; align-items: center;">
-                                            <h:outputText value="Remarque"/>
-                                        </div>
-                                        <div class="field col-10">
-                                            <p:inputText value="" class="form-control" style="width: 100%"/>
+                                        <div class="field col-10" style="display: flex; align-items: center;">
+                                            <h:outputText value="#{searchBean.getCollectionReferenceName()}" />
                                         </div>
                                     </div>
 
-                                    <div class="row" style="margin-top: 10px">
-                                        <div class="field col-2" style="display: flex; align-items: center;">
-                                            <h:outputText value="Note"/>
+                                    <div class="row" style="margin-top: 20px">
+                                        <div class="field col-2" style="display: flex; align-items: center">
+                                            <h:outputText value="#{msg['user.settings.subCollection']}" />
                                         </div>
                                         <div class="field col-10">
-                                            <p:inputText value="" class="form-control" style="width: 100%"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </section>
-                        </div>
-                        <div class="col-6">
-                            <section id="about" class="pricing about section">
-                                <div class="pricing-item featured php-email-form">
-                                    <div class="row">
-                                        <div class="field col-2" style="display: flex; align-items: center;">
-                                            <h:outputText value="Terme"/>
-                                        </div>
-                                        <div class="field col-10">
-                                            <p:inputText value="" class="form-control" style="width: 100%"/>
-                                        </div>
-                                    </div>
-
-                                    <div class="row" style="margin-top: 10px">
-                                        <div class="field col-2" style="display: flex; align-items: center;">
-                                            <h:outputText value="Variante"/>
-                                        </div>
-                                        <div class="field col-10">
-                                            <p:inputText value="" class="form-control" style="width: 100%"/>
-                                        </div>
-                                    </div>
-
-                                    <div class="row" style="margin-top: 10px">
-                                        <div class="field col-2" style="display: flex; align-items: center;">
-                                            <h:outputText value="Définition"/>
-                                        </div>
-                                        <div class="field col-10">
-                                            <p:inputText value="" class="form-control" style="width: 100%"/>
-                                        </div>
-                                    </div>
-
-                                    <div class="row" style="margin-top: 10px">
-                                        <div class="field col-2" style="display: flex; align-items: center;">
-                                            <h:outputText value="Remarque"/>
-                                        </div>
-                                        <div class="field col-10">
-                                            <p:inputText value="" class="form-control" style="width: 100%"/>
-                                        </div>
-                                    </div>
-
-                                    <div class="row" style="margin-top: 10px">
-                                        <div class="field col-2" style="display: flex; align-items: center;">
-                                            <h:outputText value="Note"/>
-                                        </div>
-                                        <div class="field col-10">
-                                            <p:inputText value="" class="form-control" style="width: 100%"/>
+                                            <p:selectOneMenu value="#{candidatBean.labelReferenceCollectionSelected}"
+                                                             class="form-control" style="width: 100%;">
+                                                <p:ajax listener="#{candidatBean.setSelectedReferenceCollection()}"/>
+                                                <f:selectItems value="#{candidatBean.referenceCollectionList}" var="collection"
+                                                               itemLabel="#{collection.label}" itemValue="#{collection.label}"/>
+                                            </p:selectOneMenu>
                                         </div>
                                     </div>
                                 </div>
@@ -118,17 +55,141 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-lg-12" style="text-align: right">
-                            <p:commandButton value="#{msg['action.annuler']}" styleClass="ui-button-secondary ui-button-flat"
-                                             actionListener="#{searchBean.backToSearchScrean()}"
-                                             ajax="true" process="@this" update="globalPanel"/>
-
-                            <p:commandButton class="btn-getstarted" update="globalPanel"
-                                             action="#{searchBean.backToSearchScrean()}"
-                                             title="Enregistrer"
-                                             ajax="true" process="@this" />
+                        <div class="col-6" style="text-align: center">
+                            <p:graphicImage value="/assets/img/flags/fr.png" style="max-width:12% !important;" />
+                        </div>
+                        <div class="col-6" style="text-align: center">
+                            <p:graphicImage value="/assets/img/flags/ar.png" style="max-width:12% !important;" />
                         </div>
                     </div>
+
+                    <h:form>
+                        <div class="row">
+                            <div class="col-6">
+                                <section id="about" class="pricing about section">
+                                    <div class="pricing-item featured php-email-form">
+                                        <div class="row">
+                                            <div class="field col-3" style="display: flex; align-items: center;">
+                                                <h:outputText value="#{msg['application.candidat.term.fr']}"/>
+                                            </div>
+                                            <div class="field col-9">
+                                                <p:inputText value="#{candidatBean.candidatDao.titleFr}" class="form-control"
+                                                             style="width: 100%"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="row" style="margin-top: 10px">
+                                            <div class="field col-3" style="display: flex; align-items: center;">
+                                                <h:outputText value="#{msg['application.candidat.variante.fr']}"/>
+                                            </div>
+                                            <div class="field col-9">
+                                                <p:inputText value="#{candidatBean.candidatDao.varianteFr}" class="form-control"
+                                                             style="width: 100%"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="row" style="margin-top: 10px">
+                                            <div class="field col-3" style="display: flex; align-items: center;">
+                                                <h:outputText value="#{msg['application.candidat.definition.fr']}"/>
+                                            </div>
+                                            <div class="field col-9">
+                                                <p:inputText value="#{candidatBean.candidatDao.definitionFr}" class="form-control"
+                                                             style="width: 100%"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="row" style="margin-top: 10px">
+                                            <div class="field col-3" style="display: flex; align-items: center;">
+                                                <h:outputText value="#{msg['application.candidat.note.fr']}"/>
+                                            </div>
+                                            <div class="field col-9">
+                                                <p:inputText value="#{candidatBean.candidatDao.noteFr}" class="form-control"
+                                                             style="width: 100%"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+
+                            <div class="col-6">
+                                <section id="about" class="pricing about section">
+                                    <div class="pricing-item featured php-email-form">
+                                        <div class="row">
+                                            <div class="field col-9">
+                                                <p:inputText value="#{candidatBean.candidatDao.titleAr}" class="form-control"
+                                                             style="width: 100%"/>
+                                            </div>
+                                            <div class="field col-3" style="margin-top: 8px; text-align: right;">
+                                                <h:outputText value="#{msg['application.candidat.term.ar']}"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="row" style="margin-top: 10px">
+                                            <div class="field col-9">
+                                                <p:inputText value="#{candidatBean.candidatDao.varianteAr}" class="form-control"
+                                                             style="width: 100%"/>
+                                            </div>
+                                            <div class="field col-3" style="margin-top: 8px; text-align: right;">
+                                                <h:outputText value="#{msg['application.candidat.variante.ar']}"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="row" style="margin-top: 10px">
+                                            <div class="field col-9">
+                                                <p:inputText value="#{candidatBean.candidatDao.definitionAr}" class="form-control"
+                                                             style="width: 100%"/>
+                                            </div>
+                                            <div class="field col-3" style="margin-top: 8px; text-align: right;">
+                                                <h:outputText value="#{msg['application.candidat.definition.ar']}"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="row" style="margin-top: 10px">
+                                            <div class="field col-9">
+                                                <p:inputText value="#{candidatBean.candidatDao.noteAr}" class="form-control"
+                                                             style="width: 100%"/>
+                                            </div>
+                                            <div class="field col-3" style="margin-top: 8px; text-align: right;">
+                                                <h:outputText value="#{msg['application.candidat.note.ar']}"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <section id="about" class="pricing about section">
+                                <div class="pricing-item featured php-email-form">
+                                    <div class="row" style="margin-top: 10px">
+                                        <div class="field col-2" style="display: flex; align-items: center;">
+                                            <h:outputText value="#{msg['application.candidat.remarque.fr']}"/>
+                                        </div>
+                                        <div class="field col-8">
+                                            <p:inputText value="#{candidatBean.candidatDao.comment}" class="form-control"
+                                                         style="width: 100%"/>
+                                        </div>
+                                        <div class="field col-2" style="margin-top: 8px; text-align: right;">
+                                            <h:outputText value="#{msg['application.candidat.remarque.ar']}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+
+                        <div class="row" style="margin-top: 10px">
+                            <div class="col-lg-12" style="text-align: right">
+                                <p:commandButton value="#{msg['action.annuler']}" styleClass="ui-button-secondary ui-button-flat"
+                                                 actionListener="#{searchBean.backToSearchScrean()}"
+                                                 ajax="true" process="@this" update="globalPanel"/>
+
+                                <p:commandButton class="btn-getstarted" update="globalPanel"
+                                                 action="#{candidatBean.saveCandidat()}"
+                                                 title="Enregistrer"
+                                                 ajax="true" process="@form" />
+                            </div>
+                        </div>
+                    </h:form>
                 </section>
             </section>
         </div>

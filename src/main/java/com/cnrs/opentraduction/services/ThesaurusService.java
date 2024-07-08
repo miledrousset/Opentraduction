@@ -1,6 +1,7 @@
 package com.cnrs.opentraduction.services;
 
 import com.cnrs.opentraduction.clients.OpenthesoClient;
+import com.cnrs.opentraduction.models.client.CandidateModel;
 import com.cnrs.opentraduction.models.client.CollectionModel;
 import com.cnrs.opentraduction.models.client.ThesaurusElementModel;
 import com.cnrs.opentraduction.models.dao.CollectionElementDao;
@@ -25,6 +26,11 @@ public class ThesaurusService {
 
     private final OpenthesoClient openthesoClient;
 
+
+    public void saveCandidat(CandidateModel candidate, String baseUrl, String userApiKey) {
+
+        openthesoClient.saveCandidat(baseUrl, userApiKey, candidate);
+    }
 
     public List<ThesaurusElementModel> searchThesaurus(String baseUrl) {
         var thesaurusResponse = openthesoClient.getThesoInfo(baseUrl);
@@ -65,8 +71,8 @@ public class ThesaurusService {
         }
     }
 
-    public List<CollectionElementDao> searchSubCollections(String baseUrl, String idThesaurus, String idTopCollection) {
-        var collectionsResponse = openthesoClient.getSousCollections(baseUrl, idThesaurus, idTopCollection);
+    public List<CollectionElementDao> searchSubCollections(String baseUrl, String idThesaurus, String idCollection) {
+        var collectionsResponse = openthesoClient.getSousCollections(baseUrl, idThesaurus, idCollection);
         if (collectionsResponse.length > 0) {
             return Stream.of(collectionsResponse)
                     .filter(element -> element.getLabels().stream().anyMatch(tmp -> FR.equals(tmp.getLang())))

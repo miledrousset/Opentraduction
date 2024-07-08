@@ -227,7 +227,7 @@ public class SearchBean implements Serializable {
         searchResultDisplay = false;
         addCandidatDisplay = true;
         addPropositionDisplay = false;
-        candidatBean.initInterface();
+        candidatBean.initInterface(userConnected);
     }
 
     public void backToSearchScrean() {

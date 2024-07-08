@@ -38,6 +38,48 @@
                             </div>
                         </div>
 
+                        <div class="row" style="margin-top: 20px">
+                        <div class="col-lg-12">
+                            <section id="about" class="pricing about section">
+                                <div class="pricing-item featured php-email-form" style="text-align: left">
+                                    <div class="col-xl-12 content">
+                                        <h3>
+                                            <h:outputText value="DeepL"/>
+                                        </h3>
+                                    </div>
+
+                                    <p:dataTable var="concept" value="#{searchBean.conceptsReferenceFoundList}"
+                                                 class="table table-hover" stripedRows="true"
+                                                 emptyMessage="#{msg['application.search.no_data']}"
+                                                 reflow="true" styleClass="products-table" draggableColumns="true">
+
+                                        <p:column headerText="Label FR" width="15%" style="text-align: center">
+                                            <h:outputText value="#{concept.labelFr}" />
+                                        </p:column>
+
+                                        <p:column headerText="Définition FR" width="25%">
+                                            <h:outputText value="" />
+                                        </p:column>
+
+                                        <p:column headerText="Label AR" width="15%" style="text-align: center">
+                                            <h:outputText value="Lyon traduit en arabe" />
+                                        </p:column>
+
+                                        <p:column headerText="Définition AR" width="25%">
+                                            <h:outputText value="#{concept.definitionAr}" />
+                                        </p:column>
+
+                                        <p:column headerText="Actions" width="15%" style="text-align: center">
+                                            <p:commandButton icon="pi pi-pencil" ajax="true" process="@this" update="globalPanel"
+                                                             action="#{searchBean.initAddProposition(concept)}"
+                                                             styleClass="rounded-button ui-button-success ui-button-flat" />
+                                        </p:column>
+                                    </p:dataTable>
+                                </div>
+                            </section>
+                        </div>
+                        </div>
+
                         <h:panelGroup rendered="#{searchBean.searchDone}">
                             <div class="row" style="margin-top: 20px">
                                 <div class="col-lg-12">
@@ -127,16 +169,16 @@
                                     </section>
                                 </div>
                             </div>
-
-                            <div class="row">
-                                <div class="col-lg-12" style="text-align: right">
-                                    <p:commandButton class="btn-getstarted" update="globalPanel"
-                                                     action="#{searchBean.initAddCandidat()}"
-                                                     title="Créer un candidat"
-                                                     ajax="true" process="@this" />
-                                </div>
-                            </div>
                         </h:panelGroup>
+
+                        <div class="row">
+                            <div class="col-lg-12" style="text-align: right">
+                                <p:commandButton class="btn-getstarted" update="globalPanel"
+                                                 action="#{searchBean.initAddCandidat()}"
+                                                 title="Créer un candidat"
+                                                 ajax="true" process="@this" />
+                            </div>
+                        </div>
                     </section>
                 </div>
             </div>
