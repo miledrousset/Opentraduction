@@ -3,12 +3,14 @@ package com.cnrs.opentraduction.clients;
 import com.cnrs.opentraduction.models.client.CandidateModel;
 import com.cnrs.opentraduction.models.client.CollectionModel;
 import com.cnrs.opentraduction.models.client.ConceptModel;
+import com.cnrs.opentraduction.models.client.PropositionModel;
 import com.cnrs.opentraduction.models.client.ThesaurusModel;
 import com.cnrs.opentraduction.models.client.TopCollectionModel;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -62,16 +64,22 @@ public class OpenthesoClient {
 
     public void saveCandidat(String baseUrl, String userApiKey, CandidateModel candidate) {
 
-        // Configurer les en-têtes HTTP
+        var request = new HttpEntity<>(candidate, createHttpHeaders(userApiKey));
+        var url = baseUrl + "/openapi/v1/candidate";
+        restTemplate.exchange(url, HttpMethod.POST, request, String.class);
+    }
+
+    public void saveProposition(String baseUrl, String userApiKey, PropositionModel proposition) {
+
+        var request = new HttpEntity<>(proposition, createHttpHeaders(userApiKey));
+        var url = baseUrl + "/openapi/v1/concepts/propositions";
+        restTemplate.exchange(url, HttpMethod.POST, request, String.class);
+    }
+
+    private HttpHeaders createHttpHeaders(String userApiKey) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
         headers.set("API-KEY", userApiKey);
-
-        // Créer l'entité HTTP à envoyer
-        HttpEntity<CandidateModel> request = new HttpEntity<>(candidate, headers);
-
-        // Envoyer la requête POST
-        var url = baseUrl + "/openapi/v1/candidate";
-        restTemplate.exchange(url, HttpMethod.POST, request, String.class);
+        return headers;
     }
 }

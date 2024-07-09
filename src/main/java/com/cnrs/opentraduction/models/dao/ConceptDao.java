@@ -12,9 +12,17 @@ public class ConceptDao {
     private String conceptId;
     private String thesaurusId;
     private String thesaurusName;
+
     private String labelFr;
-    private String definitionFr;
     private String labelAr;
+
+    private String definitionFr;
     private String definitionAr;
+
+    private String noteFr;
+    private String noteAr;
+
+    private String varianteFr;
+    private String varianteAr;
 
 }

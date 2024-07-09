@@ -3,6 +3,7 @@ package com.cnrs.opentraduction.services;
 import com.cnrs.opentraduction.clients.OpenthesoClient;
 import com.cnrs.opentraduction.models.client.CandidateModel;
 import com.cnrs.opentraduction.models.client.CollectionModel;
+import com.cnrs.opentraduction.models.client.PropositionModel;
 import com.cnrs.opentraduction.models.client.ThesaurusElementModel;
 import com.cnrs.opentraduction.models.dao.CollectionElementDao;
 
@@ -30,6 +31,12 @@ public class ThesaurusService {
     public void saveCandidat(CandidateModel candidate, String baseUrl, String userApiKey) {
 
         openthesoClient.saveCandidat(baseUrl, userApiKey, candidate);
+    }
+
+
+    public void saveProposition(PropositionModel proposition, String baseUrl, String userApiKey) {
+
+        openthesoClient.saveProposition(baseUrl, userApiKey, proposition);
     }
 
     public List<ThesaurusElementModel> searchThesaurus(String baseUrl) {

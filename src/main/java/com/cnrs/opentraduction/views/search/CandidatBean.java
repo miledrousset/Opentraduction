@@ -1,4 +1,4 @@
-package com.cnrs.opentraduction.views;
+package com.cnrs.opentraduction.views.search;
 
 import com.cnrs.opentraduction.entities.Users;
 import com.cnrs.opentraduction.models.client.CandidateModel;

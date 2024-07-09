@@ -4,112 +4,41 @@
         xmlns:f="http://xmlns.jcp.org/jsf/core"
         xmlns:h="http://xmlns.jcp.org/jsf/html">
 
+    <style>
+        .bold-text {
+            font-weight: bold;
+        }
+    </style>
+
     <section id="service-details" class="service-details section">
         <div class="container">
             <section id="pricing" class="pricing section">
                 <section class="pricing about section pricing-item featured php-email-form" style="padding: 20px">
                     <div class="container section-title" data-aos="fade-up">
-                        <h2><h:outputText value="Fiche de proposition"/></h2>
+                        <h2><h:outputText value="#{msg['application.proposition.title']}"/></h2>
                     </div>
 
-                    <ui:include src="referenceThesaurusPanel.xhtml" />
-
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-lg-12">
                             <section id="about" class="pricing about section">
                                 <div class="pricing-item featured php-email-form">
                                     <div class="row">
-                                        <div class="field col-3" style="display: flex; align-items: center;">
-                                            <h:outputText value="Terme"/>
+                                        <div class="field col-2" style="display: flex; align-items: center">
+                                            <h:outputText value="#{msg['user.settings.thesaurus']}" />
                                         </div>
-                                        <div class="field col-9">
-                                            <p:inputText value="" class="form-control" style="width: 100%"/>
-                                        </div>
-                                    </div>
-
-                                    <div class="row" style="margin-top: 10px">
-                                        <div class="field col-3" style="display: flex; align-items: center;">
-                                            <h:outputText value="Variante"/>
-                                        </div>
-                                        <div class="field col-9">
-                                            <p:inputText value="" class="form-control" style="width: 100%"/>
+                                        <div class="field col-10" style="display: flex; align-items: center;">
+                                            <a href="#{searchBean.getThesaurusReferenceUrl()}" target="_blank">
+                                                <h:outputText value="#{searchBean.userConnected.group.referenceInstances.thesaurus.name}" />
+                                            </a>
                                         </div>
                                     </div>
 
-                                    <div class="row" style="margin-top: 10px">
-                                        <div class="field col-3" style="display: flex; align-items: center;">
-                                            <h:outputText value="Définition"/>
+                                    <div class="row" style="margin-top: 20px">
+                                        <div class="field col-2" style="display: flex; align-items: center">
+                                            <h:outputText value="#{msg['user.settings.collection']}" />
                                         </div>
-                                        <div class="field col-9">
-                                            <p:inputText value="" class="form-control" style="width: 100%"/>
-                                        </div>
-                                    </div>
-
-                                    <div class="row" style="margin-top: 10px">
-                                        <div class="field col-3" style="display: flex; align-items: center;">
-                                            <h:outputText value="Remarque"/>
-                                        </div>
-                                        <div class="field col-9">
-                                            <p:inputText value="" class="form-control" style="width: 100%"/>
-                                        </div>
-                                    </div>
-
-                                    <div class="row" style="margin-top: 10px">
-                                        <div class="field col-3" style="display: flex; align-items: center;">
-                                            <h:outputText value="Note"/>
-                                        </div>
-                                        <div class="field col-9">
-                                            <p:inputText value="" class="form-control" style="width: 100%"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </section>
-                        </div>
-                        <div class="col-6">
-                            <section id="about" class="pricing about section">
-                                <div class="pricing-item featured php-email-form">
-                                    <div class="row">
-                                        <div class="field col-9">
-                                            <p:inputText value="" class="form-control" style="width: 100%"/>
-                                        </div>
-                                        <div class="field col-3" style="margin-top: 8px; text-align: right;">
-                                            <h:outputText value="المصطلح"/>
-                                        </div>
-                                    </div>
-
-                                    <div class="row" style="margin-top: 10px">
-                                        <div class="field col-9">
-                                            <p:inputText value="" class="form-control" style="width: 100%"/>
-                                        </div>
-                                        <div class="field col-3" style="margin-top: 8px; text-align: right;">
-                                            <h:outputText value="المتغیرات"/>
-                                        </div>
-                                    </div>
-
-                                    <div class="row" style="margin-top: 10px">
-                                        <div class="field col-9">
-                                            <p:inputText value="" class="form-control" style="width: 100%"/>
-                                        </div>
-                                        <div class="field col-3" style="margin-top: 8px; text-align: right;">
-                                            <h:outputText value="التعریف"/>
-                                        </div>
-                                    </div>
-
-                                    <div class="row" style="margin-top: 10px">
-                                        <div class="field col-9">
-                                            <p:inputText value="" class="form-control" style="width: 100%"/>
-                                        </div>
-                                        <div class="field col-3" style="margin-top: 8px; text-align: right;">
-                                            <h:outputText value="ملاحظة (مناقشة)"/>
-                                        </div>
-                                    </div>
-
-                                    <div class="row" style="margin-top: 10px">
-                                        <div class="field col-9">
-                                            <p:inputText value="" class="form-control" style="width: 100%"/>
-                                        </div>
-                                        <div class="field col-3" style="margin-top: 8px; text-align: right;">
-                                            <h:outputText value="ملاحظة المترجم"/>
+                                        <div class="field col-10" style="display: flex; align-items: center;">
+                                            <h:outputText value="#{searchBean.getCollectionReferenceName()}" />
                                         </div>
                                     </div>
                                 </div>
@@ -118,17 +47,235 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-lg-12" style="text-align: right">
-                            <p:commandButton value="#{msg['action.annuler']}" styleClass="ui-button-secondary ui-button-flat"
-                                             actionListener="#{searchBean.backToSearchScrean()}"
-                                             ajax="true" process="@this" update="globalPanel"/>
-
-                            <p:commandButton class="btn-getstarted" update="globalPanel"
-                                             action="#{searchBean.backToSearchScrean()}"
-                                             title="Enregistrer"
-                                             ajax="true" process="@this" />
+                        <div class="col-6" style="text-align: center">
+                            <p:graphicImage value="/assets/img/flags/fr.png" style="max-width:12% !important;" />
+                        </div>
+                        <div class="col-6" style="text-align: center">
+                            <p:graphicImage value="/assets/img/flags/ar.png" style="max-width:12% !important;" />
                         </div>
                     </div>
+
+                    <h:form>
+                        <div class="row">
+                            <div class="col-6">
+                                <section id="about" class="pricing about section">
+                                    <div class="pricing-item featured php-email-form">
+                                        <h:panelGroup id="termFr" class="row">
+                                            <div class="field col-3" style="display: flex; align-items: center;">
+                                                <h:outputText value="#{msg['application.candidat.term.fr']}"
+                                                              styleClass="#{propositionBean.termFrStyleClass}"/>
+                                            </div>
+                                            <div class="field col-9 ui-inputgroup">
+                                                <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                                                 disabled="#{propositionBean.termFrInitialDisable}"
+                                                                 ajax="true" process="@this" update="termFr"
+                                                                 actionListener="#{propositionBean.initialTermFr()}"/>
+                                                <p:inputText value="#{propositionBean.propositionDao.termeFr}"
+                                                             class="form-control" disabled="#{propositionBean.termFrDisable}">
+                                                    <p:ajax event="keyup" listener="#{propositionBean.onTermFrChange}" update="termFr"/>
+                                                </p:inputText>
+                                                <p:commandButton icon="pi pi-trash" styleClass="ui-button-warning"
+                                                                 disabled="#{propositionBean.termFrDisable}"
+                                                                 ajax="true" process="@this" update="termFr"
+                                                                 actionListener="#{propositionBean.deleteTermFr()}"/>
+                                            </div>
+                                        </h:panelGroup>
+
+                                        <h:panelGroup id="synonymeFr" class="row"  style="margin-top: 10px">
+                                            <div class="field col-3" style="display: flex; align-items: center;">
+                                                <h:outputText value="#{msg['application.candidat.variante.fr']}"
+                                                              styleClass="#{propositionBean.synonymeFrStyleClass}"/>
+                                            </div>
+                                            <div class="field col-9 ui-inputgroup">
+                                                <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                                                 disabled="#{propositionBean.synonymeFrInitialDisable}"
+                                                                 ajax="true" process="@this" update="synonymeFr"
+                                                                 actionListener="#{propositionBean.initialSynonymeFr()}"/>
+                                                <p:inputText value="#{propositionBean.propositionDao.varianteFr}"
+                                                             class="form-control" disabled="#{propositionBean.synonymeFrDisable}">
+                                                    <p:ajax event="keyup" listener="#{propositionBean.onSynonymeFrChange}"
+                                                            update="synonymeFr"/>
+                                                </p:inputText>
+                                                <p:commandButton icon="pi pi-trash" styleClass="ui-button-warning"
+                                                                 disabled="#{propositionBean.synonymeFrDisable}"
+                                                                 ajax="true" process="@this" update="synonymeFr"
+                                                                 actionListener="#{propositionBean.deleteSynonymeFr()}"/>
+                                            </div>
+                                        </h:panelGroup>
+
+                                        <h:panelGroup id="definitionFr" class="row"  style="margin-top: 10px">
+                                            <div class="field col-3" style="display: flex; align-items: center;">
+                                                <h:outputText value="#{msg['application.candidat.definition.fr']}"
+                                                              styleClass="#{propositionBean.definitionFrStyleClass}"/>
+                                            </div>
+                                            <div class="field col-9 ui-inputgroup">
+                                                <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                                                 disabled="#{propositionBean.definitionFrInitialDisable}"
+                                                                 ajax="true" process="@this" update="definitionFr"
+                                                                 actionListener="#{propositionBean.initialDefinitionFr()}"/>
+                                                <p:inputText value="#{propositionBean.propositionDao.definitionFr}"
+                                                             class="form-control" disabled="#{propositionBean.definitionFrDisable}">
+                                                    <p:ajax event="keyup" listener="#{propositionBean.onDefinitionFrChange}"
+                                                            update="definitionFr"/>
+                                                </p:inputText>
+                                                <p:commandButton icon="pi pi-trash" styleClass="ui-button-warning"
+                                                                 disabled="#{propositionBean.definitionFrDisable}"
+                                                                 ajax="true" process="@this" update="definitionFr"
+                                                                 actionListener="#{propositionBean.deleteDefinitionFr()}"/>
+                                            </div>
+                                        </h:panelGroup>
+
+                                        <h:panelGroup id="noteFr" class="row"  style="margin-top: 10px">
+                                            <div class="field col-3" style="display: flex; align-items: center;">
+                                                <h:outputText value="#{msg['application.candidat.note.fr']}"
+                                                              styleClass="#{propositionBean.noteFrStyleClass}"/>
+                                            </div>
+                                            <div class="field col-9 ui-inputgroup">
+                                                <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                                                 disabled="#{propositionBean.noteFrInitialDisable}"
+                                                                 ajax="true" process="@this" update="noteFr"
+                                                                 actionListener="#{propositionBean.initialNoteFr()}"/>
+                                                <p:inputText value="#{propositionBean.propositionDao.noteFr}"
+                                                             class="form-control" disabled="#{propositionBean.noteFrDisable}">
+                                                    <p:ajax event="keyup" listener="#{propositionBean.onNoteFrChange}"
+                                                            update="noteFr"/>
+                                                </p:inputText>
+                                                <p:commandButton icon="pi pi-trash" styleClass="ui-button-warning"
+                                                                 disabled="#{propositionBean.noteFrDisable}"
+                                                                 ajax="true" process="@this" update="noteFr"
+                                                                 actionListener="#{propositionBean.deleteNoteFr()}"/>
+                                            </div>
+                                        </h:panelGroup>
+                                    </div>
+                                </section>
+                            </div>
+
+                            <div class="col-6">
+                                <section id="about" class="pricing about section">
+                                    <div class="pricing-item featured php-email-form">
+                                        <h:panelGroup id="termAr" class="row">
+                                            <div class="field col-9 ui-inputgroup">
+                                                <p:commandButton icon="pi pi-trash" styleClass="ui-button-warning"
+                                                                 disabled="#{propositionBean.termArDisable}"
+                                                                 ajax="true" process="@this" update="termAr"
+                                                                 actionListener="#{propositionBean.deleteTermAr()}"/>
+                                                <p:inputText value="#{propositionBean.propositionDao.termeAr}"
+                                                             class="form-control" disabled="#{propositionBean.termArDisable}">
+                                                    <p:ajax event="keyup" listener="#{propositionBean.onTermArChange}" update="termAr"/>
+                                                </p:inputText>
+                                                <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                                                 disabled="#{propositionBean.termArInitialDisable}"
+                                                                 ajax="true" process="@this" update="termAr"
+                                                                 actionListener="#{propositionBean.initialTermAr()}"/>
+                                            </div>
+                                            <div class="field col-3" style="margin-top: 8px; text-align: right;">
+                                                <h:outputText value="#{msg['application.candidat.term.ar']}"
+                                                              styleClass="#{propositionBean.termArStyleClass}"/>
+                                            </div>
+                                        </h:panelGroup>
+
+                                        <h:panelGroup id="synonymeAr" class="row"  style="margin-top: 10px">
+                                            <div class="field col-9 ui-inputgroup">
+                                                <p:commandButton icon="pi pi-trash" styleClass="ui-button-warning"
+                                                                 disabled="#{propositionBean.synonymeArDisable}"
+                                                                 ajax="true" process="@this" update="synonymeAr"
+                                                                 actionListener="#{propositionBean.deleteSynonymeAr()}"/>
+                                                <p:inputText value="#{propositionBean.propositionDao.varianteAr}"
+                                                             class="form-control" disabled="#{propositionBean.synonymeArDisable}">
+                                                    <p:ajax event="keyup" listener="#{propositionBean.onSynonymeArChange}"
+                                                            update="synonymeAr"/>
+                                                </p:inputText>
+                                                <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                                                 disabled="#{propositionBean.synonymeArInitialDisable}"
+                                                                 ajax="true" process="@this" update="synonymeAr"
+                                                                 actionListener="#{propositionBean.initialSynonymeAr()}"/>
+                                            </div>
+                                            <div class="field col-3" style="margin-top: 8px; text-align: right;">
+                                                <h:outputText value="#{msg['application.candidat.variante.ar']}"
+                                                              styleClass="#{propositionBean.synonymeArStyleClass}"/>
+                                            </div>
+                                        </h:panelGroup>
+
+                                        <h:panelGroup id="definitionAr" class="row"  style="margin-top: 10px">
+                                            <div class="field col-9 ui-inputgroup">
+                                                <p:commandButton icon="pi pi-trash" styleClass="ui-button-warning"
+                                                                 disabled="#{propositionBean.definitionArDisable}"
+                                                                 ajax="true" process="@this" update="definitionAr"
+                                                                 actionListener="#{propositionBean.deleteDefinitionAr()}"/>
+                                                <p:inputText value="#{propositionBean.propositionDao.definitionAr}"
+                                                             class="form-control" disabled="#{propositionBean.definitionArDisable}">
+                                                    <p:ajax event="keyup" listener="#{propositionBean.onDefinitionArChange}"
+                                                            update="definitionAr"/>
+                                                </p:inputText>
+                                                <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                                                 disabled="#{propositionBean.definitionArInitialDisable}"
+                                                                 ajax="true" process="@this" update="definitionAr"
+                                                                 actionListener="#{propositionBean.initialDefinitionAr()}"/>
+                                            </div>
+                                            <div class="field col-3" style="margin-top: 8px; text-align: right;">
+                                                <h:outputText value="#{msg['application.candidat.definition.ar']}"
+                                                              styleClass="#{propositionBean.definitionArStyleClass}"/>
+                                            </div>
+                                        </h:panelGroup>
+
+                                        <h:panelGroup id="noteAr" class="row"  style="margin-top: 10px">
+                                            <div class="field col-9 ui-inputgroup">
+                                                <p:commandButton icon="pi pi-trash" styleClass="ui-button-warning"
+                                                                 disabled="#{propositionBean.noteArDisable}"
+                                                                 ajax="true" process="@this" update="noteAr"
+                                                                 actionListener="#{propositionBean.deleteNoteAr()}"/>
+                                                <p:inputText value="#{propositionBean.propositionDao.noteAr}"
+                                                             class="form-control" disabled="#{propositionBean.noteArDisable}">
+                                                    <p:ajax event="keyup" listener="#{propositionBean.onNoteArChange}"
+                                                            update="noteAr"/>
+                                                </p:inputText>
+                                                <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                                                 disabled="#{propositionBean.noteArInitialDisable}"
+                                                                 ajax="true" process="@this" update="noteAr"
+                                                                 actionListener="#{propositionBean.initialNoteAr()}"/>
+                                            </div>
+                                            <div class="field col-3" style="margin-top: 8px; text-align: right;">
+                                                <h:outputText value="#{msg['application.candidat.note.ar']}"
+                                                              styleClass="#{propositionBean.noteArStyleClass}"/>
+                                            </div>
+                                        </h:panelGroup>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <section id="about" class="pricing about section">
+                                <div class="pricing-item featured php-email-form">
+                                    <div class="row" style="margin-top: 10px">
+                                        <div class="field col-2" style="display: flex; align-items: center;">
+                                            <h:outputText value="#{msg['application.candidat.remarque.fr']}"/>
+                                        </div>
+                                        <div class="field col-8">
+                                            <p:inputText value="#{propositionBean.propositionDao.comment}" class="form-control"
+                                                         style="width: 100%"/>
+                                        </div>
+                                        <div class="field col-2" style="margin-top: 8px; text-align: right;">
+                                            <h:outputText value="#{msg['application.candidat.remarque.ar']}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+
+                        <div class="row" style="margin-top: 10px">
+                            <div class="col-lg-12" style="text-align: right">
+                                <p:commandButton value="#{msg['action.annuler']}" styleClass="ui-button-secondary ui-button-flat"
+                                                 actionListener="#{searchBean.backToSearchScrean()}"
+                                                 ajax="true" process="@this" update="globalPanel"/>
+
+                                <p:commandButton class="btn-getstarted" update="globalPanel"
+                                                 action="#{propositionBean.saveProposition()}"
+                                                 title="#{msg['action.save']}"
+                                                 ajax="true" process="@form" />
+                            </div>
+                        </div>
+                    </h:form>
                 </section>
             </section>
         </div>

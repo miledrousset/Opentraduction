@@ -1,4 +1,4 @@
-package com.cnrs.opentraduction.views;
+package com.cnrs.opentraduction.views.search;
 
 import com.cnrs.opentraduction.clients.OpenthesoClient;
 import com.cnrs.opentraduction.entities.ConsultationInstances;
@@ -7,6 +7,7 @@ import com.cnrs.opentraduction.entities.Users;
 import com.cnrs.opentraduction.models.client.ConceptModel;
 import com.cnrs.opentraduction.models.dao.CollectionElementDao;
 import com.cnrs.opentraduction.models.dao.ConceptDao;
+import com.cnrs.opentraduction.models.dao.PropositionDao;
 import com.cnrs.opentraduction.services.ThesaurusService;
 import com.cnrs.opentraduction.utils.MessageService;
 
@@ -42,6 +43,7 @@ public class SearchBean implements Serializable {
     private final ThesaurusService thesaurusService;
     private final OpenthesoClient openthesoClient;
     private final CandidatBean candidatBean;
+    private final PropositionBean propositionBean;
 
     private Users userConnected;
     private String termValue;
@@ -220,6 +222,7 @@ public class SearchBean implements Serializable {
         searchResultDisplay = false;
         addCandidatDisplay = false;
         addPropositionDisplay = true;
+        propositionBean.initInterface(userConnected, conceptToUpdate);
     }
 
     public void initAddCandidat() {

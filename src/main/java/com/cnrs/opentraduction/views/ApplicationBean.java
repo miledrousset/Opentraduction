@@ -5,6 +5,7 @@ import com.cnrs.opentraduction.utils.MessageService;
 import com.cnrs.opentraduction.entities.Users;
 import com.cnrs.opentraduction.models.MenuItem;
 import com.cnrs.opentraduction.services.UserService;
+import com.cnrs.opentraduction.views.search.SearchBean;
 import com.cnrs.opentraduction.views.settings.ApplicationSettingBean;
 
 import lombok.Data;
