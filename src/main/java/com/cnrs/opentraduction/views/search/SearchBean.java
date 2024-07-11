@@ -7,7 +7,6 @@ import com.cnrs.opentraduction.entities.Users;
 import com.cnrs.opentraduction.models.client.ConceptModel;
 import com.cnrs.opentraduction.models.dao.CollectionElementDao;
 import com.cnrs.opentraduction.models.dao.ConceptDao;
-import com.cnrs.opentraduction.models.dao.PropositionDao;
 import com.cnrs.opentraduction.services.ThesaurusService;
 import com.cnrs.opentraduction.utils.MessageService;
 
@@ -314,5 +313,29 @@ public class SearchBean implements Serializable {
         return "ALL".equals(userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection())
                 ? messageService.getMessage("user.settings.consultation.racine")
                 : userConnected.getGroup().getReferenceInstances().getThesaurus().getCollection();
+    }
+
+    public String getTermSourceLabel() {
+        return messageService.getMessage("application.deepl.term") + getLangSource();
+    }
+
+    public String getTermCibleLabel() {
+        return messageService.getMessage("application.deepl.term") + getLangCible();
+    }
+
+    public String getDefinitionSourceLabel() {
+        return messageService.getMessage("application.deepl.definition") + getLangSource();
+    }
+
+    public String getDefinitionCibleLabel() {
+        return messageService.getMessage("application.deepl.definition") + getLangCible();
+    }
+
+    private String getLangSource() {
+        return toArabic ? " (AR)" : " (FR)";
+    }
+
+    private String getLangCible() {
+        return toArabic ? " (FR)" : " (AR)";
     }
 }

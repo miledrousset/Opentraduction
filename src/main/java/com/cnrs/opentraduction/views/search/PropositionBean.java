@@ -54,12 +54,11 @@ public class PropositionBean implements Serializable {
     private boolean noteArInitialDisable, noteArDisable;
 
 
-    public void initInterface(Users userConnected, ConceptDao conceptToUpdate, SearchBean searchBean) {
+    public void initInterface(Users userConnected, ConceptDao conceptToUpdate) {
 
-        log.info("Initialisation de l'interface candidat");
+        log.info("Initialisation de l'interface proposition");
         this.userConnected = userConnected;
         this.conceptToUpdate = conceptToUpdate;
-        this.searchBean = searchBean;
 
         termFrInitialDisable = true;
         termFrDisable = false;
@@ -119,9 +118,6 @@ public class PropositionBean implements Serializable {
 
         log.info("Affichage de message");
         messageService.showMessage(FacesMessage.SEVERITY_INFO, "application.proposition.msg1");
-
-        log.info("Retour à la page recherche");
-        searchBean.backToSearchScrean();
 
         log.info("Fin de l'enregistrement de la proposition");
     }

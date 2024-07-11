@@ -37,3 +37,9 @@ spring:
 #######################
 logging:
   config: classpath:logback-local.xml
+
+#######################
+# Deepl configuration
+#######################
+deepl:
+  key: test

@@ -103,10 +103,14 @@ public class UserSettingsBean implements Serializable {
                 .filter(element -> !ObjectUtils.isEmpty(element.getReferenceInstances()))
                 .findFirst();
 
-        selectedReferenceInstance.ifPresent(thesaurus -> collectionReferenceSelected = referenceCollectionList.stream()
-                .filter(element -> element.getId().equals(thesaurus.getIdCollection()))
-                .findFirst()
-                .get());
+        selectedReferenceInstance.ifPresent(thesaurus -> {
+            var referenceInstanceTmp = referenceCollectionList.stream()
+                    .filter(element -> element.getId().equals(thesaurus.getIdCollection()))
+                    .findFirst();
+            if (referenceInstanceTmp.isPresent()) {
+                collectionReferenceSelected = referenceInstanceTmp.get();
+            }
+        });
     }
 
     private void setSelectedConsultationSubCollection() {
