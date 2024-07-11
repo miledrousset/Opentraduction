@@ -25,6 +25,13 @@ public class DeeplBean implements Serializable {
     private String definitionToTranslate, definitionTranslated;
 
 
+    public void initInterface() {
+        termToTranslate = "";
+        termTranslated = "";
+        definitionToTranslate = "";
+        definitionTranslated = "";
+    }
+
     public void translateTerm(boolean toArabic) {
         if (StringUtils.isEmpty(termToTranslate)) {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.deepl.error.msg1");

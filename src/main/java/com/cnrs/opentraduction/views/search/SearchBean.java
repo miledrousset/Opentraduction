@@ -43,6 +43,7 @@ public class SearchBean implements Serializable {
     private final OpenthesoClient openthesoClient;
     private final CandidatBean candidatBean;
     private final PropositionBean propositionBean;
+    private final DeeplBean deeplBean;
 
     private Users userConnected;
     private String termValue;
@@ -119,6 +120,8 @@ public class SearchBean implements Serializable {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.search.failed.msg1");
             return;
         }
+
+        deeplBean.initInterface();
 
         if (fromMain) {
             searchDone = false;
