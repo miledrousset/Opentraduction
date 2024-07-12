@@ -5,6 +5,7 @@ import com.cnrs.opentraduction.entities.ConsultationInstances;
 import com.cnrs.opentraduction.entities.Thesaurus;
 import com.cnrs.opentraduction.entities.Users;
 import com.cnrs.opentraduction.models.client.ConceptModel;
+import com.cnrs.opentraduction.models.client.ElementModel;
 import com.cnrs.opentraduction.models.dao.CollectionElementDao;
 import com.cnrs.opentraduction.models.dao.ConceptDao;
 import com.cnrs.opentraduction.services.ThesaurusService;
@@ -24,7 +25,6 @@ import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import java.io.IOException;
 import java.io.Serializable;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -63,13 +63,13 @@ public class SearchBean implements Serializable {
     public void initialSearch() {
         toArabic = true;
         searchDone = false;
-        languageSelected = "ar";
+        languageSelected = "fr";
     }
 
     public void initSearchInterface() {
         log.info("Initialisation de l'interface recherche");
         termValue = "";
-        toArabic = false;
+        toArabic = true;
         searchDone = false;
         conceptsReferenceFoundList = new ArrayList<>();
         conceptsConsultationFoundList = new ArrayList<>();
@@ -98,6 +98,10 @@ public class SearchBean implements Serializable {
                         userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection()));
             }
         }
+    }
+
+    public void navigateToConcept(ConceptDao conceptDao) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(conceptDao.getUrl());
     }
 
     public void setLanguageForSearch(String languageCode) {
@@ -214,7 +218,8 @@ public class SearchBean implements Serializable {
 
         log.info("Résultat trouvée dans le Thésaurus de référence : " + referenceResult.length);
         return Arrays.stream(referenceResult)
-                .map(element -> toConceptDao(element, thesaurus.getName()))
+                .map(element -> toConceptDao(element, thesaurus.getName(), thesaurus.getIdThesaurus(),
+                        thesaurus.getReferenceInstances().getUrl()))
                 .collect(Collectors.toList());
     }
 
@@ -242,36 +247,55 @@ public class SearchBean implements Serializable {
         addPropositionDisplay = false;
     }
 
-    private ConceptDao toConceptDao(ConceptModel conceptModel, String thesaurusName) {
-        String idThesaurus = "", idConcept = "";
-        try {
-            var url = new URL(conceptModel.getUri());
-            idThesaurus = extractDataFromUri(url.getQuery(), "idt=([^&]+)");
-            idConcept = extractDataFromUri(url.getQuery(), "idc=([^&]+)");
-        } catch (Exception ex) {
-            log.error("Erreur lors du formatage de l'URL");
-        }
-
-        String labelAr = "", definitionAr = "";
-        String labelFr = "", definitionFr = "";
-        if (toArabic) {
-            labelAr = conceptModel.getLabel();
-            definitionAr = conceptModel.getDefinition();
-        } else {
-            labelFr = conceptModel.getLabel();
-            definitionFr = conceptModel.getDefinition();
-        }
+    private ConceptDao toConceptDao(ConceptModel conceptModel, String thesaurusName, String thesaurusId, String baseUrl) {
 
         return ConceptDao.builder()
-                .uri(conceptModel.getUri())
-                .conceptId(idConcept)
-                .thesaurusId(idThesaurus)
+                .conceptId(conceptModel.getIdConcept())
+                .thesaurusId(thesaurusId)
                 .thesaurusName(thesaurusName)
-                .labelAr(labelAr)
-                .definitionAr(definitionAr)
-                .labelFr(labelFr)
-                .definitionFr(definitionFr)
+                .labelFr(getConceptTerm(conceptModel, "fr"))
+                .labelAr(getConceptTerm(conceptModel, "ar"))
+                .definitionFr(getConceptDefinition(conceptModel, "fr"))
+                .definitionAr(getConceptDefinition(conceptModel, "ar"))
+                .varianteAr(getConceptSynonyme(conceptModel, "ar"))
+                .varianteFr(getConceptSynonyme(conceptModel, "fr"))
+                .noteFr(getConceptNote(conceptModel, "fr"))
+                .noteAr(getConceptNote(conceptModel, "ar"))
+                .url(String.format("%s/?idc=%s&idt=%s", baseUrl, conceptModel.getIdConcept(), thesaurusId))
+                .status(conceptModel.getStatus())
                 .build();
+    }
+
+    private String getConceptTerm(ConceptModel conceptModel, String lang) {
+        var tmp = conceptModel.getTerms().stream()
+                .filter(element -> lang.equals(element.getLang()))
+                .map(ElementModel::getValue)
+                .findFirst();
+        return tmp.isPresent() ? tmp.get() : "";
+    }
+
+    private String getConceptSynonyme(ConceptModel conceptModel, String lang) {
+        var tmp = conceptModel.getSynonymes().stream()
+                .filter(element -> lang.equals(element.getLang()))
+                .map(ElementModel::getValue)
+                .findFirst();
+        return tmp.isPresent() ? tmp.get() : "";
+    }
+
+    private String getConceptDefinition(ConceptModel conceptModel, String lang) {
+        var tmp = conceptModel.getDefinitions().stream()
+                .filter(element -> lang.equals(element.getLang()))
+                .map(ElementModel::getValue)
+                .findFirst();
+        return tmp.isPresent() ? tmp.get() : "";
+    }
+
+    private String getConceptNote(ConceptModel conceptModel, String lang) {
+        var tmp = conceptModel.getNotes().stream()
+                .filter(element -> lang.equals(element.getLang()))
+                .map(ElementModel::getValue)
+                .findFirst();
+        return tmp.isPresent() ? tmp.get() : "";
     }
 
     private String extractDataFromUri(String query, String patternString) {

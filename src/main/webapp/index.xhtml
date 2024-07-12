@@ -50,32 +50,6 @@
               <p:inputText class="form-control" placeholder="#{msg['search.sub-title']}"
                            value="#{searchBean.termValue}" />
 
-              <nav class="navbar navbar-expand-lg navbar-light bg-light rounded"
-                   style="background-color: transparent !important; border: white !important;">
-                <ul class="navbar-nav mr-auto">
-                  <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                       style="border: solid #ff0a0a; margin-right: 10px; border-radius: 10px; color: black; padding: 2px;">
-                      <p:graphicImage value="#{searchBean.getLanguageImgFromCode()}" />
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="dropdown09">
-                      <p:commandLink class="dropdown-item"
-                                     ajax="true" process="@form" update="searchPanel"
-                                     action="#{searchBean.setLanguageForSearch('ar')}">
-                        <p:graphicImage value="/assets/img/flags/ar.png" style="width: 20px" />
-                        <h:outputText value="#{msg['application.language.arabic']}" style="margin-left: 5px; color: #000000"/>
-                      </p:commandLink>
-                      <p:commandLink class="dropdown-item"
-                                     ajax="true" process="@form" update="searchPanel"
-                                     action="#{searchBean.setLanguageForSearch('fr')}">
-                        <p:graphicImage value="/assets/img/flags/fr.png" style="width: 20px" />
-                        <h:outputText value="#{msg['application.language.french']}" style="margin-left: 5px; color: #000000"/>
-                      </p:commandLink>
-                    </div>
-                  </li>
-                </ul>
-              </nav>
-
               <p:commandButton class="btn-getstarted" title="#{msg['search.title']}"
                                ajax="true" process="@form" style="margin-left: 5px;"
                                action="#{searchBean.searchTerm(true)}" />

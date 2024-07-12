@@ -72,7 +72,11 @@
                                                 </p:column>
 
                                                 <p:column headerText="Actions" width="15%" style="text-align: center">
-                                                    <p:commandButton icon="pi pi-pencil" ajax="true" process="@this" update="globalPanel"
+                                                    <p:commandButton icon="pi pi-bookmark" ajax="true" process="@this" update="globalPanel"
+                                                                     action="#{searchBean.navigateToConcept(concept)}"
+                                                                     styleClass="rounded-button ui-button-secondary ui-button-flat" />
+
+                                                    <p:commandButton icon="pi pi-file-edit" ajax="true" process="@this" update="globalPanel"
                                                                      action="#{searchBean.initAddProposition(concept)}"
                                                                      styleClass="rounded-button ui-button-success ui-button-flat" />
                                                 </p:column>

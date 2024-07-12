@@ -56,7 +56,7 @@ public class OpenthesoClient {
         if (!StringUtils.isEmpty(idGroup)) {
             groupParam = "&group=" + idGroup;
         }
-        var url = String.format("%s/openapi/v1/concept/%s/autocomplete/%s?lang=%s&full=true" + groupParam,
+        var url = String.format("%s/openapi/v1/concept/%s/autocomplete/%s/full?lang=%s" + groupParam,
                 baseUrl, idThesaurus, termToSearch, idLang, idGroup);
         log.info("URL : " + url);
         return restTemplate.getForObject(url, ConceptModel[].class);

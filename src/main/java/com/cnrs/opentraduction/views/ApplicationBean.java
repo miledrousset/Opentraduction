@@ -105,7 +105,7 @@ public class ApplicationBean implements Serializable {
         }
     }
 
-    public void openWebPage(String logoCode) {
+    public void openWebPage(String logoCode) throws IOException {
         String urlToOpen;
         switch(logoCode) {
             case "LOGO_1":
@@ -141,12 +141,7 @@ public class ApplicationBean implements Serializable {
             default:
                 urlToOpen = "https://www.ifporient.org/";
         }
-        try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect(urlToOpen);
-        } catch (IOException e) {
-            // Gérer l'exception, par exemple en affichant un message d'erreur
-            e.printStackTrace();
-        }
+        FacesContext.getCurrentInstance().getExternalContext().redirect(urlToOpen);
     }
 
 }

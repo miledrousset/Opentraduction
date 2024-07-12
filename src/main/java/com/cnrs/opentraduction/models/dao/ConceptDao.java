@@ -8,10 +8,10 @@ import lombok.Data;
 @Builder
 public class ConceptDao {
 
-    private String uri;
     private String conceptId;
     private String thesaurusId;
     private String thesaurusName;
+    private String status;
 
     private String labelFr;
     private String labelAr;
@@ -24,5 +24,7 @@ public class ConceptDao {
 
     private String varianteFr;
     private String varianteAr;
+
+    private String url;
 
 }
