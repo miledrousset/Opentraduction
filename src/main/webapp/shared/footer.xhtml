@@ -1,49 +1,36 @@
-<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
 
-    <footer id="footer" class="footer position-relative">
-        <div class="container footer-top">
-            <div class="row gy-10">
-                <div class="col-12 footer-about">
-                    <a href="index.html" class="logo d-flex align-items-center">
-                        <span class="sitename">SHS en traduction</span>
-                    </a>
-                    <p>Le programme « SHS en traduction » est une initiative conjointe de l’<a href="https://www.institutfrancais-tunisie.com">Institut français de Tunisie (IFT)</a> et du <a href="http://majlis-remomm.fr">Groupement d’intérêt scientifique Moyen-Orient et Mondes Musulmans (GIS MOMM)</a>.<br/>
-                        Il bénéficie en 2024 et 2025 du soutien du Fonds Équipe France du ministère de l’Europe et des Affaires étrangères.<br/>
-                        Il vise à développer la traduction scientifique entre l’arabe et le français dans le domaine des sciences humaines et sociales (SHS).<br/>
-                        La plateforme d’aide aux traducteurs permet un accompagnement des traductions par des comités scientifiques spécialisés et de valider un lexique scientifique et ses variantes.<br/>
-                        Elle repose sur le gestionnaire de thesaurus <a href="https://opentheso.hypotheses.org">Opentheso</a>, développé à la <a href="https://www.mom.fr">Maison de l’Orient et de la Méditerranée</a> et faisant partie de la grille de services de <a href="https://www.huma-num.fr">Huma-Num</a>.
-                    </p>
+    <h:panelGroup id="footerPanel">
+        <footer id="footer" class="footer position-relative">
+            <div class="container footer-top">
+                <div class="row gy-10">
+                    <div class="col-12 footer-about">
+                        <a href="index.html" class="logo d-flex align-items-center">
+                            <span class="sitename"><h:outputText value="#{msg['application.name1']}" /></span>
+                        </a>
+                        <p>
+                            <h:outputText value="#{msg['application.about.msg1']}" escape="false" /><br/>
+                            <h:outputText value="#{msg['application.about.msg2']}" /><br/>
+                            <h:outputText value="#{msg['application.about.msg3']}" /><br/>
+                            <h:outputText value="#{msg['application.about.msg4']}" /><br/>
+                            <h:outputText value="#{msg['application.about.msg5']}" escape="false" />
+                        </p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="container copyright text-center mt-4">
-            <p>©
-                <span>Copyright</span>
-                <strong class="sitename">Groupement d’intérêt scientifique Moyen-Orient et Mondes Musulmans</strong>
-                <span>All Rights Reserved</span>
-            </p>
-            <div class="credits">
-                Created by <a href="http://majlis-remomm.fr">GIS MOMM</a>
+            <div class="container copyright text-center mt-4">
+                <p>©
+                    <span><h:outputText value="#{msg['application.about.copyright']}" style="color: black" /></span>
+                    <strong class="sitename"><h:outputText value="#{msg['application.about.owner']}" /></strong>
+                    <span><h:outputText value="#{msg['application.about.all-rights']}" style="color: black"/></span>
+                </p>
+                <div class="credits">
+                    <h:outputText value="#{msg['application.about.created-by']}" style="color: black"/>
+                    <a href="http://majlis-remomm.fr">GIS MOMM</a>
+                </div>
             </div>
-        </div>
-    </footer>
-
-    <!-- Scroll Top -->
-    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-    <!-- Preloader -->
-    <div id="preloader"></div>
-
-    <!-- Vendor JS Files -->
-    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js" />
-    <script src="assets/vendor/php-email-form/validate.js" />
-    <script src="assets/vendor/aos/aos.js" />
-    <script src="assets/vendor/glightbox/js/glightbox.min.js" />
-    <script src="assets/vendor/purecounter/purecounter_vanilla.js" />
-    <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js" />
-    <script src="assets/vendor/swiper/swiper-bundle.min.js" />
-
-    <!-- Main JS File -->
-    <script src="assets/js/main.js"></script>
-    <script src="assets/js/sessionTimeout.js" />
+        </footer>
+    </h:panelGroup>
 
 </ui:composition>

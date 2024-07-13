@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 public class SubCollectionModel {
 
-    private String idConcept;
+    private String idGroup;
     private List<LabelModel> labels;
 
 }

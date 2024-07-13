@@ -2,7 +2,6 @@ package com.cnrs.opentraduction.services;
 
 import com.cnrs.opentraduction.clients.OpenthesoClient;
 import com.cnrs.opentraduction.models.client.CandidateModel;
-import com.cnrs.opentraduction.models.client.CollectionModel;
 import com.cnrs.opentraduction.models.client.PropositionModel;
 import com.cnrs.opentraduction.models.client.ThesaurusElementModel;
 import com.cnrs.opentraduction.models.dao.CollectionElementDao;
@@ -40,7 +39,7 @@ public class ThesaurusService {
     }
 
     public List<ThesaurusElementModel> searchThesaurus(String baseUrl) {
-        var thesaurusResponse = openthesoClient.getThesoInfo(baseUrl);
+        var thesaurusResponse = openthesoClient.getThesaurusInformations(baseUrl);
         if (!ArrayUtils.isEmpty(thesaurusResponse)) {
             return Stream.of(thesaurusResponse)
                     .filter(element -> !ObjectUtils.isEmpty(element.getLabels()))
@@ -59,19 +58,12 @@ public class ThesaurusService {
     }
 
     public List<CollectionElementDao> searchTopCollections(String baseUrl, String idThesaurus) {
-        var topCollectionsResponse = openthesoClient.getTopCollections(baseUrl, idThesaurus);
 
-        if (topCollectionsResponse.length > 0) {
-            return Stream.of(topCollectionsResponse)
-                    .filter(element -> element.getLabels().stream().anyMatch(tmp -> FR.equals(tmp.getLang())))
-                    .map(element -> {
-                        var label = element.getLabels().stream()
-                                .filter(tmp -> FR.equals(tmp.getLang()))
-                                .findFirst().orElse(null);
+        var collections = openthesoClient.getAllCollections(baseUrl, idThesaurus, "fr");
 
-                        return new CollectionElementDao(element.getIdConcept(),
-                                ObjectUtils.isEmpty(label) ? "" : label.getTitle());
-                    })
+        if (collections.length > 0) {
+            return Stream.of(collections)
+                    .map(element -> new CollectionElementDao(element.getConceptGroup().getIdgroup(), element.getLexicalValue()))
                     .collect(Collectors.toList());
         } else {
             return List.of();
@@ -87,20 +79,6 @@ public class ThesaurusService {
                             .filter(tmp -> FR.equals(tmp.getLang()))
                             .findFirst()
                             .get()
-                            .getTitle()))
-                    .collect(Collectors.toList());
-        } else {
-            return List.of();
-        }
-    }
-
-    private List<CollectionElementDao> getCollectionDatas(CollectionModel[] collectionsResponse) {
-        if (collectionsResponse.length > 0) {
-            return Stream.of(collectionsResponse)
-                    .filter(element -> element.getLabels().stream().anyMatch(tmp -> FR.equals(tmp.getLang())))
-                    .map(element -> new CollectionElementDao(element.getIdGroup(), element.getLabels().stream()
-                            .filter(tmp -> FR.equals(tmp.getLang()))
-                            .findFirst().get()
                             .getTitle()))
                     .collect(Collectors.toList());
         } else {

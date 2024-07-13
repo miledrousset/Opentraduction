@@ -168,8 +168,8 @@ public class GroupService {
                                                 consultationProject.setThesaurusUrl(instance.getUrl() + "/?idt=" + thesaurus.getIdThesaurus());
 
                                                 collectionsList.add(CollectionDao.builder()
-                                                        .collectionId(thesaurus.getIdCollection())
-                                                        .collectionName(thesaurus.getCollection())
+                                                        .id(thesaurus.getIdCollection())
+                                                        .name(thesaurus.getCollection())
                                                         .build());
                                             });
                                         }

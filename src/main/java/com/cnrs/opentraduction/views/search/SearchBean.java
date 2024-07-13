@@ -6,6 +6,7 @@ import com.cnrs.opentraduction.entities.Thesaurus;
 import com.cnrs.opentraduction.entities.Users;
 import com.cnrs.opentraduction.models.client.ConceptModel;
 import com.cnrs.opentraduction.models.client.ElementModel;
+import com.cnrs.opentraduction.models.dao.CollectionDao;
 import com.cnrs.opentraduction.models.dao.CollectionElementDao;
 import com.cnrs.opentraduction.models.dao.ConceptDao;
 import com.cnrs.opentraduction.services.ThesaurusService;
@@ -16,9 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.client.HttpClientErrorException;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -48,7 +47,6 @@ public class SearchBean implements Serializable {
     private Users userConnected;
     private String termValue;
     private boolean toArabic, searchDone;
-    private String languageSelected;
     private ConceptDao conceptSelected;
     private List<ConceptDao> conceptsReferenceFoundList, conceptsConsultationFoundList;
 
@@ -58,18 +56,10 @@ public class SearchBean implements Serializable {
     private CollectionElementDao collectionReferenceSelected;
     private String idReferenceCollectionSelected;
 
-
-    @PostConstruct
-    public void initialSearch() {
-        toArabic = true;
-        searchDone = false;
-        languageSelected = "fr";
-    }
-
     public void initSearchInterface() {
         log.info("Initialisation de l'interface recherche");
         termValue = "";
-        toArabic = true;
+        toArabic = false;
         searchDone = false;
         conceptsReferenceFoundList = new ArrayList<>();
         conceptsConsultationFoundList = new ArrayList<>();
@@ -100,20 +90,6 @@ public class SearchBean implements Serializable {
         }
     }
 
-    public void navigateToConcept(ConceptDao conceptDao) throws IOException {
-        FacesContext.getCurrentInstance().getExternalContext().redirect(conceptDao.getUrl());
-    }
-
-    public void setLanguageForSearch(String languageCode) {
-        languageSelected = languageCode;
-        toArabic = !languageCode.equals("fr");
-    }
-
-    public String getLanguageImgFromCode() {
-        var url = "/assets/img/flags/";
-        return "fr".equals(languageSelected) ? url + "fr.png" : url + "ar.png";
-    }
-
     public String getReferenceThesaurus() {
         return CollectionUtils.isEmpty(conceptsReferenceFoundList) ? "" : conceptsReferenceFoundList.get(0).getThesaurusName();
     }
@@ -141,12 +117,12 @@ public class SearchBean implements Serializable {
 
         referenceProjectPart();
 
-        if (CollectionUtils.isEmpty(conceptsReferenceFoundList)) {
+        conceptProjectsPart();
+
+        if (CollectionUtils.isEmpty(conceptsReferenceFoundList) && CollectionUtils.isEmpty(conceptsConsultationFoundList)) {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.search.failed.msg3");
             return;
         }
-
-        conceptProjectsPart();
 
         searchDone = true;
 
@@ -165,14 +141,7 @@ public class SearchBean implements Serializable {
         if (!CollectionUtils.isEmpty(consultationProjects)) {
             log.info("Il existe {} projet de consultation !", consultationProjects.size());
             for (ConsultationInstances project : consultationProjects) {
-                project.getThesauruses().forEach(thesaurus -> {
-                    try {
-                        var tmp = searchInThesaurus(thesaurus, project.getUrl());
-                        conceptsReferenceFoundList.addAll(tmp);
-                    } catch(HttpClientErrorException ex) {
-                        log.info("Aucune résultat trouvée dans le thésaurus {}", thesaurus.getName());
-                    }
-                });
+                project.getThesauruses().forEach(thesaurus -> conceptsConsultationFoundList.addAll(searchInThesaurus(thesaurus, project.getUrl())));
             }
         }
     }
@@ -209,27 +178,27 @@ public class SearchBean implements Serializable {
 
         var languageToSearch = toArabic ? "ar" : "fr";
 
-        var referenceResult = openthesoClient.searchTerm(
-                url,
-                thesaurus.getIdThesaurus(),
-                termValue,
-                languageToSearch,
-                idCollection);
+        var referenceResult = openthesoClient.searchTerm(url, thesaurus.getIdThesaurus(), termValue, languageToSearch, idCollection);
 
         log.info("Résultat trouvée dans le Thésaurus de référence : " + referenceResult.length);
         return Arrays.stream(referenceResult)
                 .map(element -> toConceptDao(element, thesaurus.getName(), thesaurus.getIdThesaurus(),
-                        thesaurus.getReferenceInstances().getUrl()))
+                        StringUtils.isEmpty(thesaurus.getReferenceInstances())
+                                ? thesaurus.getConsultationInstances().getUrl()
+                                : thesaurus.getReferenceInstances().getUrl()))
                 .collect(Collectors.toList());
     }
 
     public void initAddProposition(ConceptDao conceptToUpdate) {
 
         this.conceptSelected = conceptToUpdate;
+
         searchResultDisplay = false;
         addCandidatDisplay = false;
         addPropositionDisplay = true;
-        propositionBean.initInterface(userConnected, conceptToUpdate);
+
+        var langFrom = toArabic ? "AR" : "FR";
+        propositionBean.initInterface(userConnected, conceptToUpdate, langFrom);
     }
 
     public void initAddCandidat() {
@@ -251,8 +220,12 @@ public class SearchBean implements Serializable {
 
         return ConceptDao.builder()
                 .conceptId(conceptModel.getIdConcept())
+                .status(conceptModel.getStatus())
                 .thesaurusId(thesaurusId)
                 .thesaurusName(thesaurusName)
+                .collections(conceptModel.getCollections().stream()
+                        .map(element -> CollectionDao.builder().id(element.getId()).name(element.getValue()).build())
+                        .collect(Collectors.toList()))
                 .labelFr(getConceptTerm(conceptModel, "fr"))
                 .labelAr(getConceptTerm(conceptModel, "ar"))
                 .definitionFr(getConceptDefinition(conceptModel, "fr"))
@@ -262,7 +235,6 @@ public class SearchBean implements Serializable {
                 .noteFr(getConceptNote(conceptModel, "fr"))
                 .noteAr(getConceptNote(conceptModel, "ar"))
                 .url(String.format("%s/?idc=%s&idt=%s", baseUrl, conceptModel.getIdConcept(), thesaurusId))
-                .status(conceptModel.getStatus())
                 .build();
     }
 
@@ -364,5 +336,9 @@ public class SearchBean implements Serializable {
 
     private String getLangCible() {
         return toArabic ? " (FR)" : " (AR)";
+    }
+
+    public boolean isConcept(String status) {
+        return "CO".equals(status);
     }
 }

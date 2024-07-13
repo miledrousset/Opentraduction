@@ -2941,3 +2941,7 @@ body .ui-toggleswitch.ui-toggleswitch-checked .ui-toggleswitch-slider {
   border: none; /* Garde le bord transparent lors du focus */
   box-shadow: none; /* Optionnel : ajoute une ombre pour indiquer le focus */
 }
+
+body .ui-toggleswitch .ui-toggleswitch-slider {
+  background: #e84545;
+}

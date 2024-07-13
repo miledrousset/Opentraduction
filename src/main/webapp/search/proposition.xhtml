@@ -38,7 +38,24 @@
                                             <h:outputText value="#{msg['user.settings.collection']}" />
                                         </div>
                                         <div class="field col-10" style="display: flex; align-items: center;">
-                                            <h:outputText value="#{searchBean.getCollectionReferenceName()}" />
+                                            <ul style="margin-bottom: -1px">
+                                                <ui:repeat value="#{propositionBean.conceptToUpdate.collections}" var="collection">
+                                                    <li>
+                                                        <p:tag styleClass="mr-2" value="#{collection.name}" style="background: rgba(0, 0, 0, 0.58)" />
+                                                    </li>
+                                                </ui:repeat>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" style="margin-top: 20px">
+                                        <div class="field col-2" style="display: flex; align-items: center">
+                                            <h:outputText value="#{msg['user.settings.concept']}" />
+                                        </div>
+                                        <div class="field col-10" style="display: flex; align-items: center;">
+                                            <a href="#{propositionBean.conceptToUpdate.url}" target="_blank">
+                                                <h:outputText value="#{propositionBean.getConceptLabel()}" />
+                                            </a>
                                         </div>
                                     </div>
                                 </div>

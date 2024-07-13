@@ -19,7 +19,7 @@
                     <div class="field col-5 ui-inputgroup">
                         <p:inputText value="#{deeplBean.termToTranslate}" class="form-control" />
 
-                        <p:commandButton icon="pi pi-comments" styleClass="ui-button-danger"
+                        <p:commandButton icon="pi pi-language" styleClass="ui-button-danger"
                                          ajax="true" process="@form" update="termPanel"
                                          actionListener="#{deeplBean.translateTerm(searchBean.toArabic)}"/>
                     </div>
@@ -35,7 +35,7 @@
                     <div class="field col-5 ui-inputgroup">
                         <p:inputText value="#{deeplBean.definitionToTranslate}" class="form-control" />
 
-                        <p:commandButton icon="pi pi-comments" styleClass="ui-button-danger"
+                        <p:commandButton icon="pi pi-language" styleClass="ui-button-danger"
                                          ajax="true" process="@form" update="definitionPanel"
                                          actionListener="#{deeplBean.translateDefinition(searchBean.toArabic)}"/>
                     </div>

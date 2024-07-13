@@ -135,7 +135,7 @@ public class ReferenceSettingBean implements Serializable {
 
         if (!ObjectUtils.isEmpty(instance)) {
 
-            dialogTitle =  messageService.getMessage("system.reference.update.title") + instance.getName();
+            dialogTitle =  messageService.getMessage("system.reference.update.title") + " " + instance.getName();
 
             referenceSelected = referenceService.getInstanceById(instance.getId());
 
@@ -199,7 +199,7 @@ public class ReferenceSettingBean implements Serializable {
             return;
         }
 
-        if (referenceService.checkExistenceByName(referenceSelected.getName())) {
+        if (ObjectUtils.isEmpty(referenceSelected.getId()) && referenceService.checkExistenceByName(referenceSelected.getName())) {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "system.reference.failed.msg4");
             return;
         }

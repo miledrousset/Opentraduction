@@ -12,58 +12,58 @@
                         <h2><h:outputText value="#{msg['application.candidat.title']}"/></h2>
                     </div>
 
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <section id="about" class="pricing about section">
-                                <div class="pricing-item featured php-email-form">
-                                    <div class="row">
-                                        <div class="field col-2" style="display: flex; align-items: center">
-                                            <h:outputText value="#{msg['user.settings.thesaurus']}" />
-                                        </div>
-                                        <div class="field col-10" style="display: flex; align-items: center;">
-                                            <a href="#{searchBean.getThesaurusReferenceUrl()}" target="_blank">
-                                                <h:outputText value="#{searchBean.userConnected.group.referenceInstances.thesaurus.name}" />
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div class="row" style="margin-top: 20px">
-                                        <div class="field col-2" style="display: flex; align-items: center">
-                                            <h:outputText value="#{msg['user.settings.collection']}" />
-                                        </div>
-                                        <div class="field col-10" style="display: flex; align-items: center;">
-                                            <h:outputText value="#{searchBean.getCollectionReferenceName()}" />
-                                        </div>
-                                    </div>
-
-                                    <div class="row" style="margin-top: 20px">
-                                        <div class="field col-2" style="display: flex; align-items: center">
-                                            <h:outputText value="#{msg['user.settings.subCollection']}" />
-                                        </div>
-                                        <div class="field col-10">
-                                            <p:selectOneMenu value="#{candidatBean.labelReferenceCollectionSelected}"
-                                                             class="form-control" style="width: 100%;">
-                                                <p:ajax listener="#{candidatBean.setSelectedReferenceCollection()}"/>
-                                                <f:selectItems value="#{candidatBean.referenceCollectionList}" var="collection"
-                                                               itemLabel="#{collection.label}" itemValue="#{collection.label}"/>
-                                            </p:selectOneMenu>
-                                        </div>
-                                    </div>
-                                </div>
-                            </section>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-6" style="text-align: center">
-                            <p:graphicImage value="/assets/img/flags/fr.png" style="max-width:12% !important;" />
-                        </div>
-                        <div class="col-6" style="text-align: center">
-                            <p:graphicImage value="/assets/img/flags/ar.png" style="max-width:12% !important;" />
-                        </div>
-                    </div>
-
                     <h:form>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <section id="about" class="pricing about section">
+                                    <div class="pricing-item featured php-email-form">
+                                        <div class="row">
+                                            <div class="field col-2" style="display: flex; align-items: center">
+                                                <h:outputText value="#{msg['user.settings.thesaurus']}" />
+                                            </div>
+                                            <div class="field col-10" style="display: flex; align-items: center;">
+                                                <a href="#{searchBean.getThesaurusReferenceUrl()}" target="_blank">
+                                                    <h:outputText value="#{searchBean.userConnected.group.referenceInstances.thesaurus.name}" />
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <div class="row" style="margin-top: 20px">
+                                            <div class="field col-2" style="display: flex; align-items: center">
+                                                <h:outputText value="#{msg['user.settings.collection']}" />
+                                            </div>
+                                            <div class="field col-10" style="display: flex; align-items: center;">
+                                                <h:outputText value="#{searchBean.getCollectionReferenceName()}" />
+                                            </div>
+                                        </div>
+
+                                        <div class="row" style="margin-top: 20px">
+                                            <div class="field col-2" style="display: flex; align-items: center">
+                                                <h:outputText value="#{msg['user.settings.subCollection']}" />
+                                            </div>
+                                            <div class="field col-10">
+                                                <p:selectOneMenu value="#{candidatBean.labelReferenceCollectionSelected}"
+                                                                 class="form-control" style="width: 100%;">
+                                                    <p:ajax listener="#{candidatBean.setSelectedReferenceCollection()}"/>
+                                                    <f:selectItems value="#{candidatBean.referenceCollectionList}" var="collection"
+                                                                   itemLabel="#{collection.label}" itemValue="#{collection.label}"/>
+                                                </p:selectOneMenu>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6" style="text-align: center">
+                                <p:graphicImage value="/assets/img/flags/fr.png" style="max-width:12% !important;" />
+                            </div>
+                            <div class="col-6" style="text-align: center">
+                                <p:graphicImage value="/assets/img/flags/ar.png" style="max-width:12% !important;" />
+                            </div>
+                        </div>
+
                         <div class="row">
                             <div class="col-6">
                                 <section id="about" class="pricing about section">

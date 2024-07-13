@@ -3,15 +3,20 @@ package com.cnrs.opentraduction.models.dao;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 
 @Data
 @Builder
 public class ConceptDao {
 
     private String conceptId;
+    private String status;
+
     private String thesaurusId;
     private String thesaurusName;
-    private String status;
+
+    private List<CollectionDao> collections;
 
     private String labelFr;
     private String labelAr;

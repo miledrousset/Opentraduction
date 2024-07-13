@@ -4,8 +4,8 @@ import com.cnrs.opentraduction.models.client.CandidateModel;
 import com.cnrs.opentraduction.models.client.CollectionModel;
 import com.cnrs.opentraduction.models.client.ConceptModel;
 import com.cnrs.opentraduction.models.client.PropositionModel;
+import com.cnrs.opentraduction.models.client.SubCollectionModel;
 import com.cnrs.opentraduction.models.client.ThesaurusModel;
-import com.cnrs.opentraduction.models.client.TopCollectionModel;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,28 +27,23 @@ public class OpenthesoClient {
 
     private final RestTemplate restTemplate;
 
-    public ThesaurusModel[] getThesoInfo(String baseUrl) {
+    public ThesaurusModel[] getThesaurusInformations(String baseUrl) {
         var url = baseUrl + "/api/info/list?theso=all";
         log.info("URL : " + url);
         return restTemplate.getForObject(url, ThesaurusModel[].class);
     }
 
-    public TopCollectionModel[] getTopCollections(String baseUrl, String idThesaurus) {
-        var url = baseUrl + "/api/info/list?theso=" + idThesaurus + "&topconcept=all";
-        log.info("URL : " + url);
-        return restTemplate.getForObject(url, TopCollectionModel[].class);
-    }
+    public CollectionModel[] getAllCollections(String baseUrl, String idThesaurus, String idLang) {
 
-    public CollectionModel[] getCollections(String baseUrl, String idThesaurus, String topCollectionAll) {
-        var url = baseUrl + "/api/info/list?theso=" + idThesaurus + "&topconcept=" + topCollectionAll + "&group=all";
+        var url = String.format("%s/openapi/v1/concept/th8/autocomplete/%s/%s", baseUrl, idThesaurus, idLang);
         log.info("URL : " + url);
         return restTemplate.getForObject(url, CollectionModel[].class);
     }
 
-    public CollectionModel[] getSousCollections(String baseUrl, String idThesaurus, String idGroup) {
+    public SubCollectionModel[] getSousCollections(String baseUrl, String idThesaurus, String idGroup) {
         var url = baseUrl + "/openapi/v1/group/"+idThesaurus+"/"+idGroup+"/subgroup";
         log.info("URL : " + url);
-        return restTemplate.getForObject(url, CollectionModel[].class);
+        return restTemplate.getForObject(url, SubCollectionModel[].class);
     }
 
     public ConceptModel[] searchTerm(String baseUrl, String idThesaurus, String termToSearch, String idLang, String idGroup) {

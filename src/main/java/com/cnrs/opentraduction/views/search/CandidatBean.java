@@ -96,7 +96,7 @@ public class CandidatBean implements Serializable {
             synonymes.add(ElementModel.builder().value(candidatDao.getVarianteFr()).lang("fr").build());
         }
         if (!StringUtils.isEmpty(candidatDao.getVarianteFr())) {
-            synonymes.add(ElementModel.builder().value(candidatDao.getVarianteFr()).lang("ar").build());
+            synonymes.add(ElementModel.builder().value(candidatDao.getVarianteAr()).lang("ar").build());
         }
 
         var candidate = CandidateModel.builder()

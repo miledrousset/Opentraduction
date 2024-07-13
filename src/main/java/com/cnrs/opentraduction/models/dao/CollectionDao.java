@@ -8,7 +8,7 @@ import lombok.Data;
 @Builder
 public class CollectionDao {
 
-    private String collectionId;
-    private String collectionName;
+    private String id;
+    private String name;
 
 }

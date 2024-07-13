@@ -53,12 +53,15 @@ public class PropositionBean implements Serializable {
     private boolean noteFrInitialDisable, noteFrDisable;
     private boolean noteArInitialDisable, noteArDisable;
 
+    private String langFrom;
 
-    public void initInterface(Users userConnected, ConceptDao conceptToUpdate) {
+
+    public void initInterface(Users userConnected, ConceptDao conceptToUpdate, String langFrom) {
 
         log.info("Initialisation de l'interface proposition");
         this.userConnected = userConnected;
         this.conceptToUpdate = conceptToUpdate;
+        this.langFrom = langFrom;
 
         termFrInitialDisable = true;
         termFrDisable = false;
@@ -120,6 +123,10 @@ public class PropositionBean implements Serializable {
         messageService.showMessage(FacesMessage.SEVERITY_INFO, "application.proposition.msg1");
 
         log.info("Fin de l'enregistrement de la proposition");
+    }
+
+    public String getConceptLabel() {
+        return "FR".equals(langFrom.toUpperCase()) ? conceptToUpdate.getLabelFr() : conceptToUpdate.getLabelAr();
     }
 
     private List<TraductionPropModel> getTraductions() {

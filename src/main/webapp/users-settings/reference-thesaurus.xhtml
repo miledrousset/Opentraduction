@@ -37,9 +37,7 @@
                         <h:outputText value="#{msg['user.settings.thesaurus']}" />
                     </div>
                     <div class="field col-10" style="display: flex; align-items: center;">
-                        <a href="#{userSettingsBean.getThesaurusReferenceUrl()}" target="_blank">
-                            <h:outputText value="#{userSettingsBean.userConnected.group.referenceInstances.thesaurus.name}" />
-                        </a>
+                        <h:outputText value="#{userSettingsBean.userConnected.group.referenceInstances.thesaurus.name}" />
                     </div>
                 </div>
 
@@ -48,37 +46,9 @@
                         <h:outputText value="#{msg['user.settings.collection']}" />
                     </div>
                     <div class="field col-10" style="display: flex; align-items: center;">
-                        <h:outputText value="#{userSettingsBean.userConnected.group.referenceInstances.thesaurus.collection}" />
-                    </div>
-                </div>
-
-                <div class="row" style="margin-top: 20px">
-                    <div class="field col-2" style="display: flex; align-items: center">
-                        <h:outputText value="#{msg['user.settings.subCollection']}" />
-                    </div>
-                    <div class="field col-10">
-                        <p:selectOneMenu value="#{userSettingsBean.idReferenceCollectionSelected}"
-                                         class="form-control" style="width: 100%;">
-                            <p:ajax listener="#{userSettingsBean.setSelectedReferenceCollection()}"/>
-                            <f:selectItems value="#{userSettingsBean.referenceCollectionList}" var="collection"
-                                           itemLabel="#{collection.label}" itemValue="#{collection.label}"/>
-                        </p:selectOneMenu>
-                    </div>
-                </div>
-
-                <div class="row" style="margin-top: 10px;">
-                    <div class="field col-12" style=" text-align: right">
-                        <h:outputText value="#{userSettingsBean.getCollectionReferenceAudit()}" style="font-style: italic; font-size: smaller; color: #BCBAB9" />
-                    </div>
-                </div>
-
-                <div class="row" style="margin-top: 10px;">
-                    <div class="field col-12" style=" text-align: right">
-                        <p:commandButton title="#{msg['user.settings.save']}"
-                                         ajax="true" process="@form"
-                                         action="#{userSettingsBean.saveCollectionReference()}"
-                                         class="btn-getstarted"
-                                         update="referenceProjectPanel"/>
+                        <a href="#{userSettingsBean.getThesaurusReferenceUrl()}" target="_blank">
+                            <h:outputText value="#{userSettingsBean.userConnected.group.referenceInstances.thesaurus.collection}" />
+                        </a>
                     </div>
                 </div>
             </h:form>

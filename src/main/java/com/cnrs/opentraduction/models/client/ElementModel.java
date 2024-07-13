@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ElementModel {
 
+    private String id;
     private String value;
     private String lang;
 

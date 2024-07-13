@@ -73,8 +73,8 @@ public class ConsultationService {
                     .map(instance -> {
                         var collections = instance.getThesauruses().stream()
                                 .map(thesaurus -> CollectionDao.builder()
-                                        .collectionId(thesaurus.getIdCollection())
-                                        .collectionName(thesaurus.getCollection())
+                                        .id(thesaurus.getIdCollection())
+                                        .name(thesaurus.getCollection())
                                         .build())
                                 .collect(Collectors.toList());
 

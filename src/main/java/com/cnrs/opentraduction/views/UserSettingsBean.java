@@ -226,8 +226,10 @@ public class UserSettingsBean implements Serializable {
     public String getThesaurusReferenceUrl() {
 
         if (!ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances())) {
-            return getInstanceReferenceUrl() + "/?idt="
-                    + userConnected.getGroup().getReferenceInstances().getThesaurus().getIdThesaurus();
+
+            return String.format("%s/?idg=%s&idt=%s", getInstanceReferenceUrl(),
+                    userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection(),
+                    userConnected.getGroup().getReferenceInstances().getThesaurus().getIdThesaurus());
         } else {
             return "";
         }
