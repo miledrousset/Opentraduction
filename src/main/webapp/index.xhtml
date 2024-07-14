@@ -3,169 +3,155 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui">
+    <h:head>
+      <meta charset="utf-8" />
+      <title>SHS en traduction</title>
+      <!-- Favicons -->
+      <link href="assets/img/logos/logo.png" rel="icon" />
+      <link href="assets/img/logos/logo.png" rel="apple-touch-icon" />
+      <!-- Vendor CSS Files -->
+      <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+      <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+      <link href="assets/vendor/aos/aos.css" rel="stylesheet" />
+      <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
+      <!-- Main CSS File -->
+      <link href="assets/css/main.css" rel="stylesheet" />
+    </h:head>
 
-  <h:head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>SHS Traduction</title>
-    <meta content="" name="description" />
-    <meta content="" name="keywords" />
-    <!-- Favicons -->
-    <link href="assets/img/favicon.png" rel="icon" />
-    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com" rel="preconnect" />
-    <link href="https://fonts.gstatic.com" rel="preconnect" />
-    <!-- Vendor CSS Files -->
-    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
-    <link href="assets/vendor/aos/aos.css" rel="stylesheet" />
-    <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
-    <!-- Main CSS File -->
-    <link href="assets/css/main.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.1.0/css/flag-icon.min.css" rel="stylesheet"/>
-  </h:head>
+    <h:body class="index-page">
+        <h:panelGroup id="mainContent">
+            <ui:include src="shared/header.xhtml" />
 
-  <h:body class="index-page">
+            <section id="hero" class="hero section call-to-action section">
+                <img src="assets/img/backgroun-website.jpg" alt="" data-aos="fade-in" />
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <h2 data-aos="fade-up" data-aos-delay="100">
+                                <h:outputText value="#{applicationBean.getUserNameConnected()}"/>
+                            </h2>
+                            <p data-aos="fade-up" data-aos-delay="200">
+                                <h:outputText value="#{msg['application.home.title']}"/>
+                            </p>
+                        </div>
+                        <h:form id="searchPanel" action="#" class="sign-up-form d-flex" rendered="#{applicationBean.isConnected()}"
+                                data-aos="fade-up" data-aos-delay="300" style="width: 40%;">
 
-    <h:panelGroup id="mainContent">
+                          <p:inputText class="form-control" placeholder="#{msg['search.sub-title']}"
+                                       value="#{searchBean.termValue}" />
 
-      <ui:include src="shared/header.xhtml" />
+                          <p:commandButton class="btn-getstarted" title="#{msg['search.title']}"
+                                           ajax="true" process="@form" style="margin-left: 5px;"
+                                           action="#{searchBean.searchTerm(true)}" />
+                        </h:form>
+                    </div>
+                    <h:panelGroup id="about" rendered="#{!applicationBean.isConnected()}" class="about section">
+                        <div class="content" data-aos="fade-up" data-aos-delay="300">
+                            <p:link href="#" class="read-more" onclick="PF('login').show();" process="@this" ajax="true"
+                              style="color: #FFFF !important">
+                                <span><h:outputText value="#{msg['application.menu.connect']}" /></span>
+                                <i class="bi bi-lock-fill"/>
+                            </p:link>
+                        </div>
+                    </h:panelGroup>
+                </div>
+            </section>
 
-      <section id="hero" class="hero section call-to-action section">
-        <img src="assets/img/backgroun-website.jpg" alt="" data-aos="fade-in" />
-        <div class="container">
-          <div class="row">
-            <div class="col-12">
-              <h2 data-aos="fade-up" data-aos-delay="100">
-                <h:outputText value="#{applicationBean.getUserNameConnected()}"/>
-              </h2>
-              <p data-aos="fade-up" data-aos-delay="200">
-                <h:outputText value="#{msg['application.home.title']}"/>
-              </p>
-            </div>
-            <h:form id="searchPanel" action="#" class="sign-up-form d-flex" rendered="#{applicationBean.isConnected()}"
-                    data-aos="fade-up" data-aos-delay="300" style="width: 40%;">
+            <section id="clients" class="clients section">
+                <div class="container" data-aos="fade-up">
+                    <div class="row">
+                        <div class="col-12 sponsor-logo">
+                            <p:graphicImage value="/assets/img/logos/ambassade%20france%20tunisie.png"
+                                            alt="#{msg['application.logos.logo1']}"
+                                            title="#{msg['application.logos.logo1']}"
+                                            style="max-width:15% !important;">
+                                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_1')}"/>
+                            </p:graphicImage>
 
-              <p:inputText class="form-control" placeholder="#{msg['search.sub-title']}"
-                           value="#{searchBean.termValue}" />
+                            <p:graphicImage value="/assets/img/logos/institut-francais-tunisie.png"
+                                            alt="#{msg['application.logos.logo2']}"
+                                            title="#{msg['application.logos.logo2']}"
+                                            style="max-width:20% !important;">
+                                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_2')}"/>
+                            </p:graphicImage>
 
-              <p:commandButton class="btn-getstarted" title="#{msg['search.title']}"
-                               ajax="true" process="@form" style="margin-left: 5px;"
-                               action="#{searchBean.searchTerm(true)}" />
-            </h:form>
-          </div>
-          <h:panelGroup id="about" rendered="#{!applicationBean.isConnected()}" class="about section">
-            <div class="content" data-aos="fade-up" data-aos-delay="300">
-              <p:link href="#" class="read-more" onclick="PF('login').show();" process="@this" ajax="true"
-                style="color: #FFFF !important">
-                <span><h:outputText value="#{msg['application.menu.connect']}" /></span>
-                <i class="bi bi-lock-fill"/>
-              </p:link>
-            </div>
-          </h:panelGroup>
-        </div>
-      </section>
+                            <p:graphicImage value="/assets/img/logos/cnrs.png"
+                                            alt="#{msg['application.logos.logo3']}"
+                                            title="#{msg['application.logos.logo3']}"
+                                            style="max-width:11% !important;">
+                                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_3')}"/>
+                            </p:graphicImage>
 
-      <section id="clients" class="clients section">
-        <div class="container" data-aos="fade-up">
-          <div class="row">
-            <div class="col-12 sponsor-logo">
-              <p:graphicImage value="/assets/img/logos/ambassade%20france%20tunisie.png"
-                              alt="#{msg['application.logos.logo1']}"
-                              title="#{msg['application.logos.logo1']}"
-                              style="max-width:15% !important;">
-                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_1')}"/>
-              </p:graphicImage>
+                            <p:graphicImage value="/assets/img/logos/moyen-orient%20et%20mondes%20musulmans.png"
+                                            alt="#{msg['application.logos.logo4']}"
+                                            title="#{msg['application.logos.logo4']}"
+                                            style="max-width:20% !important;">
+                                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_4')}"/>
+                            </p:graphicImage>
+                        </div>
+                    </div>
 
-              <p:graphicImage value="/assets/img/logos/institut-francais-tunisie.png"
-                              alt="#{msg['application.logos.logo2']}"
-                              title="#{msg['application.logos.logo2']}"
-                              style="max-width:20% !important;">
-                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_2')}"/>
-              </p:graphicImage>
+                    <div class="row">
+                        <div class="col-12 sponsor-logo">
+                            <p:graphicImage value="/assets/img/logos/Maison%20de%20l’Orient%20et%20de%20la%20Méditerranée.png"
+                                            alt="#{msg['application.logos.logo5']}"
+                                            title="#{msg['application.logos.logo5']}"
+                                            style="max-width:10% !important;">
+                                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_5')}"/>
+                            </p:graphicImage>
 
-              <p:graphicImage value="/assets/img/logos/cnrs.png"
-                              alt="#{msg['application.logos.logo3']}"
-                              title="#{msg['application.logos.logo3']}"
-                              style="max-width:11% !important;">
-                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_3')}"/>
-              </p:graphicImage>
+                            <p:graphicImage value="/assets/img/logos/huma-num.png"
+                                            alt="#{msg['application.logos.logo6']}"
+                                            title="#{msg['application.logos.logo6']}"
+                                            style="max-width:15% !important;">
+                                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_6')}"/>
+                            </p:graphicImage>
 
-              <p:graphicImage value="/assets/img/logos/moyen-orient%20et%20mondes%20musulmans.png"
-                              alt="#{msg['application.logos.logo4']}"
-                              title="#{msg['application.logos.logo4']}"
-                              style="max-width:20% !important;">
-                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_4')}"/>
-              </p:graphicImage>
-            </div>
-          </div>
+                            <p:graphicImage value="/assets/img/logos/opentheso.png"
+                                            alt="#{msg['application.logos.logo7']}"
+                                            title="#{msg['application.logos.logo7']}"
+                                            style="max-width:15% !important;">
+                                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_7')}"/>
+                            </p:graphicImage>
+                        </div>
+                    </div>
 
-          <div class="row">
-            <div class="col-12 sponsor-logo">
-              <p:graphicImage value="/assets/img/logos/Maison%20de%20l’Orient%20et%20de%20la%20Méditerranée.png"
-                              alt="#{msg['application.logos.logo5']}"
-                              title="#{msg['application.logos.logo5']}"
-                              style="max-width:10% !important;">
-                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_5')}"/>
-              </p:graphicImage>
+                    <div class="row">
+                        <div class="col-12 sponsor-logo">
+                            <p:graphicImage value="/assets/img/logos/centre-jacques-berque.png"
+                                            alt="#{msg['application.logos.logo8']}"
+                                            title="#{msg['application.logos.logo8']}"
+                                            style="max-width:9% !important;">
+                                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_8')}"/>
+                            </p:graphicImage>
 
-              <p:graphicImage value="/assets/img/logos/huma-num.png"
-                              alt="#{msg['application.logos.logo6']}"
-                              title="#{msg['application.logos.logo6']}"
-                              style="max-width:15% !important;">
-                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_6')}"/>
-              </p:graphicImage>
+                            <p:graphicImage value="/assets/img/logos/irmc.png"
+                                            alt="#{msg['application.logos.logo9']}"
+                                            title="#{msg['application.logos.logo9']}"
+                                            style="max-width:9% !important;">
+                                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_9')}"/>
+                            </p:graphicImage>
 
-              <p:graphicImage value="/assets/img/logos/opentheso.png"
-                              alt="#{msg['application.logos.logo7']}"
-                              title="#{msg['application.logos.logo7']}"
-                              style="max-width:15% !important;">
-                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_7')}"/>
-              </p:graphicImage>
-            </div>
-          </div>
+                            <p:graphicImage value="/assets/img/logos/institut-francais-archeologie-orientale.png"
+                                            alt="#{msg['application.logos.logo10']}"
+                                            title="#{msg['application.logos.logo10']}"
+                                            style="max-width:9% !important;">
+                                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_10')}"/>
+                            </p:graphicImage>
 
-          <div class="row">
-            <div class="col-12 sponsor-logo">
-              <p:graphicImage value="/assets/img/logos/centre-jacques-berque.png"
-                              alt="#{msg['application.logos.logo8']}"
-                              title="#{msg['application.logos.logo8']}"
-                              style="max-width:9% !important;">
-                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_8')}"/>
-              </p:graphicImage>
-
-              <p:graphicImage value="/assets/img/logos/irmc.png"
-                              alt="#{msg['application.logos.logo9']}"
-                              title="#{msg['application.logos.logo9']}"
-                              style="max-width:9% !important;">
-                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_9')}"/>
-              </p:graphicImage>
-
-              <p:graphicImage value="/assets/img/logos/institut-francais-archeologie-orientale.png"
-                              alt="#{msg['application.logos.logo10']}"
-                              title="#{msg['application.logos.logo10']}"
-                              style="max-width:9% !important;">
-                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_10')}"/>
-              </p:graphicImage>
-
-              <p:graphicImage value="/assets/img/logos/ifpo.png"
-                              alt="#{msg['application.logos.logo11']}"
-                              title="#{msg['application.logos.logo11']}"
-                              style="max-width:8% !important;">
-                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_11')}"/>
-              </p:graphicImage>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <ui:include src="dialogs/login.xhtml" />
-
-      <ui:include src="shared/footer.xhtml" />
-    </h:panelGroup>
-
-    <ui:include src="shared/footer2.xhtml" />
-‡
-  </h:body>
+                            <p:graphicImage value="/assets/img/logos/ifpo.png"
+                                            alt="#{msg['application.logos.logo11']}"
+                                            title="#{msg['application.logos.logo11']}"
+                                            style="max-width:8% !important;">
+                                <p:ajax event="click" listener="#{applicationBean.openWebPage('LOGO_11')}"/>
+                            </p:graphicImage>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <ui:include src="dialogs/login.xhtml" />
+            <ui:include src="shared/footer.xhtml" />
+        </h:panelGroup>
+        <ui:include src="shared/footer2.xhtml" />
+    </h:body>
 </html>

@@ -2,50 +2,41 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <h:head>
+        <meta charset="utf-8" />
+        <title>SHS en traduction</title>
+        <!-- Favicons -->
+        <link href="assets/img/logos/logo.png" rel="icon" />
+        <link href="assets/img/logos/logo.png" rel="apple-touch-icon" />
+        <!-- Vendor CSS Files -->
+        <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+        <link href="assets/vendor/aos/aos.css" rel="stylesheet" />
+        <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
+        <!-- Main CSS File -->
+        <link href="assets/css/main.css" rel="stylesheet" />
+    </h:head>
 
-  <h:head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>SHS en traduction</title>
-    <meta content="" name="description" />
-    <meta content="" name="keywords" />
-    <!-- Favicons -->
-    <link href="assets/img/favicon.png" rel="icon" />
-    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com" rel="preconnect" />
-    <link href="https://fonts.gstatic.com" rel="preconnect" />
-    <!-- Vendor CSS Files -->
-    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
-    <link href="assets/vendor/aos/aos.css" rel="stylesheet" />
-    <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
-    <!-- Main CSS File -->
-    <link href="assets/css/main.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.1.0/css/flag-icon.min.css" rel="stylesheet"/>
-  </h:head>
+    <h:body class="services-details-page">
+        <h:panelGroup id="mainContent">
+            <ui:include src="shared/header.xhtml" />
+            <main class="main">
+                <section id="service-details" class="service-details">
+                    <div class="container">
+                        <div class="row gy-5">
+                            <div class="col-lg-12 service-box" data-aos="fade-up" data-aos-delay="200">
+                                <ui:include src="users-settings/user-informations.xhtml" />
+                                <ui:include src="users-settings/reference-thesaurus.xhtml" />
+                                <ui:include src="users-settings/consultation-thesaurus.xhtml" />
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+            <ui:include src="shared/footer.xhtml" />
+        </h:panelGroup>
 
-  <h:body class="services-details-page">
-    <h:panelGroup id="mainContent">
-      <ui:include src="shared/header.xhtml" />
-      <main class="main">
-        <!-- Service Details Section -->
-        <section id="service-details" class="service-details">
-          <div class="container">
-            <div class="row gy-5">
-              <div class="col-lg-12 service-box" data-aos="fade-up" data-aos-delay="200">
-                <ui:include src="users-settings/user-informations.xhtml" />
-                <ui:include src="users-settings/reference-thesaurus.xhtml" />
-                <ui:include src="users-settings/consultation-thesaurus.xhtml" />
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
-      <ui:include src="shared/footer.xhtml" />
-    </h:panelGroup>
-
-    <ui:include src="shared/footer2.xhtml" />
-    <ui:include src="dialogs/selectThesaurusConsultationDialog.xhtml" />
-  </h:body>
+        <ui:include src="shared/footer2.xhtml" />
+        <ui:include src="dialogs/selectThesaurusConsultationDialog.xhtml" />
+    </h:body>
 </html>

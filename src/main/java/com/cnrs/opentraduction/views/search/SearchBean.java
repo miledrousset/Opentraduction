@@ -141,9 +141,27 @@ public class SearchBean implements Serializable {
         if (!CollectionUtils.isEmpty(consultationProjects)) {
             log.info("Il existe {} projet de consultation !", consultationProjects.size());
             for (ConsultationInstances project : consultationProjects) {
-                project.getThesauruses().forEach(thesaurus -> conceptsConsultationFoundList.addAll(searchInThesaurus(thesaurus, project.getUrl())));
+                project.getThesauruses().forEach(thesaurus -> {
+                    var tmp = searchInThesaurus(thesaurus, project.getUrl());
+                    if (!CollectionUtils.isEmpty(tmp)) {
+                        conceptsConsultationFoundList.addAll(tmp.stream()
+                                .filter(element -> !isAlreadyFoundInReferenceThesaurus(element.getThesaurusId(), element.getConceptId()))
+                                .collect(Collectors.toList()));
+                    }
+                });
             }
         }
+    }
+
+    private boolean isAlreadyFoundInReferenceThesaurus(String conceptId, String thesaurusId) {
+        if (CollectionUtils.isEmpty(conceptsReferenceFoundList)) {
+            return false;
+        }
+
+        return conceptsReferenceFoundList.stream()
+                .filter(element -> element.getThesaurusId().equals(thesaurusId) && element.getConceptId().equals(conceptId))
+                .findFirst()
+                .isPresent();
     }
 
     private void referenceProjectPart() {
