@@ -59,7 +59,7 @@ public class ThesaurusService {
 
     public List<CollectionElementDao> searchTopCollections(String baseUrl, String idThesaurus) {
 
-        var collections = openthesoClient.getAllCollections(baseUrl, idThesaurus, "fr");
+        var collections = openthesoClient.getCollections(baseUrl, idThesaurus, "fr");
 
         if (collections.length > 0) {
             return Stream.of(collections)

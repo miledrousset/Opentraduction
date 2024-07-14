@@ -119,7 +119,7 @@
                                                          emptyMessage="#{msg['application.search.no_data']}"
                                                          reflow="true" styleClass="products-table" draggableColumns="true">
 
-                                                <p:column headerText="Thésaurus" width="12%" style="text-align: center">
+                                                <p:column headerText="Thésaurus" width="12%">
                                                     <h:outputText value="#{concept.thesaurusName}" />
                                                 </p:column>
 
@@ -133,7 +133,7 @@
                                                     </ul>
                                                 </p:column>
 
-                                                <p:column headerText="Label (FR)" width="15%" style="text-align: center">
+                                                <p:column headerText="Label (FR)" width="15%">
                                                     <h:panelGroup rendered="#{!searchBean.isConcept(concept.status)}">
                                                         <i class="pi pi-bookmark" style="margin-right: 5px"></i>
                                                     </h:panelGroup>
@@ -146,7 +146,7 @@
                                                     <h:outputText value="#{concept.definitionFr}" />
                                                 </p:column>
 
-                                                <p:column headerText="Label (AR)" width="15%" style="text-align: center">
+                                                <p:column headerText="Label (AR)" width="15%">
                                                     <h:panelGroup rendered="#{!searchBean.isConcept(concept.status)}">
                                                         <i class="pi pi-bookmark" style="margin-right: 5px"></i>
                                                     </h:panelGroup>

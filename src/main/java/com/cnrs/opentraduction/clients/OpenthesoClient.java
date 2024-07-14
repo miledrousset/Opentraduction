@@ -28,19 +28,21 @@ public class OpenthesoClient {
     private final RestTemplate restTemplate;
 
     public ThesaurusModel[] getThesaurusInformations(String baseUrl) {
+
         var url = baseUrl + "/api/info/list?theso=all";
         log.info("URL : " + url);
         return restTemplate.getForObject(url, ThesaurusModel[].class);
     }
 
-    public CollectionModel[] getAllCollections(String baseUrl, String idThesaurus, String idLang) {
+    public CollectionModel[] getCollections(String baseUrl, String idThesaurus, String idLang) {
 
-        var url = String.format("%s/openapi/v1/concept/th8/autocomplete/%s/%s", baseUrl, idThesaurus, idLang);
+        var url = String.format("%s/openapi/v1/concept/search/groups/%s/%s", baseUrl, idThesaurus, idLang);
         log.info("URL : " + url);
         return restTemplate.getForObject(url, CollectionModel[].class);
     }
 
     public SubCollectionModel[] getSousCollections(String baseUrl, String idThesaurus, String idGroup) {
+
         var url = baseUrl + "/openapi/v1/group/"+idThesaurus+"/"+idGroup+"/subgroup";
         log.info("URL : " + url);
         return restTemplate.getForObject(url, SubCollectionModel[].class);
@@ -51,8 +53,8 @@ public class OpenthesoClient {
         if (!StringUtils.isEmpty(idGroup)) {
             groupParam = "&group=" + idGroup;
         }
-        var url = String.format("%s/openapi/v1/concept/%s/autocomplete/%s/full?lang=%s" + groupParam,
-                baseUrl, idThesaurus, termToSearch, idLang, idGroup);
+        var url = String.format("%s/openapi/v1/concept/search/%s/%s?lang=%s" + groupParam,
+                baseUrl, idThesaurus, termToSearch, idLang);
         log.info("URL : " + url);
         return restTemplate.getForObject(url, ConceptModel[].class);
     }
