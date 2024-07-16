@@ -39,7 +39,7 @@ public class ApplicationBean implements Serializable {
     private Users userConnected;
 
 
-    public void logout() {
+    public void logout() throws IOException {
 
         var userName = userConnected.getFullName();
         connexionModel = new ConnexionDto();
@@ -48,6 +48,9 @@ public class ApplicationBean implements Serializable {
         menuItemSelected = MenuItem.HOME;
 
         messageService.showMessage(FacesMessage.SEVERITY_INFO, "application.user.error.msg1");
+
+        FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
+
         log.info("Déconnexion effectué avec sucée de {}", userName);
     }
 

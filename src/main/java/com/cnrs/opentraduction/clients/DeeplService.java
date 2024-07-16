@@ -1,4 +1,4 @@
-package com.cnrs.opentraduction.services;
+package com.cnrs.opentraduction.clients;
 
 import com.deepl.api.Translator;
 import lombok.extern.slf4j.Slf4j;

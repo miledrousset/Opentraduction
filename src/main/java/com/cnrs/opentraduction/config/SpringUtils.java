@@ -15,9 +15,5 @@ public class SpringUtils {
     public static <T> T getBean(ServletContext servletContext, Class<T> beanClass) {
         return getApplicationContext(servletContext).getBean(beanClass);
     }
-
-    public static <T> T getBean(ServletContext servletContext, String beanName, Class<T> beanClass) {
-        return getApplicationContext(servletContext).getBean(beanName, beanClass);
-    }
 }
 

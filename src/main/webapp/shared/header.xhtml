@@ -83,12 +83,17 @@
                 <h:panelGroup rendered="#{applicationBean.isConnected()}">
                     <p:commandButton class="btn-getstarted" action="#{applicationBean.logout()}" update="mainContent"
                                      title="#{msg['application.menu.disconnect']}" process="@this" ajax="true">
-                        <p:confirm header="Confirmation" message="Are you sure you want to proceed?" icon="pi pi-exclamation-triangle"/>
+                        <p:confirm header="#{msg['application.user.confirmation']}"
+                                   message="#{msg['application.user.logout.msg']}" icon="pi pi-exclamation-triangle"/>
                     </p:commandButton>
 
-                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="40%">
+                        <p:commandButton value="#{msg['action.no']}" type="button"
+                                         style="color: rgba(0, 0, 0, 0.55)"
+                                         styleClass="ui-confirmdialog-no ui-button-flat"/>
+
+                        <p:commandButton value="#{msg['action.yes']}" type="button" styleClass="ui-confirmdialog-yes"
+                                         style="color: #e84545; background: #e84545; color: #fff;"/>
                     </p:confirmDialog>
                 </h:panelGroup>
             </div>

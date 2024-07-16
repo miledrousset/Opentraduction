@@ -1,6 +1,6 @@
 package com.cnrs.opentraduction.views.search;
 
-import com.cnrs.opentraduction.services.DeeplService;
+import com.cnrs.opentraduction.clients.DeeplService;
 import com.cnrs.opentraduction.utils.MessageService;
 
 import lombok.Data;
