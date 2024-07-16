@@ -27,7 +27,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 
@@ -115,9 +114,9 @@ public class SearchBean implements Serializable {
             searchReferenceCollectionList();
         }
 
-        referenceProjectPart();
+        searchInReferenceProject();
 
-        conceptProjectsPart();
+        searchInConsultationThesaurus();
 
         if (CollectionUtils.isEmpty(conceptsReferenceFoundList) && CollectionUtils.isEmpty(conceptsConsultationFoundList)) {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.search.failed.msg3");
@@ -131,13 +130,10 @@ public class SearchBean implements Serializable {
         }
     }
 
-    private void conceptProjectsPart() {
+    private void searchInConsultationThesaurus() {
         log.info("Vérification s'il y a des thésaurus de consultation");
         conceptsConsultationFoundList = new ArrayList<>();
-        var consultationProjects = userConnected.getThesauruses().stream()
-                .map(Thesaurus::getConsultationInstances)
-                .filter(consultationInstances -> !ObjectUtils.isEmpty(consultationInstances))
-                .collect(Collectors.toList());
+        var consultationProjects = userConnected.getGroup().getConsultationInstances();
         if (!CollectionUtils.isEmpty(consultationProjects)) {
             log.info("Il existe {} projet de consultation !", consultationProjects.size());
             for (ConsultationInstances project : consultationProjects) {
@@ -159,24 +155,18 @@ public class SearchBean implements Serializable {
         }
 
         return conceptsReferenceFoundList.stream()
-                .filter(element -> element.getThesaurusId().equals(thesaurusId) && element.getConceptId().equals(conceptId))
-                .findFirst()
-                .isPresent();
+                .anyMatch(element -> element.getThesaurusId().equals(thesaurusId) && element.getConceptId().equals(conceptId));
     }
 
-    private void referenceProjectPart() {
+    private void searchInReferenceProject() {
         conceptsReferenceFoundList = new ArrayList<>();
-        var referenceProject = userConnected.getThesauruses().stream()
-                .filter(element -> !ObjectUtils.isEmpty(element.getReferenceInstances()))
-                .findAny();
-        if (referenceProject.isPresent() && !ObjectUtils.isEmpty(referenceProject.get().getReferenceInstances())) {
+        var referenceProject = userConnected.getGroup().getReferenceInstances();
+        if (!ObjectUtils.isEmpty(referenceProject)) {
             try {
-                var tmp = searchInThesaurus(referenceProject.get().getReferenceInstances().getThesaurus(),
-                        referenceProject.get().getReferenceInstances().getUrl());
+                var tmp = searchInThesaurus(referenceProject.getThesaurus(), referenceProject.getUrl());
                 conceptsReferenceFoundList.addAll(tmp);
             } catch (Exception ex) {
-                log.info("Aucune résultat trouvé pour le thésaurus de référence {}",
-                        referenceProject.get().getReferenceInstances().getThesaurus().getName());
+                log.info("Aucune résultat trouvé pour le thésaurus de référence {}", referenceProject.getThesaurus().getName());
             }
         } else {
             log.error("Aucun Thésaurus de référence n'est présent !: ");
@@ -265,37 +255,27 @@ public class SearchBean implements Serializable {
     }
 
     private String getConceptSynonyme(ConceptModel conceptModel, String lang) {
-        var tmp = conceptModel.getSynonymes().stream()
+        return conceptModel.getSynonymes().stream()
                 .filter(element -> lang.equals(element.getLang()))
                 .map(ElementModel::getValue)
-                .findFirst();
-        return tmp.isPresent() ? tmp.get() : "";
+                .findFirst()
+                .orElse("");
     }
 
     private String getConceptDefinition(ConceptModel conceptModel, String lang) {
-        var tmp = conceptModel.getDefinitions().stream()
+        return conceptModel.getDefinitions().stream()
                 .filter(element -> lang.equals(element.getLang()))
                 .map(ElementModel::getValue)
-                .findFirst();
-        return tmp.isPresent() ? tmp.get() : "";
+                .findFirst()
+                .orElse("");
     }
 
     private String getConceptNote(ConceptModel conceptModel, String lang) {
-        var tmp = conceptModel.getNotes().stream()
+        return conceptModel.getNotes().stream()
                 .filter(element -> lang.equals(element.getLang()))
                 .map(ElementModel::getValue)
-                .findFirst();
-        return tmp.isPresent() ? tmp.get() : "";
-    }
-
-    private String extractDataFromUri(String query, String patternString) {
-        var pattern = Pattern.compile(patternString);
-        var matcher = pattern.matcher(query);
-        if (matcher.find()) {
-            return matcher.group(1);
-        } else {
-            return "";
-        }
+                .findFirst()
+                .orElse("");
     }
 
     public String getThesaurusReferenceUrl() {
@@ -315,15 +295,6 @@ public class SearchBean implements Serializable {
             return userConnected.getGroup().getReferenceInstances().getUrl();
         }
         return "";
-    }
-
-    public void setSelectedReferenceCollection() {
-        if (!StringUtils.isEmpty(idReferenceCollectionSelected)) {
-            var collectionReferenceTmp = referenceCollectionList.stream()
-                    .filter(element -> element.getLabel().equals(idReferenceCollectionSelected))
-                    .findFirst();
-            collectionReferenceTmp.ifPresent(collectionElementDao -> collectionReferenceSelected = collectionElementDao);
-        }
     }
 
     public String getCollectionReferenceName() {

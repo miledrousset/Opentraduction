@@ -201,21 +201,6 @@ public class ConsultationSettingBean implements Serializable {
         }
     }
 
-    public void onCollectionSelectedUpdate() {
-        log.info("Mise à jour de la collection sélectionnée");
-        selectedCollections = new ArrayList<>();
-        if (!CollectionUtils.isEmpty(selectedIdCollections)) {
-            selectedIdCollections.forEach(idCollection -> {
-                var collection = collectionList.stream()
-                        .filter(element -> element.getId().equals(idCollection))
-                        .findFirst();
-                if (collection.isPresent()) {
-                    selectedCollections.add(collection.get());
-                }
-            });
-        }
-    }
-
     public void instanceManagement() {
 
         if (StringUtils.isEmpty(instanceSelected.getName())) {
@@ -254,7 +239,7 @@ public class ConsultationSettingBean implements Serializable {
                     .consultationInstances(instanceSelected)
                     .name(thesaurusSelected.getLabel())
                     .idThesaurus(thesaurusSelected.getId())
-                    .collection("Toutes les collection")
+                    .collection("Toutes les collections")
                     .idCollection("ALL")
                     .created(LocalDateTime.now())
                     .modified(LocalDateTime.now())
