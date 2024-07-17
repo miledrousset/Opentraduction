@@ -63,7 +63,7 @@ public class ConsultationSettingBean implements Serializable {
 
     public void initialAddInstanceDialog() {
 
-        log.info("Initialisation de la boite de dialog pour l'ajout d'un projet de consultation");
+        log.info("Préparation de la boite de dialog pour l'ajout d'un projet de consultation");
         dialogTitle = messageService.getMessage("system.consultation.add");
 
         thesaurusList = List.of();
@@ -79,7 +79,7 @@ public class ConsultationSettingBean implements Serializable {
     }
 
     public void searchThesaurus() {
-        log.info("Recherche de la liste des thésaurus");
+        log.info("Recherche des thésaurus disponibles dans {}", instanceSelected.getUrl());
         thesaurusList = thesaurusService.searchThesaurus(instanceSelected.getUrl());
 
         if (!CollectionUtils.isEmpty(thesaurusList)) {
@@ -87,28 +87,31 @@ public class ConsultationSettingBean implements Serializable {
             thesaurusSelected = thesaurusList.get(0);
             thesaurusIdSelected = thesaurusSelected.getId();
             searchCollections();
+        } else {
+            messageService.showMessage(FacesMessage.SEVERITY_INFO, "system.consultation.success.msg3");
         }
     }
 
     public void searchCollections() {
 
-        log.info("Recherche des collections");
-        thesaurusSelected = thesaurusList.stream()
+        log.info("Recherche des collections disponible dans le thésaurus {}", thesaurusSelected.getLabel());
+        var tmp = thesaurusList.stream()
                 .filter(element -> element.getId().equals(thesaurusIdSelected))
-                .findFirst()
-                .get();
+                .findFirst();
+        if (tmp.isPresent()) {
+            thesaurusSelected = tmp.get();
+            log.info("Thésaurus cible : {}", thesaurusSelected.getLabel());
+            collectionList = thesaurusService.searchTopCollections(instanceSelected.getUrl(), thesaurusSelected.getId());
 
-        log.info("Thésaurus cible : {}", thesaurusSelected.getLabel());
-        collectionList = thesaurusService.searchTopCollections(instanceSelected.getUrl(), thesaurusSelected.getId());
+            validateBtnStatut = true;
 
-        validateBtnStatut = true;
-
-        if (!CollectionUtils.isEmpty(collectionList)) {
-            collectionsListStatut = true;
-            selectedCollections = collectionList;
-            selectedIdCollections = collectionList.stream()
-                    .map(CollectionElementDao::getId)
-                    .collect(Collectors.toList());
+            if (!CollectionUtils.isEmpty(collectionList)) {
+                collectionsListStatut = true;
+                selectedCollections = collectionList;
+                selectedIdCollections = collectionList.stream()
+                        .map(CollectionElementDao::getId)
+                        .collect(Collectors.toList());
+            }
         }
     }
 
@@ -179,14 +182,12 @@ public class ConsultationSettingBean implements Serializable {
                             } else {
                                 var collectionTmp = collectionList.stream()
                                         .filter(element -> collectionsSaved.stream()
-                                                .filter(collection -> element.getId().equals(collection))
-                                                .findAny()
-                                                .isPresent())
+                                                .anyMatch(collection -> element.getId().equals(collection)))
                                         .collect(Collectors.toList());
                                 if (!CollectionUtils.isEmpty(collectionTmp)) {
                                     selectedCollections = collectionTmp;
                                     selectedIdCollections = collectionTmp.stream()
-                                            .map(element -> element.getId())
+                                            .map(CollectionElementDao::getId)
                                             .collect(Collectors.toList());
                                 }
                             }
@@ -208,7 +209,7 @@ public class ConsultationSettingBean implements Serializable {
             return;
         }
 
-        if (consultationInstanceService.checkExistingName(instanceSelected.getName())) {
+        if (ObjectUtils.isEmpty(instanceSelected.getId()) && consultationInstanceService.checkExistingName(instanceSelected.getName())) {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "system.reference.failed.msg4");
             return;
         }
@@ -230,6 +231,19 @@ public class ConsultationSettingBean implements Serializable {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "system.consultation.failed.msg2");
             instanceSelected = new ConsultationInstances();
             log.error("Erreur pendant l'enregistrée l'instance de référence !");
+        }
+    }
+
+    public void onCollectionSelectedUpdate() {
+        log.info("Mise à jour de la liste des collections sélectionnées");
+        selectedCollections = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(selectedIdCollections)) {
+            selectedIdCollections.forEach(idCollection -> {
+                collectionList.stream()
+                        .filter(element -> element.getId().equals(idCollection))
+                        .findFirst()
+                        .ifPresent(collectionElementDao -> selectedCollections.add(collectionElementDao));
+            });
         }
     }
 

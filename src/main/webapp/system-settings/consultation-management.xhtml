@@ -16,11 +16,14 @@
                         <div class="pricing-item featured">
                             <div class="row">
                                 <div class="col-12" style="text-align: right; margin-bottom: 10px">
-                                    <p:commandButton styleClass="ui-button-outlined ui-button-secondary"
+                                    <p:commandButton id="addConsultationThesaurus"
+                                                     styleClass="ui-button-outlined ui-button-secondary"
                                                      icon="pi pi-plus-circle" ajax="true" process="@this"
                                                      actionListener="#{consultationBean.initialAddInstanceDialog()}"
                                                      update="consultationInstanceForm"
                                                      value="#{msg['system.consultation.add']}" />
+                                    <p:tooltip for="addConsultationThesaurus" position="bottom"
+                                               value="#{msg['system.consultation.add.tooltip']}" />
                                 </div>
                             </div>
 
@@ -53,17 +56,21 @@
                                 </p:column>
 
                                 <p:column headerText="#{msg['system.reference.actions']}" width="15%" style="text-align: center">
-                                    <p:commandButton icon="pi pi-pencil" ajax="true" process="@this"
-                                                     update="consultationInstanceForm"
+                                    <p:commandButton id="updateConsultationThesaurus" icon="pi pi-pencil" ajax="true"
+                                                     process="@this" update="consultationInstanceForm"
                                                      action="#{consultationBean.initialUpdateInstanceDialog(instance)}"
                                                      styleClass="rounded-button ui-button-success ui-button-flat" />
+                                    <p:tooltip for="updateConsultationThesaurus" position="bottom"
+                                               value="#{msg['system.consultation.update.tooltip']}" />
 
-                                    <p:commandButton icon="pi pi-times" update="listConsultationInstances"
-                                                     ajax="true" process="@this"
+                                    <p:commandButton id="removeConsultationThesaurus" icon="pi pi-times"
+                                                     update="listConsultationInstances" ajax="true" process="@this"
                                                      action="#{consultationBean.deleteInstance(instance)}"
                                                      styleClass="rounded-button ui-button-danger ui-button-flat">
                                         <p:confirm header="Confirmation" message="#{msg['system.reference.remove.msg']}" icon="pi pi-exclamation-triangle"/>
                                     </p:commandButton>
+                                    <p:tooltip for="removeConsultationThesaurus" position="bottom"
+                                               value="#{msg['system.consultation.remove.tooltip']}" />
 
                                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="40%">
                                         <p:commandButton value="#{msg['action.no']}" type="button"
