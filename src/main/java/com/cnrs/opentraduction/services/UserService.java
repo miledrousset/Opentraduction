@@ -188,7 +188,7 @@ public class UserService {
         return userThesaurusRepository.getAllByUserId(userId);
     }
 
-    public List<Users> getUsersByGroup(String groupName) {
-        return userRepository.findAllByGroupName(groupName);
+    public List<Users> getUsersByGroup(Integer groupId) {
+        return userRepository.findAllByGroupId(groupId);
     }
 }

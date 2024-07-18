@@ -12,7 +12,7 @@ public interface UserRepository extends JpaRepository<Users, Integer> {
 
     Optional<Users> findByMail(String mail);
 
-    List<Users> findAllByGroupName(String groupName);
+    List<Users> findAllByGroupId(Integer groupId);
 
     Optional<Users> findByPassword(String password);
 }

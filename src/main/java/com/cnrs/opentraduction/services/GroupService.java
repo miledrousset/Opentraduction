@@ -44,11 +44,6 @@ public class GroupService {
     private final ConsultationService consultationInstanceService;
 
 
-    public Groups getGroupById(Integer groupId) {
-        var group = groupRepository.findById(groupId);
-        return group.orElse(null);
-    }
-
     public void deleteGroup(Integer groupId) {
         groupRepository.deleteById(groupId);
     }
@@ -191,6 +186,18 @@ public class GroupService {
 
     public List<Groups> getGroups() {
         return groupRepository.findAllByOrderByName();
+    }
+
+
+    public Groups getGroupById(Integer groupId) {
+
+        return groupRepository.findById(groupId).orElse(null);
+    }
+
+
+    public Groups getGroupByName(String name) {
+
+        return groupRepository.findGroupsByName(name).orElse(null);
     }
 
 }

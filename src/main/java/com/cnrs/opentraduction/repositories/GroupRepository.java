@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface GroupRepository extends JpaRepository<Groups, Integer> {
@@ -19,5 +20,7 @@ public interface GroupRepository extends JpaRepository<Groups, Integer> {
     void updateReferenceProject(Integer id, ReferenceInstances referenceInstances);
 
     List<Groups> findAllByOrderByName();
+
+    Optional<Groups> findGroupsByName(String name);
 
 }

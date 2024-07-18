@@ -94,6 +94,11 @@ public class GroupsSettingBean implements Serializable {
             return;
         }
 
+        if (!ObjectUtils.isEmpty(groupService.getGroupByName(groupSelected.getName()))) {
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.group.error.msg4");
+            return;
+        }
+
         if (ObjectUtils.isEmpty(referenceProjectSelected)) {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.group.error.msg2");
             return;
@@ -166,7 +171,7 @@ public class GroupsSettingBean implements Serializable {
     public void deleteGroup(GroupDao group) {
 
         if (!ObjectUtils.isEmpty(group)) {
-            if (CollectionUtils.isEmpty(userService.getUsersByGroup(group.getName()))) {
+            if (CollectionUtils.isEmpty(userService.getUsersByGroup(group.getId()))) {
                 groupService.deleteGroup(group.getId());
                 groups = groupService.getAllGroups();
                 messageService.showMessage(FacesMessage.SEVERITY_INFO, "application.group.ok.msg1");

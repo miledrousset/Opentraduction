@@ -17,10 +17,11 @@
                         <div class="pricing-item featured">
                             <div class="row">
                                 <div class="col-12" style="text-align: right; margin-bottom: 10px">
-                                    <p:commandButton styleClass="ui-button-outlined ui-button-secondary"
+                                    <p:commandButton id="addGroup" styleClass="ui-button-outlined ui-button-secondary"
                                                      icon="pi pi-plus-circle" ajax="true" process="@this"
                                                      actionListener="#{groupsSettingBean.initialAddingGroup()}"
                                                      update="groupForm" value="#{msg['application.group.add.title']}" />
+                                    <p:tooltip for="addGroup" position="bottom" value="#{msg['application.group.add.tooltip']}" />
                                 </div>
                             </div>
 
@@ -52,12 +53,13 @@
                                 </p:column>
 
                                 <p:column headerText="#{msg['system.reference.actions']}" width="20%" style="text-align: center">
-                                    <p:commandButton icon="pi pi-pencil" ajax="true" process="@this"
+                                    <p:commandButton id="updateGroupBtn" icon="pi pi-pencil" ajax="true" process="@this"
                                                      update="groupForm"
                                                      action="#{groupsSettingBean.initialUpdateGroup(group)}"
                                                      styleClass="rounded-button ui-button-success ui-button-flat" />
+                                    <p:tooltip for="updateGroupBtn" position="bottom" value="#{msg['application.group.update.tooltip']}" />
 
-                                    <p:commandButton icon="pi pi-times" update=":mainContent:listGroups"
+                                    <p:commandButton id="removeGroupBtn" icon="pi pi-times" update=":mainContent:listGroups"
                                                      action="#{groupsSettingBean.deleteGroup(group)}"
                                                      styleClass="rounded-button ui-button-danger ui-button-flat">
 
@@ -65,6 +67,7 @@
                                                    message="#{msg['application.group.remove.msg']}"
                                                    icon="pi pi-exclamation-triangle"/>
                                     </p:commandButton>
+                                    <p:tooltip for="removeGroupBtn" position="bottom" value="#{msg['application.group.update.tooltip']}" />
 
                                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="40%">
                                         <p:commandButton value="#{msg['action.no']}" type="button"
