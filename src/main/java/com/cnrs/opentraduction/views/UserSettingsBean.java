@@ -35,13 +35,9 @@ public class UserSettingsBean implements Serializable {
     private final UserService userService;
 
     private Users userConnected;
-
     private List<ConsultationCollectionDao> consultationThesaurusList;
-
+    private boolean displayDialog1, displayDialog2;
     private String dialogTitle;
-
-    private boolean displayDialog;
-    private String errorMessage;
 
 
     public void initialInterface(Users userConnected) {
@@ -52,16 +48,16 @@ public class UserSettingsBean implements Serializable {
         log.info("Vérification de la présence de clé API utilisateur");
         if (StringUtils.isEmpty(userConnected.getApiKey())) {
             log.error("L'utilisateur {} ne dispose de pas de clé API", userConnected.getFullName());
-            displayDialog = true;
-            errorMessage = messageService.getMessage("application.user.error.msg2");
+            displayDialog1 = true;
+            messageService.showMessage(FacesMessage.SEVERITY_WARN, "application.user.error.msg2");
         }
 
         log.info("Préparation du projet de consultation");
         searchConsultationThesaurus();
 
-        if (!ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances())) {
-            displayDialog = true;
-            errorMessage = messageService.getMessage("application.user.error.msg3");
+        if (ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances())) {
+            displayDialog2 = true;
+            messageService.showMessage(FacesMessage.SEVERITY_WARN, "application.user.error.msg3");
         }
     }
 
@@ -124,22 +120,12 @@ public class UserSettingsBean implements Serializable {
         }
 
         if (userService.saveUser(userConnected)) {
+            displayDialog1 = StringUtils.isEmpty(userConnected.getApiKey());
+            displayDialog2 = !ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances());
             messageService.showMessage(FacesMessage.SEVERITY_INFO, ("user.settings.ok.msg0"));
             log.info("Enregistrement effectuée avec succès !");
         }  else {
             errorCase("user.settings.error.msg0");
-        }
-    }
-
-    public String getThesaurusReferenceUrl() {
-
-        if (!ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances())) {
-
-            return String.format("%s/?idg=%s&idt=%s", getInstanceReferenceUrl(),
-                    userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection(),
-                    userConnected.getGroup().getReferenceInstances().getThesaurus().getIdThesaurus());
-        } else {
-            return "";
         }
     }
 
@@ -164,5 +150,27 @@ public class UserSettingsBean implements Serializable {
 
     public boolean showReferenceProject() {
         return !ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances());
+    }
+
+    public String getCollectionName() {
+        return "ALL".equalsIgnoreCase(userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection())
+                ? messageService.getMessage("system.reference.root")
+                : userConnected.getGroup().getReferenceInstances().getThesaurus().getCollection();
+    }
+
+    public String getThesaurusReferenceUrl() {
+
+        if (!ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances())) {
+            if ("ALL".equalsIgnoreCase(userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection())) {
+                return String.format("%s/?idt=%s", getInstanceReferenceUrl(),
+                        userConnected.getGroup().getReferenceInstances().getThesaurus().getIdThesaurus());
+            } else {
+                return String.format("%s/?idg=%s&idt=%s", getInstanceReferenceUrl(),
+                        userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection(),
+                        userConnected.getGroup().getReferenceInstances().getThesaurus().getIdThesaurus());
+            }
+        } else {
+            return "";
+        }
     }
 }

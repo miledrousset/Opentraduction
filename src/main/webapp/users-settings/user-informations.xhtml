@@ -1,12 +1,20 @@
 <ui:composition 
     xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
     xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
     xmlns:h="http://xmlns.jcp.org/jsf/html">
 
     <section id="about" class="pricing about section">
 
-        <p:staticMessage id="alertMsg" severity="warn" summary="Attention" style="width: 100%; margin-bottom: 20px"
-                         detail="" closable="true" rendered="#{!userSettingsBean.displayDialog}" />
+        <p:staticMessage severity="warn" summary="#{msg['user.settings.attention']}"
+                         detail="#{msg['application.user.error.msg2']}"
+                         rendered="#{userSettingsBean.displayDialog1}"
+                         style="width: 100%; margin-bottom: 20px"/>
+
+        <p:staticMessage severity="warn" summary="#{msg['user.settings.attention']}"
+                         detail="#{msg['application.user.error.msg3']}"
+                         rendered="#{userSettingsBean.displayDialog2}"
+                         style="width: 100%; margin-bottom: 20px"/>
 
         <div class="container section-title" data-aos="fade-up">
             <h2><h:outputText value="#{msg['user.settings.title']}"/></h2>
@@ -71,6 +79,19 @@
 
                 <div class="row" style="margin-top: 10px">
                     <div class="field col-2" style="display: flex; align-items: center;">
+                        <h:outputText value="#{msg['application.user.default.traduction']}"/>
+                    </div>
+                    <div class="field col-10">
+                        <p:selectOneMenu value="#{userSettingsBean.userConnected.defaultTargetTraduction}" class="form-control"
+                                         required="true" label="tableId" appendTo="@this" >
+                            <f:selectItem itemLabel="Français -> Arabe" itemValue="FrancaisArabe"/>
+                            <f:selectItem itemLabel="Arabe -> Français" itemValue="ArabeFrancais"/>
+                        </p:selectOneMenu>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top: 10px">
+                    <div class="field col-2" style="display: flex; align-items: center;">
                         <h:outputText value="#{msg['user.settings.user_key']}"/>
                     </div>
                     <div class="field col-10">
@@ -100,7 +121,7 @@
                                          ajax="true" process="@form"
                                          action="#{userSettingsBean.saveUserInformations()}"
                                          class="btn-getstarted"
-                                         update="userInformations"/>
+                                         update="mainContent"/>
                     </div>
                 </div>
             </div>

@@ -94,7 +94,7 @@ public class GroupsSettingBean implements Serializable {
             return;
         }
 
-        if (!ObjectUtils.isEmpty(groupService.getGroupByName(groupSelected.getName()))) {
+        if (ObjectUtils.isEmpty(groupSelected.getId()) && !ObjectUtils.isEmpty(groupService.getGroupByName(groupSelected.getName()))) {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.group.error.msg4");
             return;
         }

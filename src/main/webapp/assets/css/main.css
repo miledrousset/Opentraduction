@@ -2945,3 +2945,7 @@ body .ui-toggleswitch.ui-toggleswitch-checked .ui-toggleswitch-slider {
 body .ui-toggleswitch .ui-toggleswitch-slider {
   background: #e84545;
 }
+
+body .ui-selectonemenu-panel .ui-selectonemenu-items .ui-selectonemenu-item.ui-state-highlight {
+  background: #e84545 !important;
+}
