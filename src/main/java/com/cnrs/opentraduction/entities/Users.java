@@ -54,6 +54,9 @@ public class Users implements Serializable {
 
     private LocalDateTime modified;
 
+    @Column(name = "default_target_traduction")
+    private String defaultTargetTraduction;
+
     @ManyToOne
     @JoinColumn(name = "id_group", referencedColumnName = "id")
     private Groups group;

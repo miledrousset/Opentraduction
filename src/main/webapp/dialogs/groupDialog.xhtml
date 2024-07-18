@@ -10,14 +10,14 @@
         <h:form>
             <div class="row">
                 <div class="field col-12 md:col-4">
-                    <p:outputLabel for="nom" value="Nom du groupe"/>
+                    <p:outputLabel for="nom" value="#{msg['application.group.name']}"/>
                     <p:inputText id="nom" class="form-control" value="#{groupsSettingBean.groupSelected.name}"/>
                 </div>
             </div>
 
             <div class="row" style="margin-top: 10px">
                 <div class="field col-12 md:col-4">
-                    <p:outputLabel value="Thésaurus de référence"/>
+                    <p:outputLabel value="#{msg['application.group.reference.project']}"/>
                     <p:selectOneMenu value="#{groupsSettingBean.referenceProjectNameSelected}" class="form-control">
                         <p:ajax listener="#{groupsSettingBean.setReferenceThesaurus()}"/>
                         <f:selectItems value="#{groupsSettingBean.referenceProjects}"
@@ -27,7 +27,7 @@
             </div>
 
             <div class="field col-12 md:col-4" style="margin-top: 10px">
-                <p:outputLabel value="Thésaurus de consultation"/>
+                <p:outputLabel value="#{msg['application.group.consultation.projects']}"/>
 
                 <p:selectManyMenu id="consultationProjects"
                                   value="#{groupsSettingBean.consultationProjectsNamesSelected}"
@@ -57,5 +57,4 @@
             </div>
         </h:form>
     </p:dialog>
-
 </ui:composition>

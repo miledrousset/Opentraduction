@@ -14,7 +14,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
@@ -89,56 +88,18 @@ public class UserService {
 
         userToSave.setModified(LocalDateTime.now());
 
-        boolean createNewThesaurusAssociation = true;
         if (!ObjectUtils.isEmpty(userToSave.getId())) {
             var userTmp = userRepository.findById(userToSave.getId());
-            if (userTmp.isPresent()) {
-                if (userTmp.get().getGroup().getId().intValue() != userToSave.getId().intValue()) {
-                    log.info("Suppression des anciens thésaurus liées à l'utilisateur en vue de lui associés les nouvelles associations !");
-                    userThesaurusRepository.deleteByUserId(userToSave.getId());
-                } else {
-                    log.info("Nous somme dans le cas d'une mise à jour et le group n'a pas changé !");
-                    createNewThesaurusAssociation = false;
-                }
+            if (userTmp.isPresent()
+                    && userTmp.get().getGroup().getId().intValue() != userToSave.getId().intValue()) {
+
+                log.info("Suppression des anciens thésaurus liées à l'utilisateur en vue de lui associés les nouvelles associations !");
+                userThesaurusRepository.deleteByUserId(userToSave.getId());
             }
         }
 
         log.info("Enregistrement dans la base");
-        var userSaved = userRepository.save(userToSave);
-
-        if (createNewThesaurusAssociation) {
-            log.info("Nouvel utilisateur ou le groupe de l'utilisateur à changé, donc enregistrement des références...");
-            if (!ObjectUtils.isEmpty(userSaved.getGroup().getReferenceInstances())) {
-                log.info("Associer l'instance de référence au nouvel utilisateur");
-                var userThesaurus = new UsersThesaurus();
-                userThesaurus.setUserId(userSaved.getId());
-                userThesaurus.setThesaurusId(userSaved.getGroup().getReferenceInstances().getThesaurus().getId());
-                userThesaurus.setCollectionId(userSaved.getGroup().getReferenceInstances().getThesaurus().getIdCollection());
-                userThesaurus.setCollection(userSaved.getGroup().getReferenceInstances().getThesaurus().getCollection());
-                userThesaurus.setCreated(LocalDateTime.now());
-                userThesaurus.setModified(LocalDateTime.now());
-                userThesaurusRepository.save(userThesaurus);
-            }
-
-            if (!CollectionUtils.isEmpty(userSaved.getGroup().getConsultationInstances())) {
-                log.info("Associer l'instance de consultation au nouvel utilisateur");
-                userSaved.getGroup().getConsultationInstances().forEach(consultation -> {
-                    if (!CollectionUtils.isEmpty(consultation.getThesauruses())) {
-                        consultation.getThesauruses().forEach(thesaurus -> {
-                            var userThesaurus = new UsersThesaurus();
-                            userThesaurus.setUserId(userSaved.getId());
-                            userThesaurus.setThesaurusId(thesaurus.getId());
-                            userThesaurus.setCollectionId(thesaurus.getIdCollection());
-                            userThesaurus.setCollection(thesaurus.getCollection());
-                            userThesaurus.setCreated(LocalDateTime.now());
-                            userThesaurus.setModified(LocalDateTime.now());
-                            userThesaurusRepository.save(userThesaurus);
-                        });
-                    }
-                });
-            }
-
-        }
+        userRepository.save(userToSave);
 
         return true;
     }
@@ -148,7 +109,7 @@ public class UserService {
     }
 
     public void deleteUser(Users user) {
-        userRepository.delete(user);
+        userRepository.deleteUserById(user.getId());
     }
 
     public Users getUserById(Integer userId) {

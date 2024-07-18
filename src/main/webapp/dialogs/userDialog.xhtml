@@ -52,6 +52,15 @@
                 </p:selectOneMenu>
             </div>
 
+            <div class="field col-12 md:col-4" style="margin-top: 10px">
+                <p:outputLabel value="#{msg['application.user.default.traduction']}"/>
+                <p:selectOneMenu value="#{usersSettingBean.userSelected.defaultTargetTraduction}" class="form-control"
+                                 required="true" label="tableId" appendTo="@this" >
+                    <f:selectItem itemLabel="Français -> Arabe" itemValue="FrancaisArabe"/>
+                    <f:selectItem itemLabel="Arabe -> Français" itemValue="ArabeFrancais"/>
+                </p:selectOneMenu>
+            </div>
+
             <div class="row">
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
                     <p:outputLabel for="api" value="#{msg['application.user.key-user']}"/>

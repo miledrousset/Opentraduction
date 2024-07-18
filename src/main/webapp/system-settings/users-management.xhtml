@@ -16,10 +16,12 @@
                         <div class="pricing-item featured">
                             <div class="row">
                                 <div class="col-12" style="text-align: right; margin-bottom: 10px">
-                                    <p:commandButton styleClass="ui-button-outlined ui-button-secondary"
-                                                     icon="pi pi-user-plus" ajax="true" process="@this" update=":userForm"
+                                    <p:commandButton id="addNewUser" styleClass="ui-button-outlined ui-button-secondary"
+                                                     icon="pi pi-user-plus" ajax="true" process="@this" update="userForm"
                                                      actionListener="#{usersSettingBean.initialAddUser()}"
                                                      value="#{msg['application.user.action.add']}" />
+                                    <p:tooltip for="addNewUser" position="bottom"
+                                               value="#{msg['application.user.add.tooltip']}" />
                                 </div>
                             </div>
 
@@ -61,17 +63,21 @@
                                 </p:column>
 
                                 <p:column headerText="#{msg['system.reference.actions']}" width="10%" style="text-align: center">
-                                    <p:commandButton icon="pi pi-user-edit" ajax="true" process="@this" update="userForm"
+                                    <p:commandButton id="updateUser" icon="pi pi-user-edit" ajax="true" process="@this" update="userForm"
                                                      action="#{usersSettingBean.initialUpdateUser(user)}"
                                                      styleClass="rounded-button ui-button-success ui-button-flat" />
+                                    <p:tooltip for="updateUser" position="bottom"
+                                               value="#{msg['application.user.update.tooltip']}" />
 
-                                    <p:commandButton icon="pi pi-user-minus" update=":mainContent:usersList"
+                                    <p:commandButton id="removeUser" icon="pi pi-user-minus" update=":mainContent:usersList"
                                                      action="#{usersSettingBean.deleteUser(user)}"
                                                      styleClass="rounded-button ui-button-danger ui-button-flat">
                                         <p:confirm header="#{msg['user.settings.confirmation']}"
                                                    message="#{msg['application.user.delete.confirmation']}"
                                                    icon="pi pi-exclamation-triangle"/>
                                     </p:commandButton>
+                                    <p:tooltip for="removeUser" position="bottom"
+                                               value="#{msg['application.user.remove.tooltip']}" />
 
                                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="40%">
                                         <p:commandButton value="#{msg['action.no']}" type="button"
@@ -83,7 +89,6 @@
                                     </p:confirmDialog>
                                 </p:column>
                             </p:dataTable>
-
                         </div>
                     </div>
                 </div>

@@ -33,7 +33,7 @@ public class UsersSettingBean implements Serializable {
     private Users userSelected;
 
     private Integer idGroupSelected;
-    private String dialogTitle;
+    private String dialogTitle, defaultTraduction;
 
 
     public void initialInterface() {
@@ -89,13 +89,15 @@ public class UsersSettingBean implements Serializable {
             userSelected.setGroup(group);
         }
 
-        userService.saveUser(userSelected);
+        if (userService.saveUser(userSelected)) {
 
-        users = userService.getAllUsers();
+            log.info("Enregistrement de l'utilisateur effectué, actualisation du tableau des utilisateurs !");
+            users = userService.getAllUsers();
 
-        messageService.showMessage(FacesMessage.SEVERITY_INFO, "user.settings.ok.msg2");
-        PrimeFaces.current().executeScript("PF('userDialog').hide();");
-        log.info("Utilisateur enregistré avec sucée !");
+            messageService.showMessage(FacesMessage.SEVERITY_INFO, "user.settings.ok.msg2");
+            PrimeFaces.current().executeScript("PF('userDialog').hide();");
+            log.info("Utilisateur enregistré avec sucée !");
+        }
     }
 
     public void deleteUser(Users user) {
@@ -105,7 +107,7 @@ public class UsersSettingBean implements Serializable {
 
         users = userService.getAllUsers();
 
-        messageService.showMessage(FacesMessage.SEVERITY_INFO, "user.settings.ok.msg2");
+        messageService.showMessage(FacesMessage.SEVERITY_INFO, "user.settings.ok.msg3");
         log.info("L'utilisateur a été supprimé !");
     }
 }

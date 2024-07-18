@@ -23,3 +23,5 @@ databaseChangeLog:
       file: classpath:/changelog/v1.0/011-ajouter-audit-columns-thesaurus-users-table.xml
   - include:
       file: classpath:/changelog/v1.0/012-add-api-columns-users-table.xml
+  - include:
+      file: classpath:/changelog/v1.0/013-add-traduction-default-columns-users-table.xml
