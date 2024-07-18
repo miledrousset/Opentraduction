@@ -50,7 +50,7 @@ public class CandidatBean implements Serializable {
         referenceCollectionList = new ArrayList<>();
         referenceCollectionList.add(new CollectionElementDao("ALL", messageService.getMessage("user.settings.consultation.racine")));
         if ("ALL".equals(this.userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection())) {
-            referenceCollectionList.addAll(thesaurusService.searchTopCollections(url, idThesaurus));
+            referenceCollectionList.addAll(thesaurusService.searchCollections(url, idThesaurus));
         } else {
             var idCollection = this.userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection();
             referenceCollectionList.addAll(thesaurusService.searchSubCollections(url, idThesaurus, idCollection));

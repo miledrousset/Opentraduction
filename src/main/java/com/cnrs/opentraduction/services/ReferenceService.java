@@ -6,6 +6,7 @@ import com.cnrs.opentraduction.models.dao.ReferenceInstanceDao;
 import com.cnrs.opentraduction.repositories.ReferenceInstanceRepository;
 import com.cnrs.opentraduction.repositories.ThesaurusRepository;
 
+import com.cnrs.opentraduction.utils.MessageService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ReferenceService {
 
+    private final MessageService messageService;
     private final ReferenceInstanceRepository referenceInstanceRepository;
     private final ThesaurusRepository thesaurusRepository;
 
@@ -83,7 +85,7 @@ public class ReferenceService {
                             instance.setThesaurusId(element.getThesaurus().getIdThesaurus());
                             instance.setThesaurusName(element.getThesaurus().getName());
                             instance.setCollectionId(element.getThesaurus().getIdCollection());
-                            instance.setCollectionName(element.getThesaurus().getCollection());
+                            instance.setCollectionName(getLabelCollection(element));
                         }
                         return instance;
                     })
@@ -91,6 +93,12 @@ public class ReferenceService {
         } else {
             return List.of();
         }
+    }
+
+    private String getLabelCollection(ReferenceInstances referenceInstances) {
+        return "ALL".equalsIgnoreCase(referenceInstances.getThesaurus().getIdCollection())
+                ? messageService.getMessage("system.reference.root")
+                : referenceInstances.getThesaurus().getCollection();
     }
 
     public ReferenceInstances getInstanceById(Integer instanceId) {

@@ -4,9 +4,6 @@ import com.cnrs.opentraduction.clients.OpenthesoClient;
 import com.cnrs.opentraduction.entities.ConsultationInstances;
 import com.cnrs.opentraduction.entities.Thesaurus;
 import com.cnrs.opentraduction.entities.Users;
-import com.cnrs.opentraduction.models.client.ConceptModel;
-import com.cnrs.opentraduction.models.client.ElementModel;
-import com.cnrs.opentraduction.models.dao.CollectionDao;
 import com.cnrs.opentraduction.models.dao.CollectionElementDao;
 import com.cnrs.opentraduction.models.dao.ConceptDao;
 import com.cnrs.opentraduction.services.ThesaurusService;
@@ -25,7 +22,6 @@ import javax.inject.Named;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,7 +73,7 @@ public class SearchBean implements Serializable {
         referenceCollectionList.add(new CollectionElementDao("ALL", "--"));
         if (!ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances())) {
             if ("ALL".equals(userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection())) {
-                referenceCollectionList.addAll(thesaurusService.searchTopCollections(
+                referenceCollectionList.addAll(thesaurusService.searchCollections(
                         userConnected.getGroup().getReferenceInstances().getUrl(),
                         userConnected.getGroup().getReferenceInstances().getThesaurus().getIdThesaurus()));
             } else {
@@ -186,15 +182,7 @@ public class SearchBean implements Serializable {
 
         var languageToSearch = toArabic ? "ar" : "fr";
 
-        var referenceResult = openthesoClient.searchTerm(url, thesaurus.getIdThesaurus(), termValue, languageToSearch, idCollection);
-
-        log.info("Résultat trouvée dans le Thésaurus de référence : " + referenceResult.length);
-        return Arrays.stream(referenceResult)
-                .map(element -> toConceptDao(element, thesaurus.getName(), thesaurus.getIdThesaurus(),
-                        StringUtils.isEmpty(thesaurus.getReferenceInstances())
-                                ? thesaurus.getConsultationInstances().getUrl()
-                                : thesaurus.getReferenceInstances().getUrl()))
-                .collect(Collectors.toList());
+        return thesaurusService.searchConcepts(thesaurus, url, termValue, languageToSearch, idCollection);
     }
 
     public void initAddProposition(ConceptDao conceptToUpdate) {
@@ -222,60 +210,6 @@ public class SearchBean implements Serializable {
         searchResultDisplay = true;
         addCandidatDisplay = false;
         addPropositionDisplay = false;
-    }
-
-    private ConceptDao toConceptDao(ConceptModel conceptModel, String thesaurusName, String thesaurusId, String baseUrl) {
-
-        return ConceptDao.builder()
-                .conceptId(conceptModel.getIdConcept())
-                .status(conceptModel.getStatus())
-                .thesaurusId(thesaurusId)
-                .thesaurusName(thesaurusName)
-                .collections(conceptModel.getCollections().stream()
-                        .map(element -> CollectionDao.builder().id(element.getId()).name(element.getValue()).build())
-                        .collect(Collectors.toList()))
-                .labelFr(getConceptTerm(conceptModel, "fr"))
-                .labelAr(getConceptTerm(conceptModel, "ar"))
-                .definitionFr(getConceptDefinition(conceptModel, "fr"))
-                .definitionAr(getConceptDefinition(conceptModel, "ar"))
-                .varianteAr(getConceptSynonyme(conceptModel, "ar"))
-                .varianteFr(getConceptSynonyme(conceptModel, "fr"))
-                .noteFr(getConceptNote(conceptModel, "fr"))
-                .noteAr(getConceptNote(conceptModel, "ar"))
-                .url(String.format("%s/?idc=%s&idt=%s", baseUrl, conceptModel.getIdConcept(), thesaurusId))
-                .build();
-    }
-
-    private String getConceptTerm(ConceptModel conceptModel, String lang) {
-        var tmp = conceptModel.getTerms().stream()
-                .filter(element -> lang.equals(element.getLang()))
-                .map(ElementModel::getValue)
-                .findFirst();
-        return tmp.isPresent() ? tmp.get() : "";
-    }
-
-    private String getConceptSynonyme(ConceptModel conceptModel, String lang) {
-        return conceptModel.getSynonymes().stream()
-                .filter(element -> lang.equals(element.getLang()))
-                .map(ElementModel::getValue)
-                .findFirst()
-                .orElse("");
-    }
-
-    private String getConceptDefinition(ConceptModel conceptModel, String lang) {
-        return conceptModel.getDefinitions().stream()
-                .filter(element -> lang.equals(element.getLang()))
-                .map(ElementModel::getValue)
-                .findFirst()
-                .orElse("");
-    }
-
-    private String getConceptNote(ConceptModel conceptModel, String lang) {
-        return conceptModel.getNotes().stream()
-                .filter(element -> lang.equals(element.getLang()))
-                .map(ElementModel::getValue)
-                .findFirst()
-                .orElse("");
     }
 
     public String getThesaurusReferenceUrl() {

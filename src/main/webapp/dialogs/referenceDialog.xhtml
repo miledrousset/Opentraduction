@@ -5,7 +5,7 @@
         xmlns:h="http://xmlns.jcp.org/jsf/html">
 
     <p:dialog id="referenceInstanceForm" header="#{referenceBean.dialogTitle}" widgetVar="referenceDialog"
-              minHeight="40" width="350" showEffect="fade" modal="true" resizable="true" position="top" style="margin-top: 20px">
+              minHeight="40" width="420" showEffect="fade" modal="true" resizable="true" position="top" style="margin-top: 20px">
 
         <h:form>
             <div class="row">
@@ -21,10 +21,12 @@
                     <div class="ui-inputgroup">
                         <p:inputText id="url" class="form-control" placeholder="http://..."
                                      value="#{referenceBean.referenceSelected.url}" />
-                        <p:commandButton icon="pi pi-search" ajax="true" process="@form"
+                        <p:commandButton id="searchRefThesaurus" icon="pi pi-search" ajax="true" process="@form"
                                          style="background: #e84545; border: 1px solid #e84545"
                                          update="listThesaurusForRefIns listCollectionsForRefIns valideReferenceInstance"
                                          action="#{referenceBean.searchThesaurus()}"/>
+                        <p:tooltip for="searchRefThesaurus" position="bottom"
+                                   value="#{msg['system.reference.search.tooltip']}" />
                     </div>
                 </div>
             </div>

@@ -88,6 +88,7 @@ public class ConsultationSettingBean implements Serializable {
             thesaurusIdSelected = thesaurusSelected.getId();
             searchCollections();
         } else {
+            log.error("Aucun thésaurus trouvé !");
             messageService.showMessage(FacesMessage.SEVERITY_INFO, "system.consultation.success.msg3");
         }
     }
@@ -101,7 +102,7 @@ public class ConsultationSettingBean implements Serializable {
         if (tmp.isPresent()) {
             thesaurusSelected = tmp.get();
             log.info("Thésaurus cible : {}", thesaurusSelected.getLabel());
-            collectionList = thesaurusService.searchTopCollections(instanceSelected.getUrl(), thesaurusSelected.getId());
+            collectionList = thesaurusService.searchCollections(instanceSelected.getUrl(), thesaurusSelected.getId());
 
             validateBtnStatut = true;
 
@@ -111,6 +112,9 @@ public class ConsultationSettingBean implements Serializable {
                 selectedIdCollections = collectionList.stream()
                         .map(CollectionElementDao::getId)
                         .collect(Collectors.toList());
+            } else {
+                log.error("Aucune collection trouvée !");
+                messageService.showMessage(FacesMessage.SEVERITY_INFO, "system.consultation.collection.not.found");
             }
         }
     }
@@ -165,7 +169,7 @@ public class ConsultationSettingBean implements Serializable {
                         thesaurusSelected = thesaurusTmp.get();
 
                         validateBtnStatut = true;
-                        collectionList = thesaurusService.searchTopCollections(instanceSelected.getUrl(), thesaurusSelected.getId());
+                        collectionList = thesaurusService.searchCollections(instanceSelected.getUrl(), thesaurusSelected.getId());
 
                         if (!CollectionUtils.isEmpty(collectionList)) {
                             var collectionsSaved = thesaurusSaved.get().getConsultationInstances().getThesauruses().stream()

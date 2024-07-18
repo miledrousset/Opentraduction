@@ -103,20 +103,27 @@ public class ReferenceSettingBean implements Serializable {
         if (thesaurusListStatut) {
             thesaurusSelected = thesaurusList.get(0);
             searchCollections();
+        } else {
+            log.error("Aucun thésaurus trouvé !");
+            messageService.showMessage(FacesMessage.SEVERITY_INFO, "system.reference.thesaurus.not.found");
         }
     }
 
     public void searchCollections() {
 
         collectionList = new ArrayList<>();
-        collectionList.add(new CollectionElementDao());
-        collectionList.addAll(thesaurusService.searchTopCollections(referenceSelected.getUrl(), thesaurusSelected.getId()));
+        collectionList.add(CollectionElementDao.builder().id("ALL")
+                .label(messageService.getMessage("system.reference.root")).build());
+        collectionList.addAll(thesaurusService.searchCollections(referenceSelected.getUrl(), thesaurusSelected.getId()));
 
         validateBtnStatut = true;
 
         if (!CollectionUtils.isEmpty(collectionList)) {
             collectionSelected = collectionList.get(0);
             collectionsListStatut = true;
+        } else {
+            log.error("Aucune collection trouvée !");
+            messageService.showMessage(FacesMessage.SEVERITY_INFO, "system.reference.collection.not.found");
         }
     }
 
@@ -165,8 +172,9 @@ public class ReferenceSettingBean implements Serializable {
 
                         validateBtnStatut = true;
                         collectionList = new ArrayList<>();
-                        collectionList.add(new CollectionElementDao());
-                        collectionList.addAll(thesaurusService.searchTopCollections(referenceSelected.getUrl(), thesaurusSelected.getId()));
+                        collectionList.add(CollectionElementDao.builder().id("ALL")
+                                .label(messageService.getMessage("system.reference.root")).build());
+                        collectionList.addAll(thesaurusService.searchCollections(referenceSelected.getUrl(), thesaurusSelected.getId()));
                         if (!CollectionUtils.isEmpty(collectionList)) {
                             collectionsListStatut = true;
                             if (thesaurusSaved.getIdCollection().equals("ALL")) {

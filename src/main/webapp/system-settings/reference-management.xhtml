@@ -16,11 +16,14 @@
                         <div class="pricing-item featured">
                             <div class="row">
                                 <div class="col-12" style="text-align: right; margin-bottom: 10px">
-                                    <p:commandButton styleClass="ui-button-outlined ui-button-secondary"
+                                    <p:commandButton id="addReferenceThesaurus"
+                                                     styleClass="ui-button-outlined ui-button-secondary"
                                                      icon="pi pi-plus-circle" ajax="true" process="@this"
                                                      actionListener="#{referenceBean.initialAddInstanceDialog()}"
                                                      update="referenceInstanceForm"
                                                      value="#{msg['system.reference.add']}" />
+                                    <p:tooltip for="addReferenceThesaurus" position="bottom"
+                                               value="#{msg['system.reference.search.tooltip']}" />
                                 </div>
                             </div>
 
@@ -43,7 +46,7 @@
                                 </p:column>
 
                                 <p:column headerText="#{msg['system.reference.collection_name']}" width="25%">
-                                    <p:outputLabel value="#{instance.name}" />
+                                    <p:outputLabel value="#{instance.collectionName}" />
                                 </p:column>
 
                                 <p:column headerText="#{msg['system.reference.actions']}" width="15%" style="text-align: center">

@@ -23,10 +23,12 @@
                     <div class="ui-inputgroup">
                         <p:inputText id="urlReferenceInstance" class="form-control" placeholder="http://..."
                                      value="#{consultationBean.instanceSelected.url}" />
-                        <p:commandButton icon="pi pi-search" ajax="true" process="@form"
+                        <p:commandButton id="addConsultationThesaurus" icon="pi pi-search" ajax="true" process="@form"
                                          style="background: #e84545; border: 1px solid #e84545"
                                          update="listThesaurusForConIns valideConsultationInstance"
                                          action="#{consultationBean.searchThesaurus()}"/>
+                        <p:tooltip for="addConsultationThesaurus" position="bottom"
+                                   value="#{msg['system.reference.search.tooltip']}" />
                     </div>
                 </div>
             </div>
