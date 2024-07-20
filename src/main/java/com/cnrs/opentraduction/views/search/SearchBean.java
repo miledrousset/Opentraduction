@@ -17,7 +17,10 @@ import org.springframework.util.StringUtils;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.inject.Named;
 import java.io.IOException;
 import java.io.Serializable;
@@ -40,21 +43,21 @@ public class SearchBean implements Serializable {
     private final DeeplBean deeplBean;
 
     private Users userConnected;
-    private String termValue;
-    private boolean toArabic, searchDone;
+    private String termValue, idReferenceCollectionSelected;
+    private boolean toArabic, searchDone, userApiKeyAlert;
+    private boolean searchResultDisplay, addCandidatDisplay, addPropositionDisplay;
     private ConceptDao conceptSelected;
     private List<ConceptDao> conceptsReferenceFoundList, conceptsConsultationFoundList;
-
-    private boolean searchResultDisplay, addCandidatDisplay, addPropositionDisplay;
-
     private List<CollectionElementDao> referenceCollectionList;
     private CollectionElementDao collectionReferenceSelected;
-    private String idReferenceCollectionSelected;
 
-    public void initSearchInterface() {
+
+    public void initSearchInterface(Users userConnected) {
         log.info("Initialisation de l'interface recherche");
+        this.userConnected = userConnected;
+
+        toArabic = !"FrancaisArabe".equalsIgnoreCase(userConnected.getDefaultTargetTraduction());
         termValue = "";
-        toArabic = false;
         searchDone = false;
         conceptsReferenceFoundList = new ArrayList<>();
         conceptsConsultationFoundList = new ArrayList<>();
@@ -63,26 +66,11 @@ public class SearchBean implements Serializable {
         addCandidatDisplay = false;
         addPropositionDisplay = false;
 
+        log.info("Vérification de la présence de clé API utilisateur");
+        userApiKeyAlert = StringUtils.isEmpty(userConnected.getApiKey());
+
         log.info("Préparation des projets de consultation");
         searchReferenceCollectionList();
-    }
-
-    private void searchReferenceCollectionList() {
-
-        referenceCollectionList = new ArrayList<>();
-        referenceCollectionList.add(new CollectionElementDao("ALL", "--"));
-        if (!ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances())) {
-            if ("ALL".equals(userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection())) {
-                referenceCollectionList.addAll(thesaurusService.searchCollections(
-                        userConnected.getGroup().getReferenceInstances().getUrl(),
-                        userConnected.getGroup().getReferenceInstances().getThesaurus().getIdThesaurus()));
-            } else {
-                referenceCollectionList.addAll(thesaurusService.searchSubCollections(
-                        userConnected.getGroup().getReferenceInstances().getUrl(),
-                        userConnected.getGroup().getReferenceInstances().getThesaurus().getIdThesaurus(),
-                        userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection()));
-            }
-        }
     }
 
     public String getReferenceThesaurus() {
@@ -263,5 +251,39 @@ public class SearchBean implements Serializable {
 
     public boolean isConcept(String status) {
         return "CO".equals(status);
+    }
+
+    public boolean canSendProposition(String status) {
+        return !(isConcept(status) && StringUtils.isEmpty(userConnected.getApiKey()));
+    }
+
+    public boolean canSendCandidat() {
+        return !StringUtils.isEmpty(userConnected.getApiKey());
+    }
+
+    private void searchReferenceCollectionList() {
+
+        referenceCollectionList = new ArrayList<>();
+        referenceCollectionList.add(new CollectionElementDao("ALL", "--"));
+        if (!ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances())) {
+            if ("ALL".equals(userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection())) {
+                referenceCollectionList.addAll(thesaurusService.searchCollections(
+                        userConnected.getGroup().getReferenceInstances().getUrl(),
+                        userConnected.getGroup().getReferenceInstances().getThesaurus().getIdThesaurus()));
+            } else {
+                referenceCollectionList.addAll(thesaurusService.searchSubCollections(
+                        userConnected.getGroup().getReferenceInstances().getUrl(),
+                        userConnected.getGroup().getReferenceInstances().getThesaurus().getIdThesaurus(),
+                        userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection()));
+            }
+        }
+    }
+
+    public void setTraductionDirection(AjaxBehaviorEvent event) {
+        UIComponent component = event.getComponent();
+        if (component instanceof UIInput) {
+            UIInput inputComponent = (UIInput) component;
+            toArabic = (Boolean) inputComponent.getValue();
+        }
     }
 }

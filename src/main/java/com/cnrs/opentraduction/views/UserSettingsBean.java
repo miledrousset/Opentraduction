@@ -36,7 +36,7 @@ public class UserSettingsBean implements Serializable {
 
     private Users userConnected;
     private List<ConsultationCollectionDao> consultationThesaurusList;
-    private boolean displayDialog1, displayDialog2;
+    private boolean userApiKeyAlert, referenceProjetAlert;
     private String dialogTitle;
 
 
@@ -46,19 +46,13 @@ public class UserSettingsBean implements Serializable {
         this.userConnected = userConnected;
 
         log.info("Vérification de la présence de clé API utilisateur");
-        if (StringUtils.isEmpty(userConnected.getApiKey())) {
-            log.error("L'utilisateur {} ne dispose de pas de clé API", userConnected.getFullName());
-            displayDialog1 = true;
-            messageService.showMessage(FacesMessage.SEVERITY_WARN, "application.user.error.msg2");
-        }
+        userApiKeyAlert = StringUtils.isEmpty(userConnected.getApiKey());
+
+        log.info("Vérification de la présence d'un projet de référence'");
+        referenceProjetAlert = ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances());
 
         log.info("Préparation du projet de consultation");
         searchConsultationThesaurus();
-
-        if (ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances())) {
-            displayDialog2 = true;
-            messageService.showMessage(FacesMessage.SEVERITY_WARN, "application.user.error.msg3");
-        }
     }
 
     private void searchConsultationThesaurus() {
@@ -120,8 +114,8 @@ public class UserSettingsBean implements Serializable {
         }
 
         if (userService.saveUser(userConnected)) {
-            displayDialog1 = StringUtils.isEmpty(userConnected.getApiKey());
-            displayDialog2 = !ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances());
+            userApiKeyAlert = StringUtils.isEmpty(userConnected.getApiKey());
+            referenceProjetAlert = ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances());
             messageService.showMessage(FacesMessage.SEVERITY_INFO, ("user.settings.ok.msg0"));
             log.info("Enregistrement effectuée avec succès !");
         }  else {

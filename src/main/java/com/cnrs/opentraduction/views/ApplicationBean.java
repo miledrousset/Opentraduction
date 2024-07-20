@@ -88,7 +88,7 @@ public class ApplicationBean implements Serializable {
         switch(menuItemSelected) {
             case SEARCH:
                 log.info("Navigation vers l'interface de recherche");
-                searchBean.initSearchInterface();
+                searchBean.initSearchInterface(userConnected);
                 FacesContext.getCurrentInstance().getExternalContext().redirect("search.xhtml");
                 break;
             case USER_SETTINGS:

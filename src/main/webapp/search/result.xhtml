@@ -8,6 +8,12 @@
             <div class="row gy-5">
                 <div class="col-lg-12 service-box" data-aos="fade-up" data-aos-delay="200">
                     <section id="pricing" class="pricing section">
+
+                        <center><p:staticMessage severity="warn" summary="#{msg['user.settings.attention']}"
+                                         detail="#{msg['application.user.error.msg2']}"
+                                         rendered="#{searchBean.userApiKeyAlert}"
+                                         style="width: 100%; margin-bottom: 20px"/></center>
+
                         <div class="container section-title" data-aos="fade-up">
                             <h2><h:outputText value="#{msg['application.search.title']}"/></h2>
                         </div>
@@ -17,7 +23,11 @@
                                 <p:graphicImage value="/assets/img/flags/fr.png" style="max-width:12% !important;" />
                             </div>
                             <div class="col-2" style="text-align: center; margin-top: 7px">
-                                <p:toggleSwitch value="#{searchBean.toArabic}" onIcon="pi pi-arrow-right" offIcon="pi pi-arrow-left"/>
+                                <h:form>
+                                    <p:toggleSwitch value="#{searchBean.toArabic}" onIcon="pi pi-arrow-right" offIcon="pi pi-arrow-left">
+                                        <p:ajax listener="#{searchBean.setTraductionDirection}" />
+                                    </p:toggleSwitch>
+                                </h:form>
                             </div>
                             <div class="col-5">
                                 <p:graphicImage value="/assets/img/flags/ar.png" style="max-width:12% !important;" />
@@ -29,11 +39,11 @@
                                 <h:form>
                                     <p:inputText value="#{searchBean.termValue}" class="form-control"
                                                  placeholder="#{msg['search.sub-title']}"/>
-                                    <p:commandButton icon="bi bi-search"
-                                                     ajax="true" process="@form"
-                                                     update="resultPanel"
-                                                     action="#{searchBean.searchTerm(false)}"
+                                    <p:commandButton id="searchBtn" icon="bi bi-search" ajax="true" process="@form"
+                                                     update="resultPanel" action="#{searchBean.searchTerm(false)}"
                                                      style="background: #e84545; border-color: #e84545"/>
+                                    <p:tooltip for="searchBtn" position="bottom"
+                                               value="#{msg['application.search.btn.tooltip']}" />
                                 </h:form>
                             </div>
                         </div>
@@ -55,7 +65,7 @@
                                                          emptyMessage="#{msg['application.search.no_data']}"
                                                          reflow="true" styleClass="products-table" draggableColumns="true">
 
-                                                <p:column headerText="Collection" width="12%" style="text-align: center">
+                                                <p:column headerText="Collection" width="12%" style="text-align: center" groupRow="true">
                                                     <ul style="margin-bottom: -1px">
                                                         <ui:repeat value="#{concept.collections}" var="collection">
                                                             <li>
@@ -75,7 +85,7 @@
                                                 </p:column>
 
                                                 <p:column headerText="Définition (FR)" width="25%">
-                                                    <h:outputText value="#{concept.definitionFr}" />
+                                                    <h:outputText value="#{concept.definitionFr}" escape="false" />
                                                 </p:column>
 
                                                 <p:column headerText="Label (AR)" width="12%">
@@ -88,14 +98,20 @@
                                                 </p:column>
 
                                                 <p:column headerText="Définition (AR)" width="25%">
-                                                    <h:outputText value="#{concept.definitionAr}" />
+                                                    <h:outputText value="#{concept.definitionAr}" escape="false" />
                                                 </p:column>
 
                                                 <p:column width="5%" style="text-align: center">
-                                                    <p:commandButton icon="pi pi-file-edit" ajax="true" process="@this" update="globalPanel"
-                                                                     action="#{searchBean.initAddProposition(concept)}"
-                                                                     rendered="#{searchBean.isConcept(concept.status)}"
-                                                                     styleClass="rounded-button ui-button-success ui-button-flat" />
+                                                    <h:panelGroup rendered="#{concept.status == 'CO'}">
+                                                        <p:commandButton id="propositionBtn" icon="pi pi-file-edit" ajax="true"
+                                                                         process="@this" update="globalPanel"
+                                                                         disabled="#{!searchBean.canSendProposition(concept.status)}"
+                                                                         action="#{searchBean.initAddProposition(concept)}"
+                                                                         styleClass="rounded-button ui-button-success ui-button-flat" />
+
+                                                        <p:tooltip for="propositionBtn" position="bottom"
+                                                                   value="#{msg['application.search.proposition.btn.tooltip']}" />
+                                                    </h:panelGroup>
                                                 </p:column>
                                             </p:dataTable>
                                         </div>
@@ -118,11 +134,11 @@
                                                          emptyMessage="#{msg['application.search.no_data']}"
                                                          reflow="true" styleClass="products-table" draggableColumns="true">
 
-                                                <p:column headerText="Thésaurus" width="12%">
+                                                <p:column headerText="Thésaurus" width="12%" groupRow="true">
                                                     <h:outputText value="#{concept.thesaurusName}" />
                                                 </p:column>
 
-                                                <p:column headerText="Collection" width="12%" style="text-align: center">
+                                                <p:column headerText="Collection" width="12%" style="text-align: center" groupRow="true">
                                                     <ul style="margin-bottom: -1px">
                                                         <ui:repeat value="#{concept.collections}" var="collection">
                                                             <li>
@@ -142,7 +158,7 @@
                                                 </p:column>
 
                                                 <p:column headerText="Définition (FR)" width="25%">
-                                                    <h:outputText value="#{concept.definitionFr}" />
+                                                    <h:outputText value="#{concept.definitionFr}" escape="false"/>
                                                 </p:column>
 
                                                 <p:column headerText="Label (AR)" width="15%">
@@ -155,7 +171,7 @@
                                                 </p:column>
 
                                                 <p:column headerText="Définition (AR)" width="25%">
-                                                    <h:outputText value="#{concept.definitionAr}" />
+                                                    <h:outputText value="#{concept.definitionAr}" escape="false" />
                                                 </p:column>
                                             </p:dataTable>
                                         </div>
@@ -163,13 +179,11 @@
                                 </div>
                             </div>
 
-                            <ui:include src="deepl.xhtml" />
-
                             <div class="row" style="margin-top: 20px">
                                 <div class="col-lg-12" style="text-align: right">
-                                    <p:commandButton class="btn-getstarted" update="globalPanel"
-                                                     action="#{searchBean.initAddCandidat()}"
-                                                     title="Créer un candidat"
+                                    <p:commandButton id="candidatBtn" class="btn-getstarted" update="globalPanel"
+                                                     action="#{searchBean.initAddCandidat()}" title="Créer un candidat"
+                                                     disabled="#{!searchBean.canSendCandidat()}"
                                                      ajax="true" process="@this" />
                                 </div>
                             </div>
