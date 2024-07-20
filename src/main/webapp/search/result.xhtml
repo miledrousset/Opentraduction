@@ -60,60 +60,70 @@
                                                 </h3>
                                             </div>
 
-                                            <p:dataTable id="conceptsReferenceFound" var="concept" value="#{searchBean.conceptsReferenceFoundList}"
-                                                         class="table table-hover" stripedRows="true"
-                                                         emptyMessage="#{msg['application.search.no_data']}"
-                                                         reflow="true" styleClass="products-table" draggableColumns="true">
+                                            <h:panelGroup rendered="#{searchBean.showReferenceResult()}">
+                                                <div class="row">
+                                                    <div class="col-12 content">
+                                                        <h:outputText value="#{msg['application.search.no_data']}" style="font-style: italic; color: rgba(33, 37, 41, 0.58)"/>
+                                                    </div>
+                                                </div>
+                                            </h:panelGroup>
 
-                                                <p:column headerText="Collection" width="12%" style="text-align: center" groupRow="true">
-                                                    <ul style="margin-bottom: -1px">
-                                                        <ui:repeat value="#{concept.collections}" var="collection">
-                                                            <li>
-                                                                <p:tag styleClass="mr-2" value="#{collection.name}" style="background: rgba(0, 0, 0, 0.58)" />
-                                                            </li>
-                                                        </ui:repeat>
-                                                    </ul>
-                                                </p:column>
+                                            <h:panelGroup rendered="#{!searchBean.showReferenceResult()}">
+                                                <p:dataTable id="conceptsReferenceFound" var="concept" value="#{searchBean.conceptsReferenceFoundList}"
+                                                             class="table table-hover" stripedRows="true"
+                                                             emptyMessage="#{msg['application.search.no_data']}"
+                                                             reflow="true" styleClass="products-table" draggableColumns="true">
 
-                                                <p:column headerText="Label (FR)" width="12%">
-                                                    <h:panelGroup rendered="#{!searchBean.isConcept(concept.status)}">
-                                                        <i class="pi pi-bookmark" style="margin-right: 5px"></i>
-                                                    </h:panelGroup>
-                                                    <a href="#{concept.url}" target="_blank">
-                                                        <h:outputText value="#{concept.labelFr}" />
-                                                    </a>
-                                                </p:column>
+                                                    <p:column headerText="#{msg['application.search.collection']}" width="12%" style="text-align: center" groupRow="true">
+                                                        <ul style="margin-bottom: -1px">
+                                                            <ui:repeat value="#{concept.collections}" var="collection">
+                                                                <li>
+                                                                    <p:tag styleClass="mr-2" value="#{collection.name}" style="background: rgba(0, 0, 0, 0.58)" />
+                                                                </li>
+                                                            </ui:repeat>
+                                                        </ul>
+                                                    </p:column>
 
-                                                <p:column headerText="Définition (FR)" width="25%">
-                                                    <h:outputText value="#{concept.definitionFr}" escape="false" />
-                                                </p:column>
+                                                    <p:column headerText="#{msg['application.search.labelFr']}" width="12%">
+                                                        <h:panelGroup rendered="#{!searchBean.isConcept(concept.status)}">
+                                                            <i class="pi pi-bookmark" style="margin-right: 5px"></i>
+                                                        </h:panelGroup>
+                                                        <a href="#{concept.url}" target="_blank">
+                                                            <h:outputText value="#{concept.labelFr}" />
+                                                        </a>
+                                                    </p:column>
 
-                                                <p:column headerText="Label (AR)" width="12%">
-                                                    <h:panelGroup rendered="#{!searchBean.isConcept(concept.status)}">
-                                                        <i class="pi pi-bookmark" style="margin-right: 5px"></i>
-                                                    </h:panelGroup>
-                                                    <a href="#{concept.url}" target="_blank">
-                                                        <h:outputText value="#{concept.labelAr}" />
-                                                    </a>
-                                                </p:column>
+                                                    <p:column headerText="#{msg['application.search.definitionFr']}" width="25%">
+                                                        <h:outputText value="#{concept.definitionFr}" escape="false" />
+                                                    </p:column>
 
-                                                <p:column headerText="Définition (AR)" width="25%">
-                                                    <h:outputText value="#{concept.definitionAr}" escape="false" />
-                                                </p:column>
+                                                    <p:column headerText="#{msg['application.search.labelAr']}" width="12%">
+                                                        <h:panelGroup rendered="#{!searchBean.isConcept(concept.status)}">
+                                                            <i class="pi pi-bookmark" style="margin-right: 5px"></i>
+                                                        </h:panelGroup>
+                                                        <a href="#{concept.url}" target="_blank">
+                                                            <h:outputText value="#{concept.labelAr}" />
+                                                        </a>
+                                                    </p:column>
 
-                                                <p:column width="5%" style="text-align: center">
-                                                    <h:panelGroup rendered="#{concept.status == 'CO'}">
-                                                        <p:commandButton id="propositionBtn" icon="pi pi-file-edit" ajax="true"
-                                                                         process="@this" update="globalPanel"
-                                                                         disabled="#{!searchBean.canSendProposition(concept.status)}"
-                                                                         action="#{searchBean.initAddProposition(concept)}"
-                                                                         styleClass="rounded-button ui-button-success ui-button-flat" />
+                                                    <p:column headerText="#{msg['application.search.definitionAr']}" width="25%">
+                                                        <h:outputText value="#{concept.definitionAr}" escape="false" />
+                                                    </p:column>
 
-                                                        <p:tooltip for="propositionBtn" position="bottom"
-                                                                   value="#{msg['application.search.proposition.btn.tooltip']}" />
-                                                    </h:panelGroup>
-                                                </p:column>
-                                            </p:dataTable>
+                                                    <p:column width="5%" style="text-align: center">
+                                                        <h:panelGroup rendered="#{concept.status == 'CO'}">
+                                                            <p:commandButton id="propositionBtn" icon="pi pi-file-edit" ajax="true"
+                                                                             process="@this" update="mainContent"
+                                                                             disabled="#{!searchBean.canSendProposition(concept.status)}"
+                                                                             action="#{searchBean.initAddProposition(concept)}"
+                                                                             styleClass="rounded-button ui-button-success ui-button-flat" />
+
+                                                            <p:tooltip for="propositionBtn" position="bottom"
+                                                                       value="#{msg['application.search.proposition.btn.tooltip']}" />
+                                                        </h:panelGroup>
+                                                    </p:column>
+                                                </p:dataTable>
+                                            </h:panelGroup>
                                         </div>
                                     </section>
                                 </div>
@@ -125,55 +135,65 @@
                                         <div class="pricing-item featured php-email-form" style="text-align: left">
                                             <div class="col-xl-12 content">
                                                 <h3>
-                                                    <h:outputText value="Thésaurus de consultations"/>
+                                                    <h:outputText value="#{msg['application.search.consultation.thesaurus.title']}"/>
                                                 </h3>
                                             </div>
 
-                                            <p:dataTable id="conceptsConsultationFound" var="concept" value="#{searchBean.conceptsConsultationFoundList}"
-                                                         class="table table-hover" stripedRows="true"
-                                                         emptyMessage="#{msg['application.search.no_data']}"
-                                                         reflow="true" styleClass="products-table" draggableColumns="true">
+                                            <h:panelGroup rendered="#{searchBean.showConsultationResult()}">
+                                                <div class="row">
+                                                    <div class="col-12 content">
+                                                        <h:outputText value="#{msg['application.search.no_data']}" style="font-style: italic; color: rgba(33, 37, 41, 0.58)"/>
+                                                    </div>
+                                                </div>
+                                            </h:panelGroup>
 
-                                                <p:column headerText="Thésaurus" width="12%" groupRow="true">
-                                                    <h:outputText value="#{concept.thesaurusName}" />
-                                                </p:column>
+                                            <h:panelGroup rendered="#{!searchBean.showConsultationResult()}">
+                                                <p:dataTable id="conceptsConsultationFound" var="concept" value="#{searchBean.conceptsConsultationFoundList}"
+                                                             class="table table-hover" stripedRows="true"
+                                                             emptyMessage="#{msg['application.search.no_data']}"
+                                                             reflow="true" styleClass="products-table" draggableColumns="true">
 
-                                                <p:column headerText="Collection" width="12%" style="text-align: center" groupRow="true">
-                                                    <ul style="margin-bottom: -1px">
-                                                        <ui:repeat value="#{concept.collections}" var="collection">
-                                                            <li>
-                                                                <p:tag styleClass="mr-2" value="#{collection.name}" style="background: rgba(0, 0, 0, 0.58)" />
-                                                            </li>
-                                                        </ui:repeat>
-                                                    </ul>
-                                                </p:column>
+                                                    <p:column headerText="#{msg['application.search.thesaurus']}" width="12%" groupRow="true">
+                                                        <h:outputText value="#{concept.thesaurusName}" />
+                                                    </p:column>
 
-                                                <p:column headerText="Label (FR)" width="15%">
-                                                    <h:panelGroup rendered="#{!searchBean.isConcept(concept.status)}">
-                                                        <i class="pi pi-bookmark" style="margin-right: 5px"></i>
-                                                    </h:panelGroup>
-                                                    <a href="#{concept.url}" target="_blank">
-                                                        <h:outputText value="#{concept.labelFr}" />
-                                                    </a>
-                                                </p:column>
+                                                    <p:column headerText="#{msg['application.search.collection']}" width="12%" style="text-align: center" groupRow="true">
+                                                        <ul style="margin-bottom: -1px">
+                                                            <ui:repeat value="#{concept.collections}" var="collection">
+                                                                <li>
+                                                                    <p:tag styleClass="mr-2" value="#{collection.name}" style="background: rgba(0, 0, 0, 0.58)" />
+                                                                </li>
+                                                            </ui:repeat>
+                                                        </ul>
+                                                    </p:column>
 
-                                                <p:column headerText="Définition (FR)" width="25%">
-                                                    <h:outputText value="#{concept.definitionFr}" escape="false"/>
-                                                </p:column>
+                                                    <p:column headerText="#{msg['application.search.labelFr']}" width="15%">
+                                                        <h:panelGroup rendered="#{!searchBean.isConcept(concept.status)}">
+                                                            <i class="pi pi-bookmark" style="margin-right: 5px"></i>
+                                                        </h:panelGroup>
+                                                        <a href="#{concept.url}" target="_blank">
+                                                            <h:outputText value="#{concept.labelFr}" />
+                                                        </a>
+                                                    </p:column>
 
-                                                <p:column headerText="Label (AR)" width="15%">
-                                                    <h:panelGroup rendered="#{!searchBean.isConcept(concept.status)}">
-                                                        <i class="pi pi-bookmark" style="margin-right: 5px"></i>
-                                                    </h:panelGroup>
-                                                    <a href="#{concept.url}" target="_blank">
-                                                        <h:outputText value="#{concept.labelAr}" />
-                                                    </a>
-                                                </p:column>
+                                                    <p:column headerText="#{msg['application.search.definitionFr']}" width="25%">
+                                                        <h:outputText value="#{concept.definitionFr}" escape="false"/>
+                                                    </p:column>
 
-                                                <p:column headerText="Définition (AR)" width="25%">
-                                                    <h:outputText value="#{concept.definitionAr}" escape="false" />
-                                                </p:column>
-                                            </p:dataTable>
+                                                    <p:column headerText="#{msg['application.search.labelAr']}" width="15%">
+                                                        <h:panelGroup rendered="#{!searchBean.isConcept(concept.status)}">
+                                                            <i class="pi pi-bookmark" style="margin-right: 5px"></i>
+                                                        </h:panelGroup>
+                                                        <a href="#{concept.url}" target="_blank">
+                                                            <h:outputText value="#{concept.labelAr}" />
+                                                        </a>
+                                                    </p:column>
+
+                                                    <p:column headerText="#{msg['application.search.definitionAr']}" width="25%">
+                                                        <h:outputText value="#{concept.definitionAr}" escape="false" />
+                                                    </p:column>
+                                                </p:dataTable>
+                                            </h:panelGroup>
                                         </div>
                                     </section>
                                 </div>
@@ -181,8 +201,9 @@
 
                             <div class="row" style="margin-top: 20px">
                                 <div class="col-lg-12" style="text-align: right">
-                                    <p:commandButton id="candidatBtn" class="btn-getstarted" update="globalPanel"
-                                                     action="#{searchBean.initAddCandidat()}" title="Créer un candidat"
+                                    <p:commandButton id="candidatBtn" class="btn-getstarted" update="mainContent"
+                                                     action="#{searchBean.initAddCandidat()}"
+                                                     title="#{msg['application.search.create.candidat']}"
                                                      disabled="#{!searchBean.canSendCandidat()}"
                                                      ajax="true" process="@this" />
                                 </div>

@@ -284,9 +284,9 @@
                             <div class="col-lg-12" style="text-align: right">
                                 <p:commandButton value="#{msg['action.annuler']}" styleClass="ui-button-secondary ui-button-flat"
                                                  actionListener="#{searchBean.backToSearchScrean()}"
-                                                 ajax="true" process="@this" update="globalPanel"/>
+                                                 ajax="true" process="@this" update="mainContent"/>
 
-                                <p:commandButton class="btn-getstarted" update="globalPanel"
+                                <p:commandButton class="btn-getstarted" update="mainContent"
                                                  action="#{propositionBean.saveProposition()}"
                                                  title="#{msg['action.save']}"
                                                  ajax="true" process="@form" />

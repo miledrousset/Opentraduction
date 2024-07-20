@@ -3,6 +3,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
+
     <h:head>
         <meta charset="utf-8" />
         <title>SHS en traduction</title>
@@ -18,27 +19,24 @@
         <h:panelGroup id="mainContent">
             <ui:include src="shared/header.xhtml" />
             <main class="main">
-                <h:panelGroup id="globalPanel">
-                    <h:panelGroup id="resultPanel" rendered="#{searchBean.searchResultDisplay}"
-                                  class="container" data-aos="zoom-in" data-aos-delay="100">
+                <h:panelGroup id="resultPanel" rendered="#{searchBean.searchResultDisplay}"
+                              class="container" data-aos="zoom-in" data-aos-delay="100">
 
-                        <ui:include src="search/result.xhtml" />
-                    </h:panelGroup>
+                    <ui:include src="search/result.xhtml" />
+                </h:panelGroup>
 
-                    <h:panelGroup id="addCandidat" rendered="#{searchBean.addCandidatDisplay}"
-                                  class="container" data-aos="zoom-in" data-aos-delay="100">
-                        <ui:include src="search/candidat.xhtml" />
-                    </h:panelGroup>
+                <h:panelGroup id="addCandidat" rendered="#{searchBean.addCandidatDisplay}"
+                              class="container" data-aos="zoom-in" data-aos-delay="100">
+                    <ui:include src="search/candidat.xhtml" />
+                </h:panelGroup>
 
-                    <h:panelGroup id="addProposition" rendered="#{searchBean.addPropositionDisplay}"
-                                  class="container" data-aos="zoom-in" data-aos-delay="100">
-                        <ui:include src="search/proposition.xhtml" />
-                    </h:panelGroup>
+                <h:panelGroup id="addProposition" rendered="#{searchBean.addPropositionDisplay}"
+                              class="container" data-aos="zoom-in" data-aos-delay="100">
+                    <ui:include src="search/proposition.xhtml" />
                 </h:panelGroup>
             </main>
-
             <ui:include src="shared/footer.xhtml" />
-            <ui:include src="shared/footer2.xhtml" />
         </h:panelGroup>
+        <ui:include src="shared/footer2.xhtml" />
     </h:body>
 </html>

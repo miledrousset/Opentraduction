@@ -286,4 +286,12 @@ public class SearchBean implements Serializable {
             toArabic = (Boolean) inputComponent.getValue();
         }
     }
+
+    public boolean showReferenceResult() {
+        return CollectionUtils.isEmpty(conceptsReferenceFoundList);
+    }
+
+    public boolean showConsultationResult() {
+        return CollectionUtils.isEmpty(conceptsConsultationFoundList);
+    }
 }
