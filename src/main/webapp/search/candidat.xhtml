@@ -209,7 +209,8 @@
 
                         <div class="row" style="margin-top: 10px">
                             <div class="col-lg-12" style="text-align: right">
-                                <p:commandButton value="#{msg['action.annuler']}" styleClass="ui-button-secondary ui-button-flat"
+                                <p:commandButton id="annulerCandidatBtn" value="#{msg['action.annuler']}"
+                                                 styleClass="ui-button-secondary ui-button-flat"
                                                  actionListener="#{searchBean.backToSearchScrean()}"
                                                  oncomplete="document.getElementById('scroll-top').click();"
                                                  ajax="true" process="@this" update="mainContent"/>

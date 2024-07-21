@@ -83,18 +83,26 @@
                                                               styleClass="#{propositionBean.termFrStyleClass}"/>
                                             </div>
                                             <div class="field col-9 ui-inputgroup">
-                                                <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                                <p:commandButton id="refreshTermFrBtn" icon="pi pi-refresh"
+                                                                 styleClass="ui-button-secondary"
                                                                  disabled="#{propositionBean.termFrInitialDisable}"
                                                                  ajax="true" process="@this" update="termFr"
                                                                  actionListener="#{propositionBean.initialTermFr()}"/>
+                                                <p:tooltip for="refreshTermFrBtn" position="bottom"
+                                                           value="#{msg['application.proposition.term.fr.init']}" />
+
                                                 <p:inputText value="#{propositionBean.propositionDao.termeFr}"
                                                              class="form-control" disabled="#{propositionBean.termFrDisable}">
                                                     <p:ajax event="keyup" listener="#{propositionBean.onTermFrChange}" update="termFr"/>
                                                 </p:inputText>
-                                                <p:commandButton icon="pi pi-trash" styleClass="ui-button-warning"
+
+                                                <p:commandButton id="removeTermFrBtn" icon="pi pi-trash"
+                                                                 styleClass="ui-button-danger"
                                                                  disabled="#{propositionBean.termFrDisable}"
                                                                  ajax="true" process="@this" update="termFr"
                                                                  actionListener="#{propositionBean.deleteTermFr()}"/>
+                                                <p:tooltip for="removeTermFrBtn" position="bottom"
+                                                           value="#{msg['application.proposition.term.fr.remove']}" />
                                             </div>
                                         </h:panelGroup>
 
@@ -104,19 +112,27 @@
                                                               styleClass="#{propositionBean.synonymeFrStyleClass}"/>
                                             </div>
                                             <div class="field col-9 ui-inputgroup">
-                                                <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                                <p:commandButton id="initVarianteFrBtn" icon="pi pi-refresh"
+                                                                 styleClass="ui-button-secondary"
                                                                  disabled="#{propositionBean.synonymeFrInitialDisable}"
                                                                  ajax="true" process="@this" update="synonymeFr"
                                                                  actionListener="#{propositionBean.initialSynonymeFr()}"/>
+                                                <p:tooltip for="initVarianteFrBtn" position="bottom"
+                                                           value="#{msg['application.proposition.variante.fr.init']}" />
+
                                                 <p:inputText value="#{propositionBean.propositionDao.varianteFr}"
                                                              class="form-control" disabled="#{propositionBean.synonymeFrDisable}">
                                                     <p:ajax event="keyup" listener="#{propositionBean.onSynonymeFrChange}"
                                                             update="synonymeFr"/>
                                                 </p:inputText>
-                                                <p:commandButton icon="pi pi-trash" styleClass="ui-button-warning"
+
+                                                <p:commandButton id="deleteSynonymeFrBtn" icon="pi pi-trash"
+                                                                 styleClass="ui-button-danger"
                                                                  disabled="#{propositionBean.synonymeFrDisable}"
                                                                  ajax="true" process="@this" update="synonymeFr"
                                                                  actionListener="#{propositionBean.deleteSynonymeFr()}"/>
+                                                <p:tooltip for="deleteSynonymeFrBtn" position="bottom"
+                                                           value="#{msg['application.proposition.variante.fr.remove']}" />
                                             </div>
                                         </h:panelGroup>
 
@@ -126,19 +142,27 @@
                                                               styleClass="#{propositionBean.definitionFrStyleClass}"/>
                                             </div>
                                             <div class="field col-9 ui-inputgroup">
-                                                <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                                <p:commandButton id="initDefinitionFrBtn" icon="pi pi-refresh"
+                                                                 styleClass="ui-button-secondary"
                                                                  disabled="#{propositionBean.definitionFrInitialDisable}"
                                                                  ajax="true" process="@this" update="definitionFr"
                                                                  actionListener="#{propositionBean.initialDefinitionFr()}"/>
+                                                <p:tooltip for="initDefinitionFrBtn" position="bottom"
+                                                           value="#{msg['application.proposition.definition.fr.init']}" />
+
                                                 <p:inputText value="#{propositionBean.propositionDao.definitionFr}"
                                                              class="form-control" disabled="#{propositionBean.definitionFrDisable}">
                                                     <p:ajax event="keyup" listener="#{propositionBean.onDefinitionFrChange}"
                                                             update="definitionFr"/>
                                                 </p:inputText>
-                                                <p:commandButton icon="pi pi-trash" styleClass="ui-button-warning"
+
+                                                <p:commandButton id="removeDefinitionFrBtn" icon="pi pi-trash"
+                                                                 styleClass="ui-button-danger"
                                                                  disabled="#{propositionBean.definitionFrDisable}"
                                                                  ajax="true" process="@this" update="definitionFr"
                                                                  actionListener="#{propositionBean.deleteDefinitionFr()}"/>
+                                                <p:tooltip for="removeDefinitionFrBtn" position="bottom"
+                                                           value="#{msg['application.proposition.definition.fr.remove']}" />
                                             </div>
                                         </h:panelGroup>
 
@@ -148,19 +172,27 @@
                                                               styleClass="#{propositionBean.noteFrStyleClass}"/>
                                             </div>
                                             <div class="field col-9 ui-inputgroup">
-                                                <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                                <p:commandButton id="initNoteFrBtn" icon="pi pi-refresh"
+                                                                 styleClass="ui-button-secondary"
                                                                  disabled="#{propositionBean.noteFrInitialDisable}"
                                                                  ajax="true" process="@this" update="noteFr"
                                                                  actionListener="#{propositionBean.initialNoteFr()}"/>
+                                                <p:tooltip for="initNoteFrBtn" position="bottom"
+                                                           value="#{msg['application.proposition.note.fr.init']}" />
+
                                                 <p:inputText value="#{propositionBean.propositionDao.noteFr}"
                                                              class="form-control" disabled="#{propositionBean.noteFrDisable}">
                                                     <p:ajax event="keyup" listener="#{propositionBean.onNoteFrChange}"
                                                             update="noteFr"/>
                                                 </p:inputText>
-                                                <p:commandButton icon="pi pi-trash" styleClass="ui-button-warning"
+
+                                                <p:commandButton id="removeNoteFrBtn" icon="pi pi-trash"
+                                                                 styleClass="ui-button-danger"
                                                                  disabled="#{propositionBean.noteFrDisable}"
                                                                  ajax="true" process="@this" update="noteFr"
                                                                  actionListener="#{propositionBean.deleteNoteFr()}"/>
+                                                <p:tooltip for="removeNoteFrBtn" position="bottom"
+                                                           value="#{msg['application.proposition.exemple.fr.remove']}" />
                                             </div>
                                         </h:panelGroup>
                                     </div>
@@ -172,18 +204,26 @@
                                     <div class="pricing-item featured php-email-form">
                                         <h:panelGroup id="termAr" class="row">
                                             <div class="field col-9 ui-inputgroup">
-                                                <p:commandButton icon="pi pi-trash" styleClass="ui-button-warning"
+                                                <p:commandButton id="removeTermArBtn" icon="pi pi-trash"
+                                                                 styleClass="ui-button-danger"
                                                                  disabled="#{propositionBean.termArDisable}"
                                                                  ajax="true" process="@this" update="termAr"
                                                                  actionListener="#{propositionBean.deleteTermAr()}"/>
+                                                <p:tooltip for="removeTermArBtn" position="bottom"
+                                                           value="#{msg['application.proposition.term.ar.remove']}" />
+
                                                 <p:inputText value="#{propositionBean.propositionDao.termeAr}"
                                                              class="form-control" disabled="#{propositionBean.termArDisable}">
                                                     <p:ajax event="keyup" listener="#{propositionBean.onTermArChange}" update="termAr"/>
                                                 </p:inputText>
-                                                <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+
+                                                <p:commandButton id="initTermArBtn" icon="pi pi-refresh"
+                                                                 styleClass="ui-button-secondary"
                                                                  disabled="#{propositionBean.termArInitialDisable}"
                                                                  ajax="true" process="@this" update="termAr"
                                                                  actionListener="#{propositionBean.initialTermAr()}"/>
+                                                <p:tooltip for="initTermArBtn" position="bottom"
+                                                           value="#{msg['application.proposition.term.ar.init']}" />
                                             </div>
                                             <div class="field col-3" style="margin-top: 8px; text-align: right;">
                                                 <h:outputText value="#{msg['application.candidat.term.ar']}"
@@ -193,19 +233,27 @@
 
                                         <h:panelGroup id="synonymeAr" class="row"  style="margin-top: 10px">
                                             <div class="field col-9 ui-inputgroup">
-                                                <p:commandButton icon="pi pi-trash" styleClass="ui-button-warning"
+                                                <p:commandButton id="removeVarianteArBtn" icon="pi pi-trash"
+                                                                 styleClass="ui-button-danger"
                                                                  disabled="#{propositionBean.synonymeArDisable}"
                                                                  ajax="true" process="@this" update="synonymeAr"
                                                                  actionListener="#{propositionBean.deleteSynonymeAr()}"/>
+                                                <p:tooltip for="removeVarianteArBtn" position="bottom"
+                                                           value="#{msg['application.proposition.variante.ar.remove']}" />
+
                                                 <p:inputText value="#{propositionBean.propositionDao.varianteAr}"
                                                              class="form-control" disabled="#{propositionBean.synonymeArDisable}">
                                                     <p:ajax event="keyup" listener="#{propositionBean.onSynonymeArChange}"
                                                             update="synonymeAr"/>
                                                 </p:inputText>
-                                                <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+
+                                                <p:commandButton id="initVarianteArBtn" icon="pi pi-refresh"
+                                                                 styleClass="ui-button-secondary"
                                                                  disabled="#{propositionBean.synonymeArInitialDisable}"
                                                                  ajax="true" process="@this" update="synonymeAr"
                                                                  actionListener="#{propositionBean.initialSynonymeAr()}"/>
+                                                <p:tooltip for="initVarianteArBtn" position="bottom"
+                                                           value="#{msg['application.proposition.variante.ar.init']}" />
                                             </div>
                                             <div class="field col-3" style="margin-top: 8px; text-align: right;">
                                                 <h:outputText value="#{msg['application.candidat.variante.ar']}"
@@ -215,19 +263,27 @@
 
                                         <h:panelGroup id="definitionAr" class="row"  style="margin-top: 10px">
                                             <div class="field col-9 ui-inputgroup">
-                                                <p:commandButton icon="pi pi-trash" styleClass="ui-button-warning"
+                                                <p:commandButton id="removeDefinitionArBtn" icon="pi pi-trash"
+                                                                 styleClass="ui-button-danger"
                                                                  disabled="#{propositionBean.definitionArDisable}"
                                                                  ajax="true" process="@this" update="definitionAr"
                                                                  actionListener="#{propositionBean.deleteDefinitionAr()}"/>
+                                                <p:tooltip for="removeDefinitionArBtn" position="bottom"
+                                                           value="#{msg['application.proposition.definition.ar.remove']}" />
+
                                                 <p:inputText value="#{propositionBean.propositionDao.definitionAr}"
                                                              class="form-control" disabled="#{propositionBean.definitionArDisable}">
                                                     <p:ajax event="keyup" listener="#{propositionBean.onDefinitionArChange}"
                                                             update="definitionAr"/>
                                                 </p:inputText>
-                                                <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+
+                                                <p:commandButton id="initDefinitionArBtn" icon="pi pi-refresh"
+                                                                 styleClass="ui-button-secondary"
                                                                  disabled="#{propositionBean.definitionArInitialDisable}"
                                                                  ajax="true" process="@this" update="definitionAr"
                                                                  actionListener="#{propositionBean.initialDefinitionAr()}"/>
+                                                <p:tooltip for="initDefinitionArBtn" position="bottom"
+                                                           value="#{msg['application.proposition.definition.ar.init']}" />
                                             </div>
                                             <div class="field col-3" style="margin-top: 8px; text-align: right;">
                                                 <h:outputText value="#{msg['application.candidat.definition.ar']}"
@@ -237,19 +293,27 @@
 
                                         <h:panelGroup id="noteAr" class="row"  style="margin-top: 10px">
                                             <div class="field col-9 ui-inputgroup">
-                                                <p:commandButton icon="pi pi-trash" styleClass="ui-button-warning"
+                                                <p:commandButton id="removeNoteArBtn" icon="pi pi-trash"
+                                                                 styleClass="ui-button-danger"
                                                                  disabled="#{propositionBean.noteArDisable}"
                                                                  ajax="true" process="@this" update="noteAr"
                                                                  actionListener="#{propositionBean.deleteNoteAr()}"/>
+                                                <p:tooltip for="removeNoteArBtn" position="bottom"
+                                                           value="#{msg['application.proposition.exemple.ar.remove']}" />
+
                                                 <p:inputText value="#{propositionBean.propositionDao.noteAr}"
                                                              class="form-control" disabled="#{propositionBean.noteArDisable}">
                                                     <p:ajax event="keyup" listener="#{propositionBean.onNoteArChange}"
                                                             update="noteAr"/>
                                                 </p:inputText>
-                                                <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+
+                                                <p:commandButton id="refreshNoteArBtn" icon="pi pi-refresh"
+                                                                 styleClass="ui-button-secondary"
                                                                  disabled="#{propositionBean.noteArInitialDisable}"
                                                                  ajax="true" process="@this" update="noteAr"
                                                                  actionListener="#{propositionBean.initialNoteAr()}"/>
+                                                <p:tooltip for="refreshNoteArBtn" position="bottom"
+                                                           value="#{msg['application.proposition.note.ar.init']}" />
                                             </div>
                                             <div class="field col-3" style="margin-top: 8px; text-align: right;">
                                                 <h:outputText value="#{msg['application.candidat.note.ar']}"
@@ -282,12 +346,15 @@
 
                         <div class="row" style="margin-top: 10px">
                             <div class="col-lg-12" style="text-align: right">
-                                <p:commandButton value="#{msg['action.annuler']}" styleClass="ui-button-secondary ui-button-flat"
+                                <p:commandButton id="annulerPropositionBtn" value="#{msg['action.annuler']}"
+                                                 styleClass="ui-button-secondary ui-button-flat"
                                                  actionListener="#{searchBean.backToSearchScrean()}"
+                                                 oncomplete="document.getElementById('scroll-top').click();"
                                                  ajax="true" process="@this" update="mainContent"/>
 
                                 <p:commandButton class="btn-getstarted" update="mainContent"
                                                  action="#{propositionBean.saveProposition()}"
+                                                 oncomplete="document.getElementById('scroll-top').click();"
                                                  title="#{msg['action.save']}"
                                                  ajax="true" process="@form" />
                             </div>

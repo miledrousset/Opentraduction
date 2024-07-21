@@ -12,11 +12,16 @@ import com.cnrs.opentraduction.utils.MessageService;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.primefaces.component.commandbutton.CommandButton;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -104,6 +109,14 @@ public class PropositionBean implements Serializable {
     public void saveProposition() {
         log.info("Début de l'enregistrement de la proposition");
 
+        if (CollectionUtils.isEmpty(getDefinitions())
+                && CollectionUtils.isEmpty(getNotes())
+                && CollectionUtils.isEmpty(getSynonymes())
+                && CollectionUtils.isEmpty(getTraductions())) {
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.proposition.msg2");
+            return;
+        }
+
         var proposition = PropositionModel.builder()
                 .conceptID(conceptToUpdate.getConceptId())
                 .IdTheso(conceptToUpdate.getThesaurusId())
@@ -122,11 +135,39 @@ public class PropositionBean implements Serializable {
         log.info("Affichage de message");
         messageService.showMessage(FacesMessage.SEVERITY_INFO, "application.proposition.msg1");
 
+        triggerCancelButton();
+
         log.info("Fin de l'enregistrement de la proposition");
     }
 
+    public void triggerCancelButton() {
+        var component = findComponent(FacesContext.getCurrentInstance().getViewRoot(), "annulerPropositionBtn");
+        if (!ObjectUtils.isEmpty(component) && component instanceof CommandButton) {
+            var cancelButton = (CommandButton) component;
+            cancelButton.queueEvent(new ActionEvent(cancelButton));
+        }
+    }
+
+    private UIComponent findComponent(UIComponent base, String id) {
+        if (id.equals(base.getId())) {
+            return base;
+        }
+
+        for (int i = 0; i < base.getChildCount(); i++) {
+            var kid = (UIComponent) base.getChildren().get(i);
+            if (id.equals(kid.getId())) {
+                return kid;
+            }
+            var result = findComponent(kid, id);
+            if (result != null) {
+                return result;
+            }
+        }
+        return null;
+    }
+
     public String getConceptLabel() {
-        return "FR".equals(langFrom.toUpperCase()) ? conceptToUpdate.getLabelFr() : conceptToUpdate.getLabelAr();
+        return "FR".equalsIgnoreCase(langFrom) ? conceptToUpdate.getLabelFr() : conceptToUpdate.getLabelAr();
     }
 
     private List<TraductionPropModel> getTraductions() {

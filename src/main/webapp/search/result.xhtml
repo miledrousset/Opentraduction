@@ -116,6 +116,7 @@
                                                                              process="@this" update="mainContent"
                                                                              disabled="#{!searchBean.canSendProposition(concept.status)}"
                                                                              action="#{searchBean.initAddProposition(concept)}"
+                                                                             oncomplete="document.getElementById('scroll-top').click();"
                                                                              styleClass="rounded-button ui-button-success ui-button-flat" />
 
                                                             <p:tooltip for="propositionBtn" position="bottom"

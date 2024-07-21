@@ -11,10 +11,15 @@ import com.cnrs.opentraduction.utils.MessageService;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.primefaces.component.commandbutton.CommandButton;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -122,6 +127,8 @@ public class CandidatBean implements Serializable {
                 userConnected.getGroup().getReferenceInstances().getUrl(),
                 userConnected.getApiKey());
 
+        triggerCancelButton();
+
         log.info("Enregistrement du candidat terminé");
         messageService.showMessage(FacesMessage.SEVERITY_INFO, "application.candidat.success.msg1");
     }
@@ -178,6 +185,32 @@ public class CandidatBean implements Serializable {
                 break;
         }
         log.info("Traduction finish");
+    }
+
+    public void triggerCancelButton() {
+        var component = findComponent(FacesContext.getCurrentInstance().getViewRoot(), "annulerCandidatBtn");
+        if (!ObjectUtils.isEmpty(component) && component instanceof CommandButton) {
+            var cancelButton = (CommandButton) component;
+            cancelButton.queueEvent(new ActionEvent(cancelButton));
+        }
+    }
+
+    private UIComponent findComponent(UIComponent base, String id) {
+        if (id.equals(base.getId())) {
+            return base;
+        }
+
+        for (int i = 0; i < base.getChildCount(); i++) {
+            var kid = (UIComponent) base.getChildren().get(i);
+            if (id.equals(kid.getId())) {
+                return kid;
+            }
+            var result = findComponent(kid, id);
+            if (result != null) {
+                return result;
+            }
+        }
+        return null;
     }
 
 }
