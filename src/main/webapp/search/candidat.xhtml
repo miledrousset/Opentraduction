@@ -75,8 +75,10 @@
                                             <div class="field col-9 ui-inputgroup">
                                                 <p:inputText value="#{candidatBean.candidatDao.titleFr}" class="form-control" />
 
-                                                <p:commandButton icon="pi pi-language" styleClass="ui-button-danger"
-                                                                 ajax="true" process="@form" update="termFrPanel"/>
+                                                <p:commandButton id="termFrBtn" icon="pi pi-language" styleClass="ui-button-danger"
+                                                                 ajax="true" process="@form" update="termFrPanel termArPanel"
+                                                                 actionListener="#{candidatBean.deeplTranslate(candidatBean.candidatDao.titleFr, 'termFr')}"/>
+                                                <p:tooltip for="termFrBtn" position="bottom" value="#{msg['application.candidat.translate.term.fr']}" />
                                             </div>
                                         </h:panelGroup>
 
@@ -87,30 +89,40 @@
                                             <div class="field col-9 ui-inputgroup">
                                                 <p:inputText value="#{candidatBean.candidatDao.varianteFr}" class="form-control" />
 
-                                                <p:commandButton icon="pi pi-language" styleClass="ui-button-danger"
-                                                                 ajax="true" process="@form" update="varianteFrPanel"/>
+                                                <p:commandButton id="varianteFrBtn" icon="pi pi-language" styleClass="ui-button-danger"
+                                                                 ajax="true" process="@form" update="varianteArPanel varianteFrPanel"
+                                                                 actionListener="#{candidatBean.deeplTranslate(candidatBean.candidatDao.varianteFr, 'varianteFr')}" />
+                                                <p:tooltip for="varianteFrBtn" position="bottom" value="#{msg['application.candidat.translate.variante.fr']}" />
                                             </div>
                                         </h:panelGroup>
 
-                                        <div class="row" style="margin-top: 10px">
+                                        <h:panelGroup id="definitionFrPanel" class="row" style="margin-top: 10px">
                                             <div class="field col-3" style="display: flex; align-items: center;">
                                                 <h:outputText value="#{msg['application.candidat.definition.fr']}"/>
                                             </div>
-                                            <div class="field col-9">
-                                                <p:inputText value="#{candidatBean.candidatDao.definitionFr}" class="form-control"
-                                                             style="width: 100%"/>
-                                            </div>
-                                        </div>
+                                            <div class="field col-9 ui-inputgroup">
+                                                <p:inputText value="#{candidatBean.candidatDao.definitionFr}" class="form-control" />
 
-                                        <div class="row" style="margin-top: 10px">
+                                                <p:commandButton id="definitionFrBtn" icon="pi pi-language" styleClass="ui-button-danger"
+                                                                 ajax="true" process="@form" update="definitionArPanel definitionFrPanel"
+                                                                 actionListener="#{candidatBean.deeplTranslate(candidatBean.candidatDao.definitionFr, 'definitionFr')}"/>
+                                                <p:tooltip for="definitionFrBtn" position="bottom" value="#{msg['application.candidat.translate.definition.fr']}" />
+                                            </div>
+                                        </h:panelGroup>
+
+                                        <h:panelGroup id="noteFrPanel" class="row" style="margin-top: 10px">
                                             <div class="field col-3" style="display: flex; align-items: center;">
                                                 <h:outputText value="#{msg['application.candidat.note.fr']}"/>
                                             </div>
-                                            <div class="field col-9">
-                                                <p:inputText value="#{candidatBean.candidatDao.noteFr}" class="form-control"
-                                                             style="width: 100%"/>
+                                            <div class="field col-9 ui-inputgroup">
+                                                <p:inputText value="#{candidatBean.candidatDao.noteFr}" class="form-control" />
+
+                                                <p:commandButton id="noteFrBtn" icon="pi pi-language" styleClass="ui-button-danger"
+                                                                 ajax="true" process="@form" update="noteArPanel noteFrPanel"
+                                                                 actionListener="#{candidatBean.deeplTranslate(candidatBean.candidatDao.noteFr, 'noteFr')}"/>
+                                                <p:tooltip for="noteFrBtn" position="bottom" value="#{msg['application.candidat.translate.note.fr']}" />
                                             </div>
-                                        </div>
+                                        </h:panelGroup>
                                     </div>
                                 </section>
                             </div>
@@ -118,45 +130,59 @@
                             <div class="col-6">
                                 <section id="about" class="pricing about section">
                                     <div class="pricing-item featured php-email-form">
-                                        <div class="row">
-                                            <div class="field col-9">
-                                                <p:inputText value="#{candidatBean.candidatDao.titleAr}" class="form-control"
-                                                             style="width: 100%"/>
+                                        <h:panelGroup id="termArPanel" class="row">
+                                            <div class="field col-9 ui-inputgroup">
+                                                <p:commandButton id="termArBtn" icon="pi pi-language" styleClass="ui-button-danger"
+                                                                 ajax="true" process="@form" update="termArPanel termFrPanel"
+                                                                 actionListener="#{candidatBean.deeplTranslate(candidatBean.candidatDao.titleAr, 'termAr')}"/>
+                                                <p:tooltip for="termArBtn" position="bottom" value="#{msg['application.candidat.translate.term.ar']}" />
+
+                                                <p:inputText value="#{candidatBean.candidatDao.titleAr}" class="form-control" />
                                             </div>
                                             <div class="field col-3" style="margin-top: 8px; text-align: right;">
                                                 <h:outputText value="#{msg['application.candidat.term.ar']}"/>
                                             </div>
-                                        </div>
+                                        </h:panelGroup>
 
-                                        <div class="row" style="margin-top: 10px">
-                                            <div class="field col-9">
-                                                <p:inputText value="#{candidatBean.candidatDao.varianteAr}" class="form-control"
-                                                             style="width: 100%"/>
+                                        <h:panelGroup id="varianteArPanel" class="row" style="margin-top: 10px">
+                                            <div class="field col-9 ui-inputgroup">
+                                                <p:commandButton id="varianteArBtn" icon="pi pi-language" styleClass="ui-button-danger"
+                                                                 ajax="true" process="@form" update="varianteArPanel varianteFrPanel"
+                                                                 actionListener="#{candidatBean.deeplTranslate(candidatBean.candidatDao.varianteAr, 'varianteAr')}"/>
+                                                <p:tooltip for="varianteArBtn" position="bottom" value="#{msg['application.candidat.translate.variante.ar']}" />
+
+                                                <p:inputText value="#{candidatBean.candidatDao.varianteAr}" class="form-control" />
                                             </div>
                                             <div class="field col-3" style="margin-top: 8px; text-align: right;">
                                                 <h:outputText value="#{msg['application.candidat.variante.ar']}"/>
                                             </div>
-                                        </div>
+                                        </h:panelGroup>
 
-                                        <div class="row" style="margin-top: 10px">
-                                            <div class="field col-9">
-                                                <p:inputText value="#{candidatBean.candidatDao.definitionAr}" class="form-control"
-                                                             style="width: 100%"/>
+                                        <h:panelGroup id="definitionArPanel" class="row" style="margin-top: 10px">
+                                            <div class="field col-9 ui-inputgroup">
+                                                <p:commandButton id="definitionArBtn" icon="pi pi-language" styleClass="ui-button-danger"
+                                                                 ajax="true" process="@form" update="definitionArPanel definitionFrPanel"
+                                                                 actionListener="#{candidatBean.deeplTranslate(candidatBean.candidatDao.definitionAr, 'definitionAr')}"/>
+                                                <p:tooltip for="definitionArBtn" position="bottom" value="#{msg['application.candidat.translate.definition.ar']}" />
+                                                <p:inputText value="#{candidatBean.candidatDao.definitionAr}" class="form-control" />
                                             </div>
                                             <div class="field col-3" style="margin-top: 8px; text-align: right;">
                                                 <h:outputText value="#{msg['application.candidat.definition.ar']}"/>
                                             </div>
-                                        </div>
+                                        </h:panelGroup>
 
-                                        <div class="row" style="margin-top: 10px">
-                                            <div class="field col-9">
-                                                <p:inputText value="#{candidatBean.candidatDao.noteAr}" class="form-control"
-                                                             style="width: 100%"/>
+                                        <h:panelGroup id="noteArPanel" class="row" style="margin-top: 10px">
+                                            <div class="field col-9 ui-inputgroup">
+                                                <p:commandButton id="noteArBtn" icon="pi pi-language" styleClass="ui-button-danger"
+                                                                 ajax="true" process="@form" update="noteArPanel noteFrPanel"
+                                                                 actionListener="#{candidatBean.deeplTranslate(candidatBean.candidatDao.noteAr, 'noteAr')}"/>
+                                                <p:tooltip for="noteArBtn" position="bottom" value="#{msg['application.candidat.translate.note.ar']}" />
+                                                <p:inputText value="#{candidatBean.candidatDao.noteAr}" class="form-control" />
                                             </div>
                                             <div class="field col-3" style="margin-top: 8px; text-align: right;">
                                                 <h:outputText value="#{msg['application.candidat.note.ar']}"/>
                                             </div>
-                                        </div>
+                                        </h:panelGroup>
                                     </div>
                                 </section>
                             </div>
@@ -185,11 +211,13 @@
                             <div class="col-lg-12" style="text-align: right">
                                 <p:commandButton value="#{msg['action.annuler']}" styleClass="ui-button-secondary ui-button-flat"
                                                  actionListener="#{searchBean.backToSearchScrean()}"
+                                                 oncomplete="document.getElementById('scroll-top').click();"
                                                  ajax="true" process="@this" update="mainContent"/>
 
                                 <p:commandButton class="btn-getstarted" update="mainContent"
                                                  action="#{candidatBean.saveCandidat()}"
                                                  title="Enregistrer"
+                                                 oncomplete="document.getElementById('scroll-top').click();"
                                                  ajax="true" process="@form" />
                             </div>
                         </div>
