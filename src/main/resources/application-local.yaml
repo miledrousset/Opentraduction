@@ -45,4 +45,5 @@ logging:
 # Deepl configuration
 #######################
 deepl:
+  enable: false
   key: test

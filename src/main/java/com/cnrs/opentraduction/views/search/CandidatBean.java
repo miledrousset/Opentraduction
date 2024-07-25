@@ -12,6 +12,7 @@ import com.cnrs.opentraduction.utils.MessageService;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.component.commandbutton.CommandButton;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
@@ -31,6 +32,9 @@ import java.util.List;
 @SessionScoped
 @Named(value = "candidatBean")
 public class CandidatBean implements Serializable {
+
+    @Value("${deepl.enable}")
+    private boolean deeplEnable;
 
     private final static String AR = "ar";
     private final static String FR = "fr";
@@ -154,38 +158,42 @@ public class CandidatBean implements Serializable {
 
     public void deeplTranslate(String value, String valueName) {
 
-        if (StringUtils.isEmpty(value)) {
-            messageService.showMessage(FacesMessage.SEVERITY_WARN, "application.candidat.error.emty.transition.value");
-            return;
-        }
+        if (deeplEnable) {
+            if (StringUtils.isEmpty(value)) {
+                messageService.showMessage(FacesMessage.SEVERITY_WARN, "application.candidat.error.emty.transition.value");
+                return;
+            }
 
-        switch (valueName) {
-            case "termFr":
-                candidatDao.setTitleAr(deeplService.translate(value, "fr", "ar"));
-                break;
-            case "termAr":
-                candidatDao.setTitleFr(deeplService.translate(value, "ar", "fr"));
-                break;
-            case "varianteFr":
-                candidatDao.setVarianteAr(deeplService.translate(value, "fr", "ar"));
-                break;
-            case "varianteAr":
-                candidatDao.setVarianteFr(deeplService.translate(value, "ar", "fr"));
-                break;
-            case "definitionFr":
-                candidatDao.setDefinitionAr(deeplService.translate(value, "fr", "ar"));
-                break;
-            case "definitionAr":
-                candidatDao.setDefinitionFr(deeplService.translate(value, "ar", "fr"));
-                break;
-            case "noteFr":
-                candidatDao.setNoteAr(deeplService.translate(value, "fr", "ar"));
-                break;
-            case "noteAr":
-                candidatDao.setNoteFr(deeplService.translate(value, "ar", "fr"));
-                break;
+            switch (valueName) {
+                case "termFr":
+                    candidatDao.setTitleAr(deeplService.translate(value, "fr", "ar"));
+                    break;
+                case "termAr":
+                    candidatDao.setTitleFr(deeplService.translate(value, "ar", "fr"));
+                    break;
+                case "varianteFr":
+                    candidatDao.setVarianteAr(deeplService.translate(value, "fr", "ar"));
+                    break;
+                case "varianteAr":
+                    candidatDao.setVarianteFr(deeplService.translate(value, "ar", "fr"));
+                    break;
+                case "definitionFr":
+                    candidatDao.setDefinitionAr(deeplService.translate(value, "fr", "ar"));
+                    break;
+                case "definitionAr":
+                    candidatDao.setDefinitionFr(deeplService.translate(value, "ar", "fr"));
+                    break;
+                case "noteFr":
+                    candidatDao.setNoteAr(deeplService.translate(value, "fr", "ar"));
+                    break;
+                case "noteAr":
+                    candidatDao.setNoteFr(deeplService.translate(value, "ar", "fr"));
+                    break;
+            }
+            log.info("Traduction finish");
+        } else {
+            messageService.showMessage(FacesMessage.SEVERITY_WARN, "application.candidat.deepl.disable");
         }
-        log.info("Traduction finish");
     }
 
     public void triggerCancelButton() {
