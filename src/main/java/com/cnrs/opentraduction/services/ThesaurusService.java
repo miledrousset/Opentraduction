@@ -14,9 +14,12 @@ import com.cnrs.opentraduction.models.dao.ConceptDao;
 import com.cnrs.opentraduction.utils.MessageService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.thymeleaf.util.ArrayUtils;
 
 import javax.faces.application.FacesMessage;
@@ -49,6 +52,12 @@ public class ThesaurusService {
                                     ? thesaurus.getConsultationInstances().getUrl()
                                     : thesaurus.getReferenceInstances().getUrl()))
                     .collect(Collectors.toList());
+        } catch (HttpClientErrorException e) {
+            handleClientError(e, "application.thesaurus.error.msg5");
+            return List.of();
+        } catch (HttpServerErrorException e) {
+            handleServerError(e, "application.thesaurus.error.msg5");
+            return List.of();
         } catch (Exception ex) {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.thesaurus.error.msg5");
             return List.of();
@@ -60,6 +69,12 @@ public class ThesaurusService {
         try {
             openthesoClient.saveCandidat(baseUrl, userApiKey, candidate);
             return true;
+        } catch (HttpClientErrorException e) {
+            handleClientError(e, "application.thesaurus.error.msg4");
+            return false;
+        } catch (HttpServerErrorException e) {
+            handleServerError(e, "application.thesaurus.error.msg4");
+            return false;
         } catch (Exception ex) {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.thesaurus.error.msg4");
             return false;
@@ -70,6 +85,10 @@ public class ThesaurusService {
 
         try {
             openthesoClient.saveProposition(baseUrl, userApiKey, proposition);
+        } catch (HttpClientErrorException e) {
+            handleClientError(e, "application.thesaurus.error.msg3");
+        } catch (HttpServerErrorException e) {
+            handleServerError(e, "application.thesaurus.error.msg3");
         } catch (Exception ex) {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.thesaurus.error.msg3");
         }
@@ -94,6 +113,12 @@ public class ThesaurusService {
             } else {
                 return List.of();
             }
+        } catch (HttpClientErrorException e) {
+            handleClientError(e, "application.thesaurus.error.msg1");
+            return List.of();
+        } catch (HttpServerErrorException e) {
+            handleServerError(e, "application.thesaurus.error.msg1");
+            return List.of();
         } catch (Exception ex) {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.thesaurus.error.msg1");
             return List.of();
@@ -112,6 +137,12 @@ public class ThesaurusService {
             } else {
                 return List.of();
             }
+        } catch (HttpClientErrorException e) {
+            handleClientError(e, "application.thesaurus.error.msg2");
+            return List.of();
+        } catch (HttpServerErrorException e) {
+            handleServerError(e, "application.thesaurus.error.msg2");
+            return List.of();
         } catch (Exception ex) {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.thesaurus.error.msg2");
             return List.of();
@@ -140,6 +171,12 @@ public class ThesaurusService {
             } else {
                 return List.of();
             }
+        } catch (HttpClientErrorException e) {
+            handleClientError(e, "application.thesaurus.error.msg2");
+            return List.of();
+        } catch (HttpServerErrorException e) {
+            handleServerError(e, "application.thesaurus.error.msg2");
+            return List.of();
         } catch (Exception ex) {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.thesaurus.error.msg2");
             return List.of();
@@ -198,5 +235,23 @@ public class ThesaurusService {
                 .map(ElementModel::getValue)
                 .findFirst()
                 .orElse("");
+    }
+
+    private void handleClientError(HttpClientErrorException e, String genericMessageKey) {
+        if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
+            log.error("Error 404: Resource not found.");
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.thesaurus.error.msg6");
+        } else if (e.getStatusCode() == HttpStatus.FORBIDDEN) {
+            log.error("Error 403: Access forbidden.");
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.thesaurus.error.msg7");
+        } else {
+            log.error("Client error: " + e.getStatusCode());
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, genericMessageKey);
+        }
+    }
+
+    private void handleServerError(HttpServerErrorException e, String genericMessageKey) {
+        log.error("Server error: " + e.getStatusCode());
+        messageService.showMessage(FacesMessage.SEVERITY_ERROR, genericMessageKey);
     }
 }
