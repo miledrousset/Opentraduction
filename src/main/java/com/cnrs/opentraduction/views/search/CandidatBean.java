@@ -123,14 +123,15 @@ public class CandidatBean implements Serializable {
 
         log.info("Enregistrer le nouveau candidat");
 
-        thesaurusService.saveCandidat(candidate,
+        if (thesaurusService.saveCandidat(candidate,
                 userConnected.getGroup().getReferenceInstances().getUrl(),
-                userConnected.getApiKey());
+                userConnected.getApiKey())) {
 
-        triggerCancelButton();
+            triggerCancelButton();
 
-        log.info("Enregistrement du candidat terminé");
-        messageService.showMessage(FacesMessage.SEVERITY_INFO, "application.candidat.success.msg1");
+            log.info("Enregistrement du candidat terminé");
+            messageService.showMessage(FacesMessage.SEVERITY_INFO, "application.candidat.success.msg1");
+        }
     }
 
     private String getSelectedCollectionId() {

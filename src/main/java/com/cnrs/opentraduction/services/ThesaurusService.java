@@ -55,12 +55,14 @@ public class ThesaurusService {
         }
     }
 
-    public void saveCandidat(CandidateModel candidate, String baseUrl, String userApiKey) {
+    public boolean saveCandidat(CandidateModel candidate, String baseUrl, String userApiKey) {
 
         try {
             openthesoClient.saveCandidat(baseUrl, userApiKey, candidate);
+            return true;
         } catch (Exception ex) {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.thesaurus.error.msg4");
+            return false;
         }
     }
 
