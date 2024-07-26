@@ -138,7 +138,7 @@ public class SearchBean implements Serializable {
         }
     }
 
-    private boolean isAlreadyFoundInReferenceThesaurus(String conceptId, String thesaurusId) {
+    private boolean isAlreadyFoundInReferenceThesaurus(String thesaurusId, String conceptId) {
         if (CollectionUtils.isEmpty(conceptsReferenceFoundList)) {
             return false;
         }
