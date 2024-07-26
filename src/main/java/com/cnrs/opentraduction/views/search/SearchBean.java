@@ -143,8 +143,15 @@ public class SearchBean implements Serializable {
             return false;
         }
 
-        return conceptsReferenceFoundList.stream()
+        log.info("Rechercher des doublons dans le résultat de référence");
+        var foundInReferenceThesaurus = conceptsReferenceFoundList.stream()
                 .anyMatch(element -> element.getThesaurusId().equals(thesaurusId) && element.getConceptId().equals(conceptId));
+
+        log.info("Rechercher des doublons dans le résultat de consultation");
+        var foundInConsultationThesaurus = conceptsConsultationFoundList.stream()
+                .anyMatch(element -> element.getThesaurusId().equals(thesaurusId) && element.getConceptId().equals(conceptId));
+
+        return foundInReferenceThesaurus || foundInConsultationThesaurus;
     }
 
     private void searchInReferenceProject() {
