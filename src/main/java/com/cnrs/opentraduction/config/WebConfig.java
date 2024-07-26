@@ -1,7 +1,6 @@
 package com.cnrs.opentraduction.config;
 
 import com.sun.faces.config.ConfigureListener;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -13,14 +12,6 @@ import javax.faces.webapp.FacesServlet;
 
 @Configuration
 public class WebConfig {
-
-    @Bean
-    public FilterRegistrationBean<SessionTimeoutFilter> sessionTimeoutFilter() {
-        FilterRegistrationBean<SessionTimeoutFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(new SessionTimeoutFilter());
-        registrationBean.addUrlPatterns("/*");
-        return registrationBean;
-    }
 
     @Bean
     public ServletRegistrationBean<FacesServlet> facesServletRegistration() {
