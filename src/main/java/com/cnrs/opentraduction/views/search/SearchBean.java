@@ -35,6 +35,8 @@ import java.util.stream.Collectors;
 @Named(value = "searchBean")
 public class SearchBean implements Serializable {
 
+    private final static String ALL = "ALL";
+
     private final MessageService messageService;
     private final ThesaurusService thesaurusService;
     private final OpenthesoClient openthesoClient;
@@ -122,7 +124,10 @@ public class SearchBean implements Serializable {
             log.info("Il existe {} projet de consultation !", consultationProjects.size());
             for (ConsultationInstances project : consultationProjects) {
                 project.getThesauruses().forEach(thesaurus -> {
-                    var tmp = searchInThesaurus(thesaurus, project.getUrl());
+                    var defaultIdGroup = ALL.equalsIgnoreCase(thesaurus.getIdCollection())
+                            ? null
+                            : userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection();
+                    var tmp = searchInThesaurus(thesaurus, project.getUrl(), defaultIdGroup);
                     if (!CollectionUtils.isEmpty(tmp)) {
                         conceptsConsultationFoundList.addAll(tmp.stream()
                                 .filter(element -> !isAlreadyFoundInReferenceThesaurus(element.getThesaurusId(), element.getConceptId()))
@@ -147,7 +152,10 @@ public class SearchBean implements Serializable {
         var referenceProject = userConnected.getGroup().getReferenceInstances();
         if (!ObjectUtils.isEmpty(referenceProject)) {
             try {
-                var tmp = searchInThesaurus(referenceProject.getThesaurus(), referenceProject.getUrl());
+                var defaultIdGroup = ALL.equalsIgnoreCase(userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection())
+                        ? null
+                        : userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection();
+                var tmp = searchInThesaurus(referenceProject.getThesaurus(), referenceProject.getUrl(), defaultIdGroup);
                 conceptsReferenceFoundList.addAll(tmp);
             } catch (Exception ex) {
                 log.info("Aucune résultat trouvé pour le thésaurus de référence {}", referenceProject.getThesaurus().getName());
@@ -158,13 +166,11 @@ public class SearchBean implements Serializable {
         }
     }
 
-    private List<ConceptDao> searchInThesaurus(Thesaurus thesaurus, String url) {
+    private List<ConceptDao> searchInThesaurus(Thesaurus thesaurus, String url, String defaultIdGroup) {
 
         log.info("Thésaurus de référence : " + thesaurus.getName());
 
-        var defaultIdGroup = "ALL".equalsIgnoreCase(userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection()) ?
-                null : userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection();
-        var idCollection = "ALL".equalsIgnoreCase(thesaurus.getIdCollection())
+        var idCollection = ALL.equalsIgnoreCase(thesaurus.getIdCollection())
                 ? defaultIdGroup
                 : thesaurus.getIdCollection();
 
@@ -220,7 +226,7 @@ public class SearchBean implements Serializable {
     }
 
     public String getCollectionReferenceName() {
-        return "ALL".equals(userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection())
+        return ALL.equals(userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection())
                 ? messageService.getMessage("user.settings.consultation.racine")
                 : userConnected.getGroup().getReferenceInstances().getThesaurus().getCollection();
     }
@@ -264,9 +270,9 @@ public class SearchBean implements Serializable {
     private void searchReferenceCollectionList() {
 
         referenceCollectionList = new ArrayList<>();
-        referenceCollectionList.add(new CollectionElementDao("ALL", "--"));
+        referenceCollectionList.add(new CollectionElementDao(ALL, "--"));
         if (!ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances())) {
-            if ("ALL".equals(userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection())) {
+            if (ALL.equals(userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection())) {
                 referenceCollectionList.addAll(thesaurusService.searchCollections(
                         userConnected.getGroup().getReferenceInstances().getUrl(),
                         userConnected.getGroup().getReferenceInstances().getThesaurus().getIdThesaurus()));
