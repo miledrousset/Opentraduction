@@ -128,14 +128,15 @@ public class PropositionBean implements Serializable {
                 .build();
 
         log.info("Envoie de la nouvelle proposition au serveur opentheso");
-        thesaurusService.saveProposition(proposition,
+        if (thesaurusService.saveProposition(proposition,
                 userConnected.getGroup().getReferenceInstances().getUrl(),
-                userConnected.getApiKey());
+                userConnected.getApiKey())) {
 
-        log.info("Affichage de message");
-        messageService.showMessage(FacesMessage.SEVERITY_INFO, "application.proposition.msg1");
+            log.info("Affichage de message");
+            messageService.showMessage(FacesMessage.SEVERITY_INFO, "application.proposition.msg1");
 
-        triggerCancelButton();
+            triggerCancelButton();
+        }
 
         log.info("Fin de l'enregistrement de la proposition");
     }

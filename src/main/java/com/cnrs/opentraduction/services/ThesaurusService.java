@@ -54,14 +54,12 @@ public class ThesaurusService {
                     .collect(Collectors.toList());
         } catch (HttpClientErrorException e) {
             handleClientError(e, "application.thesaurus.error.msg5");
-            return List.of();
         } catch (HttpServerErrorException e) {
             handleServerError(e, "application.thesaurus.error.msg5");
-            return List.of();
         } catch (Exception ex) {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.thesaurus.error.msg5");
-            return List.of();
         }
+        return List.of();
     }
 
     public boolean saveCandidat(CandidateModel candidate, String baseUrl, String userApiKey) {
@@ -71,20 +69,19 @@ public class ThesaurusService {
             return true;
         } catch (HttpClientErrorException e) {
             handleClientError(e, "application.thesaurus.error.msg4");
-            return false;
         } catch (HttpServerErrorException e) {
             handleServerError(e, "application.thesaurus.error.msg4");
-            return false;
         } catch (Exception ex) {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.thesaurus.error.msg4");
-            return false;
         }
+        return false;
     }
 
-    public void saveProposition(PropositionModel proposition, String baseUrl, String userApiKey) {
+    public boolean saveProposition(PropositionModel proposition, String baseUrl, String userApiKey) {
 
         try {
             openthesoClient.saveProposition(baseUrl, userApiKey, proposition);
+            return true;
         } catch (HttpClientErrorException e) {
             handleClientError(e, "application.thesaurus.error.msg3");
         } catch (HttpServerErrorException e) {
@@ -92,6 +89,7 @@ public class ThesaurusService {
         } catch (Exception ex) {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.thesaurus.error.msg3");
         }
+        return false;
     }
 
     public List<ThesaurusElementModel> searchThesaurus(String baseUrl) {
@@ -115,14 +113,12 @@ public class ThesaurusService {
             }
         } catch (HttpClientErrorException e) {
             handleClientError(e, "application.thesaurus.error.msg1");
-            return List.of();
         } catch (HttpServerErrorException e) {
             handleServerError(e, "application.thesaurus.error.msg1");
-            return List.of();
         } catch (Exception ex) {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.thesaurus.error.msg1");
-            return List.of();
         }
+        return List.of();
     }
 
     public List<CollectionElementDao> searchCollections(String baseUrl, String idThesaurus) {
@@ -139,14 +135,12 @@ public class ThesaurusService {
             }
         } catch (HttpClientErrorException e) {
             handleClientError(e, "application.thesaurus.error.msg2");
-            return List.of();
         } catch (HttpServerErrorException e) {
             handleServerError(e, "application.thesaurus.error.msg2");
-            return List.of();
         } catch (Exception ex) {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.thesaurus.error.msg2");
-            return List.of();
         }
+        return List.of();
     }
 
     public List<CollectionElementDao> searchSubCollections(String baseUrl, String idThesaurus, String idCollection) {
@@ -173,14 +167,12 @@ public class ThesaurusService {
             }
         } catch (HttpClientErrorException e) {
             handleClientError(e, "application.thesaurus.error.msg2");
-            return List.of();
         } catch (HttpServerErrorException e) {
             handleServerError(e, "application.thesaurus.error.msg2");
-            return List.of();
         } catch (Exception ex) {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.thesaurus.error.msg2");
-            return List.of();
         }
+        return List.of();
     }
 
     private ConceptDao toConceptDao(ConceptModel conceptModel, String thesaurusName, String thesaurusId, String baseUrl) {
