@@ -6,7 +6,7 @@
 
     <changeSet id="V1-006" author="fgabsi">
         <insert tableName="groups">
-            <column name="name" value="Tunisie"/>
+            <column name="name" value="Administrateurs"/>
             <column name="created" valueDate="2024-01-01T00:00:00"/>
             <column name="modified" valueDate="2024-01-01T00:00:00"/>
         </insert>
@@ -15,8 +15,8 @@
             <column name="login" value="admin"/>
             <column name="password" value="admin"/>
             <column name="mail" value="admin@google.com"/>
-            <column name="first_name" value="Admin"/>
-            <column name="last_name" value="User"/>
+            <column name="first_name" value="Amin"/>
+            <column name="last_name" value="TEST"/>
             <column name="active" valueBoolean="true"/>
             <column name="admin" valueBoolean="true"/>
             <column name="id_group" value="1"/>

@@ -42,7 +42,7 @@
                                      class="form-control" style="width: 100%;"
                                      rendered="#{consultationBean.thesaurusListStatut}">
                         <p:ajax listener="#{consultationBean.searchCollections}"
-                                update="listCollectionsForConsultationInstance valideConsultationInstance"/>
+                                update="listThesaurusForConIns"/>
                         <f:selectItems value="#{consultationBean.thesaurusList}" var="thesaurus"
                                        itemLabel="#{thesaurus.label}" itemValue="#{thesaurus.id}"/>
                     </p:selectOneMenu>
