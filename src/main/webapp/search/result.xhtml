@@ -113,7 +113,7 @@
                                                     </p:column>
 
                                                     <p:column width="5%" style="text-align: center">
-                                                        <h:panelGroup rendered="#{concept.status == 'CO'}">
+                                                        <h:panelGroup rendered="#{concept.status != 'CO'}">
                                                             <p:commandButton id="propositionBtn" icon="pi pi-file-edit" ajax="true"
                                                                              process="@this" update="mainContent"
                                                                              disabled="#{!searchBean.canSendProposition(concept.status)}"

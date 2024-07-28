@@ -1,19 +1,14 @@
 package com.cnrs.opentraduction.services;
 
-import com.cnrs.opentraduction.entities.Thesaurus;
 import com.cnrs.opentraduction.entities.Users;
-import com.cnrs.opentraduction.entities.UsersThesaurus;
 import com.cnrs.opentraduction.exception.BusinessException;
 import com.cnrs.opentraduction.models.dao.ConnexionDto;
-import com.cnrs.opentraduction.models.dao.CollectionElementDao;
 import com.cnrs.opentraduction.repositories.UserRepository;
-import com.cnrs.opentraduction.repositories.UserThesaurusRepository;
 import com.cnrs.opentraduction.utils.MessageService;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
@@ -29,7 +24,6 @@ public class UserService {
 
     private MessageService messageService;
     private UserRepository userRepository;
-    private UserThesaurusRepository userThesaurusRepository;
 
 
     public Users authentification(ConnexionDto connexionModel) {
@@ -88,16 +82,6 @@ public class UserService {
 
         userToSave.setModified(LocalDateTime.now());
 
-        if (!ObjectUtils.isEmpty(userToSave.getId())) {
-            var userTmp = userRepository.findById(userToSave.getId());
-            if (userTmp.isPresent()
-                    && userTmp.get().getGroup().getId().intValue() != userToSave.getId().intValue()) {
-
-                log.info("Suppression des anciens thésaurus liées à l'utilisateur en vue de lui associés les nouvelles associations !");
-                userThesaurusRepository.deleteByUserId(userToSave.getId());
-            }
-        }
-
         log.info("Enregistrement dans la base");
         userRepository.save(userToSave);
 
@@ -115,38 +99,6 @@ public class UserService {
     public Users getUserById(Integer userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(String.format("Utilisateur id %d n'existe pas !!!", userId)));
-    }
-
-    public boolean addThesaurusToUser(Integer userId, Thesaurus thesaurus, CollectionElementDao collection) {
-
-        log.info("Recherche du projet de référence pour l'utilisateur id {}", userId);
-        var userThesaurus = userThesaurusRepository.findByThesaurusIdAndUserId(thesaurus.getId(), userId);
-
-        if (userThesaurus.isEmpty()) {
-            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "user.settings.error.msg11");
-            return false;
-        }
-
-        log.info("Enregistrement du nouveau projet de référence");
-        userThesaurus.get().setCollectionId(collection.getId());
-        userThesaurus.get().setCollection(collection.getLabel());
-        userThesaurus.get().setModified(LocalDateTime.now());
-
-        userThesaurusRepository.save(userThesaurus.get());
-
-        return true;
-    }
-
-    @Transactional
-    public boolean deleteConsultationCollection(Integer thesaurusId, Integer userId) {
-
-        userThesaurusRepository.deleteByThesaurusIdAndUserId(thesaurusId, userId);
-        return true;
-    }
-
-    public List<UsersThesaurus> getUserConsultationCollections(Integer userId) {
-
-        return userThesaurusRepository.getAllByUserId(userId);
     }
 
     public List<Users> getUsersByGroup(Integer groupId) {

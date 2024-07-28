@@ -4,7 +4,6 @@ import com.cnrs.opentraduction.entities.ConsultationInstances;
 import com.cnrs.opentraduction.entities.Groups;
 import com.cnrs.opentraduction.entities.Thesaurus;
 import com.cnrs.opentraduction.entities.Users;
-import com.cnrs.opentraduction.entities.UsersThesaurus;
 import com.cnrs.opentraduction.models.dao.CollectionDao;
 import com.cnrs.opentraduction.models.dao.ConsultationInstanceDao;
 import com.cnrs.opentraduction.models.dao.GroupDao;
@@ -12,7 +11,6 @@ import com.cnrs.opentraduction.models.dao.ReferenceInstanceDao;
 import com.cnrs.opentraduction.repositories.GroupConsultationInstancesRepository;
 import com.cnrs.opentraduction.repositories.GroupRepository;
 import com.cnrs.opentraduction.repositories.ReferenceInstanceRepository;
-import com.cnrs.opentraduction.repositories.UserThesaurusRepository;
 import com.cnrs.opentraduction.utils.MessageService;
 
 import lombok.AllArgsConstructor;
@@ -38,7 +36,6 @@ public class GroupService {
 
     private final MessageService messageService;
     private final GroupRepository groupRepository;
-    private final UserThesaurusRepository userThesaurusRepository;
     private final GroupConsultationInstancesRepository groupConsultationInstancesRepository;
     private final ReferenceInstanceRepository referenceInstanceRepository;
     private final ConsultationService consultationInstanceService;
@@ -74,12 +71,6 @@ public class GroupService {
                 if (!CollectionUtils.isEmpty(groupSaved.get().getConsultationInstances())) {
                     groupConsultationInstancesRepository.deleteAllByGroupId(groupSaved.get().getId());
                 }
-
-                log.info("Suppression des associations groupe/thésaurus");
-                users = groupSaved.get().getUsers();
-                if (!CollectionUtils.isEmpty(users)) {
-                    users.forEach(user -> userThesaurusRepository.deleteByUserId(user.getId()));
-                }
             }
         }
 
@@ -97,24 +88,6 @@ public class GroupService {
 
         log.info("Mise à jour de la base de donnée");
         groupRepository.save(groupToSave);
-
-        if (isUpdateCase) {
-            log.info("Mise à jour des thésaurus de consultations pour chaque utilisateur");
-            for (Users user : users) {
-                for (ConsultationInstances consultationInstances : groupToSave.getConsultationInstances()) {
-                    for (Thesaurus thesaurus : consultationInstances.getThesauruses()) {
-                        userThesaurusRepository.save(UsersThesaurus.builder()
-                                .userId(user.getId())
-                                .thesaurusId(thesaurus.getId())
-                                .collectionId(thesaurus.getIdCollection())
-                                .collection(thesaurus.getCollection())
-                                .created(LocalDateTime.now())
-                                .modified(LocalDateTime.now())
-                                .build());
-                    }
-                }
-            }
-        }
     }
 
     public List<GroupDao> getAllGroups() {

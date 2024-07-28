@@ -55,11 +55,4 @@ public class Thesaurus {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "reference_instance_id", referencedColumnName = "id")
     private ReferenceInstances referenceInstances;
-
-    @ManyToMany
-    @JoinTable(
-            name = "user_thesaurus",
-            joinColumns = @JoinColumn(name = "thesaurus_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Set<Users> users;
 }

@@ -269,7 +269,7 @@ public class SearchBean implements Serializable {
     }
 
     public boolean canSendProposition(String status) {
-        return !(isConcept(status) && StringUtils.isEmpty(userConnected.getApiKey()));
+        return isConcept(status) && !StringUtils.isEmpty(userConnected.getApiKey());
     }
 
     public boolean canSendCandidat() {

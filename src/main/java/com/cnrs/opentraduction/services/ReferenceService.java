@@ -50,7 +50,7 @@ public class ReferenceService {
         } else {
             log.info("Mise à jour d'une instance dans la base");
             log.info("Suppression de l'ancien thésaurus");
-            thesaurusRepository.delete(referenceInstances.getThesaurus());
+            thesaurusRepository.deleteByReferenceInstanceId(referenceInstances.getId());
         }
 
         log.info("Enregistrement de l'instance de référence dans la base");

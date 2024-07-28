@@ -219,7 +219,7 @@ public class ReferenceSettingBean implements Serializable {
         thesaurus.setCollection(collectionSelected.getLabel());
         thesaurus.setIdCollection(collectionSelected.getId());
 
-        if (referenceService.saveInstance(referenceSelected,  thesaurus)) {
+        if (referenceService.saveInstance(referenceSelected, thesaurus)) {
             referenceInstances = referenceService.getAllInstances();
 
             messageService.showMessage(FacesMessage.SEVERITY_INFO, "system.reference.success.msg1");
