@@ -7,6 +7,7 @@ import com.cnrs.opentraduction.entities.Users;
 import com.cnrs.opentraduction.models.dao.CollectionElementDao;
 import com.cnrs.opentraduction.models.dao.ConceptDao;
 import com.cnrs.opentraduction.services.ThesaurusService;
+import com.cnrs.opentraduction.services.UserService;
 import com.cnrs.opentraduction.utils.MessageService;
 
 import lombok.Data;
@@ -43,6 +44,7 @@ public class SearchBean implements Serializable {
     private final CandidatBean candidatBean;
     private final PropositionBean propositionBean;
     private final DeeplBean deeplBean;
+    private final UserService userService;
 
     private Users userConnected;
     private String termValue, idReferenceCollectionSelected;
@@ -54,11 +56,11 @@ public class SearchBean implements Serializable {
     private CollectionElementDao collectionReferenceSelected;
 
 
-    public void initSearchInterface(Users userConnected) {
+    public void initSearchInterface(Integer userConnectedId) {
         log.info("Initialisation de l'interface recherche");
-        this.userConnected = userConnected;
+        this.userConnected = userService.getUserById(userConnectedId);
 
-        toArabic = !"FrancaisArabe".equalsIgnoreCase(userConnected.getDefaultTargetTraduction());
+        toArabic = !"FrancaisArabe".equalsIgnoreCase(this.userConnected.getDefaultTargetTraduction());
         termValue = "";
         searchDone = false;
         conceptsReferenceFoundList = new ArrayList<>();
@@ -69,7 +71,7 @@ public class SearchBean implements Serializable {
         addPropositionDisplay = false;
 
         log.info("Vérification de la présence de clé API utilisateur");
-        userApiKeyAlert = StringUtils.isEmpty(userConnected.getApiKey());
+        userApiKeyAlert = StringUtils.isEmpty(this.userConnected.getApiKey());
 
         log.info("Préparation des projets de consultation");
         searchReferenceCollectionList();
@@ -263,7 +265,7 @@ public class SearchBean implements Serializable {
     }
 
     public boolean isConcept(String status) {
-        return "CO".equals(status);
+        return !"CA".equals(status);
     }
 
     public boolean canSendProposition(String status) {
@@ -306,5 +308,10 @@ public class SearchBean implements Serializable {
 
     public boolean showConsultationResult() {
         return CollectionUtils.isEmpty(conceptsConsultationFoundList);
+    }
+
+    public boolean searchBtnEnabled() {
+        return CollectionUtils.isEmpty(userConnected.getGroup().getConsultationInstances())
+                && ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances());
     }
 }

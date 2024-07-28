@@ -88,12 +88,12 @@ public class ApplicationBean implements Serializable {
         switch(menuItemSelected) {
             case SEARCH:
                 log.info("Navigation vers l'interface de recherche");
-                searchBean.initSearchInterface(userConnected);
+                searchBean.initSearchInterface(userConnected.getId());
                 FacesContext.getCurrentInstance().getExternalContext().redirect("search.xhtml");
                 break;
             case USER_SETTINGS:
                 log.info("Navigation vers l'interface paramètres de l'utilisateur");
-                userSettingsBean.initialInterface(userConnected);
+                userSettingsBean.initialInterface(userConnected.getId());
                 FacesContext.getCurrentInstance().getExternalContext().redirect("user-settings.xhtml");
                 break;
             case SYSTEM_SETTINGS:

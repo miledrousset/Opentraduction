@@ -40,7 +40,9 @@
                                     <p:inputText value="#{searchBean.termValue}" class="form-control"
                                                  placeholder="#{msg['search.sub-title']}"/>
                                     <p:commandButton id="searchBtn" icon="bi bi-search" ajax="true" process="@form"
-                                                     update="resultPanel" action="#{searchBean.searchTerm(false)}"
+                                                     update="resultPanel"
+                                                     disabled="#{searchBean.searchBtnEnabled()}"
+                                                     action="#{searchBean.searchTerm(false)}"
                                                      style="background: #e84545; border-color: #e84545"/>
                                     <p:tooltip for="searchBtn" position="bottom"
                                                value="#{msg['application.search.btn.tooltip']}" />

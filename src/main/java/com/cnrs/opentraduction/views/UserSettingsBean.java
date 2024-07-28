@@ -40,16 +40,16 @@ public class UserSettingsBean implements Serializable {
     private String dialogTitle;
 
 
-    public void initialInterface(Users userConnected) {
+    public void initialInterface(Integer userConnectedId) {
 
+        this.userConnected = userService.getUserById(userConnectedId);
         log.info("Initialisation de l'interface de paramétrage de l'utilisateur connecté {}", userConnected.getFullName());
-        this.userConnected = userConnected;
 
         log.info("Vérification de la présence de clé API utilisateur");
-        userApiKeyAlert = StringUtils.isEmpty(userConnected.getApiKey());
+        userApiKeyAlert = StringUtils.isEmpty(this.userConnected.getApiKey());
 
         log.info("Vérification de la présence d'un projet de référence'");
-        referenceProjetAlert = ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances());
+        referenceProjetAlert = ObjectUtils.isEmpty(this.userConnected.getGroup().getReferenceInstances());
 
         log.info("Préparation du projet de consultation");
         searchConsultationThesaurus();

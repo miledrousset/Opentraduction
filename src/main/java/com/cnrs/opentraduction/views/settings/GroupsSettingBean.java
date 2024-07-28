@@ -143,13 +143,18 @@ public class GroupsSettingBean implements Serializable {
 
         groupSelected = groups;
 
-        if (!ObjectUtils.isEmpty(groupSelected.getReferenceProject())) {
-            var referenceTmp = referenceProjects.stream()
-                    .filter(element -> element.getName().equals(groupSelected.getReferenceProject().getName()))
-                    .findFirst();
-            if (referenceTmp.isPresent()) {
-                referenceProjectSelected = referenceTmp.get();
+        if (!CollectionUtils.isEmpty(referenceProjects)) {
+            if (ObjectUtils.isEmpty(groupSelected.getReferenceProject())) {
+                referenceProjectSelected = referenceProjects.get(0);
                 referenceProjectNameSelected = referenceProjectSelected.getName();
+            } else {
+                var referenceTmp = referenceProjects.stream()
+                        .filter(element -> element.getName().equals(groupSelected.getReferenceProject().getName()))
+                        .findFirst();
+                if (referenceTmp.isPresent()) {
+                    referenceProjectSelected = referenceTmp.get();
+                    referenceProjectNameSelected = referenceProjectSelected.getName();
+                }
             }
         }
 
