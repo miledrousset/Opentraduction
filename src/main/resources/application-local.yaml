@@ -13,11 +13,8 @@ server:
 # Spring configuration
 #######################
 spring:
-  mvc:
-    view:
-      prefix: /WEB-INF/views/
-      suffix: .xhtml
   datasource:
+    platform: postgres
     url: jdbc:postgresql://localhost:5432/open-traduction
     password: postgres
     username: postgres
@@ -33,13 +30,6 @@ spring:
   liquibase:
     enabled: true
     change-log: classpath:/changelog/db.changelog.yaml
-
-#######################
-# Logging configuration
-#######################
-logging:
-  config: classpath:logback-local.xml
-
 #######################
 # Deepl configuration
 #######################

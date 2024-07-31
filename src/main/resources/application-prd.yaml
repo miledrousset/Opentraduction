@@ -18,9 +18,10 @@ spring:
       prefix: /WEB-INF/views/
       suffix: .xhtml
   datasource:
-    url: jdbc:postgresql://localhost:5432/open-traduction
-    password: postgres
-    username: postgres
+    platform: postgres
+    url: jdbc:postgresql://localhost:5432/shs
+    password: frantiq2014
+    username: pactols
   jpa:
     show-sql: true
     generate-ddl: true
