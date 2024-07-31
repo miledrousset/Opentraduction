@@ -3,7 +3,7 @@
 #######################
 
 server:
-  port: 8099
+  port: 9090
   servlet:
     context-path: /shs-traduction
     session:
