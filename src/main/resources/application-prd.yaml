@@ -3,25 +3,29 @@
 #######################
 
 server:
-  port: 9090
+  port: 8087
   servlet:
     context-path: /shs-traduction
     session:
       timeout: 30m
 
+tomcat:
+  ajp:
+    port: 9090
+    remoteauthentication: false
+    enabled: true
+
 #######################
 # Spring configuration
 #######################
 spring:
-  mvc:
-    view:
-      prefix: /WEB-INF/views/
-      suffix: .xhtml
+  main:
+    allow-bean-definition-overriding: true
   datasource:
     platform: postgres
-    url: jdbc:postgresql://localhost:5432/shs
-    password: frantiq2014
-    username: pactols
+    url: jdbc:postgresql://localhost:5432/open-traduction
+    password: postgres
+    username: postgres
   jpa:
     show-sql: true
     generate-ddl: true
