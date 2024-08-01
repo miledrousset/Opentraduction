@@ -13,12 +13,12 @@ import javax.faces.webapp.FacesServlet;
 @Configuration
 public class WebConfig {
 
-    @Bean
+    /*@Bean
     public ServletRegistrationBean<FacesServlet> facesServletRegistration() {
         ServletRegistrationBean<FacesServlet> registrationBean = new ServletRegistrationBean<>(new FacesServlet(), "*.xhtml");
         registrationBean.setLoadOnStartup(1);
         return registrationBean;
-    }
+    }*/
 
     @Bean
     public ServletContextInitializer servletContextInitializer() {
@@ -28,8 +28,8 @@ public class WebConfig {
         };
     }
 
-    @Bean
+    /*<@Bean
     public ServletListenerRegistrationBean<ConfigureListener> jsfConfigureListener() {
         return new ServletListenerRegistrationBean<>(new ConfigureListener());
-    }
+    }*/
 }

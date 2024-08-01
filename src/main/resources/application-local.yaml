@@ -19,8 +19,6 @@ tomcat:
 # Spring configuration
 #######################
 spring:
-  main:
-    allow-bean-definition-overriding: true
   datasource:
     platform: postgres
     url: jdbc:postgresql://localhost:5432/open-traduction
