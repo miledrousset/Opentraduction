@@ -3,12 +3,13 @@ package com.cnrs.opentraduction.config;
 import com.sun.faces.config.ConfigureListener;
 import jakarta.faces.webapp.FacesServlet;
 import jakarta.servlet.ServletContext;
-import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.ServletContextAware;
+
 
 @Configuration
 public class WebConfig  implements ServletContextAware {
@@ -42,5 +43,10 @@ public class WebConfig  implements ServletContextAware {
     @Bean
     public ServletListenerRegistrationBean<ConfigureListener> jsfConfigureListener() {
         return new ServletListenerRegistrationBean<>(new ConfigureListener());
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 }

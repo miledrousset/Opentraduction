@@ -178,7 +178,7 @@
                                                                  ajax="true" process="@this" update="noteFr"
                                                                  actionListener="#{propositionBean.initialNoteFr()}"/>
                                                 <p:tooltip for="initNoteFrBtn" position="bottom"
-                                                           value="#{applicationBean.getLabel('application.proposition.note.fr.init')}" />
+                                                           value="#{applicationBean.getLabel('application.proposition.exemple.fr.init')}" />
 
                                                 <p:inputText value="#{propositionBean.propositionDao.noteFr}"
                                                              class="form-control" disabled="#{propositionBean.noteFrDisable}">
@@ -313,7 +313,7 @@
                                                                  ajax="true" process="@this" update="noteAr"
                                                                  actionListener="#{propositionBean.initialNoteAr()}"/>
                                                 <p:tooltip for="refreshNoteArBtn" position="bottom"
-                                                           value="#{applicationBean.getLabel('application.proposition.note.ar.init')}" />
+                                                           value="#{applicationBean.getLabel('application.proposition.exemple.ar.init')}" />
                                             </div>
                                             <div class="field col-3" style="margin-top: 8px; text-align: right;">
                                                 <h:outputText value="#{applicationBean.getLabel('application.candidat.note.ar')}"

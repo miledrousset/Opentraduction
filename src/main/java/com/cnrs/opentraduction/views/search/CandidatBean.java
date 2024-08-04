@@ -197,7 +197,11 @@ public class CandidatBean implements Serializable {
     }
 
     public void triggerCancelButton() {
-
+        var component = findComponent(FacesContext.getCurrentInstance().getViewRoot(), "annulerCandidatBtn");
+        if (!ObjectUtils.isEmpty(component) && component instanceof CommandButton) {
+            var cancelButton = (CommandButton) component;
+            cancelButton.queueEvent(new ActionEvent(cancelButton));
+        }
     }
 
     private UIComponent findComponent(UIComponent base, String id) {

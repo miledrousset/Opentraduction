@@ -143,7 +143,10 @@ public class PropositionBean implements Serializable {
 
     public void triggerCancelButton() {
         var component = findComponent(FacesContext.getCurrentInstance().getViewRoot(), "annulerPropositionBtn");
-
+        if (!ObjectUtils.isEmpty(component) && component instanceof CommandButton) {
+            var cancelButton = (CommandButton) component;
+            cancelButton.queueEvent(new ActionEvent(cancelButton));
+        }
     }
 
     private UIComponent findComponent(UIComponent base, String id) {
