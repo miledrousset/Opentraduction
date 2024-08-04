@@ -4,8 +4,8 @@ import com.cnrs.opentraduction.models.SettingPart;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import javax.enterprise.context.SessionScoped;
-import javax.inject.Named;
+import jakarta.enterprise.context.SessionScoped;
+import jakarta.inject.Named;
 import java.io.Serializable;
 
 

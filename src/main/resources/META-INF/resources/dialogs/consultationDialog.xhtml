@@ -12,13 +12,13 @@
         <h:form>
             <div class="row">
                 <div class="field col-12 md:col-4">
-                    <p:outputLabel value="#{msg['system.consultation.project_name']}" />
+                    <p:outputLabel value="#{applicationBean.getLabel('system.consultation.project_name')}" />
                     <p:inputText class="form-control" value="#{consultationBean.instanceSelected.name}"/>
                 </div>
             </div>
 
             <div class="row" style="margin-top: 10px">
-                <p:outputLabel for="urlReferenceInstance" value="#{msg['system.consultation.project_url']}" />
+                <p:outputLabel for="urlReferenceInstance" value="#{applicationBean.getLabel('system.consultation.project_url')}" />
                 <div class="col-12 md:col-4">
                     <div class="ui-inputgroup">
                         <p:inputText id="urlReferenceInstance" class="form-control" placeholder="http://..."
@@ -28,14 +28,14 @@
                                          update="listThesaurusForConIns valideConsultationInstance"
                                          action="#{consultationBean.searchThesaurus()}"/>
                         <p:tooltip for="addConsultationThesaurus" position="bottom"
-                                   value="#{msg['system.reference.search.tooltip']}" />
+                                   value="#{applicationBean.getLabel('system.reference.search.tooltip')}" />
                     </div>
                 </div>
             </div>
 
             <h:panelGroup id="listThesaurusForConIns" >
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
-                    <p:outputLabel value="#{msg['user.settings.thesaurus']}"
+                    <p:outputLabel value="#{applicationBean.getLabel('user.settings.thesaurus')}"
                                    rendered="#{consultationBean.thesaurusListStatut}" />
                     <p:selectOneMenu id="listThesaurusForConsultationInstance"
                                      value="#{consultationBean.thesaurusIdSelected}"
@@ -50,7 +50,7 @@
 
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
 
-                    <p:outputLabel value="#{msg['user.settings.collection']}"
+                    <p:outputLabel value="#{applicationBean.getLabel('user.settings.collection')}"
                                     rendered="#{consultationBean.collectionsListStatut}"/>
 
                     <p:selectManyMenu id="listCollectionsForConsultationInstance"
@@ -73,12 +73,12 @@
 
             <h:panelGroup id="valideConsultationInstance" >
                 <div style="width: 100%; text-align: right; margin-top: 15px; margin-bottom: 2px;">
-                    <p:commandButton value="#{msg['action.annuler']}" styleClass="ui-button-secondary ui-button-flat"
+                    <p:commandButton value="#{applicationBean.getLabel('action.annuler')}" styleClass="ui-button-secondary ui-button-flat"
                                      action="PF('consultationDialog').hide();"
                                      update="consultationInstanceForm"
                                      ajax="true" process="@this"/>
 
-                    <p:commandButton title="#{msg['action.save']}"
+                    <p:commandButton title="#{applicationBean.getLabel('action.save')}"
                                      action="#{consultationBean.instanceManagement()}"
                                      disabled="#{!consultationBean.validateBtnStatut}"
                                      class="btn-getstarted" ajax="true" process="@form"

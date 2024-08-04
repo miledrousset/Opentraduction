@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
-import javax.faces.application.FacesMessage;
+import jakarta.faces.application.FacesMessage;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;

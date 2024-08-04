@@ -8,13 +8,13 @@
         <div class="pricing-item featured php-email-form" style="text-align: left">
 
             <div class="col-xl-12 content">
-                <h3><h:outputText value="#{msg['user.settings.reference_thesaurus.title']}"/></h3>
+                <h3><h:outputText value="#{applicationBean.getLabel('user.settings.reference_thesaurus.title')}"/></h3>
             </div>
 
             <h:panelGroup rendered="#{!userSettingsBean.showReferenceProject()}">
                 <div class="row">
                     <div class="col-12 content">
-                        <h:outputText value="#{msg['application.share.msg1']}" style="font-style: italic; color: rgba(33, 37, 41, 0.58)"/>
+                        <h:outputText value="#{applicationBean.getLabel('application.share.msg1')}" style="font-style: italic; color: rgba(33, 37, 41, 0.58)"/>
                     </div>
                 </div>
             </h:panelGroup>
@@ -22,7 +22,7 @@
             <h:form id="referenceProjectPanel" rendered="#{userSettingsBean.showReferenceProject()}">
                 <div class="row">
                     <div class="field col-2" style="display: flex; align-items: center">
-                        <h:outputText value="#{msg['user.settings.instance_label']}" />
+                        <h:outputText value="#{applicationBean.getLabel('user.settings.instance_label')}" />
                     </div>
                     <div class="field col-10" style="display: flex; align-items: center;">
                         <a href="#{userSettingsBean.getThesaurusReferenceUrl()}" target="_blank">
@@ -34,7 +34,7 @@
 
                 <div class="row" style="margin-top: 20px">
                     <div class="field col-2" style="display: flex; align-items: center">
-                        <h:outputText value="#{msg['user.settings.thesaurus']}" />
+                        <h:outputText value="#{applicationBean.getLabel('user.settings.thesaurus')}" />
                     </div>
                     <div class="field col-10" style="display: flex; align-items: center;">
                         <h:outputText value="#{userSettingsBean.userConnected.group.referenceInstances.thesaurus.name}" />
@@ -43,7 +43,7 @@
 
                 <div class="row" style="margin-top: 20px">
                     <div class="field col-2" style="display: flex; align-items: center">
-                        <h:outputText value="#{msg['user.settings.collection']}" />
+                        <h:outputText value="#{applicationBean.getLabel('user.settings.collection')}" />
                     </div>
                     <div class="field col-10" style="display: flex; align-items: center;">
                         <a href="#{userSettingsBean.getThesaurusReferenceUrl()}" target="_blank">

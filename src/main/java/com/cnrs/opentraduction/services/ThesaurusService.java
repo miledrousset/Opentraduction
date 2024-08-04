@@ -22,7 +22,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.thymeleaf.util.ArrayUtils;
 
-import javax.faces.application.FacesMessage;
+import jakarta.faces.application.FacesMessage;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;

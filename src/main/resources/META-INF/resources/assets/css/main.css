@@ -2949,3 +2949,11 @@ body .ui-toggleswitch .ui-toggleswitch-slider {
 body .ui-selectonemenu-panel .ui-selectonemenu-items .ui-selectonemenu-item.ui-state-highlight {
   background: #e84545 !important;
 }
+
+.ui-inputfiled.ui-state-focus {
+  box-shadow: none !important;
+}
+
+.form-control {
+  box-shadow: none;
+}

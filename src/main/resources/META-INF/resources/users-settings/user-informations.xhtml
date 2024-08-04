@@ -6,29 +6,29 @@
 
     <section id="about" class="pricing about section">
 
-        <p:staticMessage severity="warn" summary="#{msg['user.settings.attention']}"
-                         detail="#{msg['application.user.error.msg2']}"
+        <p:staticMessage severity="warn" summary="#{applicationBean.getLabel('user.settings.attention')}"
+                         detail="#{applicationBean.getLabel('application.user.error.msg2')}"
                          rendered="#{userSettingsBean.userApiKeyAlert}"
                          style="width: 100%; margin-bottom: 20px"/>
 
-        <p:staticMessage severity="warn" summary="#{msg['user.settings.attention']}"
-                         detail="#{msg['application.user.error.msg3']}"
+        <p:staticMessage severity="warn" summary="#{applicationBean.getLabel('user.settings.attention')}"
+                         detail="#{applicationBean.getLabel('application.user.error.msg3')}"
                          rendered="#{userSettingsBean.referenceProjetAlert}"
                          style="width: 100%; margin-bottom: 20px"/>
 
         <div class="container section-title" data-aos="fade-up">
-            <h2><h:outputText value="#{msg['user.settings.title']}"/></h2>
+            <h2><h:outputText value="#{applicationBean.getLabel('user.settings.title')}"/></h2>
         </div>
 
         <h:form id="userInformations">
             <div class="pricing-item featured php-email-form" style="text-align: left">
                 <div class="col-xl-12 content">
-                    <h3><h:outputText value="#{msg['user.settings.informations']}"/></h3>
+                    <h3><h:outputText value="#{applicationBean.getLabel('user.settings.informations')}"/></h3>
                 </div>
 
                 <div class="row">
                     <div class="field col-2" style="display: flex; align-items: center;">
-                        <h:outputText value="#{msg['user.settings.firstname']}"/>
+                        <h:outputText value="#{applicationBean.getLabel('user.settings.firstname')}"/>
                     </div>
                     <div class="field col-10">
                         <p:inputText value="#{userSettingsBean.userConnected.firstName}" class="form-control" style="width: 100%"/>
@@ -37,7 +37,7 @@
 
                 <div class="row" style="margin-top: 10px">
                     <div class="field col-2" style="display: flex; align-items: center;">
-                        <h:outputText value="#{msg['user.settings.name']}"/>
+                        <h:outputText value="#{applicationBean.getLabel('user.settings.name')}"/>
                     </div>
                     <div class="field col-10">
                         <p:inputText value="#{userSettingsBean.userConnected.lastName}" class="form-control" style="width: 100%"/>
@@ -46,7 +46,7 @@
 
                 <div class="row" style="margin-top: 10px">
                     <div class="field col-2" style="display: flex; align-items: center;">
-                        <h:outputText value="#{msg['user.settings.mail']}"/>
+                        <h:outputText value="#{applicationBean.getLabel('user.settings.mail')}"/>
                     </div>
                     <div class="field col-10">
                         <p:inputText value="#{userSettingsBean.userConnected.mail}" class="form-control" style="width: 100%"/>
@@ -55,7 +55,7 @@
 
                 <div class="row" style="margin-top: 10px">
                     <div class="field col-2" style="display: flex; align-items: center;">
-                        <h:outputText value="#{msg['user.settings.login']}"/>
+                        <h:outputText value="#{applicationBean.getLabel('user.settings.login')}"/>
                     </div>
                     <div class="field col-10">
                         <p:inputText value="#{userSettingsBean.userConnected.login}" class="form-control" style="width: 100%"/>
@@ -64,22 +64,22 @@
 
                 <div class="row" style="margin-top: 10px">
                     <div class="field col-2" style="display: flex; align-items: center;">
-                        <h:outputText value="#{msg['user.settings.password']}"/>
+                        <h:outputText value="#{applicationBean.getLabel('user.settings.password')}"/>
                     </div>
                     <div class="field col-10">
                         <p:password value="#{userSettingsBean.userConnected.password}"
                                     feedback="true" toggleMask="true" redisplay="true"
-                                    promptLabel="#{msg['user.settings.password.message']}"
-                                    weakLabel="#{msg['user.settings.password.weak']}"
-                                    goodLabel="#{msg['user.settings.password.good']}"
-                                    strongLabel="#{msg['user.settings.password.strong']}"
+                                    promptLabel="#{applicationBean.getLabel('user.settings.password.message')}"
+                                    weakLabel="#{applicationBean.getLabel('user.settings.password.weak')}"
+                                    goodLabel="#{applicationBean.getLabel('user.settings.password.good')}"
+                                    strongLabel="#{applicationBean.getLabel('user.settings.password.strong')}"
                                     style="width: 100%" class="form-control" />
                     </div>
                 </div>
 
                 <div class="row" style="margin-top: 10px">
                     <div class="field col-2" style="display: flex; align-items: center;">
-                        <h:outputText value="#{msg['application.user.default.traduction']}"/>
+                        <h:outputText value="#{applicationBean.getLabel('application.user.default.traduction')}"/>
                     </div>
                     <div class="field col-10">
                         <p:selectOneMenu value="#{userSettingsBean.userConnected.defaultTargetTraduction}" class="form-control"
@@ -92,7 +92,7 @@
 
                 <div class="row" style="margin-top: 10px">
                     <div class="field col-2" style="display: flex; align-items: center;">
-                        <h:outputText value="#{msg['user.settings.user_key']}"/>
+                        <h:outputText value="#{applicationBean.getLabel('user.settings.user_key')}"/>
                     </div>
                     <div class="field col-10">
                         <p:inputText value="#{userSettingsBean.userConnected.apiKey}" class="form-control" style="width: 100%"/>
@@ -101,7 +101,7 @@
 
                 <div class="row" style="margin-top: 10px">
                     <div class="field col-2" style="display: flex; align-items: center;">
-                        <h:outputText value="#{msg['user.settings.group']}"/>
+                        <h:outputText value="#{applicationBean.getLabel('user.settings.group')}"/>
                     </div>
                     <div class="field col-10">
                         <p:tag styleClass="mr-2" value="#{userSettingsBean.userConnected.group.name}"
@@ -117,7 +117,7 @@
 
                 <div class="row" style="margin-top: 10px;">
                     <div class="field col-12" style=" text-align: right">
-                        <p:commandButton title="#{msg['user.settings.save']}"
+                        <p:commandButton title="#{applicationBean.getLabel('user.settings.save')}"
                                          ajax="true" process="@form"
                                          action="#{userSettingsBean.saveUserInformations()}"
                                          class="btn-getstarted"

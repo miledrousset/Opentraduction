@@ -10,14 +10,14 @@
         <h:form>
             <div class="row">
                 <div class="field col-12 md:col-4">
-                    <p:outputLabel for="nom" value="#{msg['application.group.name']}"/>
+                    <p:outputLabel for="nom" value="#{applicationBean.getLabel('application.group.name')}"/>
                     <p:inputText id="nom" class="form-control" value="#{groupsSettingBean.groupSelected.name}"/>
                 </div>
             </div>
 
             <div class="row" style="margin-top: 10px">
                 <div class="field col-12 md:col-4">
-                    <p:outputLabel value="#{msg['application.group.reference.project']}"/>
+                    <p:outputLabel value="#{applicationBean.getLabel('application.group.reference.project')}"/>
                     <p:selectOneMenu value="#{groupsSettingBean.referenceProjectNameSelected}" class="form-control">
                         <p:ajax listener="#{groupsSettingBean.setReferenceThesaurus()}"/>
                         <f:selectItems value="#{groupsSettingBean.referenceProjects}"
@@ -27,7 +27,7 @@
             </div>
 
             <div class="field col-12 md:col-4" style="margin-top: 10px">
-                <p:outputLabel value="#{msg['application.group.consultation.projects']}"/>
+                <p:outputLabel value="#{applicationBean.getLabel('application.group.consultation.projects')}"/>
 
                 <p:selectManyMenu id="consultationProjects"
                                   value="#{groupsSettingBean.consultationProjectsNamesSelected}"
@@ -46,11 +46,11 @@
             </div>
 
             <div style="width: 100%; text-align: right; margin-top: 15px; margin-bottom: 2px;">
-                <p:commandButton value="#{msg['action.annuler']}" styleClass="ui-button-secondary ui-button-flat"
+                <p:commandButton value="#{applicationBean.getLabel('action.annuler')}" styleClass="ui-button-secondary ui-button-flat"
                                  actionListener="PF('groupDialog').hide();"
                                  ajax="true" process="@this" update="groupForm"/>
 
-                <p:commandButton id="groupValidate" title="#{msg['action.save']}"
+                <p:commandButton id="groupValidate" title="#{applicationBean.getLabel('action.save')}"
                                  action="#{groupsSettingBean.groupManager()}"
                                  class="btn-getstarted" ajax="true" process="@form"
                                  update="mainContent:listGroups"/>

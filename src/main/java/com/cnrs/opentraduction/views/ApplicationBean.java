@@ -13,10 +13,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.primefaces.PrimeFaces;
 import org.springframework.util.ObjectUtils;
 
-import javax.enterprise.context.SessionScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.inject.Named;
+import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.inject.Named;
 import java.io.IOException;
 import java.io.Serializable;
 
@@ -77,6 +77,10 @@ public class ApplicationBean implements Serializable {
     public String getUserNameConnected() {
         var label = connected ? " " + userConnected.getFullName() : "";
         return messageService.getMessage("application.home.welcome") + label;
+    }
+
+    public String getLabel(String key) {
+        return messageService.getMessage(key);
     }
 
     public String getMenuItemClass(String menuItem) {

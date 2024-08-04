@@ -15,10 +15,17 @@ tomcat:
     remoteauthentication: false
     enabled: false
 
+
+primefaces:
+  theme: bootstrap
+
 #######################
 # Spring configuration
 #######################
 spring:
+  threads:
+    virtual:
+      enabled: true
   datasource:
     platform: postgres
     url: jdbc:postgresql://localhost:5432/open-traduction

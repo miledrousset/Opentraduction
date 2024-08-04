@@ -15,7 +15,7 @@
             <section id="pricing" class="pricing section">
                 <section class="pricing about section pricing-item featured php-email-form" style="padding: 20px">
                     <div class="container section-title" data-aos="fade-up">
-                        <h2><h:outputText value="#{msg['application.proposition.title']}"/></h2>
+                        <h2><h:outputText value="#{applicationBean.getLabel('application.proposition.title')}"/></h2>
                     </div>
 
                     <div class="row">
@@ -24,7 +24,7 @@
                                 <div class="pricing-item featured php-email-form">
                                     <div class="row">
                                         <div class="field col-2" style="display: flex; align-items: center">
-                                            <h:outputText value="#{msg['user.settings.thesaurus']}" />
+                                            <h:outputText value="#{applicationBean.getLabel('user.settings.thesaurus')}" />
                                         </div>
                                         <div class="field col-10" style="display: flex; align-items: center;">
                                             <a href="#{searchBean.getThesaurusReferenceUrl()}" target="_blank">
@@ -35,7 +35,7 @@
 
                                     <div class="row" style="margin-top: 20px">
                                         <div class="field col-2" style="display: flex; align-items: center">
-                                            <h:outputText value="#{msg['user.settings.collection']}" />
+                                            <h:outputText value="#{applicationBean.getLabel('user.settings.collection')}" />
                                         </div>
                                         <div class="field col-10" style="display: flex; align-items: center;">
                                             <ul style="margin-bottom: -1px">
@@ -50,7 +50,7 @@
 
                                     <div class="row" style="margin-top: 20px">
                                         <div class="field col-2" style="display: flex; align-items: center">
-                                            <h:outputText value="#{msg['user.settings.concept']}" />
+                                            <h:outputText value="#{applicationBean.getLabel('user.settings.concept')}" />
                                         </div>
                                         <div class="field col-10" style="display: flex; align-items: center;">
                                             <a href="#{propositionBean.conceptToUpdate.url}" target="_blank">
@@ -79,7 +79,7 @@
                                     <div class="pricing-item featured php-email-form">
                                         <h:panelGroup id="termFr" class="row">
                                             <div class="field col-3" style="display: flex; align-items: center;">
-                                                <h:outputText value="#{msg['application.candidat.term.fr']}"
+                                                <h:outputText value="#{applicationBean.getLabel('application.candidat.term.fr')}"
                                                               styleClass="#{propositionBean.termFrStyleClass}"/>
                                             </div>
                                             <div class="field col-9 ui-inputgroup">
@@ -89,7 +89,7 @@
                                                                  ajax="true" process="@this" update="termFr"
                                                                  actionListener="#{propositionBean.initialTermFr()}"/>
                                                 <p:tooltip for="refreshTermFrBtn" position="bottom"
-                                                           value="#{msg['application.proposition.term.fr.init']}" />
+                                                           value="#{applicationBean.getLabel('application.proposition.term.fr.init')}" />
 
                                                 <p:inputText value="#{propositionBean.propositionDao.termeFr}"
                                                              class="form-control" disabled="#{propositionBean.termFrDisable}">
@@ -102,13 +102,13 @@
                                                                  ajax="true" process="@this" update="termFr"
                                                                  actionListener="#{propositionBean.deleteTermFr()}"/>
                                                 <p:tooltip for="removeTermFrBtn" position="bottom"
-                                                           value="#{msg['application.proposition.term.fr.remove']}" />
+                                                           value="#{applicationBean.getLabel('application.proposition.term.fr.remove')}" />
                                             </div>
                                         </h:panelGroup>
 
                                         <h:panelGroup id="synonymeFr" class="row"  style="margin-top: 10px">
                                             <div class="field col-3" style="display: flex; align-items: center;">
-                                                <h:outputText value="#{msg['application.candidat.variante.fr']}"
+                                                <h:outputText value="#{applicationBean.getLabel('application.candidat.variante.fr')}"
                                                               styleClass="#{propositionBean.synonymeFrStyleClass}"/>
                                             </div>
                                             <div class="field col-9 ui-inputgroup">
@@ -118,7 +118,7 @@
                                                                  ajax="true" process="@this" update="synonymeFr"
                                                                  actionListener="#{propositionBean.initialSynonymeFr()}"/>
                                                 <p:tooltip for="initVarianteFrBtn" position="bottom"
-                                                           value="#{msg['application.proposition.variante.fr.init']}" />
+                                                           value="#{applicationBean.getLabel('application.proposition.variante.fr.init')}" />
 
                                                 <p:inputText value="#{propositionBean.propositionDao.varianteFr}"
                                                              class="form-control" disabled="#{propositionBean.synonymeFrDisable}">
@@ -132,13 +132,13 @@
                                                                  ajax="true" process="@this" update="synonymeFr"
                                                                  actionListener="#{propositionBean.deleteSynonymeFr()}"/>
                                                 <p:tooltip for="deleteSynonymeFrBtn" position="bottom"
-                                                           value="#{msg['application.proposition.variante.fr.remove']}" />
+                                                           value="#{applicationBean.getLabel('application.proposition.variante.fr.remove')}" />
                                             </div>
                                         </h:panelGroup>
 
                                         <h:panelGroup id="definitionFr" class="row"  style="margin-top: 10px">
                                             <div class="field col-3" style="display: flex; align-items: center;">
-                                                <h:outputText value="#{msg['application.candidat.definition.fr']}"
+                                                <h:outputText value="#{applicationBean.getLabel('application.candidat.definition.fr')}"
                                                               styleClass="#{propositionBean.definitionFrStyleClass}"/>
                                             </div>
                                             <div class="field col-9 ui-inputgroup">
@@ -148,7 +148,7 @@
                                                                  ajax="true" process="@this" update="definitionFr"
                                                                  actionListener="#{propositionBean.initialDefinitionFr()}"/>
                                                 <p:tooltip for="initDefinitionFrBtn" position="bottom"
-                                                           value="#{msg['application.proposition.definition.fr.init']}" />
+                                                           value="#{applicationBean.getLabel('application.proposition.definition.fr.init')}" />
 
                                                 <p:inputText value="#{propositionBean.propositionDao.definitionFr}"
                                                              class="form-control" disabled="#{propositionBean.definitionFrDisable}">
@@ -162,13 +162,13 @@
                                                                  ajax="true" process="@this" update="definitionFr"
                                                                  actionListener="#{propositionBean.deleteDefinitionFr()}"/>
                                                 <p:tooltip for="removeDefinitionFrBtn" position="bottom"
-                                                           value="#{msg['application.proposition.definition.fr.remove']}" />
+                                                           value="#{applicationBean.getLabel('application.proposition.definition.fr.remove')}" />
                                             </div>
                                         </h:panelGroup>
 
                                         <h:panelGroup id="noteFr" class="row"  style="margin-top: 10px">
                                             <div class="field col-3" style="display: flex; align-items: center;">
-                                                <h:outputText value="#{msg['application.candidat.note.fr']}"
+                                                <h:outputText value="#{applicationBean.getLabel('application.candidat.note.fr')}"
                                                               styleClass="#{propositionBean.noteFrStyleClass}"/>
                                             </div>
                                             <div class="field col-9 ui-inputgroup">
@@ -178,7 +178,7 @@
                                                                  ajax="true" process="@this" update="noteFr"
                                                                  actionListener="#{propositionBean.initialNoteFr()}"/>
                                                 <p:tooltip for="initNoteFrBtn" position="bottom"
-                                                           value="#{msg['application.proposition.note.fr.init']}" />
+                                                           value="#{applicationBean.getLabel('application.proposition.note.fr.init')}" />
 
                                                 <p:inputText value="#{propositionBean.propositionDao.noteFr}"
                                                              class="form-control" disabled="#{propositionBean.noteFrDisable}">
@@ -192,7 +192,7 @@
                                                                  ajax="true" process="@this" update="noteFr"
                                                                  actionListener="#{propositionBean.deleteNoteFr()}"/>
                                                 <p:tooltip for="removeNoteFrBtn" position="bottom"
-                                                           value="#{msg['application.proposition.exemple.fr.remove']}" />
+                                                           value="#{applicationBean.getLabel('application.proposition.exemple.fr.remove')}" />
                                             </div>
                                         </h:panelGroup>
                                     </div>
@@ -210,7 +210,7 @@
                                                                  ajax="true" process="@this" update="termAr"
                                                                  actionListener="#{propositionBean.deleteTermAr()}"/>
                                                 <p:tooltip for="removeTermArBtn" position="bottom"
-                                                           value="#{msg['application.proposition.term.ar.remove']}" />
+                                                           value="#{applicationBean.getLabel('application.proposition.term.ar.remove')}" />
 
                                                 <p:inputText value="#{propositionBean.propositionDao.termeAr}"
                                                              class="form-control" disabled="#{propositionBean.termArDisable}">
@@ -223,10 +223,10 @@
                                                                  ajax="true" process="@this" update="termAr"
                                                                  actionListener="#{propositionBean.initialTermAr()}"/>
                                                 <p:tooltip for="initTermArBtn" position="bottom"
-                                                           value="#{msg['application.proposition.term.ar.init']}" />
+                                                           value="#{applicationBean.getLabel('application.proposition.term.ar.init')}" />
                                             </div>
                                             <div class="field col-3" style="margin-top: 8px; text-align: right;">
-                                                <h:outputText value="#{msg['application.candidat.term.ar']}"
+                                                <h:outputText value="#{applicationBean.getLabel('application.candidat.term.ar')}"
                                                               styleClass="#{propositionBean.termArStyleClass}"/>
                                             </div>
                                         </h:panelGroup>
@@ -239,7 +239,7 @@
                                                                  ajax="true" process="@this" update="synonymeAr"
                                                                  actionListener="#{propositionBean.deleteSynonymeAr()}"/>
                                                 <p:tooltip for="removeVarianteArBtn" position="bottom"
-                                                           value="#{msg['application.proposition.variante.ar.remove']}" />
+                                                           value="#{applicationBean.getLabel('application.proposition.variante.ar.remove')}" />
 
                                                 <p:inputText value="#{propositionBean.propositionDao.varianteAr}"
                                                              class="form-control" disabled="#{propositionBean.synonymeArDisable}">
@@ -253,10 +253,10 @@
                                                                  ajax="true" process="@this" update="synonymeAr"
                                                                  actionListener="#{propositionBean.initialSynonymeAr()}"/>
                                                 <p:tooltip for="initVarianteArBtn" position="bottom"
-                                                           value="#{msg['application.proposition.variante.ar.init']}" />
+                                                           value="#{applicationBean.getLabel('application.proposition.variante.ar.init')}" />
                                             </div>
                                             <div class="field col-3" style="margin-top: 8px; text-align: right;">
-                                                <h:outputText value="#{msg['application.candidat.variante.ar']}"
+                                                <h:outputText value="#{applicationBean.getLabel('application.candidat.variante.ar')}"
                                                               styleClass="#{propositionBean.synonymeArStyleClass}"/>
                                             </div>
                                         </h:panelGroup>
@@ -269,7 +269,7 @@
                                                                  ajax="true" process="@this" update="definitionAr"
                                                                  actionListener="#{propositionBean.deleteDefinitionAr()}"/>
                                                 <p:tooltip for="removeDefinitionArBtn" position="bottom"
-                                                           value="#{msg['application.proposition.definition.ar.remove']}" />
+                                                           value="#{applicationBean.getLabel('application.proposition.definition.ar.remove')}" />
 
                                                 <p:inputText value="#{propositionBean.propositionDao.definitionAr}"
                                                              class="form-control" disabled="#{propositionBean.definitionArDisable}">
@@ -283,10 +283,10 @@
                                                                  ajax="true" process="@this" update="definitionAr"
                                                                  actionListener="#{propositionBean.initialDefinitionAr()}"/>
                                                 <p:tooltip for="initDefinitionArBtn" position="bottom"
-                                                           value="#{msg['application.proposition.definition.ar.init']}" />
+                                                           value="#{applicationBean.getLabel('application.proposition.definition.ar.init')}" />
                                             </div>
                                             <div class="field col-3" style="margin-top: 8px; text-align: right;">
-                                                <h:outputText value="#{msg['application.candidat.definition.ar']}"
+                                                <h:outputText value="#{applicationBean.getLabel('application.candidat.definition.ar')}"
                                                               styleClass="#{propositionBean.definitionArStyleClass}"/>
                                             </div>
                                         </h:panelGroup>
@@ -299,7 +299,7 @@
                                                                  ajax="true" process="@this" update="noteAr"
                                                                  actionListener="#{propositionBean.deleteNoteAr()}"/>
                                                 <p:tooltip for="removeNoteArBtn" position="bottom"
-                                                           value="#{msg['application.proposition.exemple.ar.remove']}" />
+                                                           value="#{applicationBean.getLabel('application.proposition.exemple.ar.remove')}" />
 
                                                 <p:inputText value="#{propositionBean.propositionDao.noteAr}"
                                                              class="form-control" disabled="#{propositionBean.noteArDisable}">
@@ -313,10 +313,10 @@
                                                                  ajax="true" process="@this" update="noteAr"
                                                                  actionListener="#{propositionBean.initialNoteAr()}"/>
                                                 <p:tooltip for="refreshNoteArBtn" position="bottom"
-                                                           value="#{msg['application.proposition.note.ar.init']}" />
+                                                           value="#{applicationBean.getLabel('application.proposition.note.ar.init')}" />
                                             </div>
                                             <div class="field col-3" style="margin-top: 8px; text-align: right;">
-                                                <h:outputText value="#{msg['application.candidat.note.ar']}"
+                                                <h:outputText value="#{applicationBean.getLabel('application.candidat.note.ar')}"
                                                               styleClass="#{propositionBean.noteArStyleClass}"/>
                                             </div>
                                         </h:panelGroup>
@@ -330,14 +330,14 @@
                                 <div class="pricing-item featured php-email-form">
                                     <div class="row" style="margin-top: 10px">
                                         <div class="field col-2" style="display: flex; align-items: center;">
-                                            <h:outputText value="#{msg['application.candidat.remarque.fr']}"/>
+                                            <h:outputText value="#{applicationBean.getLabel('application.candidat.remarque.fr')}"/>
                                         </div>
                                         <div class="field col-8">
                                             <p:inputText value="#{propositionBean.propositionDao.comment}" class="form-control"
                                                          style="width: 100%"/>
                                         </div>
                                         <div class="field col-2" style="margin-top: 8px; text-align: right;">
-                                            <h:outputText value="#{msg['application.candidat.remarque.ar']}"/>
+                                            <h:outputText value="#{applicationBean.getLabel('application.candidat.remarque.ar')}"/>
                                         </div>
                                     </div>
                                 </div>
@@ -346,7 +346,7 @@
 
                         <div class="row" style="margin-top: 10px">
                             <div class="col-lg-12" style="text-align: right">
-                                <p:commandButton id="annulerPropositionBtn" value="#{msg['action.annuler']}"
+                                <p:commandButton id="annulerPropositionBtn" value="#{applicationBean.getLabel('action.annuler')}"
                                                  styleClass="ui-button-secondary ui-button-flat"
                                                  actionListener="#{searchBean.backToSearchScrean()}"
                                                  oncomplete="document.getElementById('scroll-top').click();"
@@ -355,7 +355,7 @@
                                 <p:commandButton class="btn-getstarted" update="mainContent"
                                                  action="#{propositionBean.saveProposition()}"
                                                  oncomplete="document.getElementById('scroll-top').click();"
-                                                 title="#{msg['action.save']}"
+                                                 title="#{applicationBean.getLabel('action.save')}"
                                                  ajax="true" process="@form" />
                             </div>
                         </div>

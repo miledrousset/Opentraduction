@@ -51,7 +51,7 @@
             </div>
 
             <div style="width: 100%; text-align: right; margin-top: 15px; margin-bottom: 2px;">
-                <p:commandButton value="#{msg['action.annuler']}" styleClass="ui-button-secondary ui-button-flat"
+                <p:commandButton value="#{applicationBean.getLabel('action.annuler')}" styleClass="ui-button-secondary ui-button-flat"
                                  action="PF('consultationThesaurusDialog').hide();"
                                  ajax="true" process="@this"/>
 

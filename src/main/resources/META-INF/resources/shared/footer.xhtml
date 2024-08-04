@@ -7,26 +7,30 @@
                 <div class="row gy-10">
                     <div class="col-12 footer-about">
                         <a href="index.html" class="logo d-flex align-items-center">
-                            <span class="sitename"><h:outputText value="#{msg['application.name1']}" /></span>
+                            <span class="sitename"><h:outputText value="#{applicationBean.getLabel('application.name1')}" /></span>
                         </a>
                         <p>
-                            <h:outputText value="#{msg['application.about.msg1']}" escape="false" /><br/>
-                            <h:outputText value="#{msg['application.about.msg2']}" /><br/>
-                            <h:outputText value="#{msg['application.about.msg3']}" /><br/>
-                            <h:outputText value="#{msg['application.about.msg4']}" /><br/>
-                            <h:outputText value="#{msg['application.about.msg5']}" escape="false" />
+                            <h:outputText value="#{applicationBean.getLabel('application.about.msg1')}" escape="false" /><br/>
+                            <h:outputText value="#{applicationBean.getLabel('application.about.msg2')}" /><br/>
+                            <h:outputText value="#{applicationBean.getLabel('application.about.msg3')}" /><br/>
+                            <h:outputText value="#{applicationBean.getLabel('application.about.msg4')}" /><br/>
+                            <h:outputText value="#{applicationBean.getLabel('application.about.msg5')}" escape="false" />
                         </p>
                     </div>
                 </div>
             </div>
             <div class="container copyright text-center mt-4">
                 <p>©
-                    <span><h:outputText value="#{msg['application.about.copyright']}" style="color: black" /></span>
-                    <strong class="sitename"><h:outputText value="#{msg['application.about.owner']}" /></strong>
-                    <span><h:outputText value="#{msg['application.about.all-rights']}" style="color: black"/></span>
+                    <span><h:outputText value="#{applicationBean.getLabel('application.about.copyright')}" style="color: black" /></span>
+                    <strong class="sitename">
+                        <h:outputText value="#{applicationBean.getLabel('application.about.owner')}" />
+                    </strong>
+                    <span>
+                        <h:outputText value="#{applicationBean.getLabel('application.about.all-rights')}" style="color: black"/>
+                    </span>
                 </p>
                 <div class="credits">
-                    <h:outputText value="#{msg['application.about.created-by']}" style="color: black"/>
+                    <h:outputText value="#{applicationBean.getLabel('application.about.created-by')}" style="color: black"/>
                     <a href="http://majlis-remomm.fr">GIS MOMM</a>
                 </div>
             </div>
