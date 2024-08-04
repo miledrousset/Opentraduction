@@ -60,7 +60,7 @@ public class SearchBean implements Serializable {
         log.info("Initialisation de l'interface recherche");
         this.userConnected = userService.getUserById(userConnectedId);
 
-        toArabic = !"FrancaisArabe".equalsIgnoreCase(this.userConnected.getDefaultTargetTraduction());
+        toArabic = "FrancaisArabe".equalsIgnoreCase(this.userConnected.getDefaultTargetTraduction());
         termValue = "";
         searchDone = false;
         conceptsReferenceFoundList = new ArrayList<>();

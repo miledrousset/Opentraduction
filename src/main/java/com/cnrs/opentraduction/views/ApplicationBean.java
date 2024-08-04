@@ -75,7 +75,11 @@ public class ApplicationBean implements Serializable {
     }
 
     public String getUserNameConnected() {
-        var label = connected ? " " + userConnected.getFullName() : "";
+        var label = "";
+        if (connected) {
+            userConnected = userService.getUserById(userConnected.getId());
+            label = " " + userConnected.getFullName();
+        }
         return messageService.getMessage("application.home.welcome") + label;
     }
 
