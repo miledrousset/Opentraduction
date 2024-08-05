@@ -16,33 +16,33 @@
             </a>
             <nav id="navmenu" class="navmenu">
                 <ul>
-                    <h:panelGroup rendered="#{applicationBean.isConnected()}">
-                        <li>
-                            <p:commandLink class="#{applicationBean.getMenuItemClass('HOME')}"
-                                           ajax="true" process="@this"
-                                           action="#{applicationBean.navigateToPage('HOME')}"
-                                           value="#{applicationBean.getLabel('application.menu.home')}" />
-                        </li>
-                        <li>
-                            <p:commandLink class="#{applicationBean.getMenuItemClass('SEARCH')}"
-                                           ajax="true" process="@this"
-                                           action="#{applicationBean.navigateToPage('SEARCH')}"
-                                           value="#{applicationBean.getLabel('application.menu.search')}" />
-                        </li>
-                        <li>
-                            <p:commandLink class="#{applicationBean.getMenuItemClass('USER_SETTINGS')}"
-                                           ajax="true" process="@this"
-                                           action="#{applicationBean.navigateToPage('USER_SETTINGS')}"
-                                           value="#{applicationBean.getLabel('application.menu.settings')}" />
-                        </li>
-                        <li>
-                            <p:commandLink class="#{applicationBean.getMenuItemClass('SYSTEM_SETTINGS')}"
-                                           action="#{applicationBean.navigateToPage('SYSTEM_SETTINGS')}"
-                                           rendered="#{applicationBean.userConnected.isAdmin()}"
-                                           value="#{applicationBean.getLabel('application.menu.system-settings')}"
-                                           ajax="true" process="@this"/>
-                        </li>
-                    </h:panelGroup>
+                    <li>
+                        <p:commandLink class="#{applicationBean.getMenuItemClass('HOME')}"
+                                       ajax="true" process="@this"
+                                       action="#{applicationBean.navigateToPage('HOME')}"
+                                       value="#{applicationBean.getLabel('application.menu.home')}" />
+                    </li>
+                    <li>
+                        <p:commandLink class="#{applicationBean.getMenuItemClass('SEARCH')}"
+                                       ajax="true" process="@this"
+                                       rendered="#{applicationBean.isConnected()}"
+                                       action="#{applicationBean.navigateToPage('SEARCH')}"
+                                       value="#{applicationBean.getLabel('application.menu.search')}" />
+                    </li>
+                    <li>
+                        <p:commandLink class="#{applicationBean.getMenuItemClass('USER_SETTINGS')}"
+                                       ajax="true" process="@this"
+                                       rendered="#{applicationBean.isConnected()}"
+                                       action="#{applicationBean.navigateToPage('USER_SETTINGS')}"
+                                       value="#{applicationBean.getLabel('application.menu.settings')}" />
+                    </li>
+                    <li>
+                        <p:commandLink class="#{applicationBean.getMenuItemClass('SYSTEM_SETTINGS')}"
+                                       action="#{applicationBean.navigateToPage('SYSTEM_SETTINGS')}"
+                                       rendered="#{applicationBean.userConnected.isAdmin()}"
+                                       value="#{applicationBean.getLabel('application.menu.system-settings')}"
+                                       ajax="true" process="@this"/>
+                    </li>
                 </ul>
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"/>
             </nav>

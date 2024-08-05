@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.primefaces.PrimeFaces;
 import org.springframework.util.ObjectUtils;
 
+import jakarta.faces.context.ExternalContext;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -33,7 +35,7 @@ public class ApplicationBean implements Serializable {
     private final MessageService messageService;
     private final UserService userService;
 
-    private MenuItem menuItemSelected;
+    private MenuItem menuItemSelected = MenuItem.HOME;
     private ConnexionDto connexionModel = new ConnexionDto();
     private boolean connected;
     private Users userConnected;
@@ -54,7 +56,7 @@ public class ApplicationBean implements Serializable {
         log.info("Déconnexion effectué avec sucée de {}", userName);
     }
 
-    public void login() {
+    public void login() throws IOException {
 
         log.info("Début de l'authentification");
         userConnected = userService.authentification(connexionModel);
@@ -69,9 +71,16 @@ public class ApplicationBean implements Serializable {
             messageService.showMessage(FacesMessage.SEVERITY_INFO, "application.user.ok.msg1");
 
             log.info("Authentification terminé avec sucée de {}", userConnected.getLogin());
+
+            refreshPage();
         } else {
             log.error("Erreur pendant l'authentification !");
         }
+    }
+
+    public void refreshPage() throws IOException {
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
     }
 
     public String getUserNameConnected() {
