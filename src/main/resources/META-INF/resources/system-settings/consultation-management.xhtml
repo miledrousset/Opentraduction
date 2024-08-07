@@ -6,7 +6,7 @@
     <div class="col-lg-9 service-box" data-aos="fade-up" data-aos-delay="200">
         <section id="pricing" class="pricing section">
             <div class="container section-title" data-aos="fade-up">
-                <h2><h:outputText value="#{msg['system.consultation.title']}" /></h2>
+                <h2><h:outputText value="#{applicationBean.getLabel('system.consultation.title')}" /></h2>
             </div>
 
             <div class="container" data-aos="zoom-in" data-aos-delay="100">
@@ -21,31 +21,31 @@
                                                      icon="pi pi-plus-circle" ajax="true" process="@this"
                                                      actionListener="#{consultationBean.initialAddInstanceDialog()}"
                                                      update="consultationInstanceForm"
-                                                     value="#{msg['system.consultation.add']}" />
+                                                     value="#{applicationBean.getLabel('system.consultation.add')}" />
                                     <p:tooltip for="addConsultationThesaurus" position="bottom"
-                                               value="#{msg['system.consultation.add.tooltip']}" />
+                                               value="#{applicationBean.getLabel('system.consultation.add.tooltip')}" />
                                 </div>
                             </div>
 
                             <p:dataTable id="listConsultationInstances" var="instance"
                                          value="#{consultationBean.consultationList}"
                                          class="table table-hover" stripedRows="true"
-                                         emptyMessage="#{msg['system.consultation.empty.array']}"
+                                         emptyMessage="#{applicationBean.getLabel('system.consultation.empty.array')}"
                                          reflow="true" styleClass="products-table" draggableColumns="true">
 
-                                <p:column headerText="#{msg['system.consultation.project_name']}" width="15%" style="text-align: center">
+                                <p:column headerText="#{applicationBean.getLabel('system.consultation.project_name')}" width="15%" style="text-align: center">
                                     <a href="#{instance.url}" target="_blank">
                                         <p:tag styleClass="mr-2" value="#{instance.name}" style="background: rgba(0, 0, 0, 0.58)" />
                                     </a>
                                 </p:column>
 
-                                <p:column headerText="#{msg['system.reference.thesaurus_name']}" width="25%">
+                                <p:column headerText="#{applicationBean.getLabel('system.reference.thesaurus_name')}" width="25%">
                                     <a href="#{instance.url}/?idt=#{instance.thesaurusId}" target="_blank">
                                         <h:outputText value="#{instance.thesaurusName}" />
                                     </a>
                                 </p:column>
 
-                                <p:column headerText="#{msg['system.reference.collection_name']}" width="25%">
+                                <p:column headerText="#{applicationBean.getLabel('system.reference.collection_name')}" width="25%">
                                     <ul style="margin-bottom: -1px">
                                         <ui:repeat value="#{instance.collectionList}" var="collection">
                                             <li>
@@ -55,28 +55,28 @@
                                     </ul>
                                 </p:column>
 
-                                <p:column headerText="#{msg['system.reference.actions']}" width="15%" style="text-align: center">
+                                <p:column headerText="#{applicationBean.getLabel('system.reference.actions')}" width="15%" style="text-align: center">
                                     <p:commandButton id="updateConsultationThesaurus" icon="pi pi-pencil" ajax="true"
                                                      process="@this" update="consultationInstanceForm"
                                                      action="#{consultationBean.initialUpdateInstanceDialog(instance)}"
                                                      styleClass="rounded-button ui-button-success ui-button-flat" />
                                     <p:tooltip for="updateConsultationThesaurus" position="bottom"
-                                               value="#{msg['system.consultation.update.tooltip']}" />
+                                               value="#{applicationBean.getLabel('system.consultation.update.tooltip')}" />
 
                                     <p:commandButton id="removeConsultationThesaurus" icon="pi pi-times"
                                                      update="listConsultationInstances" ajax="true" process="@this"
                                                      action="#{consultationBean.deleteInstance(instance)}"
                                                      styleClass="rounded-button ui-button-danger ui-button-flat">
-                                        <p:confirm header="Confirmation" message="#{msg['system.reference.remove.msg']}" icon="pi pi-exclamation-triangle"/>
+                                        <p:confirm header="Confirmation" message="#{applicationBean.getLabel('system.reference.remove.msg')}" icon="pi pi-exclamation-triangle"/>
                                     </p:commandButton>
                                     <p:tooltip for="removeConsultationThesaurus" position="bottom"
-                                               value="#{msg['system.consultation.remove.tooltip']}" />
+                                               value="#{applicationBean.getLabel('system.consultation.remove.tooltip')}" />
 
                                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="40%">
-                                        <p:commandButton value="#{msg['action.no']}" type="button"
+                                        <p:commandButton value="#{applicationBean.getLabel('action.no')}" type="button"
                                                          styleClass="ui-confirmdialog-no ui-button-flat"
                                                          style="color: rgba(0, 0, 0, 0.55)"/>
-                                        <p:commandButton value="#{msg['action.yes']}" type="button"
+                                        <p:commandButton value="#{applicationBean.getLabel('action.yes')}" type="button"
                                                          styleClass="ui-confirmdialog-yes"
                                                          style="color: #e84545; background: #e84545; color: #fff;"/>
                                     </p:confirmDialog>

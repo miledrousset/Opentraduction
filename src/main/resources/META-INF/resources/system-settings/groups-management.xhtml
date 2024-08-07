@@ -7,7 +7,7 @@
         <section id="pricing" class="pricing section">
 
             <div class="container section-title" data-aos="fade-up">
-                <h2><h:outputText value="#{msg['application.group.title']}"/></h2>
+                <h2><h:outputText value="#{applicationBean.getLabel('application.group.title')}"/></h2>
             </div>
 
             <div class="container" data-aos="zoom-in" data-aos-delay="100">
@@ -20,27 +20,27 @@
                                     <p:commandButton id="addGroup" styleClass="ui-button-outlined ui-button-secondary"
                                                      icon="pi pi-plus-circle" ajax="true" process="@this"
                                                      actionListener="#{groupsSettingBean.initialAddingGroup()}"
-                                                     update="groupForm" value="#{msg['application.group.add.title']}" />
-                                    <p:tooltip for="addGroup" position="bottom" value="#{msg['application.group.add.tooltip']}" />
+                                                     update="groupForm" value="#{applicationBean.getLabel('application.group.add.title')}" />
+                                    <p:tooltip for="addGroup" position="bottom" value="#{applicationBean.getLabel('application.group.add.tooltip')}" />
                                 </div>
                             </div>
 
                             <p:dataTable id="listGroups" var="group" value="#{groupsSettingBean.groups}"
                                          class="table table-hover" stripedRows="true"
-                                         emptyMessage="#{msg['application.group.empty.array']}"
+                                         emptyMessage="#{applicationBean.getLabel('application.group.empty.array')}"
                                          reflow="true" styleClass="products-table" draggableColumns="true">
 
-                                <p:column headerText="#{msg['user.settings.name']}" width="20%" style="text-align: center">
+                                <p:column headerText="#{applicationBean.getLabel('user.settings.name')}" width="20%" style="text-align: center">
                                     <p:tag styleClass="mr-2" value="#{group.name}" style="background: rgba(0, 0, 0, 0.58)" />
                                 </p:column>
 
-                                <p:column headerText="#{msg['application.group.reference.project']}" width="20%">
+                                <p:column headerText="#{applicationBean.getLabel('application.group.reference.project')}" width="20%">
                                     <a href="#{group.referenceProject.thesaurusUrl}" target="_blank">
                                         <h:outputText value="#{group.referenceProject.name}" />
                                     </a>
                                 </p:column>
 
-                                <p:column headerText="#{msg['application.group.consultation.projects']}" width="20%">
+                                <p:column headerText="#{applicationBean.getLabel('application.group.consultation.projects')}" width="20%">
                                     <ul style="margin-bottom: -1px">
                                         <ui:repeat value="#{group.consultationProjectsList}" var="consultation">
                                             <li>
@@ -52,29 +52,29 @@
                                     </ul>
                                 </p:column>
 
-                                <p:column headerText="#{msg['system.reference.actions']}" width="20%" style="text-align: center">
+                                <p:column headerText="#{applicationBean.getLabel('system.reference.actions')}" width="20%" style="text-align: center">
                                     <p:commandButton id="updateGroupBtn" icon="pi pi-pencil" ajax="true" process="@this"
                                                      update="groupForm"
                                                      action="#{groupsSettingBean.initialUpdateGroup(group)}"
                                                      styleClass="rounded-button ui-button-success ui-button-flat" />
-                                    <p:tooltip for="updateGroupBtn" position="bottom" value="#{msg['application.group.update.tooltip']}" />
+                                    <p:tooltip for="updateGroupBtn" position="bottom" value="#{applicationBean.getLabel('application.group.update.tooltip')}" />
 
                                     <p:commandButton id="removeGroupBtn" icon="pi pi-times" update=":mainContent:listGroups"
                                                      action="#{groupsSettingBean.deleteGroup(group)}"
                                                      styleClass="rounded-button ui-button-danger ui-button-flat">
 
-                                        <p:confirm header="#{msg['system.reference.remove']}"
-                                                   message="#{msg['application.group.remove.msg']}"
+                                        <p:confirm header="#{applicationBean.getLabel('system.reference.remove')}"
+                                                   message="#{applicationBean.getLabel('application.group.remove.msg')}"
                                                    icon="pi pi-exclamation-triangle"/>
                                     </p:commandButton>
-                                    <p:tooltip for="removeGroupBtn" position="bottom" value="#{msg['application.group.update.tooltip']}" />
+                                    <p:tooltip for="removeGroupBtn" position="bottom" value="#{applicationBean.getLabel('application.group.update.tooltip')}" />
 
                                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="40%">
-                                        <p:commandButton value="#{msg['action.no']}" type="button"
+                                        <p:commandButton value="#{applicationBean.getLabel('action.no')}" type="button"
                                                          style="color: rgba(0, 0, 0, 0.55)"
                                                          styleClass="ui-confirmdialog-no ui-button-flat"/>
 
-                                        <p:commandButton value="#{msg['action.yes']}" type="button" styleClass="ui-confirmdialog-yes"
+                                        <p:commandButton value="#{applicationBean.getLabel('action.yes')}" type="button" styleClass="ui-confirmdialog-yes"
                                                          style="color: #e84545; background: #e84545; color: #fff;"/>
                                     </p:confirmDialog>
                                 </p:column>

@@ -16,13 +16,13 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
-import javax.enterprise.context.SessionScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
-import javax.faces.context.FacesContext;
-import javax.faces.event.AjaxBehaviorEvent;
-import javax.inject.Named;
+import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.component.UIInput;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.event.AjaxBehaviorEvent;
+import jakarta.inject.Named;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -60,7 +60,7 @@ public class SearchBean implements Serializable {
         log.info("Initialisation de l'interface recherche");
         this.userConnected = userService.getUserById(userConnectedId);
 
-        toArabic = !"FrancaisArabe".equalsIgnoreCase(this.userConnected.getDefaultTargetTraduction());
+        toArabic = "FrancaisArabe".equalsIgnoreCase(this.userConnected.getDefaultTargetTraduction());
         termValue = "";
         searchDone = false;
         conceptsReferenceFoundList = new ArrayList<>();

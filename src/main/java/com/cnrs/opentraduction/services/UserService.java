@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
-import javax.faces.application.FacesMessage;
+import jakarta.faces.application.FacesMessage;
 import java.time.LocalDateTime;
 import java.util.List;
 

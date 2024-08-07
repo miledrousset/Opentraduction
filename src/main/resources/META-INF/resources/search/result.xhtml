@@ -9,13 +9,13 @@
                 <div class="col-lg-12 service-box" data-aos="fade-up" data-aos-delay="200">
                     <section id="pricing" class="pricing section">
 
-                        <center><p:staticMessage severity="warn" summary="#{msg['user.settings.attention']}"
-                                         detail="#{msg['application.user.error.msg2']}"
+                        <center><p:staticMessage severity="warn" summary="#{applicationBean.getLabel('user.settings.attention')}"
+                                         detail="#{applicationBean.getLabel('application.user.error.msg2')}"
                                          rendered="#{searchBean.userApiKeyAlert}"
                                          style="width: 100%; margin-bottom: 20px"/></center>
 
                         <div class="container section-title" data-aos="fade-up">
-                            <h2><h:outputText value="#{msg['application.search.title']}"/></h2>
+                            <h2><h:outputText value="#{applicationBean.getLabel('application.search.title')}"/></h2>
                         </div>
 
                         <div class="row" style="margin-bottom: 20px">
@@ -38,14 +38,14 @@
                             <div class="col-lg-12 search-widget widget-item">
                                 <h:form>
                                     <p:inputText value="#{searchBean.termValue}" class="form-control"
-                                                 placeholder="#{msg['search.sub-title']}"/>
+                                                 placeholder="#{applicationBean.getLabel('search.sub-title')}"/>
                                     <p:commandButton id="searchBtn" icon="bi bi-search" ajax="true" process="@form"
                                                      update="resultPanel"
                                                      disabled="#{searchBean.searchBtnEnabled()}"
                                                      action="#{searchBean.searchTerm(false)}"
                                                      style="background: #e84545; border-color: #e84545"/>
                                     <p:tooltip for="searchBtn" position="bottom"
-                                               value="#{msg['application.search.btn.tooltip']}" />
+                                               value="#{applicationBean.getLabel('application.search.btn.tooltip')}" />
                                 </h:form>
                             </div>
                         </div>
@@ -57,7 +57,7 @@
                                         <div class="pricing-item featured php-email-form" style="text-align: left">
                                             <div class="col-xl-12 content">
                                                 <h3>
-                                                    <h:outputText value="#{msg['application.search.reference.thesaurus.title']}"/>
+                                                    <h:outputText value="#{applicationBean.getLabel('application.search.reference.thesaurus.title')}"/>
                                                     <h:outputText value="#{searchBean.getReferenceThesaurus()}"/>
                                                 </h3>
                                             </div>
@@ -65,7 +65,7 @@
                                             <h:panelGroup rendered="#{searchBean.showReferenceResult()}">
                                                 <div class="row">
                                                     <div class="col-12 content">
-                                                        <h:outputText value="#{msg['application.search.no_data']}" style="font-style: italic; color: rgba(33, 37, 41, 0.58)"/>
+                                                        <h:outputText value="#{applicationBean.getLabel('application.search.no_data')}" style="font-style: italic; color: rgba(33, 37, 41, 0.58)"/>
                                                     </div>
                                                 </div>
                                             </h:panelGroup>
@@ -73,10 +73,10 @@
                                             <h:panelGroup rendered="#{!searchBean.showReferenceResult()}">
                                                 <p:dataTable id="conceptsReferenceFound" var="concept" value="#{searchBean.conceptsReferenceFoundList}"
                                                              class="table table-hover" stripedRows="true"
-                                                             emptyMessage="#{msg['application.search.no_data']}"
+                                                             emptyMessage="#{applicationBean.getLabel('application.search.no_data')}"
                                                              reflow="true" styleClass="products-table" draggableColumns="true">
 
-                                                    <p:column headerText="#{msg['application.search.collection']}" width="12%" style="text-align: center" groupRow="true">
+                                                    <p:column headerText="#{applicationBean.getLabel('application.search.collection')}" width="12%" style="text-align: center" groupRow="true">
                                                         <ul style="margin-bottom: -1px">
                                                             <ui:repeat value="#{concept.collections}" var="collection">
                                                                 <li>
@@ -86,7 +86,7 @@
                                                         </ul>
                                                     </p:column>
 
-                                                    <p:column headerText="#{msg['application.search.labelFr']}" width="12%">
+                                                    <p:column headerText="#{applicationBean.getLabel('application.search.labelFr')}" width="12%">
                                                         <h:panelGroup rendered="#{!searchBean.isConcept(concept.status)}">
                                                             <i class="pi pi-bookmark" style="margin-right: 5px"/>
                                                         </h:panelGroup>
@@ -95,11 +95,11 @@
                                                         </a>
                                                     </p:column>
 
-                                                    <p:column headerText="#{msg['application.search.definitionFr']}" width="25%">
+                                                    <p:column headerText="#{applicationBean.getLabel('application.search.definitionFr')}" width="25%">
                                                         <h:outputText value="#{concept.definitionFr}" escape="false" />
                                                     </p:column>
 
-                                                    <p:column headerText="#{msg['application.search.labelAr']}" width="12%">
+                                                    <p:column headerText="#{applicationBean.getLabel('application.search.labelAr')}" width="12%">
                                                         <h:panelGroup rendered="#{!searchBean.isConcept(concept.status)}">
                                                             <i class="pi pi-bookmark" style="margin-right: 5px"/>
                                                         </h:panelGroup>
@@ -108,12 +108,12 @@
                                                         </a>
                                                     </p:column>
 
-                                                    <p:column headerText="#{msg['application.search.definitionAr']}" width="25%">
+                                                    <p:column headerText="#{applicationBean.getLabel('application.search.definitionAr')}" width="25%">
                                                         <h:outputText value="#{concept.definitionAr}" escape="false" />
                                                     </p:column>
 
                                                     <p:column width="5%" style="text-align: center">
-                                                        <h:panelGroup rendered="#{concept.status != 'CO'}">
+                                                        <h:panelGroup rendered="#{searchBean.isConcept(concept.status)}">
                                                             <p:commandButton id="propositionBtn" icon="pi pi-file-edit" ajax="true"
                                                                              process="@this" update="mainContent"
                                                                              disabled="#{!searchBean.canSendProposition(concept.status)}"
@@ -122,7 +122,7 @@
                                                                              styleClass="rounded-button ui-button-success ui-button-flat" />
 
                                                             <p:tooltip for="propositionBtn" position="bottom"
-                                                                       value="#{msg['application.search.proposition.btn.tooltip']}" />
+                                                                       value="#{applicationBean.getLabel('application.search.proposition.btn.tooltip')}" />
                                                         </h:panelGroup>
                                                     </p:column>
                                                 </p:dataTable>
@@ -138,14 +138,14 @@
                                         <div class="pricing-item featured php-email-form" style="text-align: left">
                                             <div class="col-xl-12 content">
                                                 <h3>
-                                                    <h:outputText value="#{msg['application.search.consultation.thesaurus.title']}"/>
+                                                    <h:outputText value="#{applicationBean.getLabel('application.search.consultation.thesaurus.title')}"/>
                                                 </h3>
                                             </div>
 
                                             <h:panelGroup rendered="#{searchBean.showConsultationResult()}">
                                                 <div class="row">
                                                     <div class="col-12 content">
-                                                        <h:outputText value="#{msg['application.search.no_data']}" style="font-style: italic; color: rgba(33, 37, 41, 0.58)"/>
+                                                        <h:outputText value="#{applicationBean.getLabel('application.search.no_data')}" style="font-style: italic; color: rgba(33, 37, 41, 0.58)"/>
                                                     </div>
                                                 </div>
                                             </h:panelGroup>
@@ -153,14 +153,14 @@
                                             <h:panelGroup rendered="#{!searchBean.showConsultationResult()}">
                                                 <p:dataTable id="conceptsConsultationFound" var="concept" value="#{searchBean.conceptsConsultationFoundList}"
                                                              class="table table-hover" stripedRows="true"
-                                                             emptyMessage="#{msg['application.search.no_data']}"
+                                                             emptyMessage="#{applicationBean.getLabel('application.search.no_data')}"
                                                              reflow="true" styleClass="products-table" draggableColumns="true">
 
-                                                    <p:column headerText="#{msg['application.search.thesaurus']}" width="12%" groupRow="true">
+                                                    <p:column headerText="#{applicationBean.getLabel('application.search.thesaurus')}" width="12%" groupRow="true">
                                                         <h:outputText value="#{concept.thesaurusName}" />
                                                     </p:column>
 
-                                                    <p:column headerText="#{msg['application.search.collection']}" width="12%" style="text-align: center" groupRow="true">
+                                                    <p:column headerText="#{applicationBean.getLabel('application.search.collection')}" width="12%" style="text-align: center" groupRow="true">
                                                         <ul style="margin-bottom: -1px">
                                                             <ui:repeat value="#{concept.collections}" var="collection">
                                                                 <li>
@@ -170,7 +170,7 @@
                                                         </ul>
                                                     </p:column>
 
-                                                    <p:column headerText="#{msg['application.search.labelFr']}" width="15%">
+                                                    <p:column headerText="#{applicationBean.getLabel('application.search.labelFr')}" width="15%">
                                                         <h:panelGroup rendered="#{!searchBean.isConcept(concept.status)}">
                                                             <i class="pi pi-bookmark" style="margin-right: 5px"/>
                                                         </h:panelGroup>
@@ -179,11 +179,11 @@
                                                         </a>
                                                     </p:column>
 
-                                                    <p:column headerText="#{msg['application.search.definitionFr']}" width="25%">
+                                                    <p:column headerText="#{applicationBean.getLabel('application.search.definitionFr')}" width="25%">
                                                         <h:outputText value="#{concept.definitionFr}" escape="false"/>
                                                     </p:column>
 
-                                                    <p:column headerText="#{msg['application.search.labelAr']}" width="15%">
+                                                    <p:column headerText="#{applicationBean.getLabel('application.search.labelAr')}" width="15%">
                                                         <h:panelGroup rendered="#{!searchBean.isConcept(concept.status)}">
                                                             <i class="pi pi-bookmark" style="margin-right: 5px"/>
                                                         </h:panelGroup>
@@ -192,7 +192,7 @@
                                                         </a>
                                                     </p:column>
 
-                                                    <p:column headerText="#{msg['application.search.definitionAr']}" width="25%">
+                                                    <p:column headerText="#{applicationBean.getLabel('application.search.definitionAr')}" width="25%">
                                                         <h:outputText value="#{concept.definitionAr}" escape="false" />
                                                     </p:column>
                                                 </p:dataTable>
@@ -207,7 +207,7 @@
                             <div class="col-lg-12" style="text-align: right">
                                 <p:commandButton id="candidatBtn" class="btn-getstarted" update="mainContent"
                                                  action="#{searchBean.initAddCandidat()}"
-                                                 title="#{msg['application.search.create.candidat']}"
+                                                 title="#{applicationBean.getLabel('application.search.create.candidat')}"
                                                  disabled="#{!searchBean.canSendCandidat()}"
                                                  oncomplete="document.getElementById('scroll-top').click();"
                                                  ajax="true" process="@this" />

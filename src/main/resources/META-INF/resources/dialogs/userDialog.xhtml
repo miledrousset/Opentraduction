@@ -10,83 +10,81 @@
         <h:form>
             <div class="row">
                 <div class="field col-12 md:col-4">
-                    <p:outputLabel for="firstname" value="#{msg['application.user.firstname']}"/>
+                    <p:outputLabel for="firstname" value="#{applicationBean.getLabel('application.user.firstname')}"/>
                     <p:inputText id="firstname" class="form-control" value="#{usersSettingBean.userSelected.firstName}"/>
                 </div>
             </div>
 
             <div class="row">
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
-                    <p:outputLabel for="lastname" value="#{msg['application.user.lastname']}"/>
+                    <p:outputLabel for="lastname" value="#{applicationBean.getLabel('application.user.lastname')}"/>
                     <p:inputText id="lastname" class="form-control" value="#{usersSettingBean.userSelected.lastName}" />
                 </div>
             </div>
 
             <div class="row">
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
-                    <p:outputLabel for="email" value="#{msg['application.user.email']}"/>
+                    <p:outputLabel for="email" value="#{applicationBean.getLabel('application.user.email')}"/>
                     <p:inputText id="email" class="form-control" value="#{usersSettingBean.userSelected.mail}"/>
                 </div>
             </div>
 
             <div class="row">
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
-                    <p:outputLabel for="login" value="#{msg['application.user.login']}"/>
+                    <p:outputLabel for="login" value="#{applicationBean.getLabel('application.user.login')}"/>
                     <p:inputText id="login" class="form-control" value="#{usersSettingBean.userSelected.login}"/>
                 </div>
             </div>
 
             <div class="row">
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
-                    <p:outputLabel for="password" value="#{msg['application.user.password']}"/>
+                    <p:outputLabel for="password" value="#{applicationBean.getLabel('application.user.password')}"/>
                     <p:inputText id="password" class="form-control" value="#{usersSettingBean.userSelected.password}" />
                 </div>
             </div>
 
             <div class="field col-12 md:col-4" style="margin-top: 10px">
-                <p:outputLabel value="#{msg['application.user.group']}"/>
-                <p:selectOneMenu value="#{usersSettingBean.idGroupSelected}" class="form-control"
-                                 required="true" label="tableId" appendTo="@this" >
+                <p:outputLabel value="#{applicationBean.getLabel('application.user.group')}"/>
+                <p:selectOneMenu value="#{usersSettingBean.idGroupSelected}" class="form-control">
                     <f:selectItems value="#{usersSettingBean.groups}" var="group"
                                    itemLabel="#{group.name}" itemValue="#{group.id}"/>
                 </p:selectOneMenu>
             </div>
 
             <div class="field col-12 md:col-4" style="margin-top: 10px">
-                <p:outputLabel value="#{msg['application.user.default.traduction']}"/>
-                <p:selectOneMenu value="#{usersSettingBean.userSelected.defaultTargetTraduction}" class="form-control"
-                                 required="true" label="tableId" appendTo="@this" >
-                    <f:selectItem itemLabel="Français -> Arabe" itemValue="FrancaisArabe"/>
-                    <f:selectItem itemLabel="Arabe -> Français" itemValue="ArabeFrancais"/>
+                <p:outputLabel value="#{applicationBean.getLabel('application.user.default.traduction')}"/>
+                <p:selectOneMenu value="#{usersSettingBean.userSelected.defaultTargetTraduction}" class="form-control" >
+                    <f:selectItem itemLabel="Arabe" itemValue="FrancaisArabe"/>
+                    <f:selectItem itemLabel="Français" itemValue="ArabeFrancais"/>
                 </p:selectOneMenu>
             </div>
 
             <div class="row">
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
-                    <p:outputLabel for="api" value="#{msg['application.user.key-user']}"/>
+                    <p:outputLabel for="api" value="#{applicationBean.getLabel('application.user.key-user')}"/>
                     <p:inputText id="api" class="form-control" value="#{usersSettingBean.userSelected.apiKey}" />
                 </div>
             </div>
 
             <div class="row" style="margin-top: 10px">
                 <div class="field col-6 md:col-2">
-                    <h5><p:outputLabel for="admin" value="#{msg['application.user.admin']}"/></h5>
+                    <h5><p:outputLabel for="admin" value="#{applicationBean.getLabel('application.user.admin')}"/></h5>
                     <p:toggleSwitch id="admin" onIcon="pi pi-check" offIcon="pi pi-times"
                                     value="#{usersSettingBean.userSelected.admin}"/>
                 </div>
                 <div class="field col-6 md:col-2" style="text-align: right">
-                    <h5><p:outputLabel for="active" value="#{msg['application.user.enable']}"/></h5>
+                    <h5><p:outputLabel for="active" value="#{applicationBean.getLabel('application.user.enable')}"/></h5>
                     <p:toggleSwitch id="active" onIcon="pi pi-check" offIcon="pi pi-times"
                                     value="#{usersSettingBean.userSelected.active}"/>
                 </div>
             </div>
 
             <div style="width: 100%; text-align: right; margin-top: 15px; margin-bottom: 2px;">
-                <p:commandButton value="#{msg['action.annuler']}" styleClass="ui-button-secondary ui-button-flat"
+                <p:commandButton value="#{applicationBean.getLabel('action.annuler')}" styleClass="ui-button-secondary ui-button-flat"
                                  action="PF('userDialog').hide();"
                                  ajax="true" process="@this" update="userForm"/>
 
-                <p:commandButton title="#{msg['action.validate']}"
+                <p:commandButton title="#{applicationBean.getLabel('action.validate')}"
                                  action="#{usersSettingBean.userManagement()}"
                                  class="btn-getstarted" ajax="true" process="@form"
                                  update=":mainContent:usersList"/>

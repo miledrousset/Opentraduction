@@ -3,28 +3,30 @@
     xmlns:p="http://primefaces.org/ui"
     xmlns:h="http://xmlns.jcp.org/jsf/html">
 
-    <p:dialog header="Connexion" widgetVar="login" minHeight="40" width="350" showEffect="fade" modal="true" resizable="true">
+    <p:dialog header="#{applicationBean.getLabel('application.menu.connect')}" widgetVar="login"
+              minHeight="40" width="350" showEffect="fade" modal="true" resizable="true">
 
         <h:form class="php-email-form" data-aos="fade-up" data-aos-delay="200">
 
             <div class="row">
                 <div class="col-12">
-                    <p:inputText class="form-control" placeholder="Login"
+                    <p:inputText class="form-control" placeholder="#{applicationBean.getLabel('application.user.login')}"
                                  value="#{applicationBean.connexionModel.login}" />
                 </div>
 
                 <div class="col-12" style="margin-top: 20px">
-                    <p:password class="form-control" placeholder="Mot de passe"
+                    <p:password class="form-control" placeholder="#{applicationBean.getLabel('application.user.password')}"
                                 value="#{applicationBean.connexionModel.password}"/>
                 </div>
             </div>
 
             <div style="width: 100%; text-align: right; margin-top: 15px; margin-bottom: 2px;">
-                <p:commandButton value="#{msg['action.annuler']}" styleClass="ui-button-secondary ui-button-flat"
+                <p:commandButton value="#{applicationBean.getLabel('action.annuler')}"
+                                 styleClass="ui-button-secondary ui-button-flat"
                                  actionListener="PF('login').hide();"
                                  ajax="true" process="@this" update="mainContent"/>
 
-                <p:commandButton value="#{msg['application.menu.connect']}"
+                <p:commandButton value="#{applicationBean.getLabel('application.menu.connect')}"
                                  action="#{applicationBean.login()}" ajax="true" process="@form"
                                  update="mainContent"/>
             </div>

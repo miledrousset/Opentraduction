@@ -8,38 +8,41 @@
     <header id="header" class="header d-flex align-items-center fixed-top">
         <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
             <a href="index.xhtml" class="logo d-flex flex-column align-items-start me-auto me-xl-0">
-                <h5 class="sitename"><h:outputText value="#{msg['application.name1']}"/><span>.</span></h5>
-                <h5 class="sitename"><span>.</span><h:outputText value="#{msg['application.name3']}"/></h5>
+                <h5 class="sitename">
+                    <h:outputText value="#{applicationBean.getLabel('application.name1')}"/><span>.</span>
+                </h5>
+                <h5 class="sitename">
+                    <span>.</span><h:outputText value="#{applicationBean.getLabel('application.name3')}"/></h5>
             </a>
             <nav id="navmenu" class="navmenu">
                 <ul>
-                    <h:panelGroup rendered="#{applicationBean.isConnected()}">
-                        <li>
-                            <p:commandLink class="#{applicationBean.getMenuItemClass('HOME')}"
-                                           ajax="true" process="@this"
-                                           action="#{applicationBean.navigateToPage('HOME')}"
-                                           value="#{msg['application.menu.home']}" />
-                        </li>
-                        <li>
-                            <p:commandLink class="#{applicationBean.getMenuItemClass('SEARCH')}"
-                                           ajax="true" process="@this"
-                                           action="#{applicationBean.navigateToPage('SEARCH')}"
-                                           value="#{msg['application.menu.search']}" />
-                        </li>
-                        <li>
-                            <p:commandLink class="#{applicationBean.getMenuItemClass('USER_SETTINGS')}"
-                                           ajax="true" process="@this"
-                                           action="#{applicationBean.navigateToPage('USER_SETTINGS')}"
-                                           value="#{msg['application.menu.settings']}" />
-                        </li>
-                        <li>
-                            <p:commandLink class="#{applicationBean.getMenuItemClass('SYSTEM_SETTINGS')}"
-                                           action="#{applicationBean.navigateToPage('SYSTEM_SETTINGS')}"
-                                           rendered="#{applicationBean.userConnected.isAdmin()}"
-                                           value="#{msg['application.menu.system-settings']}"
-                                           ajax="true" process="@this"/>
-                        </li>
-                    </h:panelGroup>
+                    <li>
+                        <p:commandLink class="#{applicationBean.getMenuItemClass('HOME')}"
+                                       ajax="true" process="@this"
+                                       action="#{applicationBean.navigateToPage('HOME')}"
+                                       value="#{applicationBean.getLabel('application.menu.home')}" />
+                    </li>
+                    <li>
+                        <p:commandLink class="#{applicationBean.getMenuItemClass('SEARCH')}"
+                                       ajax="true" process="@this"
+                                       rendered="#{applicationBean.isConnected()}"
+                                       action="#{applicationBean.navigateToPage('SEARCH')}"
+                                       value="#{applicationBean.getLabel('application.menu.search')}" />
+                    </li>
+                    <li>
+                        <p:commandLink class="#{applicationBean.getMenuItemClass('USER_SETTINGS')}"
+                                       ajax="true" process="@this"
+                                       rendered="#{applicationBean.isConnected()}"
+                                       action="#{applicationBean.navigateToPage('USER_SETTINGS')}"
+                                       value="#{applicationBean.getLabel('application.menu.settings')}" />
+                    </li>
+                    <li>
+                        <p:commandLink class="#{applicationBean.getMenuItemClass('SYSTEM_SETTINGS')}"
+                                       action="#{applicationBean.navigateToPage('SYSTEM_SETTINGS')}"
+                                       rendered="#{applicationBean.userConnected.isAdmin()}"
+                                       value="#{applicationBean.getLabel('application.menu.system-settings')}"
+                                       ajax="true" process="@this"/>
+                    </li>
                 </ul>
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"/>
             </nav>
@@ -59,13 +62,13 @@
                                                    ajax="true" process="@this" update="mainContent languagesPanel"
                                                    action="#{localeBean.changeLanguage('ar')}">
                                         <p:graphicImage value="/assets/img/flags/ar.png" style="width: 27px" />
-                                        <h:outputText value="#{msg['application.language.arabic']}" style="margin-left: 5px; color: #000000"/>
+                                        <h:outputText value="#{applicationBean.getLabel('application.language.arabic')}" style="margin-left: 5px; color: #000000"/>
                                     </p:commandLink>
                                     <p:commandLink class="dropdown-item"
                                                    ajax="true" process="@form" update="mainContent languagesPanel"
                                                    action="#{localeBean.changeLanguage('fr')}">
                                         <p:graphicImage value="/assets/img/flags/fr.png" style="width: 27px" />
-                                        <h:outputText value="#{msg['application.language.french']}" style="margin-left: 5px; color: #000000"/>
+                                        <h:outputText value="#{applicationBean.getLabel('application.language.french')}" style="margin-left: 5px; color: #000000"/>
                                     </p:commandLink>
                                 </div>
                             </li>
@@ -76,22 +79,23 @@
 
                 <h:panelGroup rendered="#{!applicationBean.isConnected()}">
                     <p:commandButton class="btn-getstarted" onclick="PF('login').show();"
-                                     title="#{msg['application.menu.connect']}"
+                                     title="#{applicationBean.getLabel('application.menu.connect')}"
                                      process="@this" ajax="true"/>
                 </h:panelGroup>
                 <h:panelGroup rendered="#{applicationBean.isConnected()}">
                     <p:commandButton class="btn-getstarted" action="#{applicationBean.logout()}" update="mainContent"
-                                     title="#{msg['application.menu.disconnect']}" process="@this" ajax="true">
-                        <p:confirm header="#{msg['application.user.confirmation']}"
-                                   message="#{msg['application.user.logout.msg']}" icon="pi pi-exclamation-triangle"/>
+                                     title="#{applicationBean.getLabel('application.menu.disconnect')}" process="@this" ajax="true">
+                        <p:confirm header="#{applicationBean.getLabel('application.user.confirmation')}"
+                                   message="#{applicationBean.getLabel('application.user.logout.msg')}" icon="pi pi-exclamation-triangle"/>
                     </p:commandButton>
 
                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="40%">
-                        <p:commandButton value="#{msg['action.no']}" type="button"
+                        <p:commandButton title="#{applicationBean.getLabel('action.no')}" type="button"
                                          style="color: rgba(0, 0, 0, 0.55)"
                                          styleClass="ui-confirmdialog-no ui-button-flat"/>
 
-                        <p:commandButton value="#{msg['action.yes']}" type="button" styleClass="ui-confirmdialog-yes"
+                        <p:commandButton title="#{applicationBean.getLabel('action.yes')}" type="button"
+                                         styleClass="ui-confirmdialog-yes"
                                          style="color: #e84545; background: #e84545; color: #fff;"/>
                     </p:confirmDialog>
                 </h:panelGroup>

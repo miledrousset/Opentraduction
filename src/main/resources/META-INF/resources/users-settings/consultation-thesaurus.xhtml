@@ -8,14 +8,14 @@
 
             <div class="row">
                 <div class="col-xl-12 content">
-                    <h3><h:outputText value="#{msg['user.settings.consultation.title']}"/></h3>
+                    <h3><h:outputText value="#{applicationBean.getLabel('user.settings.consultation.title')}"/></h3>
                 </div>
             </div>
 
             <h:panelGroup rendered="#{!userSettingsBean.showConsultationProjects()}">
                 <div class="row">
                     <div class="col-12 content">
-                        <h:outputText value="#{msg['application.share.msg1']}" style="font-style: italic; color: rgba(33, 37, 41, 0.58)"/>
+                        <h:outputText value="#{applicationBean.getLabel('application.share.msg1')}" style="font-style: italic; color: rgba(33, 37, 41, 0.58)"/>
                     </div>
                 </div>
             </h:panelGroup>
@@ -26,19 +26,19 @@
                              class="table table-hover" stripedRows="true"
                              reflow="true" styleClass="products-table" draggableColumns="true">
 
-                    <p:column headerText="#{msg['application.user.project_name']}" width="15%" style="text-align: center"  groupRow="true">
+                    <p:column headerText="#{applicationBean.getLabel('application.user.project_name')}" width="15%" style="text-align: center"  groupRow="true">
                         <a href="#{instance.url}" target="_blank">
                             <p:tag styleClass="mr-2" value="#{instance.name}" style="background: rgba(0, 0, 0, 0.58)" />
                         </a>
                     </p:column>
 
-                    <p:column headerText="#{msg['system.reference.thesaurus_name']}" width="25%" groupRow="true">
+                    <p:column headerText="#{applicationBean.getLabel('system.reference.thesaurus_name')}" width="25%" groupRow="true">
                         <a href="#{instance.url}/?idt=#{instance.thesaurusId}" target="_blank">
                             <h:outputText value="#{instance.thesaurusName}" />
                         </a>
                     </p:column>
 
-                    <p:column headerText="#{msg['system.reference.collection_name']}" width="25%">
+                    <p:column headerText="#{applicationBean.getLabel('system.reference.collection_name')}" width="25%">
                         <h:outputText value="#{instance.collectionName}" />
                     </p:column>
                 </p:dataTable>

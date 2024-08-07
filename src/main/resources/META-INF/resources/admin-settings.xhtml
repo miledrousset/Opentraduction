@@ -26,30 +26,30 @@
             <div class="row gy-5">
               <div class="col-lg-3" data-aos="fade-up" data-aos-delay="100">
                 <div class="service-box">
-                  <h4><h:outputText value="#{msg['application.settings.title']}" /></h4>
+                  <h4><h:outputText value="#{applicationBean.getLabel('application.settings.title')}" /></h4>
                   <div class="services-list">
                     <p:commandLink class="#{applicationSettingBean.getMenuItemClass('USER_MANAGEMENT')}"
                                    action="#{applicationSettingBean.setMenuItem('USER_MANAGEMENT')}"
                                    ajax="true" process="@this" update="mainContent">
-                      <i class="pi pi-user"/><span><h:outputText value="#{msg['application.user.btn.title']}" /></span>
+                      <i class="pi pi-user"/><span><h:outputText value="#{applicationBean.getLabel('application.user.btn.title')}" /></span>
                     </p:commandLink>
 
                     <p:commandLink class="#{applicationSettingBean.getMenuItemClass('GROUP_MANAGEMENT')}"
                                    action="#{applicationSettingBean.setMenuItem('GROUP_MANAGEMENT')}"
                                    ajax="true" process="@this" update="mainContent">
-                      <i class="pi pi-users"/><span><h:outputText value="#{msg['application.group.btn.title']}" /></span>
+                      <i class="pi pi-users"/><span><h:outputText value="#{applicationBean.getLabel('application.group.btn.title')}" /></span>
                     </p:commandLink>
 
                     <p:commandLink class="#{applicationSettingBean.getMenuItemClass('THESAURUS_REFERENCE')}"
                                    action="#{applicationSettingBean.setMenuItem('THESAURUS_REFERENCE')}"
                                    ajax="true" process="@this" update="mainContent">
-                      <i class="pi pi-server"/><span><h:outputText value="#{msg['system.reference.btn.title']}" /></span>
+                      <i class="pi pi-server"/><span><h:outputText value="#{applicationBean.getLabel('system.reference.btn.title')}" /></span>
                     </p:commandLink>
 
                     <p:commandLink class="#{applicationSettingBean.getMenuItemClass('THESAURUS_CONSULTATION')}"
                                    action="#{applicationSettingBean.setMenuItem('THESAURUS_CONSULTATION')}"
                                    ajax="true" process="@this" update="mainContent">
-                      <i class="pi pi-server"/><span><h:outputText value="#{msg['system.consultation.btn.title']}" /></span>
+                      <i class="pi pi-server"/><span><h:outputText value="#{applicationBean.getLabel('system.consultation.btn.title')}" /></span>
                     </p:commandLink>
                   </div>
                 </div>
