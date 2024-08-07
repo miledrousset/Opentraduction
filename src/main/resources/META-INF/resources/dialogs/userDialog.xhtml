@@ -45,8 +45,7 @@
 
             <div class="field col-12 md:col-4" style="margin-top: 10px">
                 <p:outputLabel value="#{applicationBean.getLabel('application.user.group')}"/>
-                <p:selectOneMenu value="#{usersSettingBean.idGroupSelected}" class="form-control"
-                                 required="true" label="tableId" appendTo="@this" >
+                <p:selectOneMenu value="#{usersSettingBean.idGroupSelected}" class="form-control">
                     <f:selectItems value="#{usersSettingBean.groups}" var="group"
                                    itemLabel="#{group.name}" itemValue="#{group.id}"/>
                 </p:selectOneMenu>
@@ -54,8 +53,7 @@
 
             <div class="field col-12 md:col-4" style="margin-top: 10px">
                 <p:outputLabel value="#{applicationBean.getLabel('application.user.default.traduction')}"/>
-                <p:selectOneMenu value="#{usersSettingBean.userSelected.defaultTargetTraduction}" class="form-control"
-                                 required="true" label="tableId" appendTo="@this" >
+                <p:selectOneMenu value="#{usersSettingBean.userSelected.defaultTargetTraduction}" class="form-control" >
                     <f:selectItem itemLabel="Arabe" itemValue="FrancaisArabe"/>
                     <f:selectItem itemLabel="Français" itemValue="ArabeFrancais"/>
                 </p:selectOneMenu>

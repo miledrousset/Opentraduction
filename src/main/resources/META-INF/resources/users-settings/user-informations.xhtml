@@ -82,10 +82,9 @@
                         <h:outputText value="#{applicationBean.getLabel('application.user.default.traduction')}"/>
                     </div>
                     <div class="field col-10">
-                        <p:selectOneMenu value="#{userSettingsBean.userConnected.defaultTargetTraduction}" class="form-control"
-                                         required="true" label="tableId" appendTo="@this" >
-                            <f:selectItem itemLabel="Français -> Arabe" itemValue="FrancaisArabe"/>
-                            <f:selectItem itemLabel="Arabe -> Français" itemValue="ArabeFrancais"/>
+                        <p:selectOneMenu value="#{userSettingsBean.userConnected.defaultTargetTraduction}" class="form-control" >
+                            <f:selectItem itemLabel="Arabe" itemValue="FrancaisArabe"/>
+                            <f:selectItem itemLabel="Français" itemValue="ArabeFrancais"/>
                         </p:selectOneMenu>
                     </div>
                 </div>
