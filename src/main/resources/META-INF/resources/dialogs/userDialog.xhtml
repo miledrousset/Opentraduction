@@ -54,8 +54,8 @@
             <div class="field col-12 md:col-4" style="margin-top: 10px">
                 <p:outputLabel value="#{applicationBean.getLabel('application.user.default.traduction')}"/>
                 <p:selectOneMenu value="#{usersSettingBean.userSelected.defaultTargetTraduction}" class="form-control" >
-                    <f:selectItem itemLabel="Arabe" itemValue="FrancaisArabe"/>
-                    <f:selectItem itemLabel="Français" itemValue="ArabeFrancais"/>
+                    <f:selectItem itemLabel="#{usersSettingBean.arabeLabel}" itemValue="FrancaisArabe"/>
+                    <f:selectItem itemLabel="#{usersSettingBean.francaisLabel}" itemValue="ArabeFrancais"/>
                 </p:selectOneMenu>
             </div>
 

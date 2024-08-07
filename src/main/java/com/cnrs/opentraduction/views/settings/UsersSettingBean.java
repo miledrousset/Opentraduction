@@ -33,7 +33,7 @@ public class UsersSettingBean implements Serializable {
     private Users userSelected;
 
     private Integer idGroupSelected;
-    private String dialogTitle, defaultTraduction;
+    private String dialogTitle, defaultTraduction, francaisLabel, arabeLabel;
 
 
     public void initialInterface() {
@@ -42,6 +42,9 @@ public class UsersSettingBean implements Serializable {
         userSelected = new Users();
         users = userService.getAllUsers();
         groups = groupService.getGroups();
+
+        francaisLabel = messageService.getMessage("application.language.french");
+        arabeLabel = messageService.getMessage("application.language.arabic");
     }
 
     public void initialAddUser() {

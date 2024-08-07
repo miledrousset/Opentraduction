@@ -37,7 +37,7 @@ public class UserSettingsBean implements Serializable {
     private Users userConnected;
     private List<ConsultationCollectionDao> consultationThesaurusList;
     private boolean userApiKeyAlert, referenceProjetAlert;
-    private String dialogTitle;
+    private String dialogTitle, francaisLabel, arabeLabel;
 
 
     public void initialInterface(Integer userConnectedId) {
@@ -53,6 +53,9 @@ public class UserSettingsBean implements Serializable {
 
         log.info("Préparation du projet de consultation");
         searchConsultationThesaurus();
+
+        francaisLabel = messageService.getMessage("application.language.french");
+        arabeLabel = messageService.getMessage("application.language.arabic");
     }
 
     private void searchConsultationThesaurus() {
