@@ -6,12 +6,11 @@ server:
   port: 9090
   servlet:
     context-path: /shs-traduction
-
-tomcat:
-  ajp:
-    port: 9090
-    remoteauthentication: false
-    enabled: false
+    session:
+      timeout: 125m
+  tomcat:
+    remote_ip_header: x-forwarded-for
+    protocol_header: x-forwarded-proto
 
 
 primefaces:

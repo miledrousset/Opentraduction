@@ -3,6 +3,7 @@ package com.cnrs.opentraduction.config;
 import com.sun.faces.config.ConfigureListener;
 import jakarta.faces.webapp.FacesServlet;
 import jakarta.servlet.ServletContext;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -48,5 +49,13 @@ public class WebConfig  implements ServletContextAware {
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();
+    }
+
+    @Bean
+    public FilterRegistrationBean<SessionTimeoutFilter> sessionTimeoutFilter() {
+        var registrationBean = new FilterRegistrationBean<SessionTimeoutFilter>();
+        registrationBean.setFilter(new SessionTimeoutFilter());
+        registrationBean.addUrlPatterns("/*");
+        return registrationBean;
     }
 }
