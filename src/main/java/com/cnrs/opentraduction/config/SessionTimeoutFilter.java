@@ -16,6 +16,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
+import javax.faces.context.FacesContext;
+
 
 @Slf4j
 @Component
@@ -43,7 +45,12 @@ public class SessionTimeoutFilter implements Filter {
             } catch (Exception ex) {
                 log.error("Erreur pendant la fermeture de la session");
             }
-            httpResponse.sendRedirect(httpRequest.getContextPath() + "/index.xhtml");
+
+            if (FacesContext.getCurrentInstance() != null) {
+                FacesContext.getCurrentInstance().getExternalContext().redirect(httpRequest.getContextPath() + "/index.xhtml");
+            } else {
+                httpResponse.sendRedirect(httpRequest.getContextPath() + "/index.xhtml");
+            }
         } else {
             chain.doFilter(request, response);
         }

@@ -60,7 +60,7 @@ public class SearchBean implements Serializable {
         log.info("Initialisation de l'interface recherche");
         this.userConnected = userService.getUserById(userConnectedId);
 
-        toArabic = "FrancaisArabe".equalsIgnoreCase(this.userConnected.getDefaultTargetTraduction());
+        toArabic = "Arabe".equalsIgnoreCase(this.userConnected.getDefaultTargetTraduction());
         termValue = "";
         searchDone = false;
         conceptsReferenceFoundList = new ArrayList<>();
@@ -183,7 +183,7 @@ public class SearchBean implements Serializable {
                 ? defaultIdGroup
                 : thesaurus.getIdCollection();
 
-        var languageToSearch = toArabic ? "ar" : "fr";
+        var languageToSearch = toArabic ? "fr" : "ar";
 
         return thesaurusService.searchConcepts(thesaurus, url, termValue, languageToSearch, idCollection);
     }
@@ -196,7 +196,7 @@ public class SearchBean implements Serializable {
         addCandidatDisplay = false;
         addPropositionDisplay = true;
 
-        var langFrom = toArabic ? "AR" : "FR";
+        var langFrom = toArabic ? "FR" : "AR";
         propositionBean.initInterface(userConnected, conceptToUpdate, langFrom);
     }
 
@@ -257,11 +257,11 @@ public class SearchBean implements Serializable {
     }
 
     private String getLangSource() {
-        return toArabic ? " (AR)" : " (FR)";
+        return toArabic ? " (FR)" : " (AR)";
     }
 
     private String getLangCible() {
-        return toArabic ? " (FR)" : " (AR)";
+        return toArabic ? " (AR)" : " (FR)";
     }
 
     public boolean isConcept(String status) {
