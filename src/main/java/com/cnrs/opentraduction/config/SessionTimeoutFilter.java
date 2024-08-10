@@ -45,15 +45,8 @@ public class SessionTimeoutFilter implements Filter {
             } catch (Exception ex) {
                 log.error("Erreur pendant la fermeture de la session");
             }
-
-            if (FacesContext.getCurrentInstance() != null) {
-                FacesContext.getCurrentInstance().getExternalContext().redirect(httpRequest.getContextPath() + "/index.xhtml");
-            } else {
-                httpResponse.sendRedirect(httpRequest.getContextPath() + "/index.xhtml");
-            }
-        } else {
-            chain.doFilter(request, response);
         }
+        chain.doFilter(request, response);
     }
 
     @Override

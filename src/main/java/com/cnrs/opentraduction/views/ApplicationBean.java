@@ -75,8 +75,18 @@ public class ApplicationBean implements Serializable {
         }
     }
 
+    public boolean checkConnection() throws IOException {
+        if (isConnected()) {
+            return true;
+        } else {
+            var externalContext = FacesContext.getCurrentInstance().getExternalContext();
+            externalContext.redirect("index.xhtml");
+            return false;
+        }
+    }
+
     public void refreshPage() throws IOException {
-        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        var ec = FacesContext.getCurrentInstance().getExternalContext();
         ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
     }
 
@@ -98,27 +108,29 @@ public class ApplicationBean implements Serializable {
     }
 
     public void navigateToPage(String menuItem) throws IOException {
-        menuItemSelected = MenuItem.valueOf(menuItem);
-        switch(menuItemSelected) {
-            case SEARCH:
-                log.info("Navigation vers l'interface de recherche");
-                searchBean.initSearchInterface(userConnected.getId());
-                FacesContext.getCurrentInstance().getExternalContext().redirect("search.xhtml");
-                break;
-            case USER_SETTINGS:
-                log.info("Navigation vers l'interface paramètres de l'utilisateur");
-                userSettingsBean.initialInterface(userConnected.getId());
-                FacesContext.getCurrentInstance().getExternalContext().redirect("user-settings.xhtml");
-                break;
-            case SYSTEM_SETTINGS:
-                log.info("Navigation vers l'interface paramètres du systhème");
-                applicationSettingBean.initialInterface();
-                FacesContext.getCurrentInstance().getExternalContext().redirect("admin-settings.xhtml");
-                break;
-            default:
-                log.info("Navigation vers l'interface principale");
-                searchBean.setTermValue("");
-                FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
+        if (checkConnection()) {
+            menuItemSelected = MenuItem.valueOf(menuItem);
+            switch(menuItemSelected) {
+                case SEARCH:
+                    log.info("Navigation vers l'interface de recherche");
+                    searchBean.initSearchInterface(userConnected.getId());
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("search.xhtml");
+                    break;
+                case USER_SETTINGS:
+                    log.info("Navigation vers l'interface paramètres de l'utilisateur");
+                    userSettingsBean.initialInterface(userConnected.getId());
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("user-settings.xhtml");
+                    break;
+                case SYSTEM_SETTINGS:
+                    log.info("Navigation vers l'interface paramètres du systhème");
+                    applicationSettingBean.initialInterface();
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("admin-settings.xhtml");
+                    break;
+                default:
+                    log.info("Navigation vers l'interface principale");
+                    searchBean.setTermValue("");
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
+            }
         }
     }
 

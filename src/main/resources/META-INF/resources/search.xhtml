@@ -15,7 +15,7 @@
     </h:head>
 
     <h:body class="services-details-page">
-        <h:panelGroup id="mainContent">
+        <h:panelGroup id="mainContent" rendered="#{applicationBean.checkConnection()}">
             <ui:include src="shared/header.xhtml" />
             <main class="main">
                 <h:panelGroup id="resultPanel" rendered="#{searchBean.searchResultDisplay}"

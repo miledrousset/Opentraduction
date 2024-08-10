@@ -19,10 +19,7 @@
   <properties>
     <java.version>17</java.version>
     <poi.version>3.12</poi.version>
-    <primefaces.version>13.0.0</primefaces.version>
-    <cdi-api.version>2.0.SP1</cdi-api.version>
     <lombok.version>1.18.24</lombok.version>
-    <jsf-api.version>2.2.20</jsf-api.version>
     <deepl.version>1.5.0</deepl.version>
     <joinfaces.version>5.3.2</joinfaces.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

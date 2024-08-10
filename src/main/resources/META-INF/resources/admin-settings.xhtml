@@ -17,7 +17,7 @@
 
     <ui:include src="shared/header.xhtml" />
 
-    <h:form id="mainContent">
+    <h:form id="mainContent" rendered="#{applicationBean.checkConnection()}">
 
       <main class="main">
         <!-- Service Details Section -->

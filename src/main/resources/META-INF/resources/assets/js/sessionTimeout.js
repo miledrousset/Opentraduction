@@ -15,3 +15,20 @@ document.addEventListener("DOMContentLoaded", function() {
         .catch(error => console.error('Error during logout:', error));
   }, timeoutInMilliseconds);
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    if (document.documentElement.getAttribute('data-session-invalid') === 'true') {
+        fetch('/api/logout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        }).then(response => {
+            if (response.ok) {
+                window.location.href = '/index.xhtml';
+            } else {
+                console.error('La requête de déconnexion a échoué.');
+            }
+        }).catch(error => {
+            console.error('Une erreur est survenue lors de la requête de déconnexion :', error);
+        });
+    }
+});
