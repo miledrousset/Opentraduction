@@ -2960,3 +2960,7 @@ body .ui-selectonemenu-panel .ui-selectonemenu-items .ui-selectonemenu-item.ui-s
 .form-control {
   box-shadow: none;
 }
+
+body .ui-toggleswitch.ui-toggleswitch-checked .ui-toggleswitch-slider {
+  background: #1fa61f;
+}

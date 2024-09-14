@@ -133,10 +133,6 @@ public class ThesaurusService {
             } else {
                 return List.of();
             }
-        } catch (HttpClientErrorException e) {
-            handleClientError(e, "application.thesaurus.error.msg2");
-        } catch (HttpServerErrorException e) {
-            handleServerError(e, "application.thesaurus.error.msg2");
         } catch (Exception ex) {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.thesaurus.error.msg2");
         }
@@ -165,10 +161,6 @@ public class ThesaurusService {
             } else {
                 return List.of();
             }
-        } catch (HttpClientErrorException e) {
-            handleClientError(e, "application.thesaurus.error.msg2");
-        } catch (HttpServerErrorException e) {
-            handleServerError(e, "application.thesaurus.error.msg2");
         } catch (Exception ex) {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.thesaurus.error.msg2");
         }

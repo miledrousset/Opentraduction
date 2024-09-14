@@ -13,7 +13,7 @@ import org.springframework.web.context.ServletContextAware;
 
 
 @Configuration
-public class WebConfig  implements ServletContextAware {
+public class WebConfig implements ServletContextAware {
 
 
     @Override

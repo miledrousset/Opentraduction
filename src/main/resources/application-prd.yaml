@@ -3,11 +3,11 @@
 #######################
 
 server:
-  port: 8087
+  port: 9090
   servlet:
     context-path: /shs-traduction
     session:
-      timeout: 125m
+      timeout: 2m
   tomcat:
     remote_ip_header: x-forwarded-for
     protocol_header: x-forwarded-proto

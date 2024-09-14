@@ -10,6 +10,9 @@
               style="margin-top: 20px">
 
         <h:form>
+
+            <p:defaultCommand target="saveConsultationProject" />
+
             <div class="row">
                 <div class="field col-12 md:col-4">
                     <p:outputLabel value="#{applicationBean.getLabel('system.consultation.project_name')}" />
@@ -78,7 +81,7 @@
                                      update="consultationInstanceForm"
                                      ajax="true" process="@this"/>
 
-                    <p:commandButton title="#{applicationBean.getLabel('action.save')}"
+                    <p:commandButton id="saveConsultationProject" title="#{applicationBean.getLabel('action.save')}"
                                      action="#{consultationBean.instanceManagement()}"
                                      disabled="#{!consultationBean.validateBtnStatut}"
                                      class="btn-getstarted" ajax="true" process="@form"

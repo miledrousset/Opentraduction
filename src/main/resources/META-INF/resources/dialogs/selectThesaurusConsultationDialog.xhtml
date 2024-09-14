@@ -10,6 +10,9 @@
               style="margin-top: 20px">
 
         <h:form>
+
+            <p:defaultCommand target="selectThesaurusConsultationId" />
+
             <div class="field col-12 md:col-4" style="margin-top: 10px">
                 <p:outputLabel value="Thésaurus" />
                 <p:selectOneMenu value="#{userSettingsBean.thesaurusSelected}"
@@ -55,7 +58,7 @@
                                  action="PF('consultationThesaurusDialog').hide();"
                                  ajax="true" process="@this"/>
 
-                <p:commandButton title="Valider"
+                <p:commandButton id="selectThesaurusConsultationId" title="#{applicationBean.getLabel('action.save')}"
                                  action="#{consultationBean.instanceManagement()}"
                                  class="btn-getstarted" ajax="true" process="@this"
                                  update="listConsultationInstances"/>

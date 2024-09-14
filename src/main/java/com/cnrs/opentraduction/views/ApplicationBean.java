@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.primefaces.PrimeFaces;
 import org.springframework.util.ObjectUtils;
 
-import jakarta.faces.context.ExternalContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
@@ -41,16 +40,12 @@ public class ApplicationBean implements Serializable {
     private Users userConnected;
 
 
-    public void logout() throws IOException {
+    public void logout() {
 
         connexionModel = new ConnexionDto();
         connected = false;
         userConnected = null;
         menuItemSelected = MenuItem.HOME;
-
-        //messageService.showMessage(FacesMessage.SEVERITY_INFO, "application.user.error.msg1");
-
-        //FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
     }
 
     public void login() throws IOException {

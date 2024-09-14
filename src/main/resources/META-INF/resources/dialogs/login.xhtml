@@ -8,6 +8,8 @@
 
         <h:form class="php-email-form" data-aos="fade-up" data-aos-delay="200">
 
+            <p:defaultCommand target="connection" />
+
             <div class="row">
                 <div class="col-12">
                     <p:inputText class="form-control" placeholder="#{applicationBean.getLabel('application.user.login')}"
@@ -26,7 +28,7 @@
                                  actionListener="PF('login').hide();"
                                  ajax="true" process="@this" update="mainContent"/>
 
-                <p:commandButton value="#{applicationBean.getLabel('application.menu.connect')}"
+                <p:commandButton id="connection" value="#{applicationBean.getLabel('application.menu.connect')}"
                                  action="#{applicationBean.login()}" ajax="true" process="@form"
                                  update="mainContent"/>
             </div>

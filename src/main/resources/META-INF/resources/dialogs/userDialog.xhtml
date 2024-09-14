@@ -8,6 +8,9 @@
               width="350" showEffect="fade" modal="true" resizable="true">
 
         <h:form>
+
+            <p:defaultCommand target="saveUserId" />
+
             <div class="row">
                 <div class="field col-12 md:col-4">
                     <p:outputLabel for="firstname" value="#{applicationBean.getLabel('application.user.firstname')}"/>
@@ -84,7 +87,7 @@
                                  action="PF('userDialog').hide();"
                                  ajax="true" process="@this" update="userForm"/>
 
-                <p:commandButton title="#{applicationBean.getLabel('action.validate')}"
+                <p:commandButton id="saveUserId" title="#{applicationBean.getLabel('action.validate')}"
                                  action="#{usersSettingBean.userManagement()}"
                                  class="btn-getstarted" ajax="true" process="@form"
                                  update=":mainContent:usersList"/>
