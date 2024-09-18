@@ -29,7 +29,7 @@ public class OpenthesoClient {
 
     public ThesaurusModel[] getThesaurusInformations(String baseUrl) {
 
-        var url = baseUrl + "/api/info/list?theso=all";
+        var url = baseUrl + "/openapi/v1/thesaurus";
         log.info("URL : " + url);
         return restTemplate.getForObject(url, ThesaurusModel[].class);
     }
