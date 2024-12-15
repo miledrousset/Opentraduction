@@ -6,81 +6,81 @@
 
     <p:dialog id="userForm" header="#{usersSettingBean.dialogTitle}" widgetVar="userDialog" minHeight="40"
               width="350" showEffect="fade" modal="true" resizable="true">
-
         <h:form>
+            <p:scrollPanel mode="native" style="height:400px">
+                <p:defaultCommand target="saveUserId" />
 
-            <p:defaultCommand target="saveUserId" />
-
-            <div class="row">
-                <div class="field col-12 md:col-4">
-                    <p:outputLabel for="firstname" value="#{applicationBean.getLabel('application.user.firstname')}"/>
-                    <p:inputText id="firstname" class="form-control" value="#{usersSettingBean.userSelected.firstName}"/>
+                <div class="row">
+                    <div class="field col-12 md:col-4">
+                        <p:outputLabel for="firstname" value="#{applicationBean.getLabel('application.user.firstname')}"/>
+                        <p:inputText id="firstname" class="form-control" value="#{usersSettingBean.userSelected.firstName}"/>
+                    </div>
                 </div>
-            </div>
 
-            <div class="row">
+                <div class="row">
+                    <div class="field col-12 md:col-4" style="margin-top: 10px">
+                        <p:outputLabel for="lastname" value="#{applicationBean.getLabel('application.user.lastname')}"/>
+                        <p:inputText id="lastname" class="form-control" value="#{usersSettingBean.userSelected.lastName}" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="field col-12 md:col-4" style="margin-top: 10px">
+                        <p:outputLabel for="email" value="#{applicationBean.getLabel('application.user.email')}"/>
+                        <p:inputText id="email" class="form-control" value="#{usersSettingBean.userSelected.mail}"/>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="field col-12 md:col-4" style="margin-top: 10px">
+                        <p:outputLabel for="login" value="#{applicationBean.getLabel('application.user.login')}"/>
+                        <p:inputText id="login" class="form-control" value="#{usersSettingBean.userSelected.login}"/>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="field col-12 md:col-4" style="margin-top: 10px">
+                        <p:outputLabel for="password" value="#{applicationBean.getLabel('application.user.password')}"/>
+                        <p:inputText id="password" class="form-control" value="#{usersSettingBean.userSelected.password}" />
+                    </div>
+                </div>
+
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
-                    <p:outputLabel for="lastname" value="#{applicationBean.getLabel('application.user.lastname')}"/>
-                    <p:inputText id="lastname" class="form-control" value="#{usersSettingBean.userSelected.lastName}" />
+                    <p:outputLabel value="#{applicationBean.getLabel('application.user.group')}"/>
+                    <p:selectOneMenu value="#{usersSettingBean.idGroupSelected}" class="form-control">
+                        <f:selectItems value="#{usersSettingBean.groups}" var="group"
+                                       itemLabel="#{group.name}" itemValue="#{group.id}"/>
+                    </p:selectOneMenu>
                 </div>
-            </div>
 
-            <div class="row">
                 <div class="field col-12 md:col-4" style="margin-top: 10px">
-                    <p:outputLabel for="email" value="#{applicationBean.getLabel('application.user.email')}"/>
-                    <p:inputText id="email" class="form-control" value="#{usersSettingBean.userSelected.mail}"/>
+                    <p:outputLabel value="#{applicationBean.getLabel('application.user.default.traduction')}"/>
+                    <p:selectOneMenu value="#{usersSettingBean.userSelected.defaultTargetTraduction}" class="form-control" >
+                        <f:selectItem itemLabel="#{usersSettingBean.arabeLabel}" itemValue="Arabe"/>
+                        <f:selectItem itemLabel="#{usersSettingBean.francaisLabel}" itemValue="Francais"/>
+                    </p:selectOneMenu>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="field col-12 md:col-4" style="margin-top: 10px">
-                    <p:outputLabel for="login" value="#{applicationBean.getLabel('application.user.login')}"/>
-                    <p:inputText id="login" class="form-control" value="#{usersSettingBean.userSelected.login}"/>
+                <div class="row">
+                    <div class="field col-12 md:col-4" style="margin-top: 10px">
+                        <p:outputLabel for="api" value="#{applicationBean.getLabel('application.user.key-user')}"/>
+                        <p:inputText id="api" class="form-control" value="#{usersSettingBean.userSelected.apiKey}" />
+                    </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="field col-12 md:col-4" style="margin-top: 10px">
-                    <p:outputLabel for="password" value="#{applicationBean.getLabel('application.user.password')}"/>
-                    <p:inputText id="password" class="form-control" value="#{usersSettingBean.userSelected.password}" />
+                <div class="row" style="margin-top: 10px">
+                    <div class="field col-6 md:col-2">
+                        <h5><p:outputLabel for="admin" value="#{applicationBean.getLabel('application.user.admin')}"/></h5>
+                        <p:toggleSwitch id="admin" onIcon="pi pi-check" offIcon="pi pi-times"
+                                        value="#{usersSettingBean.userSelected.admin}"/>
+                    </div>
+                    <div class="field col-6 md:col-2" style="text-align: right">
+                        <h5><p:outputLabel for="active" value="#{applicationBean.getLabel('application.user.enable')}"/></h5>
+                        <p:toggleSwitch id="active" onIcon="pi pi-check" offIcon="pi pi-times"
+                                        value="#{usersSettingBean.userSelected.active}"/>
+                    </div>
                 </div>
-            </div>
-
-            <div class="field col-12 md:col-4" style="margin-top: 10px">
-                <p:outputLabel value="#{applicationBean.getLabel('application.user.group')}"/>
-                <p:selectOneMenu value="#{usersSettingBean.idGroupSelected}" class="form-control">
-                    <f:selectItems value="#{usersSettingBean.groups}" var="group"
-                                   itemLabel="#{group.name}" itemValue="#{group.id}"/>
-                </p:selectOneMenu>
-            </div>
-
-            <div class="field col-12 md:col-4" style="margin-top: 10px">
-                <p:outputLabel value="#{applicationBean.getLabel('application.user.default.traduction')}"/>
-                <p:selectOneMenu value="#{usersSettingBean.userSelected.defaultTargetTraduction}" class="form-control" >
-                    <f:selectItem itemLabel="#{usersSettingBean.arabeLabel}" itemValue="Arabe"/>
-                    <f:selectItem itemLabel="#{usersSettingBean.francaisLabel}" itemValue="Francais"/>
-                </p:selectOneMenu>
-            </div>
-
-            <div class="row">
-                <div class="field col-12 md:col-4" style="margin-top: 10px">
-                    <p:outputLabel for="api" value="#{applicationBean.getLabel('application.user.key-user')}"/>
-                    <p:inputText id="api" class="form-control" value="#{usersSettingBean.userSelected.apiKey}" />
-                </div>
-            </div>
-
-            <div class="row" style="margin-top: 10px">
-                <div class="field col-6 md:col-2">
-                    <h5><p:outputLabel for="admin" value="#{applicationBean.getLabel('application.user.admin')}"/></h5>
-                    <p:toggleSwitch id="admin" onIcon="pi pi-check" offIcon="pi pi-times"
-                                    value="#{usersSettingBean.userSelected.admin}"/>
-                </div>
-                <div class="field col-6 md:col-2" style="text-align: right">
-                    <h5><p:outputLabel for="active" value="#{applicationBean.getLabel('application.user.enable')}"/></h5>
-                    <p:toggleSwitch id="active" onIcon="pi pi-check" offIcon="pi pi-times"
-                                    value="#{usersSettingBean.userSelected.active}"/>
-                </div>
-            </div>
+            </p:scrollPanel>
 
             <div style="width: 100%; text-align: right; margin-top: 15px; margin-bottom: 2px;">
                 <p:commandButton value="#{applicationBean.getLabel('action.annuler')}" styleClass="ui-button-secondary ui-button-flat"
