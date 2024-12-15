@@ -70,13 +70,6 @@ public class UserService {
                 return false;
             }
 
-            log.info("Vérification du password");
-            user = userRepository.findByPassword(userToSave.getPassword());
-            if (user.isPresent()) {
-                messageService.showMessage(FacesMessage.SEVERITY_ERROR, "user.settings.error.msg10");
-                return false;
-            }
-
             userToSave.setCreated(LocalDateTime.now());
         }
 
