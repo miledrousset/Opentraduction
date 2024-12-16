@@ -40,12 +40,15 @@ public class ApplicationBean implements Serializable {
     private Users userConnected;
 
 
-    public void logout() {
+    public void logout() throws IOException {
 
         connexionModel = new ConnexionDto();
         connected = false;
         userConnected = null;
         menuItemSelected = MenuItem.HOME;
+
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        facesContext.getExternalContext().redirect(facesContext.getExternalContext().getRequestContextPath() + facesContext.getViewRoot().getViewId());
     }
 
     public void login() throws IOException {
