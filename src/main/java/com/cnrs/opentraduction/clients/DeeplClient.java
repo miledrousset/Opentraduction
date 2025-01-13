@@ -10,7 +10,7 @@ import org.springframework.util.StringUtils;
 
 @Slf4j
 @Service
-public class DeeplService {
+public class DeeplClient {
 
     @Value("${deepl.key}")
     private String deeplKey;

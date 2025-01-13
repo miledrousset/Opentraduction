@@ -1,4 +1,4 @@
-package com.cnrs.opentraduction.models.client;
+package com.cnrs.opentraduction.models.client.opentheso.proposition;
 
 import lombok.Builder;
 import lombok.Data;
@@ -6,11 +6,10 @@ import lombok.Data;
 
 @Data
 @Builder
-public class SynonymPropModel {
+public class NotePropModel {
 
-    private String lexical_value;
-    private boolean hiden;
     private String lang;
+    private String lexicalvalue;
     private String oldValue;
     private boolean toAdd;
     private boolean toRemove;

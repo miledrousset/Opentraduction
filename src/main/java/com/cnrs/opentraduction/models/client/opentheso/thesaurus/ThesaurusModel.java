@@ -1,5 +1,6 @@
-package com.cnrs.opentraduction.models.client;
+package com.cnrs.opentraduction.models.client.opentheso.thesaurus;
 
+import com.cnrs.opentraduction.models.client.opentheso.concept.LabelModel;
 import lombok.Data;
 import java.util.List;
 

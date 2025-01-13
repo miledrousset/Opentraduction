@@ -1,6 +1,6 @@
 package com.cnrs.opentraduction.views.search;
 
-import com.cnrs.opentraduction.clients.DeeplService;
+import com.cnrs.opentraduction.clients.DeeplClient;
 import com.cnrs.opentraduction.utils.MessageService;
 
 import lombok.Data;
@@ -19,7 +19,7 @@ import java.io.Serializable;
 public class DeeplBean implements Serializable {
 
     private final MessageService messageService;
-    private final DeeplService deeplService;
+    private final DeeplClient deeplService;
 
     private String termToTranslate, termTranslated;
     private String definitionToTranslate, definitionTranslated;

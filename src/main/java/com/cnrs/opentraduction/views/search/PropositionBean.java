@@ -1,10 +1,10 @@
 package com.cnrs.opentraduction.views.search;
 
 import com.cnrs.opentraduction.entities.Users;
-import com.cnrs.opentraduction.models.client.NotePropModel;
-import com.cnrs.opentraduction.models.client.PropositionModel;
-import com.cnrs.opentraduction.models.client.SynonymPropModel;
-import com.cnrs.opentraduction.models.client.TraductionPropModel;
+import com.cnrs.opentraduction.models.client.opentheso.proposition.NotePropModel;
+import com.cnrs.opentraduction.models.client.opentheso.proposition.PropositionModel;
+import com.cnrs.opentraduction.models.client.opentheso.proposition.SynonymPropModel;
+import com.cnrs.opentraduction.models.client.opentheso.proposition.TraductionPropModel;
 import com.cnrs.opentraduction.models.dao.ConceptDao;
 import com.cnrs.opentraduction.models.dao.PropositionDao;
 import com.cnrs.opentraduction.services.ThesaurusService;

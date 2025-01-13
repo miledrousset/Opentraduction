@@ -4,7 +4,7 @@ import com.cnrs.opentraduction.entities.ConsultationInstances;
 import com.cnrs.opentraduction.entities.Thesaurus;
 import com.cnrs.opentraduction.models.dao.CollectionElementDao;
 import com.cnrs.opentraduction.models.dao.ConsultationInstanceDao;
-import com.cnrs.opentraduction.models.client.ThesaurusElementModel;
+import com.cnrs.opentraduction.models.client.opentheso.thesaurus.ThesaurusElementModel;
 import com.cnrs.opentraduction.services.ConsultationService;
 import com.cnrs.opentraduction.services.ThesaurusService;
 import com.cnrs.opentraduction.utils.MessageService;

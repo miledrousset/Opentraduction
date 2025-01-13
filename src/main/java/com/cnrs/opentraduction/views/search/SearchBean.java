@@ -1,12 +1,9 @@
 package com.cnrs.opentraduction.views.search;
 
-import com.cnrs.opentraduction.clients.OpenthesoClient;
-import com.cnrs.opentraduction.entities.ConsultationInstances;
-import com.cnrs.opentraduction.entities.Thesaurus;
 import com.cnrs.opentraduction.entities.Users;
 import com.cnrs.opentraduction.models.dao.CollectionElementDao;
 import com.cnrs.opentraduction.models.dao.ConceptDao;
-import com.cnrs.opentraduction.services.ThesaurusService;
+import com.cnrs.opentraduction.services.SearchService;
 import com.cnrs.opentraduction.services.UserService;
 import com.cnrs.opentraduction.utils.MessageService;
 
@@ -23,11 +20,13 @@ import jakarta.faces.component.UIInput;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.event.AjaxBehaviorEvent;
 import jakarta.inject.Named;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -36,24 +35,25 @@ import java.util.stream.Collectors;
 @Named(value = "searchBean")
 public class SearchBean implements Serializable {
 
-    private final static String ALL = "ALL";
-
     private final MessageService messageService;
-    private final ThesaurusService thesaurusService;
-    private final OpenthesoClient openthesoClient;
     private final CandidatBean candidatBean;
     private final PropositionBean propositionBean;
     private final DeeplBean deeplBean;
     private final UserService userService;
+    private final SearchService searchService;
 
     private Users userConnected;
     private String termValue, idReferenceCollectionSelected;
     private boolean toArabic, searchDone, userApiKeyAlert;
     private boolean searchResultDisplay, addCandidatDisplay, addPropositionDisplay;
+    private boolean firstSearch, refreshSearch;
     private ConceptDao conceptSelected;
-    private List<ConceptDao> conceptsReferenceFoundList, conceptsConsultationFoundList;
+    private List<ConceptDao> conceptsReferenceFoundList, conceptsConsultationFoundList, resultGeoNameSearch, resultWikiDataSearch, rdRefSearch;
     private List<CollectionElementDao> referenceCollectionList;
     private CollectionElementDao collectionReferenceSelected;
+
+    private boolean wikiDataSelected, geoNamesSelected, rdRefSelected;
+    private List<String> selectedExternSource;
 
 
     public void initSearchInterface(Integer userConnectedId) {
@@ -74,14 +74,17 @@ public class SearchBean implements Serializable {
         userApiKeyAlert = StringUtils.isEmpty(this.userConnected.getApiKey());
 
         log.info("Préparation des projets de consultation");
-        searchReferenceCollectionList();
+        referenceCollectionList = searchService.searchReferenceCollectionList(userConnected);
+
+        firstSearch = true;
+        selectedExternSource = List.of("WikiData", "GeoNames", "EdRef");
     }
 
     public String getReferenceThesaurus() {
         return CollectionUtils.isEmpty(conceptsReferenceFoundList) ? "" : conceptsReferenceFoundList.get(0).getThesaurusName();
     }
 
-    public void searchTerm(boolean fromMain) throws IOException {
+    public void searchTerm(boolean fromMain) throws IOException, InterruptedException, ParserConfigurationException, SAXException {
 
         if (StringUtils.isEmpty(termValue)) {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.search.failed.msg1");
@@ -99,16 +102,45 @@ public class SearchBean implements Serializable {
             addPropositionDisplay = false;
 
             log.info("Préparation des projets de consultation");
-            searchReferenceCollectionList();
+            referenceCollectionList = searchService.searchReferenceCollectionList(userConnected);
         }
 
-        searchInReferenceProject();
+        if (firstSearch || refreshSearch) {
+            refreshSearch = false;
+            conceptsReferenceFoundList = searchService.searchInReferenceProject(userConnected, termValue, toArabic);
+            if (CollectionUtils.isEmpty(conceptsReferenceFoundList)) {
+                messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.search.failed.msg2");
+            }
+            conceptsConsultationFoundList = searchService.searchInConsultationThesaurus(userConnected, conceptsReferenceFoundList,
+                    termValue, toArabic);
 
-        searchInConsultationThesaurus();
+            if (CollectionUtils.isEmpty(conceptsReferenceFoundList) && CollectionUtils.isEmpty(conceptsConsultationFoundList)) {
+                messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.search.failed.msg3");
+                firstSearch = false;
+                return;
+            }
+        } else {
+            geoNamesSelected = false;
+            wikiDataSelected = false;
+            rdRefSelected = false;
+            refreshSearch = true;
+            firstSearch = true;
 
-        if (CollectionUtils.isEmpty(conceptsReferenceFoundList) && CollectionUtils.isEmpty(conceptsConsultationFoundList)) {
-            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.search.failed.msg3");
-            return;
+            var languageToSearch = toArabic ? "fr" : "ar";
+            if (selectedExternSource.contains("GeoNames")) {
+                geoNamesSelected = true;
+                resultGeoNameSearch = searchService.geoNamesSearch(termValue, languageToSearch);
+            }
+
+            if (selectedExternSource.contains("WikiData")) {
+                wikiDataSelected = true;
+                resultWikiDataSearch = searchService.wikiDataSearch(termValue, languageToSearch);
+            }
+
+            if (selectedExternSource.contains("EdRef")) {
+                rdRefSelected = true;
+                rdRefSearch = searchService.rdRefSearch(termValue, languageToSearch);
+            }
         }
 
         searchDone = true;
@@ -116,76 +148,6 @@ public class SearchBean implements Serializable {
         if (fromMain) {
             FacesContext.getCurrentInstance().getExternalContext().redirect("search.xhtml");
         }
-    }
-
-    private void searchInConsultationThesaurus() {
-        log.info("Vérification s'il y a des thésaurus de consultation");
-        conceptsConsultationFoundList = new ArrayList<>();
-        var consultationProjects = userConnected.getGroup().getConsultationInstances();
-        if (!CollectionUtils.isEmpty(consultationProjects)) {
-            log.info("Il existe {} projet de consultation !", consultationProjects.size());
-            for (ConsultationInstances project : consultationProjects) {
-                project.getThesauruses().forEach(thesaurus -> {
-                    var defaultIdGroup = ALL.equalsIgnoreCase(thesaurus.getIdCollection())
-                            ? null
-                            : userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection();
-                    var tmp = searchInThesaurus(thesaurus, project.getUrl(), defaultIdGroup);
-                    if (!CollectionUtils.isEmpty(tmp)) {
-                        conceptsConsultationFoundList.addAll(tmp.stream()
-                                .filter(element -> !isAlreadyFoundInReferenceThesaurus(element.getThesaurusId(), element.getConceptId()))
-                                .collect(Collectors.toList()));
-                    }
-                });
-            }
-        }
-    }
-
-    private boolean isAlreadyFoundInReferenceThesaurus(String thesaurusId, String conceptId) {
-        if (CollectionUtils.isEmpty(conceptsReferenceFoundList)) {
-            return false;
-        }
-
-        log.info("Rechercher des doublons dans le résultat de référence");
-        var foundInReferenceThesaurus = conceptsReferenceFoundList.stream()
-                .anyMatch(element -> element.getThesaurusId().equals(thesaurusId) && element.getConceptId().equals(conceptId));
-
-        log.info("Rechercher des doublons dans le résultat de consultation");
-        var foundInConsultationThesaurus = conceptsConsultationFoundList.stream()
-                .anyMatch(element -> element.getThesaurusId().equals(thesaurusId) && element.getConceptId().equals(conceptId));
-
-        return foundInReferenceThesaurus || foundInConsultationThesaurus;
-    }
-
-    private void searchInReferenceProject() {
-        conceptsReferenceFoundList = new ArrayList<>();
-        var referenceProject = userConnected.getGroup().getReferenceInstances();
-        if (!ObjectUtils.isEmpty(referenceProject)) {
-            try {
-                var defaultIdGroup = ALL.equalsIgnoreCase(userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection())
-                        ? null
-                        : userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection();
-                var tmp = searchInThesaurus(referenceProject.getThesaurus(), referenceProject.getUrl(), defaultIdGroup);
-                conceptsReferenceFoundList.addAll(tmp);
-            } catch (Exception ex) {
-                log.info("Aucune résultat trouvé pour le thésaurus de référence {}", referenceProject.getThesaurus().getName());
-            }
-        } else {
-            log.error("Aucun Thésaurus de référence n'est présent !: ");
-            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.search.failed.msg2");
-        }
-    }
-
-    private List<ConceptDao> searchInThesaurus(Thesaurus thesaurus, String url, String defaultIdGroup) {
-
-        log.info("Thésaurus de référence : " + thesaurus.getName());
-
-        var idCollection = ALL.equalsIgnoreCase(thesaurus.getIdCollection())
-                ? defaultIdGroup
-                : thesaurus.getIdCollection();
-
-        var languageToSearch = toArabic ? "fr" : "ar";
-
-        return thesaurusService.searchConcepts(thesaurus, url, termValue, languageToSearch, idCollection);
     }
 
     public void initAddProposition(ConceptDao conceptToUpdate) {
@@ -200,12 +162,12 @@ public class SearchBean implements Serializable {
         propositionBean.initInterface(userConnected, conceptToUpdate, langFrom);
     }
 
-    public void initAddCandidat() {
+    public void initAddCandidat(ConceptDao conceptDao) {
 
         searchResultDisplay = false;
         addCandidatDisplay = true;
         addPropositionDisplay = false;
-        candidatBean.initInterface(userConnected);
+        candidatBean.initInterface(userConnected, conceptDao);
     }
 
     public void backToSearchScrean() {
@@ -235,7 +197,7 @@ public class SearchBean implements Serializable {
     }
 
     public String getCollectionReferenceName() {
-        return ALL.equals(userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection())
+        return "ALL".equals(userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection())
                 ? messageService.getMessage("user.settings.consultation.racine")
                 : userConnected.getGroup().getReferenceInstances().getThesaurus().getCollection();
     }
@@ -276,24 +238,6 @@ public class SearchBean implements Serializable {
         return !StringUtils.isEmpty(userConnected.getApiKey());
     }
 
-    private void searchReferenceCollectionList() {
-
-        referenceCollectionList = new ArrayList<>();
-        referenceCollectionList.add(new CollectionElementDao(ALL, "--"));
-        if (!ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances())) {
-            if (ALL.equals(userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection())) {
-                referenceCollectionList.addAll(thesaurusService.searchCollections(
-                        userConnected.getGroup().getReferenceInstances().getUrl(),
-                        userConnected.getGroup().getReferenceInstances().getThesaurus().getIdThesaurus()));
-            } else {
-                referenceCollectionList.addAll(thesaurusService.searchSubCollections(
-                        userConnected.getGroup().getReferenceInstances().getUrl(),
-                        userConnected.getGroup().getReferenceInstances().getThesaurus().getIdThesaurus(),
-                        userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection()));
-            }
-        }
-    }
-
     public void setTraductionDirection(AjaxBehaviorEvent event) {
         UIComponent component = event.getComponent();
         if (component instanceof UIInput) {
@@ -313,5 +257,17 @@ public class SearchBean implements Serializable {
     public boolean searchBtnEnabled() {
         return CollectionUtils.isEmpty(userConnected.getGroup().getConsultationInstances())
                 && ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances());
+    }
+
+    public boolean showGeoNamesResult() {
+        return CollectionUtils.isEmpty(resultGeoNameSearch);
+    }
+
+    public boolean showWikiDataResult() {
+        return CollectionUtils.isEmpty(resultWikiDataSearch);
+    }
+
+    public boolean showRdRefResult() {
+        return CollectionUtils.isEmpty(rdRefSearch);
     }
 }

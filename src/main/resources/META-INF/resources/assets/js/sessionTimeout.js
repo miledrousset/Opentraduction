@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-  var timeoutInMilliseconds = 2 * 60 * 60 * 1000; // 120 minute
+  var timeoutInMilliseconds = 120 * 60 * 60 * 1000; // 120 minute
   var timeoutUrl = "/shs-traduction/index.xhtml";
 
   setTimeout(function() {

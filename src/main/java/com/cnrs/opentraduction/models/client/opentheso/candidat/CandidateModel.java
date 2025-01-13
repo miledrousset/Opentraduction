@@ -1,5 +1,6 @@
-package com.cnrs.opentraduction.models.client;
+package com.cnrs.opentraduction.models.client.opentheso.candidat;
 
+import com.cnrs.opentraduction.models.client.opentheso.concept.ElementModel;
 import lombok.Builder;
 import lombok.Data;
 import java.util.List;

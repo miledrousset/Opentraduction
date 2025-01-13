@@ -1,11 +1,12 @@
 package com.cnrs.opentraduction.views.search;
 
-import com.cnrs.opentraduction.clients.DeeplService;
+import com.cnrs.opentraduction.clients.DeeplClient;
 import com.cnrs.opentraduction.entities.Users;
-import com.cnrs.opentraduction.models.client.CandidateModel;
-import com.cnrs.opentraduction.models.client.ElementModel;
+import com.cnrs.opentraduction.models.client.opentheso.candidat.CandidateModel;
+import com.cnrs.opentraduction.models.client.opentheso.concept.ElementModel;
 import com.cnrs.opentraduction.models.dao.CandidatDao;
 import com.cnrs.opentraduction.models.dao.CollectionElementDao;
+import com.cnrs.opentraduction.models.dao.ConceptDao;
 import com.cnrs.opentraduction.services.ThesaurusService;
 import com.cnrs.opentraduction.utils.MessageService;
 
@@ -41,7 +42,7 @@ public class CandidatBean implements Serializable {
 
     private final MessageService messageService;
     private final ThesaurusService thesaurusService;
-    private final DeeplService deeplService;
+    private final DeeplClient deeplService;
 
     private CandidatDao candidatDao;
     private Users userConnected;
@@ -51,10 +52,24 @@ public class CandidatBean implements Serializable {
     private boolean deeplDisponible;
 
 
-    public void initInterface(Users userConnected) {
+    public void initInterface(Users userConnected, ConceptDao conceptDaoTmp) {
         log.info("Initialisation de l'interface candidat");
         this.userConnected = userConnected;
         candidatDao = new CandidatDao();
+
+        if (conceptDaoTmp != null) {
+            candidatDao.setTitleAr(conceptDaoTmp.getLabelFr());
+            candidatDao.setTitleFr(conceptDaoTmp.getLabelAr());
+
+            candidatDao.setDefinitionAr(conceptDaoTmp.getDefinitionAr());
+            candidatDao.setDefinitionFr(conceptDaoTmp.getDefinitionFr());
+
+            candidatDao.setNoteAr(conceptDaoTmp.getNoteAr());
+            candidatDao.setNoteFr(conceptDaoTmp.getNoteFr());
+
+            candidatDao.setVarianteAr(conceptDaoTmp.getNoteAr());
+            candidatDao.setVarianteFr(conceptDaoTmp.getNoteFr());
+        }
 
         //Disable Deepl Translate function
         deeplDisponible = false;

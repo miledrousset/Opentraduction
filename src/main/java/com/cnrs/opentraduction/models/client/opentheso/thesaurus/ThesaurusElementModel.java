@@ -1,4 +1,4 @@
-package com.cnrs.opentraduction.models.client;
+package com.cnrs.opentraduction.models.client.opentheso.thesaurus;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

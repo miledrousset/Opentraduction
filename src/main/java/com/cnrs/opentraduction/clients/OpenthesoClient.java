@@ -1,11 +1,11 @@
 package com.cnrs.opentraduction.clients;
 
-import com.cnrs.opentraduction.models.client.CandidateModel;
-import com.cnrs.opentraduction.models.client.CollectionModel;
-import com.cnrs.opentraduction.models.client.ConceptModel;
-import com.cnrs.opentraduction.models.client.PropositionModel;
-import com.cnrs.opentraduction.models.client.SubCollectionModel;
-import com.cnrs.opentraduction.models.client.ThesaurusModel;
+import com.cnrs.opentraduction.models.client.opentheso.candidat.CandidateModel;
+import com.cnrs.opentraduction.models.client.opentheso.collection.CollectionModel;
+import com.cnrs.opentraduction.models.client.opentheso.concept.ConceptModel;
+import com.cnrs.opentraduction.models.client.opentheso.proposition.PropositionModel;
+import com.cnrs.opentraduction.models.client.opentheso.collection.SubCollectionModel;
+import com.cnrs.opentraduction.models.client.opentheso.thesaurus.ThesaurusModel;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

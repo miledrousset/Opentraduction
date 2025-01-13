@@ -4,7 +4,7 @@ import com.cnrs.opentraduction.entities.ReferenceInstances;
 import com.cnrs.opentraduction.entities.Thesaurus;
 import com.cnrs.opentraduction.models.dao.CollectionElementDao;
 import com.cnrs.opentraduction.models.dao.ReferenceInstanceDao;
-import com.cnrs.opentraduction.models.client.ThesaurusElementModel;
+import com.cnrs.opentraduction.models.client.opentheso.thesaurus.ThesaurusElementModel;
 import com.cnrs.opentraduction.services.ReferenceService;
 import com.cnrs.opentraduction.services.ThesaurusService;
 import com.cnrs.opentraduction.utils.MessageService;

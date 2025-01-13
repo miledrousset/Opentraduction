@@ -2,11 +2,11 @@ package com.cnrs.opentraduction.services;
 
 import com.cnrs.opentraduction.clients.OpenthesoClient;
 import com.cnrs.opentraduction.entities.Thesaurus;
-import com.cnrs.opentraduction.models.client.CandidateModel;
-import com.cnrs.opentraduction.models.client.ConceptModel;
-import com.cnrs.opentraduction.models.client.ElementModel;
-import com.cnrs.opentraduction.models.client.PropositionModel;
-import com.cnrs.opentraduction.models.client.ThesaurusElementModel;
+import com.cnrs.opentraduction.models.client.opentheso.candidat.CandidateModel;
+import com.cnrs.opentraduction.models.client.opentheso.concept.ConceptModel;
+import com.cnrs.opentraduction.models.client.opentheso.concept.ElementModel;
+import com.cnrs.opentraduction.models.client.opentheso.proposition.PropositionModel;
+import com.cnrs.opentraduction.models.client.opentheso.thesaurus.ThesaurusElementModel;
 import com.cnrs.opentraduction.models.dao.CollectionDao;
 import com.cnrs.opentraduction.models.dao.CollectionElementDao;
 
@@ -82,10 +82,6 @@ public class ThesaurusService {
         try {
             openthesoClient.saveProposition(baseUrl, userApiKey, proposition);
             return true;
-        } catch (HttpClientErrorException e) {
-            handleClientError(e, "application.thesaurus.error.msg3");
-        } catch (HttpServerErrorException e) {
-            handleServerError(e, "application.thesaurus.error.msg3");
         } catch (Exception ex) {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.thesaurus.error.msg3");
         }
