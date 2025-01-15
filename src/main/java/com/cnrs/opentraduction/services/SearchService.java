@@ -10,6 +10,7 @@ import com.cnrs.opentraduction.models.client.wikidata.AliasDTO;
 import com.cnrs.opentraduction.models.client.wikidata.WikidataModel;
 import com.cnrs.opentraduction.models.dao.CollectionElementDao;
 import com.cnrs.opentraduction.models.dao.ConceptDao;
+
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -103,9 +104,9 @@ public class SearchService {
 
         log.info("Vérification s'il y a des thésaurus de consultation");
         var consultationProjects = userConnected.getGroup().getConsultationInstances();
+        List<ConceptDao> conceptsConsultationFoundList = new ArrayList<>();
         if (!CollectionUtils.isEmpty(consultationProjects)) {
             log.info("Il existe {} projet de consultation !", consultationProjects.size());
-            List<ConceptDao> conceptsConsultationFoundList = new ArrayList<>();
             for (ConsultationInstances project : consultationProjects) {
                 project.getThesauruses().forEach(thesaurus -> {
                     var defaultIdGroup = ALL.equalsIgnoreCase(thesaurus.getIdCollection())
@@ -114,14 +115,14 @@ public class SearchService {
                     var tmp = searchInThesaurus(thesaurus, project.getUrl(), defaultIdGroup, termValue, toArabic);
                     if (!CollectionUtils.isEmpty(tmp)) {
                         conceptsConsultationFoundList.addAll(tmp.stream()
-                                .filter(element -> !isAlreadyFoundInReferenceThesaurus(conceptsConsultationFoundList,
-                                        conceptsReferenceFoundList, element.getThesaurusId(), element.getConceptId()))
+                                .filter(element -> isAlreadyFound(conceptsConsultationFoundList, conceptsReferenceFoundList,
+                                        element.getThesaurusId(), element.getConceptId()))
                                 .toList());
                     }
                 });
             }
         }
-        return List.of();
+        return conceptsConsultationFoundList;
     }
 
     public List<ConceptDao> searchInReferenceProject(Users userConnected, String termValue, boolean toArabic) {
@@ -172,23 +173,17 @@ public class SearchService {
         return thesaurusService.searchConcepts(thesaurus, url, termValue, languageToSearch, idCollection);
     }
 
-    private boolean isAlreadyFoundInReferenceThesaurus(List<ConceptDao> conceptsConsultationFoundList,
-                                                       List<ConceptDao> conceptsReferenceFoundList,
-                                                       String thesaurusId, String conceptId) {
+    private boolean isAlreadyFound(List<ConceptDao> conceptsConsultationFoundList,
+                                   List<ConceptDao> conceptsReferenceFoundList,
+                                   String thesaurusId, String conceptId) {
 
-        if (CollectionUtils.isEmpty(conceptsReferenceFoundList)) {
-            return false;
-        }
+        if (CollectionUtils.isEmpty(conceptsReferenceFoundList)) return true;
 
-        log.info("Rechercher des doublons dans le résultat de référence");
         var foundInReferenceThesaurus = conceptsReferenceFoundList.stream()
-                .anyMatch(element -> element.getThesaurusId().equals(thesaurusId) && element.getConceptId().equals(conceptId));
-
-        log.info("Rechercher des doublons dans le résultat de consultation");
+                .anyMatch(a -> a.getThesaurusId().equals(thesaurusId) && a.getConceptId().equals(conceptId));
         var foundInConsultationThesaurus = conceptsConsultationFoundList.stream()
-                .anyMatch(element -> element.getThesaurusId().equals(thesaurusId) && element.getConceptId().equals(conceptId));
-
-        return foundInReferenceThesaurus || foundInConsultationThesaurus;
+                .anyMatch(a -> a.getThesaurusId().equals(thesaurusId) && a.getConceptId().equals(conceptId));
+        return !foundInReferenceThesaurus && !foundInConsultationThesaurus;
     }
 
 }
