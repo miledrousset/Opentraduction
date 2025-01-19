@@ -34,39 +34,33 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-lg-12 search-widget widget-item">
-                                <h:form style="display: flex; align-items: center; gap: 10px;">
+                        <h:form class="row">
+                            <div class="col-lg-12 search-widget widget-item ui-inputgroup">
+                                <p:inputText value="#{searchBean.termValue}"
+                                             class="form-control"
+                                             placeholder="#{applicationBean.getLabel('search.sub-title')}"/>
 
-                                    <p:inputText value="#{searchBean.termValue}"
-                                                 class="form-control"
-                                                 placeholder="#{applicationBean.getLabel('search.sub-title')}"
-                                                 style="flex: 1;"/>
+                                <p:commandButton id="searchBtn" icon="bi bi-search"
+                                                 styleClass="ui-button-danger"
+                                                 ajax="true"
+                                                 process="@form"
+                                                 update="resultPanel"
+                                                 disabled="#{searchBean.searchBtnEnabled()}"
+                                                 action="#{searchBean.searchTerm(false)}"/>
 
-                                    <!-- CommandButton -->
-                                    <p:commandButton id="searchBtn"
-                                                     icon="bi bi-search"
-                                                     ajax="true"
-                                                     process="@form"
-                                                     update="resultPanel"
-                                                     disabled="#{searchBean.searchBtnEnabled()}"
-                                                     action="#{searchBean.searchTerm(false)}"
-                                                     style="background: #e84545; border-color: #e84545; flex: 0;"/>
-
-                                    <!-- Tooltip -->
-                                    <p:tooltip for="searchBtn" position="bottom"
-                                               value="#{applicationBean.getLabel('application.search.btn.tooltip')}" />
-                                </h:form>
+                                <!-- Tooltip -->
+                                <p:tooltip for="searchBtn" position="bottom"
+                                           value="#{applicationBean.getLabel('application.search.btn.tooltip')}" />
                             </div>
 
-                            <h:panelGroup rendered="#{searchBean.showExternSources()}">
+                            <h:panelGroup rendered="#{searchBean.showExternSources()}" style="display: flex; justify-content: center;">
                                 <p:selectManyButton value="#{searchBean.selectedExternSource}">
                                     <f:selectItem itemLabel="WikiData" itemValue="WikiData"/>
                                     <f:selectItem itemLabel="GeoNames" itemValue="GeoNames"/>
                                     <f:selectItem itemLabel="EdRef" itemValue="EdRef"/>
                                 </p:selectManyButton>
                             </h:panelGroup>
-                        </div>
+                        </h:form>
 
                         <h:panelGroup rendered="#{searchBean.searchDone}">
                             <h:panelGroup rendered="#{searchBean.showFirstResult()}">

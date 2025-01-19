@@ -1,12 +1,13 @@
 package com.cnrs.opentraduction.services;
 
+import com.cnrs.opentraduction.clients.OpenthesoClient;
 import com.cnrs.opentraduction.entities.ConsultationInstances;
 import com.cnrs.opentraduction.entities.Groups;
-import com.cnrs.opentraduction.entities.Thesaurus;
 import com.cnrs.opentraduction.entities.Users;
 import com.cnrs.opentraduction.models.dao.CollectionDao;
 import com.cnrs.opentraduction.models.dao.ConsultationInstanceDao;
 import com.cnrs.opentraduction.models.dao.GroupDao;
+import com.cnrs.opentraduction.models.dao.NodeIdValue;
 import com.cnrs.opentraduction.models.dao.ReferenceInstanceDao;
 import com.cnrs.opentraduction.repositories.GroupConsultationInstancesRepository;
 import com.cnrs.opentraduction.repositories.GroupRepository;
@@ -25,7 +26,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -36,10 +36,18 @@ public class GroupService {
 
     private final MessageService messageService;
     private final GroupRepository groupRepository;
+    private final OpenthesoClient openthesoClient;
     private final GroupConsultationInstancesRepository groupConsultationInstancesRepository;
     private final ReferenceInstanceRepository referenceInstanceRepository;
     private final ConsultationService consultationInstanceService;
 
+
+    public List<NodeIdValue> searchConceptByGroup(Users userConnected, String idGroup) {
+        return openthesoClient.searchConceptByGroup(
+                userConnected.getGroup().getReferenceInstances().getUrl(),
+                userConnected.getGroup().getReferenceInstances().getThesaurus().getIdThesaurus(),
+                idGroup);
+    }
 
     public void deleteGroup(Integer groupId) {
         groupRepository.deleteById(groupId);
@@ -48,16 +56,13 @@ public class GroupService {
     public void saveGroup(GroupDao groupDao, ReferenceInstanceDao referenceProjects,
                           List<ConsultationInstanceDao> consultationProjects) {
 
-        var isUpdateCase = false;
         var groupToSave = new Groups();
-        List<Users> users = new ArrayList<>();
 
         if (ObjectUtils.isEmpty(groupDao.getId())) {
             log.info("Cas de création d'un nouveau groupe");
             groupToSave.setCreated(LocalDateTime.now());
         } else {
             log.info("Cas de mise à jour de groupe");
-            isUpdateCase = true;
             var groupSaved = groupRepository.findById(groupDao.getId());
             if (groupSaved.isPresent()) {
                 groupToSave.setCreated(groupSaved.get().getCreated());
@@ -145,7 +150,7 @@ public class GroupService {
                                         consultationProject.setCollectionList(collectionsList);
                                         return consultationProject;
                                     })
-                                    .collect(Collectors.toList()));
+                                    .toList());
                 }
 
                 groupsModel.add(groupModel);

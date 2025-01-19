@@ -44,9 +44,22 @@
                                             <div class="field col-10">
                                                 <p:selectOneMenu value="#{candidatBean.labelReferenceCollectionSelected}"
                                                                  class="form-control" style="width: 100%;">
-                                                    <p:ajax listener="#{candidatBean.setSelectedReferenceCollection()}"/>
+                                                    <p:ajax listener="#{candidatBean.setSelectedReferenceCollection()}" update="conceptSelector"/>
                                                     <f:selectItems value="#{candidatBean.referenceCollectionList}" var="collection"
                                                                    itemLabel="#{collection.label}" itemValue="#{collection.label}"/>
+                                                </p:selectOneMenu>
+                                            </div>
+                                        </div>
+
+                                        <div class="row" style="margin-top: 20px">
+                                            <div class="field col-2" style="display: flex; align-items: center">
+                                                <h:outputText value="#{applicationBean.getLabel('user.settings.concept')}" />
+                                            </div>
+                                            <div class="field col-10">
+                                                <p:selectOneMenu id="conceptSelector" value="#{candidatBean.idConceptSelected}"
+                                                                 class="form-control" style="width: 100%;">
+                                                    <f:selectItems value="#{candidatBean.conceptsList}" var="concept"
+                                                                   itemLabel="#{concept.prefLabel}" itemValue="#{concept.idConcept}"/>
                                                 </p:selectOneMenu>
                                             </div>
                                         </div>

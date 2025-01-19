@@ -12,11 +12,11 @@ public class CandidateModel {
 
     private String thesoId;
     private String collectionId;
+    private String conceptGenericId;
     private List<ElementModel> terme;
     private List<ElementModel> synonymes;
     private List<ElementModel> definition;
     private List<ElementModel> note;
     private String source;
     private String comment;
-
 }

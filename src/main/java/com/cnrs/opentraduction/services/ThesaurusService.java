@@ -82,6 +82,10 @@ public class ThesaurusService {
         try {
             openthesoClient.saveProposition(baseUrl, userApiKey, proposition);
             return true;
+        } catch (HttpClientErrorException e) {
+            handleClientError(e, "application.thesaurus.error.msg3");
+        } catch (HttpServerErrorException e) {
+            handleServerError(e, "application.thesaurus.error.msg3");
         } catch (Exception ex) {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.thesaurus.error.msg3");
         }

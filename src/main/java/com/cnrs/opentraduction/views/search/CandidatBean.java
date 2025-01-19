@@ -7,6 +7,8 @@ import com.cnrs.opentraduction.models.client.opentheso.concept.ElementModel;
 import com.cnrs.opentraduction.models.dao.CandidatDao;
 import com.cnrs.opentraduction.models.dao.CollectionElementDao;
 import com.cnrs.opentraduction.models.dao.ConceptDao;
+import com.cnrs.opentraduction.models.dao.NodeIdValue;
+import com.cnrs.opentraduction.services.GroupService;
 import com.cnrs.opentraduction.services.ThesaurusService;
 import com.cnrs.opentraduction.utils.MessageService;
 
@@ -14,6 +16,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.component.commandbutton.CommandButton;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
@@ -43,6 +46,7 @@ public class CandidatBean implements Serializable {
     private final MessageService messageService;
     private final ThesaurusService thesaurusService;
     private final DeeplClient deeplService;
+    private final GroupService groupService;
 
     private CandidatDao candidatDao;
     private Users userConnected;
@@ -50,6 +54,8 @@ public class CandidatBean implements Serializable {
     private CollectionElementDao collectionReferenceSelected;
     private String labelReferenceCollectionSelected;
     private boolean deeplDisponible;
+    private List<NodeIdValue> conceptsList;
+    private String idConceptSelected;
 
 
     public void initInterface(Users userConnected, ConceptDao conceptDaoTmp) {
@@ -86,6 +92,24 @@ public class CandidatBean implements Serializable {
             referenceCollectionList.addAll(thesaurusService.searchSubCollections(url, idThesaurus, idCollection));
         }
         collectionReferenceSelected = referenceCollectionList.get(0);
+
+        searchConceptByGroup();
+        if (!CollectionUtils.isEmpty(conceptsList)) {
+            idConceptSelected = conceptsList.get(0).getIdConcept();
+        }
+    }
+
+    public void searchConceptByGroup() {
+        String idGroup;
+        if ("ALL".equals(labelReferenceCollectionSelected)) {
+            idGroup = userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection();
+        } else {
+            idGroup = collectionReferenceSelected.getId();
+        }
+        conceptsList = groupService.searchConceptByGroup(userConnected, idGroup);
+        if (CollectionUtils.isEmpty(conceptsList)) {
+            conceptsList = List.of(NodeIdValue.builder().prefLabel("Aucun concept n'est présent").build());
+        }
     }
 
     public void saveCandidat() {
@@ -132,6 +156,7 @@ public class CandidatBean implements Serializable {
 
         var candidate = CandidateModel.builder()
                 .thesoId(candidatDao.getThesoId())
+                .conceptGenericId("1427712")//.conceptGenericId(idConceptSelected)
                 .terme(termes)
                 .definition(definitions)
                 .note(notes)
@@ -168,6 +193,7 @@ public class CandidatBean implements Serializable {
                     .filter(element -> element.getLabel().equals(labelReferenceCollectionSelected))
                     .findFirst();
             collectionReferenceTmp.ifPresent(collectionElementDao -> collectionReferenceSelected = collectionElementDao);
+            searchConceptByGroup();
         }
     }
 

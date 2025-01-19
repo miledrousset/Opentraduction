@@ -166,6 +166,27 @@
       <artifactId>httpclient5</artifactId>
       <version>5.1</version>
     </dependency>
+
+    <!-- Core RDF API -->
+    <dependency>
+      <groupId>org.apache.jena</groupId>
+      <artifactId>jena-core</artifactId>
+      <version>4.8.0</version>
+    </dependency>
+
+    <!-- SPARQL Query Execution -->
+    <dependency>
+      <groupId>org.apache.jena</groupId>
+      <artifactId>jena-arq</artifactId>
+      <version>4.8.0</version>
+    </dependency>
+
+    <!-- RDF Parsing and Writing -->
+    <dependency>
+      <groupId>org.apache.jena</groupId>
+      <artifactId>jena-iri</artifactId>
+      <version>4.8.0</version>
+    </dependency>
   </dependencies>
 
   <build>

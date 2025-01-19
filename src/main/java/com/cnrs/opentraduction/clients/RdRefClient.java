@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.primefaces.shaded.json.JSONObject;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URLEncoder;
@@ -25,8 +26,8 @@ public class RdRefClient {
 
         List<String> result = new ArrayList<>();
         result.addAll(searchInIdRefPersonnes(searchTerm));
-        result.addAll(searchInIdRefLieux(searchTerm));
-        result.addAll(searchInIdRefSujets(searchTerm));
+        //result.addAll(searchInIdRefLieux(searchTerm));
+        //result.addAll(searchInIdRefSujets(searchTerm));
         return result;
     }
 
@@ -61,16 +62,15 @@ public class RdRefClient {
 
     private List<String> extractAffcourtZValues(String jsonResponse) {
         List<String> affcourtValues = new ArrayList<>();
-        var response = new JSONObject(jsonResponse).getJSONObject("response");
-        var docs = response.getJSONArray("docs");
-
-        for (int i = 0; i < docs.length(); i++) {
-            var doc = docs.getJSONObject(i);
-            if (doc.has("affcourt_z")) {
-                affcourtValues.add(doc.getString("affcourt_z"));
+        if (!StringUtils.isEmpty(jsonResponse)) {
+            var docs = new JSONObject(jsonResponse).getJSONObject("response").getJSONArray("docs");
+            for (int i = 0; i < docs.length(); i++) {
+                var doc = docs.getJSONObject(i);
+                if (doc.has("affcourt_z")) {
+                    affcourtValues.add(doc.getString("affcourt_z"));
+                }
             }
         }
-
         return affcourtValues;
     }
 }

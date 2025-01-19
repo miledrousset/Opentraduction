@@ -2964,3 +2964,24 @@ body .ui-selectonemenu-panel .ui-selectonemenu-items .ui-selectonemenu-item.ui-s
 body .ui-toggleswitch.ui-toggleswitch-checked .ui-toggleswitch-slider {
   background: #1fa61f;
 }
+
+.ui-selectbooleanbutton.ui-state-active, body .ui-selectonebutton>.ui-button.ui-state-active, body .ui-selectmanybutton>.ui-button.ui-state-active {
+  background: #e84545;
+  border-color: #e84545;
+  color: #fff;
+}
+
+.ui-selectbooleanbutton.ui-state-active:hover, body .ui-selectonebutton>.ui-button.ui-state-active:hover, body .ui-selectmanybutton>.ui-button.ui-state-active:hover {
+  background: #e84545;
+  border-color: #e84545;
+  color: #fff;
+}
+
+.ui-selectmanybutton .ui-button:hover {
+  background-color: #d3d3d3 !important; /* Gris clair */
+  color: #000 !important; /* Optionnel : changer la couleur du texte */
+}
+
+body .ui-tabs .ui-tabs-nav li.ui-tabs-header.ui-state-active {
+  background: #e84545;
+}

@@ -82,7 +82,7 @@ public class SearchBean implements Serializable {
     }
 
     public String getReferenceThesaurus() {
-        return CollectionUtils.isEmpty(conceptsReferenceFoundList) ? "" : conceptsReferenceFoundList.get(0).getThesaurusName();
+        return userConnected.getGroup().getReferenceInstances().getName();
     }
 
     public void searchTerm(boolean fromMain) throws IOException, InterruptedException, ParserConfigurationException, SAXException {
