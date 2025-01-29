@@ -64,8 +64,8 @@ public class CandidatBean implements Serializable {
         candidatDao = new CandidatDao();
 
         if (conceptDaoTmp != null) {
-            candidatDao.setTitleAr(conceptDaoTmp.getLabelFr());
-            candidatDao.setTitleFr(conceptDaoTmp.getLabelAr());
+            candidatDao.setTitleFr(conceptDaoTmp.getLabelFr());
+            candidatDao.setTitleAr(conceptDaoTmp.getLabelAr());
 
             candidatDao.setDefinitionAr(conceptDaoTmp.getDefinitionAr());
             candidatDao.setDefinitionFr(conceptDaoTmp.getDefinitionFr());
@@ -156,7 +156,7 @@ public class CandidatBean implements Serializable {
 
         var candidate = CandidateModel.builder()
                 .thesoId(candidatDao.getThesoId())
-                .conceptGenericId("1427712")//.conceptGenericId(idConceptSelected)
+                .conceptGenericId(idConceptSelected)
                 .terme(termes)
                 .definition(definitions)
                 .note(notes)

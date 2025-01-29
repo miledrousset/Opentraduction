@@ -1,7 +1,7 @@
 package com.cnrs.opentraduction.config;
 
 import com.cnrs.opentraduction.models.MenuItem;
-import com.cnrs.opentraduction.models.dao.ConnexionDto;
+import com.cnrs.opentraduction.models.dao.ConnexionDao;
 import com.cnrs.opentraduction.views.ApplicationBean;
 
 import jakarta.enterprise.context.SessionScoped;
@@ -25,7 +25,7 @@ public class UserController implements Serializable {
     @PostMapping("/logout")
     public void sayHello() {
 
-        applicationBean.setConnexionModel(new ConnexionDto());
+        applicationBean.setConnexionModel(new ConnexionDao());
         applicationBean.setConnected(false);
         applicationBean.setUserConnected(null);
         applicationBean.setMenuItemSelected(MenuItem.HOME);

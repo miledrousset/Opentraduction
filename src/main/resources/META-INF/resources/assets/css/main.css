@@ -2978,8 +2978,8 @@ body .ui-toggleswitch.ui-toggleswitch-checked .ui-toggleswitch-slider {
 }
 
 .ui-selectmanybutton .ui-button:hover {
-  background-color: #d3d3d3 !important; /* Gris clair */
-  color: #000 !important; /* Optionnel : changer la couleur du texte */
+  background-color: #e84545 !important; /* Gris clair */
+  color: #fff !important; /* Optionnel : changer la couleur du texte */
 }
 
 body .ui-tabs .ui-tabs-nav li.ui-tabs-header.ui-state-active {

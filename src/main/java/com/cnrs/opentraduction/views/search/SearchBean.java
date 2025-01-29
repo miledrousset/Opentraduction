@@ -43,16 +43,15 @@ public class SearchBean implements Serializable {
     private final SearchService searchService;
 
     private Users userConnected;
-    private String termValue, oldTermValue, idReferenceCollectionSelected;
-    private boolean toArabic, searchDone, userApiKeyAlert, firstSearch;
-    private boolean searchResultDisplay, addCandidatDisplay, addPropositionDisplay;
     private ConceptDao conceptSelected;
+    private String termValue, idReferenceCollectionSelected, selectedExternSource;
+    private boolean toArabic, searchDone, userApiKeyAlert, showExternSources;
+    private boolean searchResultDisplay, addCandidatDisplay, addPropositionDisplay, searchInOpenTheso, searchInSpecificSource, searchInAllSources;
     private List<ConceptDao> conceptsReferenceFoundList, conceptsConsultationFoundList, resultGeoNameSearch, resultWikiDataSearch, rdRefSearch;
     private List<CollectionElementDao> referenceCollectionList;
     private CollectionElementDao collectionReferenceSelected;
 
-    private boolean wikiDataSelected, geoNamesSelected, rdRefSelected;
-    private List<String> selectedExternSource;
+    private boolean wikiDataSelected, geoNamesSelected, idRefSelected;
 
 
     public void initSearchInterface(Integer userConnectedId) {
@@ -75,17 +74,23 @@ public class SearchBean implements Serializable {
         log.info("Préparation des projets de consultation");
         referenceCollectionList = searchService.searchReferenceCollectionList(userConnected);
 
-        oldTermValue = "";
         termValue = "";
-        firstSearch = false;
-        selectedExternSource = List.of("WikiData", "GeoNames", "EdRef");
+        selectedExternSource = "";
+        searchInOpenTheso = false;
+        searchInAllSources = false;
+        searchInSpecificSource = false;
+        showExternSources = false;
     }
 
-    public String getReferenceThesaurus() {
-        return userConnected.getGroup().getReferenceInstances().getName();
+    public String getReferenceThesaurusName() {
+        return userConnected.getGroup().getReferenceInstances().getThesaurus().getName();
     }
 
-    public void searchTerm(boolean fromMain) throws IOException, InterruptedException, ParserConfigurationException, SAXException {
+    public String getReferenceCollectionName() {
+        return userConnected.getGroup().getReferenceInstances().getThesaurus().getCollection();
+    }
+
+    public void searchTerm(boolean fromMain) throws IOException {
 
         if (StringUtils.isEmpty(termValue)) {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.search.failed.msg1");
@@ -106,18 +111,14 @@ public class SearchBean implements Serializable {
             referenceCollectionList = searchService.searchReferenceCollectionList(userConnected);
         }
 
-        if (!termValue.equals(oldTermValue)) {
-            oldTermValue = termValue;
-            if (firstSearch && CollectionUtils.isEmpty(conceptsReferenceFoundList) && CollectionUtils.isEmpty(conceptsConsultationFoundList)) {
-                secondSearch();
-            } else {
-                firstSearch();
-            }
-        } else if (CollectionUtils.isEmpty(conceptsReferenceFoundList) && CollectionUtils.isEmpty(conceptsConsultationFoundList)) {
-            secondSearch();
-        } else {
-            firstSearch();
-        }
+        searchInOpenTheso = true;
+        searchInSpecificSource = false;
+        searchInAllSources = false;
+
+        conceptsReferenceFoundList = searchService.searchInReferenceProject(userConnected, termValue, toArabic);
+        conceptsConsultationFoundList = searchService.searchInConsultationThesaurus(userConnected, conceptsReferenceFoundList, termValue, toArabic);
+
+        showExternSources = CollectionUtils.isEmpty(conceptsReferenceFoundList);
 
         if (fromMain) {
             FacesContext.getCurrentInstance().getExternalContext().redirect("search.xhtml");
@@ -125,32 +126,48 @@ public class SearchBean implements Serializable {
         searchDone = true;
     }
 
-    private void firstSearch() {
-        firstSearch = true;
-        conceptsReferenceFoundList = searchService.searchInReferenceProject(userConnected, termValue, toArabic);
-        conceptsConsultationFoundList = searchService.searchInConsultationThesaurus(userConnected, conceptsReferenceFoundList, termValue, toArabic);
-    }
-
-    private void secondSearch() throws IOException, ParserConfigurationException, InterruptedException, SAXException {
-        firstSearch = false;
-        geoNamesSelected = false;
-        wikiDataSelected = false;
-        rdRefSelected = false;
+    public void searchInAllExternSources() throws IOException, ParserConfigurationException, InterruptedException, SAXException {
 
         var languageToSearch = toArabic ? "fr" : "ar";
-        if (selectedExternSource.contains("GeoNames")) {
-            geoNamesSelected = true;
-            resultGeoNameSearch = searchService.geoNamesSearch(termValue, languageToSearch);
-        }
 
-        if (selectedExternSource.contains("WikiData")) {
-            wikiDataSelected = true;
-            resultWikiDataSearch = searchService.wikiDataSearch(termValue, languageToSearch);
-        }
+        geoNamesSelected = true;
+        wikiDataSelected = true;
+        idRefSelected = true;
 
-        if (selectedExternSource.contains("EdRef")) {
-            rdRefSelected = true;
-            rdRefSearch = searchService.rdRefSearch(termValue, languageToSearch);
+        selectedExternSource = "";
+
+        resultGeoNameSearch = searchService.geoNamesSearch(termValue, languageToSearch);
+        resultWikiDataSearch = searchService.wikiDataSearch(termValue, languageToSearch);
+        rdRefSearch = searchService.idRefSearch(termValue, languageToSearch);
+
+        searchInOpenTheso = false;
+        searchInSpecificSource = false;
+        searchInAllSources = true;
+    }
+
+    public void searchInSpecificSource() throws IOException, ParserConfigurationException, InterruptedException, SAXException {
+        searchInOpenTheso = false;
+        searchInAllSources = false;
+        searchInSpecificSource = true;
+
+        geoNamesSelected = false;
+        wikiDataSelected = false;
+        idRefSelected = false;
+        var languageToSearch = toArabic ? "fr" : "ar";
+
+        switch(selectedExternSource) {
+            case "GeoNames":
+                geoNamesSelected = true;
+                resultGeoNameSearch = searchService.geoNamesSearch(termValue, languageToSearch);
+                break;
+            case "WikiData":
+                wikiDataSelected = true;
+                resultWikiDataSearch = searchService.wikiDataSearch(termValue, languageToSearch);
+                break;
+            case "IdRef":
+                idRefSelected = true;
+                rdRefSearch = searchService.idRefSearch(termValue, languageToSearch);
+                break;
         }
     }
 
@@ -275,11 +292,7 @@ public class SearchBean implements Serializable {
         return CollectionUtils.isEmpty(rdRefSearch);
     }
 
-    public boolean showFirstResult() {
-        return firstSearch;
-    }
-
     public boolean showExternSources() {
-        return firstSearch && showReferenceResult() && showConsultationResult();
+        return searchInOpenTheso && showReferenceResult() && showConsultationResult();
     }
 }

@@ -18,8 +18,6 @@ public interface UserRepository extends JpaRepository<Users, Integer> {
 
     List<Users> findAllByGroupId(Integer groupId);
 
-    Optional<Users> findByPassword(String password);
-
     @Modifying
     @Transactional
     @Query("DELETE users c WHERE c.id = ?1")

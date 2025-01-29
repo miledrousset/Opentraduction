@@ -23,19 +23,19 @@
                                      emptyMessage="#{applicationBean.getLabel('application.search.no_data')}"
                                      reflow="true" styleClass="products-table" draggableColumns="true">
 
-                            <p:column headerText="#{applicationBean.getLabel('application.search.labelFr')}">
+                            <p:column width="45%" headerText="#{applicationBean.getLabel('application.search.labelFr')}">
                                 <a href="#{concept.url}" target="_blank">
                                     <h:outputText value="#{concept.labelFr}" />
                                 </a>
                             </p:column>
 
-                            <p:column headerText="#{applicationBean.getLabel('application.search.labelAr')}">
+                            <p:column width="45%" headerText="#{applicationBean.getLabel('application.search.labelAr')}">
                                 <a href="#{concept.url}" target="_blank">
                                     <h:outputText value="#{concept.labelAr}" />
                                 </a>
                             </p:column>
 
-                            <p:column width="5%" style="text-align: center">
+                            <p:column width="10%" style="text-align: center">
                                 <h:panelGroup rendered="#{searchBean.isConcept(concept.status)}">
                                     <p:commandButton id="propositionBtn" update="mainContent" icon="pi pi-file-edit"
                                                      action="#{searchBean.initAddCandidat(concept)}"

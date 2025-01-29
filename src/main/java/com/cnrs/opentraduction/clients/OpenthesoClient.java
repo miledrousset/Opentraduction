@@ -39,6 +39,7 @@ public class OpenthesoClient {
 
     private final RestTemplate restTemplate;
 
+
     public ThesaurusModel[] getThesaurusInformations(String baseUrl) {
 
         var url = baseUrl + "/openapi/v1/thesaurus";

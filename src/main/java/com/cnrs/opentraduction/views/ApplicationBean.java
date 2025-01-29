@@ -1,6 +1,6 @@
 package com.cnrs.opentraduction.views;
 
-import com.cnrs.opentraduction.models.dao.ConnexionDto;
+import com.cnrs.opentraduction.models.dao.ConnexionDao;
 import com.cnrs.opentraduction.utils.MessageService;
 import com.cnrs.opentraduction.entities.Users;
 import com.cnrs.opentraduction.models.MenuItem;
@@ -35,14 +35,14 @@ public class ApplicationBean implements Serializable {
     private final UserService userService;
 
     private MenuItem menuItemSelected = MenuItem.HOME;
-    private ConnexionDto connexionModel = new ConnexionDto();
+    private ConnexionDao connexionModel = new ConnexionDao();
     private boolean connected;
     private Users userConnected;
 
 
     public void logout() throws IOException {
 
-        connexionModel = new ConnexionDto();
+        connexionModel = new ConnexionDao();
         connected = false;
         userConnected = null;
         menuItemSelected = MenuItem.HOME;
@@ -121,7 +121,7 @@ public class ApplicationBean implements Serializable {
                     break;
                 case SYSTEM_SETTINGS:
                     log.info("Navigation vers l'interface paramètres du systhème");
-                    applicationSettingBean.initialInterface();
+                    applicationSettingBean.initialInterface(userConnected.getId());
                     FacesContext.getCurrentInstance().getExternalContext().redirect("admin-settings.xhtml");
                     break;
                 default:

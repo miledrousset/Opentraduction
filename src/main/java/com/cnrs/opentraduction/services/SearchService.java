@@ -1,7 +1,7 @@
 package com.cnrs.opentraduction.services;
 
 import com.cnrs.opentraduction.clients.GeoNamesClient;
-import com.cnrs.opentraduction.clients.RdRefClient;
+import com.cnrs.opentraduction.clients.IdRefClient;
 import com.cnrs.opentraduction.clients.WikidataClient;
 import com.cnrs.opentraduction.entities.ConsultationInstances;
 import com.cnrs.opentraduction.entities.Thesaurus;
@@ -32,7 +32,7 @@ public class SearchService {
 
     private final static String ALL = "ALL";
 
-    private final RdRefClient rdRefClient;
+    private final IdRefClient rdRefClient;
     private final GeoNamesClient geoNamesClient;
     private final WikidataClient wikidataClient;
     private final ThesaurusService thesaurusService;
@@ -85,7 +85,7 @@ public class SearchService {
         return List.of();
     }
 
-    public List<ConceptDao> rdRefSearch(String termValue, String languageToSearch) {
+    public List<ConceptDao> idRefSearch(String termValue, String languageToSearch) {
         var tmp = rdRefClient.searchInRdRefSource(termValue);
         if (CollectionUtils.isEmpty(tmp)) {
             return List.of();

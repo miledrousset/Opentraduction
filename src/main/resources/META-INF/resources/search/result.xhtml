@@ -4,105 +4,122 @@
         xmlns:f="http://xmlns.jcp.org/jsf/core"
         xmlns:h="http://xmlns.jcp.org/jsf/html">
 
-    <section id="service-details" class="service-details section">
-        <div class="container">
-            <div class="row gy-5">
-                <div class="col-lg-12 service-box" data-aos="fade-up" data-aos-delay="200">
-                    <section id="pricing" class="pricing section">
-                        <center><p:staticMessage severity="warn" summary="#{applicationBean.getLabel('user.settings.attention')}"
-                                         detail="#{applicationBean.getLabel('application.user.error.msg2')}"
-                                         rendered="#{searchBean.userApiKeyAlert}"
-                                         style="width: 100%; margin-bottom: 20px"/></center>
+    <h:form>
+        <section id="service-details" class="service-details section">
+            <div class="container">
+                <div class="row gy-5">
+                    <div class="col-lg-12 service-box" data-aos="fade-up" data-aos-delay="200">
+                        <section id="pricing" class="pricing section">
+                            <center><p:staticMessage severity="warn" summary="#{applicationBean.getLabel('user.settings.attention')}"
+                                                     detail="#{applicationBean.getLabel('application.user.error.msg2')}"
+                                                     rendered="#{searchBean.userApiKeyAlert}"
+                                                     style="width: 100%; margin-bottom: 20px"/></center>
 
-                        <div class="container section-title" data-aos="fade-up">
-                            <h2><h:outputText value="#{applicationBean.getLabel('application.search.title')}"/></h2>
-                        </div>
-
-                        <div class="row" style="margin-bottom: 20px">
-                            <div class="col-5" style="text-align: right">
-                                <p:graphicImage value="/assets/img/flags/fr.png" style="max-width:12% !important;" />
-                            </div>
-                            <div class="col-2" style="text-align: center; margin-top: 7px">
-                                <h:form>
-                                    <p:toggleSwitch value="#{searchBean.toArabic}" onIcon="pi pi-arrow-right" offIcon="pi pi-arrow-left">
-                                        <p:ajax listener="#{searchBean.setTraductionDirection}" />
-                                    </p:toggleSwitch>
-                                </h:form>
-                            </div>
-                            <div class="col-5">
-                                <p:graphicImage value="/assets/img/flags/ar.png" style="max-width:12% !important;" />
-                            </div>
-                        </div>
-
-                        <h:form class="row">
-                            <div class="col-lg-12 search-widget widget-item ui-inputgroup">
-                                <p:inputText value="#{searchBean.termValue}"
-                                             class="form-control"
-                                             placeholder="#{applicationBean.getLabel('search.sub-title')}"/>
-
-                                <p:commandButton id="searchBtn" icon="bi bi-search"
-                                                 styleClass="ui-button-danger"
-                                                 ajax="true"
-                                                 process="@form"
-                                                 update="resultPanel"
-                                                 disabled="#{searchBean.searchBtnEnabled()}"
-                                                 action="#{searchBean.searchTerm(false)}"/>
-
-                                <!-- Tooltip -->
-                                <p:tooltip for="searchBtn" position="bottom"
-                                           value="#{applicationBean.getLabel('application.search.btn.tooltip')}" />
+                            <div class="container section-title" data-aos="fade-up">
+                                <h2><h:outputText value="#{applicationBean.getLabel('application.search.title')}"/></h2>
                             </div>
 
-                            <h:panelGroup rendered="#{searchBean.showExternSources()}" style="display: flex; justify-content: center;">
-                                <p:selectManyButton value="#{searchBean.selectedExternSource}">
-                                    <f:selectItem itemLabel="WikiData" itemValue="WikiData"/>
-                                    <f:selectItem itemLabel="GeoNames" itemValue="GeoNames"/>
-                                    <f:selectItem itemLabel="EdRef" itemValue="EdRef"/>
-                                </p:selectManyButton>
-                            </h:panelGroup>
-                        </h:form>
+                            <div class="row" style="margin-bottom: 20px">
+                                <div class="col-5" style="text-align: right">
+                                    <p:graphicImage value="/assets/img/flags/fr.png" style="max-width:12% !important;" />
+                                </div>
+                                <div class="col-2" style="text-align: center; margin-top: 7px">
+                                    <h:form>
+                                        <p:toggleSwitch value="#{searchBean.toArabic}" onIcon="pi pi-arrow-right" offIcon="pi pi-arrow-left">
+                                            <p:ajax listener="#{searchBean.setTraductionDirection}" />
+                                        </p:toggleSwitch>
+                                    </h:form>
+                                </div>
+                                <div class="col-5">
+                                    <p:graphicImage value="/assets/img/flags/ar.png" style="max-width:12% !important;" />
+                                </div>
+                            </div>
 
-                        <h:panelGroup rendered="#{searchBean.searchDone}">
-                            <h:panelGroup rendered="#{searchBean.showFirstResult()}">
-                                <ui:include src="resultat/openTheso.xhtml" />
-                            </h:panelGroup>
+                            <div class="row">
+                                <div class="col-lg-12 search-widget widget-item ui-inputgroup">
+                                    <p:inputText value="#{searchBean.termValue}"
+                                                 class="form-control"
+                                                 placeholder="#{applicationBean.getLabel('search.sub-title')}"/>
 
-                            <h:panelGroup rendered="#{!searchBean.showFirstResult()}">
-                                <section id="about" class="pricing about section">
-                                    <div class="pricing-item featured php-email-form" style="text-align: left">
-                                        <div class="col-xl-12 content">
-                                            <h3><h:outputText value="Résultat de la recherche"/></h3>
+                                    <p:commandButton id="searchBtn" icon="bi bi-search"
+                                                     styleClass="ui-button-danger"
+                                                     ajax="true"
+                                                     process="@form"
+                                                     update="resultPanel"
+                                                     disabled="#{searchBean.searchBtnEnabled()}"
+                                                     action="#{searchBean.searchTerm(false)}"/>
+
+                                    <!-- Tooltip -->
+                                    <p:tooltip for="searchBtn" position="bottom"
+                                               value="#{applicationBean.getLabel('application.search.btn.tooltip')}" />
+                                </div>
+
+                                <h:panelGroup id="sourceExternes" rendered="#{searchBean.showExternSources}"
+                                              style="display: flex; justify-content: center;">
+                                    <p:selectOneButton value="#{searchBean.selectedExternSource}">
+                                        <p:ajax update="resultDetailPanel sourceExternes" event="change"
+                                                listener="#{searchBean.searchInSpecificSource()}" />
+                                        <f:selectItem itemLabel="WikiData" itemValue="WikiData"/>
+                                        <f:selectItem itemLabel="GeoNames" itemValue="GeoNames"/>
+                                        <f:selectItem itemLabel="IdRef" itemValue="IdRef"/>
+                                    </p:selectOneButton>
+
+                                    <p:commandButton value="Toutes les sources" styleClass="ui-button-outlined ui-button-danger"
+                                                     actionListener="#{searchBean.searchInAllExternSources()}" ajax="true" process="@form"
+                                                     update="resultDetailPanel sourceExternes"/>
+                                </h:panelGroup>
+                            </div>
+
+                            <h:panelGroup id="resultDetailPanel" rendered="#{searchBean.searchDone}">
+                                <h:panelGroup rendered="#{searchBean.searchInOpenTheso}">
+                                    <ui:include src="resultat/openTheso.xhtml" />
+                                </h:panelGroup>
+
+                                <h:panelGroup rendered="#{searchBean.searchInAllSources}">
+                                    <section id="about" class="pricing about section">
+                                        <div class="pricing-item featured php-email-form" style="text-align: left">
+                                            <p:tabView>
+                                                <p:tab title="WikiData" rendered="#{searchBean.wikiDataSelected}">
+                                                    <ui:include src="resultat/wikidata.xhtml" />
+                                                </p:tab>
+                                                <p:tab title="GeoNames" rendered="#{searchBean.geoNamesSelected}">
+                                                    <ui:include src="resultat/geoNames.xhtml" />
+                                                </p:tab>
+                                                <p:tab title="Id-Ref" rendered="#{searchBean.idRefSelected}">
+                                                    <ui:include src="resultat/id-ref.xhtml" />
+                                                </p:tab>
+                                            </p:tabView>
                                         </div>
+                                    </section>
+                                </h:panelGroup>
 
-                                        <p:tabView>
-                                            <p:tab title="GeoNames" rendered="#{searchBean.geoNamesSelected}">
-                                                <ui:include src="resultat/geoNames.xhtml" />
-                                            </p:tab>
-                                            <p:tab title="WikiData" rendered="#{searchBean.wikiDataSelected}">
-                                                <ui:include src="resultat/wikidata.xhtml" />
-                                            </p:tab>
-                                            <p:tab title="RdRef" rendered="#{searchBean.rdRefSelected}">
-                                                <ui:include src="resultat/rd-ref.xhtml" />
-                                            </p:tab>
-                                        </p:tabView>
-                                    </div>
-                                </section>
+                                <h:panelGroup rendered="#{searchBean.searchInSpecificSource}">
+                                    <h:panelGroup rendered="#{searchBean.geoNamesSelected}">
+                                        <ui:include src="resultat/geoNames.xhtml" />
+                                    </h:panelGroup>
+                                    <h:panelGroup rendered="#{searchBean.wikiDataSelected}">
+                                        <ui:include src="resultat/wikidata.xhtml" />
+                                    </h:panelGroup>
+                                    <h:panelGroup rendered="#{searchBean.idRefSelected}">
+                                        <ui:include src="resultat/id-ref.xhtml" />
+                                    </h:panelGroup>
+                                </h:panelGroup>
                             </h:panelGroup>
-                        </h:panelGroup>
 
-                        <div class="row" style="margin-top: 20px">
-                            <div class="col-lg-12" style="text-align: right">
-                                <p:commandButton id="candidatBtn" class="btn-getstarted" update="mainContent"
-                                                 action="#{searchBean.initAddCandidat(null)}"
-                                                 title="#{applicationBean.getLabel('application.search.create.candidat')}"
-                                                 disabled="#{!searchBean.canSendCandidat()}"
-                                                 oncomplete="document.getElementById('scroll-top').click();"
-                                                 ajax="true" process="@this" />
+                            <div class="row" style="margin-top: 20px">
+                                <div class="col-lg-12" style="text-align: right">
+                                    <p:commandButton id="candidatBtn" class="btn-getstarted" update="mainContent"
+                                                     action="#{searchBean.initAddCandidat(null)}"
+                                                     title="#{applicationBean.getLabel('application.search.create.candidat')}"
+                                                     disabled="#{!searchBean.canSendCandidat()}"
+                                                     oncomplete="document.getElementById('scroll-top').click();"
+                                                     ajax="true" process="@this" />
+                                </div>
                             </div>
-                        </div>
-                    </section>
+                        </section>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </h:form>
 </ui:composition>

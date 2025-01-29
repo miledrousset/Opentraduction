@@ -21,12 +21,14 @@ public class ApplicationSettingBean implements Serializable {
     private final UsersSettingBean usersSettingBean;
 
     private SettingPart selectedSetting;
+    private Integer userConnectedId;
 
 
-    public void initialInterface() {
+    public void initialInterface(Integer userConnectedId) {
+        this.userConnectedId = userConnectedId;
         selectedSetting = SettingPart.USER_MANAGEMENT;
 
-        usersSettingBean.initialInterface();
+        usersSettingBean.initialInterface(userConnectedId);
         groupsSettingBean.initialInterface();
         consultationBean.initialInterface();
         referenceBean.initialInterface();
@@ -41,7 +43,7 @@ public class ApplicationSettingBean implements Serializable {
             selectedSetting = SettingPart.valueOf(settingItem);
             switch (settingItem) {
                 case "USER_MANAGEMENT":
-                    usersSettingBean.initialInterface();
+                    usersSettingBean.initialInterface(userConnectedId);
                     break;
                 case "GROUP_MANAGEMENT":
                     groupsSettingBean.initialInterface();

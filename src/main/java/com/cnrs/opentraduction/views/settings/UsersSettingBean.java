@@ -31,14 +31,17 @@ public class UsersSettingBean implements Serializable {
     private List<Groups> groups;
     private List<Users> users;
     private Users userSelected;
+    private Users userConnected;
 
     private Integer idGroupSelected;
     private String dialogTitle, defaultTraduction, francaisLabel, arabeLabel;
 
 
-    public void initialInterface() {
+    public void initialInterface(Integer userConnectedId) {
 
         log.info("Initialisation de l'interface gestion des utilisateur");
+        this.userConnected = userService.getUserById(userConnectedId);
+
         userSelected = new Users();
         users = userService.getAllUsers();
         groups = groupService.getGroups();
@@ -92,7 +95,7 @@ public class UsersSettingBean implements Serializable {
             userSelected.setGroup(group);
         }
 
-        if (userService.saveUser(userSelected)) {
+        if (userService.saveUser(userSelected, userConnected.getApiKey())) {
 
             log.info("Enregistrement de l'utilisateur effectué, actualisation du tableau des utilisateurs !");
             users = userService.getAllUsers();
@@ -106,7 +109,7 @@ public class UsersSettingBean implements Serializable {
     public void deleteUser(Users user) {
 
         log.info("Début de suppression de l'utilisateur {}", user.getFullName());
-        userService.deleteUser(user);
+        userService.deleteUser(user, userConnected.getApiKey());
 
         users = userService.getAllUsers();
 

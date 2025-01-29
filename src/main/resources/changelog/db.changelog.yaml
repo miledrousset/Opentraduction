@@ -29,3 +29,5 @@ databaseChangeLog:
       file: classpath:/changelog/v1.0/014-remove-user-thesaurus-table.xml
   - include:
       file: classpath:/changelog/v1.0/015-update-default-traduction-value.xml
+  - include:
+      file: classpath:/changelog/v1.0/016-add-user-id-columns-users-table.xml

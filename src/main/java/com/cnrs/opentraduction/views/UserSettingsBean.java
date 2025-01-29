@@ -116,7 +116,7 @@ public class UserSettingsBean implements Serializable {
             return;
         }
 
-        if (userService.saveUser(userConnected)) {
+        if (userService.saveUser(userConnected, userConnected.getApiKey())) {
             userApiKeyAlert = StringUtils.isEmpty(userConnected.getApiKey());
             referenceProjetAlert = ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances());
             messageService.showMessage(FacesMessage.SEVERITY_INFO, ("user.settings.ok.msg0"));

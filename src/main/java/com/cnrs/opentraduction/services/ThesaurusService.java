@@ -9,11 +9,12 @@ import com.cnrs.opentraduction.models.client.opentheso.proposition.PropositionMo
 import com.cnrs.opentraduction.models.client.opentheso.thesaurus.ThesaurusElementModel;
 import com.cnrs.opentraduction.models.dao.CollectionDao;
 import com.cnrs.opentraduction.models.dao.CollectionElementDao;
-
 import com.cnrs.opentraduction.models.dao.ConceptDao;
 import com.cnrs.opentraduction.utils.MessageService;
+
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;

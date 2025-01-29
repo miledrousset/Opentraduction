@@ -5,12 +5,12 @@ import java.io.Serializable;
 
 
 @Data
-public class ConnexionDto implements Serializable {
+public class ConnexionDao implements Serializable {
 
     private String login;
     private String password;
 
-    public ConnexionDto() {
+    public ConnexionDao() {
         login = "";
         password = "";
     }
