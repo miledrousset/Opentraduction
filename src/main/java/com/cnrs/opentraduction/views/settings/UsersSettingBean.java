@@ -9,6 +9,7 @@ import com.cnrs.opentraduction.utils.MessageService;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.PrimeFaces;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import jakarta.enterprise.context.SessionScoped;
@@ -64,7 +65,7 @@ public class UsersSettingBean implements Serializable {
         log.info("Initialiser la boite de dialog pour la modification de l'utilisateur " + user.getFullName());
 
         userSelected = user;
-        idGroupSelected = userSelected.getGroup().getId();
+        idGroupSelected = ObjectUtils.isEmpty(userSelected.getGroup()) ? null : userSelected.getGroup().getId();
 
         dialogTitle = messageService.getMessage("application.user.update.title") + user.getFullName();
         PrimeFaces.current().executeScript("PF('userDialog').show();");

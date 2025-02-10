@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+    <changeSet id="V1-017" author="fgabsi">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="users" columnName="id_group"/>
+        </preConditions>
+        <dropForeignKeyConstraint baseTableName="users" constraintName="fk_user_group"/>
+        <dropNotNullConstraint tableName="users" columnName="id_group" columnDataType="int"/>
+        <addForeignKeyConstraint baseTableName="users"
+                                 baseColumnNames="id_group"
+                                 referencedTableName="groups"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_user_group"
+                                 onDelete="SET NULL"/>
+    </changeSet>
+</databaseChangeLog>

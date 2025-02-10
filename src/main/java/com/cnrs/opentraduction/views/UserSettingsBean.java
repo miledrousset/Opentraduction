@@ -49,7 +49,9 @@ public class UserSettingsBean implements Serializable {
         userApiKeyAlert = StringUtils.isEmpty(this.userConnected.getApiKey());
 
         log.info("Vérification de la présence d'un projet de référence'");
-        referenceProjetAlert = ObjectUtils.isEmpty(this.userConnected.getGroup().getReferenceInstances());
+        if (!ObjectUtils.isEmpty(userConnected.getGroup())) {
+            referenceProjetAlert = ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances());
+        }
 
         log.info("Préparation du projet de consultation");
         searchConsultationThesaurus();
@@ -62,20 +64,22 @@ public class UserSettingsBean implements Serializable {
 
         consultationThesaurusList = new ArrayList<>();
 
-        var consultationThesaurus = userConnected.getGroup().getConsultationInstances();
+        if (!ObjectUtils.isEmpty(userConnected.getGroup())) {
+            var consultationThesaurus = userConnected.getGroup().getConsultationInstances();
 
-        if (!CollectionUtils.isEmpty(consultationThesaurus)) {
-            for (ConsultationInstances consultationInstances : consultationThesaurus) {
-                for (Thesaurus thesaurus : consultationInstances.getThesauruses()) {
-                    consultationThesaurusList.add(ConsultationCollectionDao.builder()
-                            .id(thesaurus.getId())
-                            .name(consultationInstances.getName())
-                            .url(consultationInstances.getUrl())
-                            .thesaurusName(thesaurus.getName())
-                            .thesaurusId(thesaurus.getIdThesaurus())
-                            .collectionId(thesaurus.getIdCollection())
-                            .collectionName(thesaurus.getCollection())
-                            .build());
+            if (!CollectionUtils.isEmpty(consultationThesaurus)) {
+                for (ConsultationInstances consultationInstances : consultationThesaurus) {
+                    for (Thesaurus thesaurus : consultationInstances.getThesauruses()) {
+                        consultationThesaurusList.add(ConsultationCollectionDao.builder()
+                                .id(thesaurus.getId())
+                                .name(consultationInstances.getName())
+                                .url(consultationInstances.getUrl())
+                                .thesaurusName(thesaurus.getName())
+                                .thesaurusId(thesaurus.getIdThesaurus())
+                                .collectionId(thesaurus.getIdCollection())
+                                .collectionName(thesaurus.getCollection())
+                                .build());
+                    }
                 }
             }
         }
@@ -118,7 +122,7 @@ public class UserSettingsBean implements Serializable {
 
         if (userService.saveUser(userConnected, userConnected.getApiKey())) {
             userApiKeyAlert = StringUtils.isEmpty(userConnected.getApiKey());
-            referenceProjetAlert = ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances());
+            referenceProjetAlert = ObjectUtils.isEmpty(userConnected.getGroup()) && ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances());
             messageService.showMessage(FacesMessage.SEVERITY_INFO, ("user.settings.ok.msg0"));
             log.info("Enregistrement effectuée avec succès !");
         }  else {
@@ -146,7 +150,8 @@ public class UserSettingsBean implements Serializable {
     }
 
     public boolean showReferenceProject() {
-        return !ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances());
+        return !ObjectUtils.isEmpty(userConnected.getGroup())
+                && !ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances());
     }
 
     public String getCollectionName() {
@@ -157,7 +162,8 @@ public class UserSettingsBean implements Serializable {
 
     public String getThesaurusReferenceUrl() {
 
-        if (!ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances())) {
+        if (!ObjectUtils.isEmpty(userConnected.getGroup())
+                && !ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances())) {
             if ("ALL".equalsIgnoreCase(userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection())) {
                 return String.format("%s/?idt=%s", getInstanceReferenceUrl(),
                         userConnected.getGroup().getReferenceInstances().getThesaurus().getIdThesaurus());

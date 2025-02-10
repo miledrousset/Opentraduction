@@ -12,6 +12,8 @@ server:
     remote_ip_header: x-forwarded-for
     protocol_header: x-forwarded-proto
 
+admin:
+  apikey: ot_1739224206613pm58lw3n2hbh9nb55pmqrb93g7xfph5m5dl68x0fn38fqvk6
 
 primefaces:
   theme: bootstrap
@@ -31,14 +33,9 @@ spring:
     password: postgres
     username: postgres
   jpa:
-    show-sql: true
     generate-ddl: true
     hibernate:
       ddl-auto: validate
-    properties:
-      hibernate:
-        format_sql: true
-        dialect: org.hibernate.dialect.PostgreSQLDialect
   liquibase:
     enabled: true
     change-log: classpath:/changelog/db.changelog.yaml

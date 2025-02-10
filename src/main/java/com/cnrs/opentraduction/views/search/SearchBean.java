@@ -276,7 +276,8 @@ public class SearchBean implements Serializable {
     }
 
     public boolean searchBtnEnabled() {
-        return CollectionUtils.isEmpty(userConnected.getGroup().getConsultationInstances())
+        return !ObjectUtils.isEmpty(userConnected.getGroup())
+                && CollectionUtils.isEmpty(userConnected.getGroup().getConsultationInstances())
                 && ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances());
     }
 

@@ -31,3 +31,7 @@ databaseChangeLog:
       file: classpath:/changelog/v1.0/015-update-default-traduction-value.xml
   - include:
       file: classpath:/changelog/v1.0/016-add-user-id-columns-users-table.xml
+  - include:
+      file: classpath:/changelog/v1.0/017-add-nullable-group-id-columns-users-table.xml
+  - include:
+      file: classpath:/changelog/v1.0/018-remove-all-api-key.xml

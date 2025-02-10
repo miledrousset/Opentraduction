@@ -147,7 +147,8 @@ public class SearchService {
 
         List<CollectionElementDao> referenceCollectionList = new ArrayList<>();
         referenceCollectionList.add(new CollectionElementDao(ALL, "--"));
-        if (!ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances())) {
+        if (!ObjectUtils.isEmpty(userConnected.getGroup())
+                && !ObjectUtils.isEmpty(userConnected.getGroup().getReferenceInstances())) {
             if (ALL.equals(userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection())) {
                 referenceCollectionList.addAll(thesaurusService.searchCollections(
                         userConnected.getGroup().getReferenceInstances().getUrl(),
@@ -158,8 +159,10 @@ public class SearchService {
                         userConnected.getGroup().getReferenceInstances().getThesaurus().getIdThesaurus(),
                         userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection()));
             }
+            return referenceCollectionList;
+        } else {
+            return null;
         }
-        return referenceCollectionList;
     }
 
     private List<ConceptDao> searchInThesaurus(Thesaurus thesaurus, String url, String defaultIdGroup, String termValue, boolean toArabic) {

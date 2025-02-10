@@ -56,6 +56,10 @@
 
                                 <h:panelGroup id="sourceExternes" rendered="#{searchBean.showExternSources}"
                                               style="display: flex; justify-content: center;">
+
+                                    <p:outputLabel value="#{applicationBean.getLabel('application.search.sources')}"
+                                        style="margin-top: 5px; margin-right: 5px;"/>
+
                                     <p:selectOneButton value="#{searchBean.selectedExternSource}">
                                         <p:ajax update="resultDetailPanel sourceExternes" event="change"
                                                 listener="#{searchBean.searchInSpecificSource()}" />

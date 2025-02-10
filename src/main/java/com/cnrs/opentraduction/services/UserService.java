@@ -13,8 +13,9 @@ import com.cnrs.opentraduction.repositories.UserRepository;
 import com.cnrs.opentraduction.utils.MD5Password;
 import com.cnrs.opentraduction.utils.MessageService;
 
-import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -27,9 +28,12 @@ import java.util.List;
 
 
 @Slf4j
+@Data
 @Service
-@AllArgsConstructor
 public class UserService {
+
+    @Value("${admin.apikey}")
+    private String adminApiKey;
 
     private final MessageService messageService;
     private final UserRepository userRepository;
@@ -73,9 +77,17 @@ public class UserService {
             if (userFromDB.get().getApiKey() == null
                     || !userFromDB.get().getApiKey().equals(userFromOpentheso.getApiKey())
                     || userFromDB.get().getIdUserOpenTheso() == null) {
-                userFromDB.get().setApiKey(userFromOpentheso.getApiKey());
-                userFromDB.get().setIdUserOpenTheso(userFromOpentheso.getIdUser());
-                userRepository.save(userFromDB.get());
+
+                var refInstances = referenceInstanceRepository.findAll();
+                if (!CollectionUtils.isEmpty(refInstances)) {
+                    var userFromApi = userClient.generateApiKey(refInstances.get(0).getUrl(), userFromOpentheso.getIdUser(), adminApiKey);
+                    userFromDB.get().setApiKey(userFromApi.block().getApiKey());
+                    userFromDB.get().setIdUserOpenTheso(userFromOpentheso.getIdUser());
+                    return userRepository.save(userFromDB.get());
+                } else {
+                    messageService.showMessage(FacesMessage.SEVERITY_ERROR, "Erreur pendant la génération de l'API Key, veuillez contacter votre administrateur.");
+                    return null;
+                }
             }
             return userFromDB.get();
         } else if (userFromDB.isEmpty() && userFromOpentheso.isActive()) {
@@ -86,7 +98,12 @@ public class UserService {
                     .password(connexionModel.getPassword())
                     .apiKey(userFromOpentheso.getApiKey())
                     .firstName(userFromOpentheso.getName())
+                    .lastName(userFromOpentheso.getName())
+                    .active(true)
+                    .defaultTargetTraduction("Francais")
                     .mail(userFromOpentheso.getMail())
+                    .created(LocalDateTime.now())
+                    .modified(LocalDateTime.now())
                     .idUserOpenTheso(userFromOpentheso.getIdUser())
                     .build());
         } else {
@@ -111,10 +128,24 @@ public class UserService {
     }
 
     private Users saveUserInOpenTheso(Users userFromDB) {
-        var admin = userRepository.findAll().stream().filter(user -> user.isAdmin()).findFirst().get();
         var refInstances = referenceInstanceRepository.findAll();
+
+        var users = userClient.searchUsers(refInstances.get(0).getUrl(), null, userFromDB.getLogin(), adminApiKey);
+        if (!CollectionUtils.isEmpty(users.block())) {
+            log.error("Erreur : Login '{}'existe déjà !", userFromDB.getLogin());
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "user.settings.error.msg13");
+            return null;
+        }
+
+        users = userClient.searchUsers(refInstances.get(0).getUrl(), userFromDB.getMail(), null, adminApiKey);
+        if (!CollectionUtils.isEmpty(users.block())) {
+            log.error("Erreur : Mail '{}'existe déjà !", userFromDB.getLogin());
+            messageService.showMessage(FacesMessage.SEVERITY_ERROR, "user.settings.error.msg14");
+            return null;
+        }
+
         var userDao = createUserDao(userFromDB, refInstances);
-        var userCreated = userClient.createUser(refInstances.get(0).getUrl(), userDao, admin.getApiKey()).block();
+        var userCreated = userClient.createUser(refInstances.get(0).getUrl(), userDao, adminApiKey).block();
         if (userCreated == null) {
             log.error("Erreur pendant l'enregistrement de l'utilisateur dans OpenTheso !");
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "user.settings.error.msg0");
@@ -147,7 +178,7 @@ public class UserService {
 
     public boolean saveUser(Users userToSave, String apiKey) {
 
-        boolean isUpdate = true;
+        boolean createCase = false;
         if (ObjectUtils.isEmpty(userToSave.getId())) {
             log.info("Cas d'un nouveau utilisateur !");
 
@@ -158,7 +189,7 @@ public class UserService {
                 return false;
             }
 
-            isUpdate = false;
+            createCase = true;
             userToSave.setCreated(LocalDateTime.now());
         }
 
@@ -167,7 +198,23 @@ public class UserService {
         var refInstances = referenceInstanceRepository.findAll();
         var userDao = createUserDao(userToSave, refInstances);
 
-        if (!isUpdate) {
+        if (createCase) {
+            var users = userClient.searchUsers(refInstances.get(0).getUrl(), null, userToSave.getLogin(), apiKey);
+            if (!CollectionUtils.isEmpty(users.block())) {
+                log.error("Erreur : Login '{}'existe déjà !", userToSave.getLogin());
+                messageService.showMessage(FacesMessage.SEVERITY_ERROR,
+                        String.format("L'utilisateur %s ne peut pas être crée car le login existe déjà dans OpenTheso, Veuillez contacter votre adinistrateur.", userToSave.getLogin()));
+                return false;
+            }
+
+            users = userClient.searchUsers(refInstances.get(0).getUrl(), userToSave.getMail(), null, apiKey);
+            if (!CollectionUtils.isEmpty(users.block())) {
+                log.error("Erreur : Mail '{}'existe déjà !", userToSave.getLogin());
+                messageService.showMessage(FacesMessage.SEVERITY_ERROR,
+                        String.format("L'utilisateur %s ne peut pas être crée car le mail existe déjà dans OpenTheso, Veuillez contacter votre adinistrateur.", userToSave.getLogin()));
+                return false;
+            }
+
             var userFromOpenTheso = userClient.createUser(refInstances.get(0).getUrl(), userDao, apiKey).block();
             if (userFromOpenTheso != null) {
                 log.info("Enregistrement dans la base");
@@ -193,8 +240,7 @@ public class UserService {
     }
 
     public void deleteUser(Users user, String apiKey) {
-
-        if (userClient.deleteUser(user.getGroup().getReferenceInstances().getUrl(), user.getLogin(), user.getPassword(), apiKey).block()) {
+        if (userClient.deleteUser(user.getGroup().getReferenceInstances().getUrl(), user.getIdUserOpenTheso(), apiKey).block()) {
             userRepository.deleteUserById(user.getId());
         }
     }

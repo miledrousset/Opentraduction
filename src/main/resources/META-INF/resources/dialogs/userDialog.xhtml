@@ -61,12 +61,12 @@
                     </p:selectOneMenu>
                 </div>
 
-                <div class="row">
+                <!--<div class="row">
                     <div class="field col-12 md:col-4" style="margin-top: 10px">
                         <p:outputLabel for="api" value="#{applicationBean.getLabel('application.user.key-user')}"/>
                         <p:inputText id="api" class="form-control" value="#{usersSettingBean.userSelected.apiKey}" />
                     </div>
-                </div>
+                </div>-->
 
                 <div class="row" style="margin-top: 10px">
                     <div class="field col-6 md:col-2">
@@ -90,7 +90,7 @@
                 <p:commandButton id="saveUserId" title="#{applicationBean.getLabel('action.validate')}"
                                  action="#{usersSettingBean.userManagement()}"
                                  class="btn-getstarted" ajax="true" process="@form"
-                                 update=":mainContent:usersList"/>
+                                 update=":mainContent:usersList message"/>
             </div>
         </h:form>
     </p:dialog>
