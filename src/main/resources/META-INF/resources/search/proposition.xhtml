@@ -138,8 +138,9 @@
 
                                         <h:panelGroup id="definitionFr" class="row"  style="margin-top: 10px">
                                             <div class="field col-3" style="display: flex; align-items: center;">
-                                                <h:outputText value="#{applicationBean.getLabel('application.candidat.definition.fr')}"
+                                                <h:outputText id="definitionLabelFr" value="#{applicationBean.getLabel('application.candidat.definition.fr')}"
                                                               styleClass="#{propositionBean.definitionFrStyleClass}"/>
+                                                <p:tooltip for="definitionLabelFr" value="#{applicationBean.getLabel('application.candidat.definition.tooltip.fr')}" position="right"/>
                                             </div>
                                             <div class="field col-9 ui-inputgroup">
                                                 <p:commandButton id="initDefinitionFrBtn" icon="pi pi-refresh"
@@ -150,11 +151,13 @@
                                                 <p:tooltip for="initDefinitionFrBtn" position="bottom"
                                                            value="#{applicationBean.getLabel('application.proposition.definition.fr.init')}" />
 
-                                                <p:inputText value="#{propositionBean.propositionDao.definitionFr}"
+                                                <p:inputText id="definitionFiledFr" value="#{propositionBean.propositionDao.definitionFr}"
                                                              class="form-control" disabled="#{propositionBean.definitionFrDisable}">
                                                     <p:ajax event="keyup" listener="#{propositionBean.onDefinitionFrChange}"
                                                             update="definitionFr"/>
                                                 </p:inputText>
+                                                <p:tooltip for="definitionFiledFr"
+                                                           value="#{applicationBean.getLabel('application.candidat.definition.tooltip.fr')}" position="right"/>
 
                                                 <p:commandButton id="removeDefinitionFrBtn" icon="pi pi-trash"
                                                                  styleClass="ui-button-danger"
@@ -168,8 +171,9 @@
 
                                         <h:panelGroup id="noteFr" class="row"  style="margin-top: 10px">
                                             <div class="field col-3" style="display: flex; align-items: center;">
-                                                <h:outputText value="#{applicationBean.getLabel('application.candidat.note.fr')}"
+                                                <h:outputText id="noteLabelFr" value="#{applicationBean.getLabel('application.candidat.note.fr')}"
                                                               styleClass="#{propositionBean.noteFrStyleClass}"/>
+                                                <p:tooltip for="noteLabelFr" value="#{applicationBean.getLabel('application.candidat.note.tooltip.fr')}" position="right"/>
                                             </div>
                                             <div class="field col-9 ui-inputgroup">
                                                 <p:commandButton id="initNoteFrBtn" icon="pi pi-refresh"
@@ -180,11 +184,12 @@
                                                 <p:tooltip for="initNoteFrBtn" position="bottom"
                                                            value="#{applicationBean.getLabel('application.proposition.exemple.fr.init')}" />
 
-                                                <p:inputText value="#{propositionBean.propositionDao.noteFr}"
+                                                <p:inputText id="noteFiledFr" value="#{propositionBean.propositionDao.noteFr}"
                                                              class="form-control" disabled="#{propositionBean.noteFrDisable}">
                                                     <p:ajax event="keyup" listener="#{propositionBean.onNoteFrChange}"
                                                             update="noteFr"/>
                                                 </p:inputText>
+                                                <p:tooltip for="noteFiledFr" value="#{applicationBean.getLabel('application.candidat.note.tooltip.fr')}" position="right"/>
 
                                                 <p:commandButton id="removeNoteFrBtn" icon="pi pi-trash"
                                                                  styleClass="ui-button-danger"
@@ -271,11 +276,12 @@
                                                 <p:tooltip for="removeDefinitionArBtn" position="bottom"
                                                            value="#{applicationBean.getLabel('application.proposition.definition.ar.remove')}" />
 
-                                                <p:inputText value="#{propositionBean.propositionDao.definitionAr}"
+                                                <p:inputText id="definitionFiledAr" value="#{propositionBean.propositionDao.definitionAr}"
                                                              class="form-control" disabled="#{propositionBean.definitionArDisable}">
                                                     <p:ajax event="keyup" listener="#{propositionBean.onDefinitionArChange}"
                                                             update="definitionAr"/>
                                                 </p:inputText>
+                                                <p:tooltip for="definitionFiledAr" value="#{applicationBean.getLabel('application.candidat.definition.tooltip.ar')}" position="right"/>
 
                                                 <p:commandButton id="initDefinitionArBtn" icon="pi pi-refresh"
                                                                  styleClass="ui-button-secondary"
@@ -286,8 +292,9 @@
                                                            value="#{applicationBean.getLabel('application.proposition.definition.ar.init')}" />
                                             </div>
                                             <div class="field col-3" style="margin-top: 8px; text-align: right;">
-                                                <h:outputText value="#{applicationBean.getLabel('application.candidat.definition.ar')}"
+                                                <h:outputText id="definitionLabelAr" value="#{applicationBean.getLabel('application.candidat.definition.ar')}"
                                                               styleClass="#{propositionBean.definitionArStyleClass}"/>
+                                                <p:tooltip for="definitionLabelAr" value="#{applicationBean.getLabel('application.candidat.definition.tooltip.ar')}" position="right"/>
                                             </div>
                                         </h:panelGroup>
 
@@ -301,11 +308,12 @@
                                                 <p:tooltip for="removeNoteArBtn" position="bottom"
                                                            value="#{applicationBean.getLabel('application.proposition.exemple.ar.remove')}" />
 
-                                                <p:inputText value="#{propositionBean.propositionDao.noteAr}"
+                                                <p:inputText id="noteFiledAr" value="#{propositionBean.propositionDao.noteAr}"
                                                              class="form-control" disabled="#{propositionBean.noteArDisable}">
                                                     <p:ajax event="keyup" listener="#{propositionBean.onNoteArChange}"
                                                             update="noteAr"/>
                                                 </p:inputText>
+                                                <p:tooltip for="noteFiledAr" value="#{applicationBean.getLabel('application.candidat.note.tooltip.ar')}" position="right"/>
 
                                                 <p:commandButton id="refreshNoteArBtn" icon="pi pi-refresh"
                                                                  styleClass="ui-button-secondary"
@@ -316,8 +324,9 @@
                                                            value="#{applicationBean.getLabel('application.proposition.exemple.ar.init')}" />
                                             </div>
                                             <div class="field col-3" style="margin-top: 8px; text-align: right;">
-                                                <h:outputText value="#{applicationBean.getLabel('application.candidat.note.ar')}"
+                                                <h:outputText id="noteLabelAr" value="#{applicationBean.getLabel('application.candidat.note.ar')}"
                                                               styleClass="#{propositionBean.noteArStyleClass}"/>
+                                                <p:tooltip for="noteLabelAr" value="#{applicationBean.getLabel('application.candidat.note.tooltip.ar')}" position="right"/>
                                             </div>
                                         </h:panelGroup>
                                     </div>

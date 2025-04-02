@@ -6,6 +6,7 @@ import com.cnrs.opentraduction.models.client.opentheso.concept.ConceptModel;
 import com.cnrs.opentraduction.models.client.opentheso.proposition.PropositionModel;
 import com.cnrs.opentraduction.models.client.opentheso.collection.SubCollectionModel;
 import com.cnrs.opentraduction.models.client.opentheso.thesaurus.ThesaurusModel;
+import com.cnrs.opentraduction.models.dao.ConceptShortDao;
 import com.cnrs.opentraduction.models.dao.NodeIdValue;
 
 import lombok.AllArgsConstructor;
@@ -39,6 +40,13 @@ public class OpenthesoClient {
 
     private final RestTemplate restTemplate;
 
+
+    public ConceptShortDao[] searchConcepts(String baseUrl, String value, String idThesaurus, String lang) {
+
+        var url = String.format(baseUrl + "/openapi/v1/concept/%s/autocomplete/%s?lang=%s&", idThesaurus, value, lang);
+        log.info("URL : " + url);
+        return restTemplate.getForObject(url, ConceptShortDao[].class);
+    }
 
     public ThesaurusModel[] getThesaurusInformations(String baseUrl) {
 
@@ -74,6 +82,7 @@ public class OpenthesoClient {
 
     public void saveCandidat(String baseUrl, String userApiKey, CandidateModel candidate) {
 
+        log.info("Candidat :" + candidate.toString());
         var request = new HttpEntity<>(candidate, createHttpHeaders(userApiKey));
         var url = baseUrl + "/openapi/v1/candidate";
         log.info("URL : " + url);

@@ -7,7 +7,7 @@ import com.cnrs.opentraduction.models.client.opentheso.concept.ElementModel;
 import com.cnrs.opentraduction.models.dao.CandidatDao;
 import com.cnrs.opentraduction.models.dao.CollectionElementDao;
 import com.cnrs.opentraduction.models.dao.ConceptDao;
-import com.cnrs.opentraduction.models.dao.NodeIdValue;
+import com.cnrs.opentraduction.models.dao.ConceptShortDao;
 import com.cnrs.opentraduction.services.GroupService;
 import com.cnrs.opentraduction.services.ThesaurusService;
 import com.cnrs.opentraduction.utils.MessageService;
@@ -15,6 +15,7 @@ import com.cnrs.opentraduction.utils.MessageService;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.component.commandbutton.CommandButton;
+import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -50,12 +51,11 @@ public class CandidatBean implements Serializable {
 
     private CandidatDao candidatDao;
     private Users userConnected;
+    private List<ConceptShortDao> conceptList;
     private List<CollectionElementDao> referenceCollectionList;
     private CollectionElementDao collectionReferenceSelected;
-    private String labelReferenceCollectionSelected;
+    private String idConceptSelected, labelConceptSelected, labelReferenceCollectionSelected;
     private boolean deeplDisponible;
-    private List<NodeIdValue> conceptsList;
-    private String idConceptSelected;
 
 
     public void initInterface(Users userConnected, ConceptDao conceptDaoTmp) {
@@ -92,24 +92,6 @@ public class CandidatBean implements Serializable {
             referenceCollectionList.addAll(thesaurusService.searchSubCollections(url, idThesaurus, idCollection));
         }
         collectionReferenceSelected = referenceCollectionList.get(0);
-
-        searchConceptByGroup();
-        if (!CollectionUtils.isEmpty(conceptsList)) {
-            idConceptSelected = conceptsList.get(0).getIdConcept();
-        }
-    }
-
-    public void searchConceptByGroup() {
-        String idGroup;
-        if ("ALL".equals(labelReferenceCollectionSelected)) {
-            idGroup = userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection();
-        } else {
-            idGroup = collectionReferenceSelected.getId();
-        }
-        conceptsList = groupService.searchConceptByGroup(userConnected, idGroup);
-        if (CollectionUtils.isEmpty(conceptsList)) {
-            conceptsList = List.of(NodeIdValue.builder().prefLabel("Aucun concept n'est présent").build());
-        }
     }
 
     public void saveCandidat() {
@@ -123,34 +105,34 @@ public class CandidatBean implements Serializable {
         candidatDao.setThesoId(userConnected.getGroup().getReferenceInstances().getThesaurus().getIdThesaurus());
 
         List<ElementModel> termes = new ArrayList<>();
-        if (!StringUtils.isEmpty(candidatDao.getTitleFr())) {
+        if (isValidValue(candidatDao.getTitleFr())) {
             termes.add(ElementModel.builder().value(candidatDao.getTitleFr()).lang("fr").build());
         }
-        if (!StringUtils.isEmpty(candidatDao.getTitleAr())) {
+        if (isValidValue(candidatDao.getTitleAr())) {
             termes.add(ElementModel.builder().value(candidatDao.getTitleAr()).lang("ar").build());
         }
 
         List<ElementModel> definitions = new ArrayList<>();
-        if (!StringUtils.isEmpty(candidatDao.getDefinitionFr())) {
+        if (isValidValue(candidatDao.getDefinitionFr())) {
             definitions.add(ElementModel.builder().value(candidatDao.getDefinitionFr()).lang("fr").build());
         }
-        if (!StringUtils.isEmpty(candidatDao.getDefinitionAr())) {
+        if (isValidValue(candidatDao.getDefinitionAr())) {
             definitions.add(ElementModel.builder().value(candidatDao.getDefinitionAr()).lang("ar").build());
         }
 
         List<ElementModel> notes = new ArrayList<>();
-        if (!StringUtils.isEmpty(candidatDao.getNoteFr())) {
+        if (isValidValue(candidatDao.getNoteFr())) {
             notes.add(ElementModel.builder().value(candidatDao.getNoteFr()).lang("fr").build());
         }
-        if (!StringUtils.isEmpty(candidatDao.getNoteAr())) {
+        if (isValidValue(candidatDao.getNoteAr())) {
             notes.add(ElementModel.builder().value(candidatDao.getNoteAr()).lang("ar").build());
         }
 
         List<ElementModel> synonymes = new ArrayList<>();
-        if (!StringUtils.isEmpty(candidatDao.getVarianteFr())) {
+        if (isValidValue(candidatDao.getVarianteFr())) {
             synonymes.add(ElementModel.builder().value(candidatDao.getVarianteFr()).lang("fr").build());
         }
-        if (!StringUtils.isEmpty(candidatDao.getVarianteFr())) {
+        if (isValidValue(candidatDao.getVarianteFr())) {
             synonymes.add(ElementModel.builder().value(candidatDao.getVarianteAr()).lang("ar").build());
         }
 
@@ -162,7 +144,7 @@ public class CandidatBean implements Serializable {
                 .note(notes)
                 .collectionId(getSelectedCollectionId())
                 .synonymes(synonymes)
-                .comment(candidatDao.getComment())
+                .comment(isValidValue(candidatDao.getComment()) ? candidatDao.getComment() : null)
                 .build();
 
         log.info("Enregistrer le nouveau candidat");
@@ -176,6 +158,10 @@ public class CandidatBean implements Serializable {
             log.info("Enregistrement du candidat terminé");
             messageService.showMessage(FacesMessage.SEVERITY_INFO, "application.candidat.success.msg1");
         }
+    }
+
+    private boolean isValidValue(String value) {
+        return !StringUtils.isEmpty(value) && !" ".equals(value);
     }
 
     private String getSelectedCollectionId() {
@@ -193,7 +179,6 @@ public class CandidatBean implements Serializable {
                     .filter(element -> element.getLabel().equals(labelReferenceCollectionSelected))
                     .findFirst();
             collectionReferenceTmp.ifPresent(collectionElementDao -> collectionReferenceSelected = collectionElementDao);
-            searchConceptByGroup();
         }
     }
 
@@ -261,6 +246,25 @@ public class CandidatBean implements Serializable {
             }
         }
         return null;
+    }
+
+    public List<String> conceptAutocomplete(String query) {
+
+        conceptList = thesaurusService.conceptAutocomplet(userConnected.getGroup().getReferenceInstances().getUrl(),
+                query.toLowerCase(),
+                userConnected.getGroup().getReferenceInstances().getThesaurus().getIdThesaurus(), "fr");
+
+        return CollectionUtils.isEmpty(conceptList) ? List.of() : conceptList.stream().map(concept -> concept.getLabel()).toList();
+    }
+
+    public void onConceptSelect(SelectEvent<String> event) {
+        if (StringUtils.isEmpty(event.getObject())) {
+            idConceptSelected = null;
+        } else {
+            var concept = conceptList.stream().filter(element -> element.getLabel().equals(labelConceptSelected)).findFirst();
+            idConceptSelected = concept.isPresent() ? concept.get().getIdentifier() : null;
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Country Selected", idConceptSelected));
+        }
     }
 
 }

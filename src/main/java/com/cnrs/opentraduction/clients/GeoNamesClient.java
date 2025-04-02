@@ -29,6 +29,7 @@ public class GeoNamesClient {
     public List<GeoNameModel> searchValue(String searchTerm, String lang)
             throws IOException, InterruptedException, ParserConfigurationException, SAXException {
 
+        searchTerm = searchTerm.replaceAll(" ", "%20");
         var requestUrl = String.format("%s?q=%s&maxRows=%d&style=FULL&lang=%s&username=%s",
                 GEONAMES_API_URL, searchTerm, MAX_ROWS, lang, USERNAME);
 

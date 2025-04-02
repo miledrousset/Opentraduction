@@ -76,7 +76,7 @@ public class SearchService {
                                         element.getAliases().get("ar").stream()
                                                 .map(AliasDTO::getValue)
                                                 .collect(Collectors.joining(", ")))
-                                .url("www.wikidata.org/wiki/"+element.getId())
+                                .url("https://www.wikidata.org/wiki/"+element.getId())
                                 .build())
                         .toList();
             }

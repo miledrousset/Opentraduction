@@ -10,6 +10,7 @@ import com.cnrs.opentraduction.models.client.opentheso.thesaurus.ThesaurusElemen
 import com.cnrs.opentraduction.models.dao.CollectionDao;
 import com.cnrs.opentraduction.models.dao.CollectionElementDao;
 import com.cnrs.opentraduction.models.dao.ConceptDao;
+import com.cnrs.opentraduction.models.dao.ConceptShortDao;
 import com.cnrs.opentraduction.utils.MessageService;
 
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpClientErrorException;
@@ -61,6 +63,11 @@ public class ThesaurusService {
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.thesaurus.error.msg5");
         }
         return List.of();
+    }
+
+    public List<ConceptShortDao> conceptAutocomplet(String base, String value, String idThesaurus, String lang) {
+        var result = openthesoClient.searchConcepts(base, value, idThesaurus, lang);
+        return ObjectUtils.isEmpty(result) ? List.of() : List.of(result);
     }
 
     public boolean saveCandidat(CandidateModel candidate, String baseUrl, String userApiKey) {
@@ -230,7 +237,7 @@ public class ThesaurusService {
             log.error("Error 403: Access forbidden.");
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, "application.thesaurus.error.msg7");
         } else {
-            log.error("Client error: " + e.getStatusCode());
+            log.error("Client error " + e.getStatusCode() + " : " + e.getMessage());
             messageService.showMessage(FacesMessage.SEVERITY_ERROR, genericMessageKey);
         }
     }

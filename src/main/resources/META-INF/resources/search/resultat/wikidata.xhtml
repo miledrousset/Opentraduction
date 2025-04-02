@@ -34,7 +34,7 @@
                             </p:column>
 
                             <p:column headerText="#{applicationBean.getLabel('application.search.labelAr')}" width="15%">
-                                <a href="#{concept.url}" target="_blank">
+                                <a href="#{'https://' += concept.url}" target="_blank">
                                     <h:outputText value="#{concept.labelAr}" />
                                 </a>
                             </p:column>

@@ -44,7 +44,7 @@
                                             <div class="field col-10">
                                                 <p:selectOneMenu value="#{candidatBean.labelReferenceCollectionSelected}"
                                                                  class="form-control" style="width: 100%;">
-                                                    <p:ajax listener="#{candidatBean.setSelectedReferenceCollection()}" update="conceptSelector"/>
+                                                    <p:ajax listener="#{candidatBean.setSelectedReferenceCollection()}" />
                                                     <f:selectItems value="#{candidatBean.referenceCollectionList}" var="collection"
                                                                    itemLabel="#{collection.label}" itemValue="#{collection.label}"/>
                                                 </p:selectOneMenu>
@@ -56,11 +56,11 @@
                                                 <h:outputText value="#{applicationBean.getLabel('user.settings.concept')}" />
                                             </div>
                                             <div class="field col-10">
-                                                <p:selectOneMenu id="conceptSelector" value="#{candidatBean.idConceptSelected}"
-                                                                 class="form-control" style="width: 100%;">
-                                                    <f:selectItems value="#{candidatBean.conceptsList}" var="concept"
-                                                                   itemLabel="#{concept.prefLabel}" itemValue="#{concept.idConcept}"/>
-                                                </p:selectOneMenu>
+                                                <p:autoComplete value="#{candidatBean.labelConceptSelected}" scrollHeight="250"
+                                                                completeMethod="#{candidatBean.conceptAutocomplete}"
+                                                                style="width: 100%;">
+                                                    <p:ajax event="itemSelect" listener="#{candidatBean.onConceptSelect}" />
+                                                </p:autoComplete>
                                             </div>
                                         </div>
                                     </div>
@@ -112,6 +112,7 @@
                                         <h:panelGroup id="definitionFrPanel" class="row" style="margin-top: 10px">
                                             <div class="field col-3" style="display: flex; align-items: center;">
                                                 <h:outputText value="#{applicationBean.getLabel('application.candidat.definition.fr')}"/>
+                                                <p:tooltip for="noteLabelFr" value="#{applicationBean.getLabel('application.candidat.definition.tooltip.fr')}" position="right"/>
                                             </div>
                                             <div class="field col-9 ui-inputgroup">
                                                 <p:inputText value="#{candidatBean.candidatDao.definitionFr}" class="form-control" />
@@ -125,10 +126,12 @@
 
                                         <h:panelGroup id="noteFrPanel" class="row" style="margin-top: 10px">
                                             <div class="field col-3" style="display: flex; align-items: center;">
-                                                <h:outputText value="#{applicationBean.getLabel('application.candidat.note.fr')}"/>
+                                                <h:outputText id="noteLabelFr" value="#{applicationBean.getLabel('application.candidat.note.fr')}"/>
+                                                <p:tooltip for="noteLabelFr" value="#{applicationBean.getLabel('application.candidat.note.tooltip.fr')}" position="right"/>
                                             </div>
                                             <div class="field col-9 ui-inputgroup">
-                                                <p:inputText value="#{candidatBean.candidatDao.noteFr}" class="form-control" />
+                                                <p:inputText id="noteFiledFr" value="#{candidatBean.candidatDao.noteFr}" class="form-control" />
+                                                <p:tooltip for="noteFiledFr" value="#{applicationBean.getLabel('application.candidat.note.tooltip.fr')}" position="right"/>
 
                                                 <p:commandButton id="noteFrBtn" icon="pi pi-language" styleClass="ui-button-danger"
                                                                  ajax="true" process="@form" update="noteArPanel noteFrPanel"
@@ -177,10 +180,13 @@
                                                                  ajax="true" process="@form" update="definitionArPanel definitionFrPanel"
                                                                  actionListener="#{candidatBean.deeplTranslate(candidatBean.candidatDao.definitionAr, 'definitionAr')}"/>
                                                 <p:tooltip for="definitionArBtn" position="bottom" value="#{applicationBean.getLabel('application.candidat.translate.definition.ar')}" />
-                                                <p:inputText value="#{candidatBean.candidatDao.definitionAr}" class="form-control" />
+
+                                                <p:inputText id="definitionFiledAr" value="#{candidatBean.candidatDao.definitionAr}" class="form-control" />
+                                                <p:tooltip for="definitionFiledAr" value="#{applicationBean.getLabel('application.candidat.definition.tooltip.ar')}" position="right"/>
                                             </div>
                                             <div class="field col-3" style="margin-top: 8px; text-align: right;">
-                                                <h:outputText value="#{applicationBean.getLabel('application.candidat.definition.ar')}"/>
+                                                <h:outputText id="definitionLabelAr" value="#{applicationBean.getLabel('application.candidat.definition.ar')}"/>
+                                                <p:tooltip for="definitionLabelAr" value="#{applicationBean.getLabel('application.candidat.definition.tooltip.ar')}" position="right"/>
                                             </div>
                                         </h:panelGroup>
 
@@ -190,10 +196,13 @@
                                                                  ajax="true" process="@form" update="noteArPanel noteFrPanel"
                                                                  actionListener="#{candidatBean.deeplTranslate(candidatBean.candidatDao.noteAr, 'noteAr')}"/>
                                                 <p:tooltip for="noteArBtn" position="bottom" value="#{applicationBean.getLabel('application.candidat.translate.note.ar')}" />
-                                                <p:inputText value="#{candidatBean.candidatDao.noteAr}" class="form-control" />
+
+                                                <p:inputText id="noteFiledAr" value="#{candidatBean.candidatDao.noteAr}" class="form-control" />
+                                                <p:tooltip for="noteFiledAr" value="#{applicationBean.getLabel('application.candidat.note.tooltip.fr')}" position="right"/>
                                             </div>
                                             <div class="field col-3" style="margin-top: 8px; text-align: right;">
-                                                <h:outputText value="#{applicationBean.getLabel('application.candidat.note.ar')}"/>
+                                                <h:outputText id="noteLabelAr" value="#{applicationBean.getLabel('application.candidat.note.ar')}"/>
+                                                <p:tooltip for="noteLabelAr" value="#{applicationBean.getLabel('application.candidat.note.tooltip.fr')}" position="right"/>
                                             </div>
                                         </h:panelGroup>
                                     </div>

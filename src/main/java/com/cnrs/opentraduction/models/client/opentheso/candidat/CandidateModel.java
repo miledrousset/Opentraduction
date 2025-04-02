@@ -3,11 +3,14 @@ package com.cnrs.opentraduction.models.client.opentheso.candidat;
 import com.cnrs.opentraduction.models.client.opentheso.concept.ElementModel;
 import lombok.Builder;
 import lombok.Data;
+import lombok.ToString;
+
 import java.util.List;
 
 
 @Data
 @Builder
+@ToString
 public class CandidateModel {
 
     private String thesoId;

@@ -120,6 +120,8 @@ public class SearchBean implements Serializable {
 
         showExternSources = CollectionUtils.isEmpty(conceptsReferenceFoundList);
 
+        selectedExternSource = "";
+
         if (fromMain) {
             FacesContext.getCurrentInstance().getExternalContext().redirect("search.xhtml");
         }

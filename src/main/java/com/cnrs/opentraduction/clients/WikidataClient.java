@@ -1,19 +1,23 @@
 package com.cnrs.opentraduction.clients;
 
 import com.cnrs.opentraduction.models.client.wikidata.EntityDTO;
-import com.cnrs.opentraduction.models.client.wikidata.EntityDetailsDTO;
 import com.cnrs.opentraduction.models.client.wikidata.WikidataModel;
+import com.cnrs.opentraduction.models.client.wikidata.EntityDetailsDTO;
 import com.cnrs.opentraduction.models.client.wikidata.WikidataResponseDTO;
+
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import reactor.netty.http.client.HttpClient;
 
 
 @Slf4j
@@ -21,56 +25,71 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class WikidataClient {
 
-    private static final String API_URL = "https://www.wikidata.org/w/api.php?action=wbgetentities&ids={ids}&languages=ar|fr&format=json";
-    private static final String WIKIDATA_API_URL = "https://www.wikidata.org/w/api.php";
+    private static final String API_URL = "https://www.wikidata.org/w/api.php";
     private static final int MAX_ROWS = 10;
 
-    private final RestTemplate restTemplate;
-
-
     public WikidataModel searchEntities(String searchTerm, String language) {
-
-        var url = UriComponentsBuilder.fromHttpUrl(WIKIDATA_API_URL)
+        String uri = UriComponentsBuilder.fromHttpUrl(API_URL)
                 .queryParam("action", "wbsearchentities")
                 .queryParam("search", searchTerm)
                 .queryParam("language", language)
                 .queryParam("format", "json")
                 .queryParam("limit", MAX_ROWS)
+                .build()
                 .toUriString();
-        return restTemplate.getForObject(url, WikidataModel.class);
+
+        return webClient().get()
+                .uri(uri)
+                .retrieve()
+                .bodyToMono(WikidataModel.class)
+                .block(); // blocage pour rester dans du code impératif
     }
 
     public List<EntityDetailsDTO> getEntitiesDetails(List<String> ids) {
-        // Construire la chaîne d'IDs séparés par "|"
         String idsParam = String.join("|", ids);
 
-        // Appeler l'API
-        WikidataResponseDTO response = restTemplate.getForObject(API_URL, WikidataResponseDTO.class, idsParam);
+        String uri = UriComponentsBuilder.fromHttpUrl(API_URL)
+                .queryParam("action", "wbgetentities")
+                .queryParam("ids", idsParam)
+                .queryParam("languages", "ar|fr")
+                .queryParam("format", "json")
+                .build()
+                .toUriString();
 
-        // Mapper les résultats dans une liste de DTOs
+        WikidataResponseDTO response = webClient().get()
+                .uri(uri)
+                .retrieve()
+                .bodyToMono(WikidataResponseDTO.class)
+                .block();
+
         List<EntityDetailsDTO> entityDetailsList = new ArrayList<>();
         if (response != null && response.getEntities() != null) {
             for (Map.Entry<String, EntityDTO> entry : response.getEntities().entrySet()) {
-                EntityDTO entity = entry.getValue();
 
-                EntityDetailsDTO details = new EntityDetailsDTO();
-
-                // Mapper les labels
-                Map<String, String> labelsMap = entity.getLabels().entrySet().stream()
-                        .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().get("value")));
-                details.setLabels(labelsMap);
-
-                // Mapper les descriptions
-                Map<String, String> descriptionsMap = entity.getDescriptions().entrySet().stream()
-                        .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().get("value")));
-                details.setDescriptions(descriptionsMap);
-
-                // Mapper les aliases
-                details.setAliases(entity.getAliases());
-
+                var value = entry.getValue();
+                var details = new EntityDetailsDTO();
+                details.setId(entry.getKey());
+                details.setLabels(value.getLabels().entrySet().stream()
+                        .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().get("value"))));
+                details.setDescriptions(value.getDescriptions().entrySet().stream()
+                        .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().get("value"))));
+                details.setAliases(value.getAliases());
                 entityDetailsList.add(details);
             }
         }
         return entityDetailsList;
+    }
+
+    public WebClient webClient() {
+        HttpClient httpClient = HttpClient.create()
+                .responseTimeout(java.time.Duration.ofSeconds(10)); // optionnel
+
+        return WebClient.builder()
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
+                .codecs(configurer -> configurer
+                        .defaultCodecs()
+                        .maxInMemorySize(5 * 1024 * 1024)) // ← 5 Mo (par exemple)
+                .baseUrl("https://www.wikidata.org/w/api.php")
+                .build();
     }
 }
