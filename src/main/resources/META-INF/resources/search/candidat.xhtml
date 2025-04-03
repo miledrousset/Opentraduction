@@ -1,8 +1,18 @@
 <ui:composition
         xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
         xmlns:p="http://primefaces.org/ui"
-        xmlns:f="http://xmlns.jcp.org/jsf/core"
         xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <style>
+        .php-email-form input[type=text], .php-email-form input[type=password] {
+            width: 350px;
+        }
+
+        body .ui-autocomplete-panel .ui-autocomplete-items .ui-autocomplete-item.ui-state-highlight {
+            background: #e84545;
+            color: #fff;
+        }
+    </style>
 
     <section id="service-details" class="service-details section">
         <div class="container">
@@ -38,27 +48,14 @@
                                         </div>
 
                                         <div class="row" style="margin-top: 20px">
-                                            <div class="field col-2" style="display: flex; align-items: center">
-                                                <h:outputText value="#{applicationBean.getLabel('user.settings.subCollection')}" />
-                                            </div>
-                                            <div class="field col-10">
-                                                <p:selectOneMenu value="#{candidatBean.labelReferenceCollectionSelected}"
-                                                                 class="form-control" style="width: 100%;">
-                                                    <p:ajax listener="#{candidatBean.setSelectedReferenceCollection()}" />
-                                                    <f:selectItems value="#{candidatBean.referenceCollectionList}" var="collection"
-                                                                   itemLabel="#{collection.label}" itemValue="#{collection.label}"/>
-                                                </p:selectOneMenu>
-                                            </div>
-                                        </div>
-
-                                        <div class="row" style="margin-top: 20px">
-                                            <div class="field col-2" style="display: flex; align-items: center">
+                                            <div class="col-2" style="display: flex; align-items: center">
                                                 <h:outputText value="#{applicationBean.getLabel('user.settings.concept')}" />
                                             </div>
-                                            <div class="field col-10">
+                                            <div class="field col-10" style="display: flex; align-items: normal">
                                                 <p:autoComplete value="#{candidatBean.labelConceptSelected}" scrollHeight="250"
                                                                 completeMethod="#{candidatBean.conceptAutocomplete}"
-                                                                style="width: 100%;">
+                                                                style="width: 350px;"
+                                                                placeholder="Rechercher un concept...">
                                                     <p:ajax event="itemSelect" listener="#{candidatBean.onConceptSelect}" />
                                                 </p:autoComplete>
                                             </div>

@@ -52,9 +52,8 @@ public class CandidatBean implements Serializable {
     private CandidatDao candidatDao;
     private Users userConnected;
     private List<ConceptShortDao> conceptList;
-    private List<CollectionElementDao> referenceCollectionList;
     private CollectionElementDao collectionReferenceSelected;
-    private String idConceptSelected, labelConceptSelected, labelReferenceCollectionSelected;
+    private String idConceptSelected, labelConceptSelected;
     private boolean deeplDisponible;
 
 
@@ -80,18 +79,9 @@ public class CandidatBean implements Serializable {
         //Disable Deepl Translate function
         deeplDisponible = false;
 
-        var url = this.userConnected.getGroup().getReferenceInstances().getUrl();
-        var idThesaurus = this.userConnected.getGroup().getReferenceInstances().getThesaurus().getIdThesaurus();
-
-        referenceCollectionList = new ArrayList<>();
-        referenceCollectionList.add(new CollectionElementDao("ALL", messageService.getMessage("user.settings.consultation.racine")));
-        if ("ALL".equals(this.userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection())) {
-            referenceCollectionList.addAll(thesaurusService.searchCollections(url, idThesaurus));
-        } else {
-            var idCollection = this.userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection();
-            referenceCollectionList.addAll(thesaurusService.searchSubCollections(url, idThesaurus, idCollection));
-        }
-        collectionReferenceSelected = referenceCollectionList.get(0);
+        conceptList = new ArrayList<>();
+        idConceptSelected = null;
+        labelConceptSelected = null;
     }
 
     public void saveCandidat() {
@@ -138,7 +128,7 @@ public class CandidatBean implements Serializable {
 
         var candidate = CandidateModel.builder()
                 .thesoId(candidatDao.getThesoId())
-                .conceptGenericId(idConceptSelected)
+                .conceptGenericId(StringUtils.isEmpty(labelConceptSelected) ? null : idConceptSelected)
                 .terme(termes)
                 .definition(definitions)
                 .note(notes)
@@ -170,15 +160,6 @@ public class CandidatBean implements Serializable {
                     ? "" : this.userConnected.getGroup().getReferenceInstances().getThesaurus().getIdCollection();
         } else {
             return collectionReferenceSelected.getId();
-        }
-    }
-
-    public void setSelectedReferenceCollection() {
-        if (!StringUtils.isEmpty(labelReferenceCollectionSelected)) {
-            var collectionReferenceTmp = referenceCollectionList.stream()
-                    .filter(element -> element.getLabel().equals(labelReferenceCollectionSelected))
-                    .findFirst();
-            collectionReferenceTmp.ifPresent(collectionElementDao -> collectionReferenceSelected = collectionElementDao);
         }
     }
 
@@ -263,7 +244,6 @@ public class CandidatBean implements Serializable {
         } else {
             var concept = conceptList.stream().filter(element -> element.getLabel().equals(labelConceptSelected)).findFirst();
             idConceptSelected = concept.isPresent() ? concept.get().getIdentifier() : null;
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Country Selected", idConceptSelected));
         }
     }
 
